@@ -1,6 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import StatsContextProvider from '@/Contexts/StatsContext';
 import StatsList from '@/Components/DaisyUI/StatsList';
 
 export default function Dashboard({ auth }) {
@@ -16,9 +15,7 @@ export default function Dashboard({ auth }) {
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-4">
                     <div className=" overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-4 text-gray-900">
-                           <StatsContextProvider>
                                 <StatsList/>
-                            </StatsContextProvider>
                         </div>
                     </div>
                 </div>
