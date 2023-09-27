@@ -4,19 +4,22 @@ import {instance} from './api/instance'
 export const StatsContext = createContext();
 
 export default function StatsContextProvider(props) {
-    const [stats,setStats] = useState([])
+    const [statsData,setStatsData] = useState({stats:[],errMessage:'',loading:true})
 
     useEffect(()=>{
        instance.get('/home/Dashboard')
         .then(res => {
-            setStats(res.data.value)
+            setStatsData({stats:res.data.value,errMessage:'',loading:false}) 
             console.log(res.data.value)
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+          setStatsData({stats:[],errMessage:err.message,loading:false})
+          console.log(err.message)
+        })
     },[])
 
   return (
-    <StatsContext.Provider value={stats}>
+    <StatsContext.Provider value={statsData}>
         {props.children}
     </StatsContext.Provider>
   )
