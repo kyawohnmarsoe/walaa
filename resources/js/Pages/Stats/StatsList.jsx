@@ -10,7 +10,7 @@ export default function StatsList({ apitoken }) {
 
         const instance = axios.create({
         baseURL: 'https://rapi.earthlink.iq/api/reseller',
-        headers: { 'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6IndhbGFhaW0iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJSZXNlbGxlciIsIkFmZmlsaWF0ZUluZGV4IjoiNjMwMzEiLCJBZmZpbGlhdGVOYW1lIjoid2FsYWFsaW5rMSIsIkFwcGxpY2F0aW9uTmFtZSI6IlJlc2VsbGVyIiwibmJmIjoxNjk1OTc5MjI2LCJleHAiOjE2OTU5ODI4MjYsImlzcyI6ImJpbGxpbmdhcGkiLCJhdWQiOiJkMjZkMTFkZTUxYmE0YmE2YWQ0ZGVhZTc5ODY1Mzk4YiJ9.8hGh3RxzYuYwwBrt4vEOLFN7wK5Zgoycj7drBWeo9CY` }
+        headers: { 'Authorization': `Bearer ${apitoken}` }
         });
 
     useEffect(()=>{
