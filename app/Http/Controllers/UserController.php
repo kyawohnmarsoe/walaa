@@ -10,11 +10,13 @@ use Inertia\Response;
 class UserController extends Controller
 {
    
-    public function show(string $id): Response
+    public function getUserDetails(string $id): Response
     {
-        return Inertia::render('Users/Profile', [
-            'user' => User::findOrFail($id)
-        ]);
+        // return Inertia::render('Users/Details', [
+        //     'user' => User::findOrFail($id)
+        // ]);
+         $token = $this->GetApiToken();  
+        return Inertia::render('Users/Details',['apitoken' => $token,'id' => $id]);
     }
 
     public function test(): Response
@@ -26,6 +28,6 @@ class UserController extends Controller
      public function showOnlineUsers(): Response
     {
         $token = $this->GetApiToken();      
-        return Inertia::render('Users/OnlineUsers',['api_token' => $token]);
+        return Inertia::render('Users/OnlineUsers',['apitoken' => $token]);
     }
 }

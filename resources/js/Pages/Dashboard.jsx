@@ -2,7 +2,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import StatsList from '../Pages/Stats/StatsList';
 
-export default function Dashboard({ auth, api_token }) {
+export default function Dashboard({ auth, apitoken }) {
 
     return (
         <AuthenticatedLayout
@@ -19,7 +19,7 @@ export default function Dashboard({ auth, api_token }) {
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-4">
                     <div className=" overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="text-gray-900">
-                            <StatsList apitoken={api_token} />
+                            <StatsList apitoken={apitoken} />
                         </div>
                     </div>
                 </div>
