@@ -2,6 +2,7 @@ import React,{useState,useEffect} from 'react'
 // import {instance} from '../../api/instance'
 import OnlineUsersTableRow from './OnlineUsersTableRow'
 import Alert from '../../Components/DaisyUI/Alert'
+import Pagination from '@/Components/DaisyUI/Pagination'
 
 export default function OnlineUsersTable({apitoken}) {
    const [onlineUsersData,setOnlineUsersData] = useState({users:[],errMessage:'',loading:true})
@@ -27,11 +28,13 @@ export default function OnlineUsersTable({apitoken}) {
 
   return (
     <div className="overflow-x-auto">
+      <Pagination />
   <table className="table">
     {/* head */}
     <thead>
       <tr className='bg-accent'>
-        <th>User Index</th>
+        <th>#</th>
+        {/* <th>User Index</th> */}
         <th>Username</th>
         <th>Customer Name</th>
         <th>Accounting Info</th>
@@ -59,7 +62,7 @@ export default function OnlineUsersTable({apitoken}) {
     {/* foot */}
     <tfoot>
       <tr>
-        <th></th>
+        <th>#</th>
         <th>Username</th>
         <th>Customer Name</th>
         <th>Accounting Info</th>

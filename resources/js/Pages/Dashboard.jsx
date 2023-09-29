@@ -18,7 +18,7 @@ export default function Dashboard({ auth, api_token }) {
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-4">
                     <div className=" overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-4 text-gray-900">
+                        <div className="text-gray-900">
                             <StatsList apitoken={api_token} />
                         </div>
                     </div>

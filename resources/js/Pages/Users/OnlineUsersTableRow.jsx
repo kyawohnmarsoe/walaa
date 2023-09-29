@@ -6,11 +6,13 @@ console.log(user)
 
   return (
     <tr>
-        <th>
+        {/* <th>
           <label>
             <input type="checkbox" className="checkbox" />
           </label>
-        </th>
+        </th> */}
+        <td></td>
+        {/* <td>{user.userIndex && user.userIndex}</td> */}
 
         <td>
           <div className="flex items-center space-x-3">

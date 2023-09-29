@@ -16,7 +16,7 @@ export default function Edit({ auth, mustVerifyEmail, accounts }) {
             <Head title="Accounts" />
 
             <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+                <div className="max-w-7xl mx-auto sm:px-6 lg:px-4 space-y-6">
 
                     {flash.status == 422 &&
                         <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
@@ -31,7 +31,7 @@ export default function Edit({ auth, mustVerifyEmail, accounts }) {
                         </div>
                     }
 
-                    <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+                    <div className="sm:p-8 bg-white shadow sm:rounded-lg">
                         <AccountsTable accounts={accounts} />
                     </div>
                 </div>
