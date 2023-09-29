@@ -47,6 +47,9 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
+        $api_token = $this->GetApiToken();
+        session(['api_token' => $api_token]);
+
         return redirect(RouteServiceProvider::HOME);
     }
 }

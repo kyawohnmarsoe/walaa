@@ -5,21 +5,12 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AccountController;
  
 Route::get('/user/{id}', [UserController::class, 'show']);
 
-Route::get('/', function () {
+Route::get('/', function () {   
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
@@ -28,13 +19,26 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+Route::get('/dashboard', function () {    
+    return Inertia::render('Dashboard', [
+        'api_token' => session('api_token') ?? ''
+    ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/online/users', function () {
-    return Inertia::render('Online/Users');
+    return Inertia::render('Online/Users', [
+        'api_token' => session('api_token') ?? ''
+    ]);
 })->middleware(['auth', 'verified'])->name('online.users');
+
+Route::get('/accounts', function () {
+    return Inertia::render('Accounts/Accounts', [
+        'api_token' => session('api_token') ?? ''
+    ]);
+  }
+)->middleware(['auth', 'verified'])->name('accounts');
+
+// Route::get('/accounts', [AccountController::class, 'accounts'])->middleware(['auth', 'verified'])->name('accounts');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

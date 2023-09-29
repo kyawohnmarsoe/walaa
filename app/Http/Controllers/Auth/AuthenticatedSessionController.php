@@ -34,6 +34,9 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        $api_token = $this->GetApiToken();
+        session(['api_token' => $api_token]);
+
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 
@@ -47,6 +50,8 @@ class AuthenticatedSessionController extends Controller
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
+
+        session()->forget('api_token');
 
         return redirect('/');
     }
