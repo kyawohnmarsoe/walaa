@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "@inertiajs/react";
 
 export default function OnlineUsersTableRow({user}) {
 
@@ -22,14 +23,14 @@ console.log(user)
               </div>
             </div> */}
             <div>
-              <div className="font-bold">{user.userID && user.userID}</div>
+              <div className="font-bold text-emerald-700"><Link href={`/user/${user.userIndex}`}>{user.userID && user.userID}</Link></div>
              
               {/* <div className="text-sm opacity-50">United States</div> */}
             </div>
           </div>
         </td>
 
-        <td>{user.customer && user.customer.customerFullName}</td>
+        <td> {user.customer && user.customer.customerFullName}</td>
 
         <td>
           <strong>Last Refill</strong> : {user.lastRefill && user.lastRefill}

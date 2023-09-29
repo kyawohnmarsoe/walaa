@@ -32,7 +32,7 @@ export default function OnlineUsersTable({apitoken}) {
   <table className="table">
     {/* head */}
     <thead>
-      <tr className='bg-accent'>
+      <tr className='bg-emerald-300'>
         <th>#</th>
         {/* <th>User Index</th> */}
         <th>Username</th>
