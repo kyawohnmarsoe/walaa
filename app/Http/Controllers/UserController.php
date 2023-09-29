@@ -22,12 +22,10 @@ class UserController extends Controller
         return Inertia::render('Users/Test');
     }
 
-    public function online_users()
+
+     public function showOnlineUsers(): Response
     {
         $token = $this->GetApiToken();      
-        
-        return Inertia::render('Online/Users', [
-            'api_token' => $token
-        ]);        
-    } // online_users
+        return Inertia::render('Users/OnlineUsers',['api_token' => $token]);
+    }
 }

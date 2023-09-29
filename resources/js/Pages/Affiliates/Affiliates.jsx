@@ -1,4 +1,4 @@
-import AffiliateTable from '@/Components/DaisyUI/AffiliateTable';
+import AffiliatesTable from './AffiliatesTable';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, usePage } from '@inertiajs/react';
 
@@ -32,7 +32,7 @@ export default function Edit({ auth, mustVerifyEmail, affiliates }) {
                     }
 
                     <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                        <AffiliateTable affiliates={affiliates} />
+                        <AffiliatesTable affiliates={affiliates} />
                     </div>
                 </div>
             </div>

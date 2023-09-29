@@ -1,4 +1,4 @@
-import AccountTable from '@/Components/DaisyUI/AccountTable';
+import AccountsTable from './AccountsTable';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, usePage } from '@inertiajs/react';
 
@@ -32,7 +32,7 @@ export default function Edit({ auth, mustVerifyEmail, accounts }) {
                     }
 
                     <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                        <AccountTable accounts={accounts} />
+                        <AccountsTable accounts={accounts} />
                     </div>
                 </div>
             </div>

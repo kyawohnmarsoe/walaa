@@ -44,7 +44,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     
-    Route::get('/online/users', [UserController::class, 'online_users'])->name('online.users');
+    Route::get('/users/online', [UserController::class, 'showOnlineUsers'])->name('users.online');
     
     Route::get('/accounts', [AccountController::class, 'index'])->name('accounts');
     Route::get('/accounts/store', [AccountController::class, 'store'])->name('accounts.store');
