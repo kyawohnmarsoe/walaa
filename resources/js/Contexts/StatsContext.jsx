@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext } from "react";
+import React, { useState, useEffect, createContext, useContext } from "react";
 import { instance } from './api/instance'
 
 export const StatsContext = createContext();
@@ -24,3 +24,4 @@ export default function StatsContextProvider(props) {
     </StatsContext.Provider>
   )
 }
+

@@ -5,7 +5,7 @@ import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
 
-export default function Authenticated({ user, header, children, apitoken }) {
+export default function Authenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     return (
@@ -29,6 +29,9 @@ export default function Authenticated({ user, header, children, apitoken }) {
                                 </NavLink>
                                 <NavLink href={route('accounts')} active={route().current('accounts')}>
                                     Accounts
+                                </NavLink>
+                                <NavLink href={route('affiliates')} active={route().current('affiliates')}>
+                                    Affiliates
                                 </NavLink>
                             </div>
                         </div>
@@ -126,6 +129,7 @@ export default function Authenticated({ user, header, children, apitoken }) {
             )}
 
             <main>{children}</main>
+
         </div>
     );
 }

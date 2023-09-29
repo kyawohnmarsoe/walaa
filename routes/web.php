@@ -7,6 +7,8 @@ use Inertia\Inertia;
 
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AffiliateController;
  
 Route::get('/user/{id}', [UserController::class, 'show']);
 
@@ -19,26 +21,37 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {    
-    return Inertia::render('Dashboard', [
-        'api_token' => session('api_token') ?? ''
-    ]);
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {    
+//     return Inertia::render('Dashboard', [
+//         'api_token' => session('api_token') ?? ''
+//     ]);
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/online/users', function () {
-    return Inertia::render('Online/Users', [
-        'api_token' => session('api_token') ?? ''
-    ]);
-})->middleware(['auth', 'verified'])->name('online.users');
+// Route::get('/online/users', function () {
+//     return Inertia::render('Online/Users', [
+//         'api_token' => session('api_token') ?? ''
+//     ]);
+// })->middleware(['auth', 'verified'])->name('online.users');
 
-Route::get('/accounts', function () {
-    return Inertia::render('Accounts/Accounts', [
-        'api_token' => session('api_token') ?? ''
-    ]);
-  }
-)->middleware(['auth', 'verified'])->name('accounts');
+// Route::get('/accounts', function () {
+//     return Inertia::render('Accounts/Accounts', [
+//         'api_token' => session('api_token') ?? ''
+//     ]);
+//   }
+// )->middleware(['auth', 'verified'])->name('accounts');
 
-// Route::get('/accounts', [AccountController::class, 'accounts'])->middleware(['auth', 'verified'])->name('accounts');
+Route::middleware(['auth', 'verified'])->group(function () {
+
+    Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+    
+    Route::get('/online/users', [UserController::class, 'online_users'])->name('online.users');
+    
+    Route::get('/accounts', [AccountController::class, 'index'])->name('accounts');
+    Route::get('/accounts/store', [AccountController::class, 'store'])->name('accounts.store');
+
+    Route::get('/affiliates', [AffiliateController::class, 'index'])->name('affiliates');
+    Route::get('/affiliates/store', [AffiliateController::class, 'store'])->name('affiliates.store');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -1,37 +1,28 @@
 import React from "react";
-import axios from 'axios';
 import { useEffect, useState } from "react";
+import { router } from '@inertiajs/react'
 
-export default function AccountTable({ api_token }) {
-    const [accounts, setAccounts] = useState([]);
+export default function AccountTable({ accounts }) {
     const [loading, setLoading] = useState(false);
 
-    const getAccounts = (url) => {
-        setLoading(true)
-
-        let instance = axios.create({
-            baseURL: 'https://rapi.earthlink.iq/api/reseller/accounts/all',
-            headers: { 'Authorization': `Bearer ${api_token}` }
-        });
-
-        instance.get('/')
-            .then(res => {
-                setLoading(false)
-                setAccounts(res.data.value)
-                console.log(res.data.value)
-            })
-            .catch(err => {
-                setLoading(false)
-                console.log(err.message)
-            })
+    const addApiClick = () => {
+        router.get('/accounts/store')
     }
 
     useEffect(() => {
-        getAccounts();
+        console.log(accounts);
     }, [])
 
     return (
         <div className="overflow-x-auto">
+
+            <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded float-right mb-6"
+                onClick={ev => addApiClick()}
+            >
+                Add Account Api Data
+            </button>
+
             <table className="table">
                 <thead>
                     <tr>
@@ -55,20 +46,20 @@ export default function AccountTable({ api_token }) {
                 }
                 {!loading &&
                     <tbody>
-                        {accounts.map(acc => (
-                            <tr key={acc.accountIndex}>
-                                <td>{acc.accountIndex}</td>
-                                <td>{acc.accountName}</td>
+                        {accounts && accounts.map(acc => (
+                            <tr key={acc.account_index}>
+                                <td>{acc.account_index}</td>
+                                <td>{acc.account_name}</td>
                                 <td style={{ whiteSpace: "pre-line" }}>
-                                    {acc.accountDescription}
+                                    {acc.account_description}
                                 </td>
-                                <td>{acc.accountPrice}</td>
-                                <td>{acc.endUserAccountPrice}</td>
+                                <td>{acc.account_price}</td>
+                                <td>{acc.end_user_account_price}</td>
                                 <td>
                                     {
-                                        acc.accountImagePath ?
+                                        acc.account_image_path ?
                                             <img
-                                                src={acc.accountImagePath}
+                                                src={acc.account_image_path}
                                                 width={60}
                                                 alt='Image'
                                             />
@@ -80,8 +71,6 @@ export default function AccountTable({ api_token }) {
                         ))}
                     </tbody>
                 }
-
-
 
             </table>
         </div>

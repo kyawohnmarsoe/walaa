@@ -22,7 +22,8 @@ class Controller extends BaseController
         ]; 
         $api_response       = Http::asForm()->post($apiURL, $data);
         $api_response_token = json_decode($api_response->getBody(), true); 
+        $api_token = $api_response_token ? $api_response_token['access_token'] : null;
 
-        return $api_response_token['access_token'];
+        return $api_token;
     } // GetApiToken
 }

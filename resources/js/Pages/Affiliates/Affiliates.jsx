@@ -1,8 +1,8 @@
-import AccountTable from '@/Components/DaisyUI/AccountTable';
+import AffiliateTable from '@/Components/DaisyUI/AffiliateTable';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, usePage } from '@inertiajs/react';
 
-export default function Edit({ auth, mustVerifyEmail, accounts }) {
+export default function Edit({ auth, mustVerifyEmail, affiliates }) {
 
     const { flash } = usePage().props
 
@@ -10,7 +10,7 @@ export default function Edit({ auth, mustVerifyEmail, accounts }) {
         <AuthenticatedLayout
             user={auth.user}
             header={
-                <h2 className="font-semibold text-xl text-gray-800 leading-tight">Accounts</h2>
+                <h2 className="font-semibold text-xl text-gray-800 leading-tight">Affiliates</h2>
             }
         >
             <Head title="Accounts" />
@@ -32,7 +32,7 @@ export default function Edit({ auth, mustVerifyEmail, accounts }) {
                     }
 
                     <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                        <AccountTable accounts={accounts} />
+                        <AffiliateTable affiliates={affiliates} />
                     </div>
                 </div>
             </div>

@@ -9,9 +9,7 @@ use Inertia\Response;
  
 class UserController extends Controller
 {
-    /**
-     * Show the Users for a given user.
-     */
+   
     public function show(string $id): Response
     {
         return Inertia::render('Users/Profile', [
@@ -23,4 +21,13 @@ class UserController extends Controller
     {
         return Inertia::render('Users/Test');
     }
+
+    public function online_users()
+    {
+        $token = $this->GetApiToken();      
+        
+        return Inertia::render('Online/Users', [
+            'api_token' => $token
+        ]);        
+    } // online_users
 }
