@@ -5,6 +5,8 @@ import TextInput from '@/Components/TextInput';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
 import { useEffect } from 'react';
+import Checkbox from '@/Components/Checkbox';
+
 
 export default function AccessDetails({ user,className = '' }) {
     
@@ -35,7 +37,9 @@ export default function AccessDetails({ user,className = '' }) {
             </header>
 
             {/* <form onSubmit={submit} className="mt-6 space-y-6"> */}
-            <form className="mt-6 space-y-6">
+            <form className="mt-6 space-y-6 grid grid-cols-3 gap-4">
+
+                 
                 <div>
                     <InputLabel htmlFor="userName" value="Username" />
 
@@ -43,13 +47,103 @@ export default function AccessDetails({ user,className = '' }) {
                         id="userName"
                         className="mt-1 block w-full "
                         value={user.userObject.userId}
-                        onChange={(e) => setData('userName', e.target.value)}
                         required
                         isFocused
                         autoComplete="userName"
                     />
 
                     {/* <InputError className="mt-2" message={errors.name} /> */}
+                </div>
+
+               
+
+                <div>
+                    <InputLabel htmlFor="displayName" value="Display Name" />
+
+                    <TextInput
+                        id="displayName"
+                        className="mt-1 block w-full "
+                        value={user.userObject.displayName}
+                        required
+                        isFocused
+                        autoComplete="displayName"
+                    />
+
+                    {/* <InputError className="mt-2" message={errors.name} /> */}
+                </div>
+
+                <div>
+                    <InputLabel htmlFor="macAddress" value="MAC Address" />
+
+                    <TextInput
+                        id="macAddress"
+                        className="mt-1 block w-full "
+                        value={user.userObject.displayName}
+                        required
+                        isFocused
+                        autoComplete="macAddress"
+                    />
+
+                    {/* <InputError className="mt-2" message={errors.name} /> */}
+                </div>
+
+                <div>
+                    <InputLabel htmlFor="affiliate" value="Affiliate" />
+
+                    <TextInput
+                        id="affiliate"
+                        className="mt-1 block w-full disabled bg-gray-100"
+                        value={user.affiliateName}
+                        required
+                        isFocused
+                        autoComplete="affiliate"
+                        editable = {false}
+                        disabled
+                    />
+
+                    {/* <InputError className="mt-2" message={errors.name} /> */}
+                </div>
+
+                <div>
+                    <InputLabel htmlFor="userNotes" value="User Notes" />
+
+                    <TextInput
+                        id="userNotes"
+                        className="mt-1 block w-full "
+                        value={user.userNotes}
+                        required
+                        isFocused
+                        autoComplete="userNotes"
+                    />
+
+                    {/* <InputError className="mt-2" message={errors.name} /> */}
+                </div>
+
+                <div>
+                    <InputLabel htmlFor="router" value="Router/Nano IP:" />
+
+                    <TextInput
+                        id="router"
+                        className="mt-1 block w-full "
+                        value={user.userNotes}
+                        required
+                        isFocused
+                        autoComplete="router"
+                    />
+
+                    {/* <InputError className="mt-2" message={errors.name} /> */}
+                </div>
+
+                <div >
+                    <label className="flex items-center">
+                        <Checkbox
+                            name="active"
+                            checked={true}
+                            onChange={(e) => setData('active', e.target.checked)}
+                        />
+                       
+                        <InputLabel htmlFor="active" value="Active" />
+                    </label>
                 </div>
 
                 

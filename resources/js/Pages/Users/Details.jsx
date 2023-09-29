@@ -9,7 +9,7 @@ import Security from './Partials/Security';
 import AccountingInformation from './Partials/AccountingInformation';
 
 export default function Details({ auth,apitoken,id,mustVerifyEmail, status }) {
-     const [userData,setUserData] = useState({user:{},errMessage:'',loading:true})
+     const [userData,setUserData] = useState({user:null,errMessage:'',loading:true})
    const {user,errMessage,loading} = userData
 
     const instance = axios.create({
@@ -24,7 +24,7 @@ export default function Details({ auth,apitoken,id,mustVerifyEmail, status }) {
             console.log(res.data.value)
         })
         .catch(err => {
-          setUserData({user:{},errMessage:err.message,loading:false})
+          setUserData({user:null,errMessage:err.message,loading:false})
           console.log(err)
         })
     },[])
@@ -38,10 +38,11 @@ export default function Details({ auth,apitoken,id,mustVerifyEmail, status }) {
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
                     <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                        <AccessDetails
+                        {
+                            user ? <AccessDetails
                             user={user}
-                            className="max-w-xl"
-                        />
+                            className="max-w-none"/>: null
+                        }
                         
                     </div>
 
