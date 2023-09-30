@@ -28,12 +28,12 @@ export default function CustomerTable({ customers }) {
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded float-right mb-6"
                 onClick={ev => addApiClick()}
             >
-                Add customer
+                Add user
             </button>
 
             <table className="table">
                 <thead>
-                    <tr>
+                    <tr className='bg-emerald-300'>
                         <th>Customer Index</th>
                         <th>Customer Name</th>
                         <th>Action</th>

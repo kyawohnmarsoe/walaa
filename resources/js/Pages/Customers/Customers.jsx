@@ -1,8 +1,9 @@
-import CustomerTable from '@/Components/DaisyUI/CustomerTable';
+import CustomerTable from './CustomerTable';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, usePage } from '@inertiajs/react';
+import AddForm from './Partials/AddForm';
 
-export default function Edit({ auth, mustVerifyEmail, customers }) {
+export default function Edit({ auth, mustVerifyEmail, customers, show_data, affiliates, accounts }) {
 
     const { flash } = usePage().props
 
@@ -10,7 +11,7 @@ export default function Edit({ auth, mustVerifyEmail, customers }) {
         <AuthenticatedLayout
             user={auth.user}
             header={
-                <h2 className="font-semibold text-xl text-gray-800 leading-tight">Affiliates</h2>
+                <h2 className="font-semibold text-xl text-gray-800 leading-tight">Users</h2>
             }
         >
             <Head title="Accounts" />
@@ -31,9 +32,25 @@ export default function Edit({ auth, mustVerifyEmail, customers }) {
                         </div>
                     }
 
-                    <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                        <CustomerTable customers={customers} />
-                    </div>
+                    {
+                        show_data == 'list' &&
+                        <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+                            <CustomerTable customers={customers} />
+                        </div>
+                    }
+
+                    {
+                        show_data == 'add_form' &&
+                        <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+                            <AddForm
+                                className="max-w-xl"
+                                accounts={accounts}
+                                affiliates={affiliates}
+                            />
+                        </div>
+                    }
+
+
                 </div>
             </div>
 

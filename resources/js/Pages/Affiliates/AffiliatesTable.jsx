@@ -33,7 +33,7 @@ export default function AffiliatesTable({ affiliates }) {
 
             <table className="table">
                 <thead>
-                    <tr>
+                    <tr className='bg-emerald-300'>
                         <th>Affiliate Index</th>
                         <th>Affiliate Name</th>
                         <th>Action</th>
