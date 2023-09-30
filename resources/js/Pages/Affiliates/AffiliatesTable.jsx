@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { router } from '@inertiajs/react'
 
-export default function AffiliateTable({ affiliates }) {
+export default function AffiliatesTable({ affiliates }) {
     const [loading, setLoading] = useState(false);
 
     const addApiClick = () => {

@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { router } from '@inertiajs/react'
 
-export default function AccountTable({ accounts }) {
+export default function AccountsTable({ accounts }) {
     const [loading, setLoading] = useState(false);
 
     const addApiClick = () => {
@@ -31,7 +31,7 @@ export default function AccountTable({ accounts }) {
                         <th>Description</th>
                         <th>Account Price</th>
                         <th>End User Account Price</th>
-                        <th>Image</th>
+                        {/* <th>Image</th> */}
                     </tr>
                 </thead>
 
@@ -55,7 +55,7 @@ export default function AccountTable({ accounts }) {
                                 </td>
                                 <td>{acc.account_price}</td>
                                 <td>{acc.end_user_account_price}</td>
-                                <td>
+                                {/* <td>
                                     {
                                         acc.account_image_path ?
                                             <img
@@ -66,7 +66,7 @@ export default function AccountTable({ accounts }) {
                                             :
                                             ''
                                     }
-                                </td>
+                                </td> */}
                             </tr>
                         ))}
                     </tbody>
