@@ -37,8 +37,8 @@ export default function AccessDetails({ user,className = '' }) {
             </header>
 
             {/* <form onSubmit={submit} className="mt-6 space-y-6"> */}
-            <form className="mt-6 space-y-6 grid grid-cols-3 gap-4">
-
+            <form className="mt-6 space-y-6 ">
+                <div className='grid grid-cols-3 gap-4'>
                  
                 <div>
                     <InputLabel htmlFor="userName" value="Username" />
@@ -140,12 +140,13 @@ export default function AccessDetails({ user,className = '' }) {
                             name="active"
                             checked={true}
                             onChange={(e) => setData('active', e.target.checked)}
+                           
                         />
                        
-                        <InputLabel htmlFor="active" value="Active" />
+                        <InputLabel htmlFor="active" value="Active"  className='ml-2'/>
                     </label>
                 </div>
-
+            </div>
                 
 
 

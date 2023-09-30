@@ -14,7 +14,7 @@ export default function OnlineUsersTable({apitoken}) {
         });
 
     useEffect(()=>{
-       instance.get('/user/filter/WillBeDisabledIn2Days/20/30')
+       instance.get('/user/filter/WillBeDisabledIn2Days/10/10')
         .then(res => {
             setOnlineUsersData({users:res.data.value.itemsList,errMessage:'',loading:false}) 
             // console.log(res.data.value.itemsList[0].customer.customerFullName)
@@ -28,7 +28,7 @@ export default function OnlineUsersTable({apitoken}) {
 
   return (
     <div className="overflow-x-auto">
-      <Pagination />
+      {/* <Pagination /> */}
   <table className="table">
     {/* head */}
     <thead>

@@ -46,33 +46,31 @@ export default function Details({ auth,apitoken,id,mustVerifyEmail, status }) {
                         
                     </div>
 
-                    <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                        <UserStatus  mustVerifyEmail={mustVerifyEmail}
-                            status={status}
+                        <div className='grid md:grid-cols-2 gap-4'>
+                        <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+                        <UserStatus  
+                            user={user}
                             className="max-w-xl" />
                     </div>
-
                     <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                        <Security  mustVerifyEmail={mustVerifyEmail}
-                            status={status}
+                        <Security 
+                            user={user}
                             className="max-w-xl" />
                     </div>
-
                     <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                        <CustomerInformation  mustVerifyEmail={mustVerifyEmail}
-                            status={status}
+                        <CustomerInformation  
+                            user={user}
                             className="max-w-xl" />
                     </div>
-
                     <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                        <AccountingInformation  mustVerifyEmail={mustVerifyEmail}
-                            status={status}
+                        <AccountingInformation  
+                            user={user}
                             className="max-w-xl" />
                     </div>
+                        </div>
+                
 
-                    <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                        <DeleteUserForm className="max-w-xl" />
-                    </div>
+                    
                 </div>
             </div>
         </AuthenticatedLayout>
