@@ -25,7 +25,7 @@ export default function AccountsTable({ accounts }) {
 
             <table className="table">
                 <thead>
-                    <tr>
+                    <tr className='bg-emerald-300'>
                         <th>Account Index</th>
                         <th>Account Name</th>
                         <th>Description</th>

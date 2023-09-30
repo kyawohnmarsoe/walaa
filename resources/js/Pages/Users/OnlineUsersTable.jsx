@@ -1,17 +1,17 @@
-import React,{useState,useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 // import {instance} from '../../api/instance'
 import OnlineUsersTableRow from './OnlineUsersTableRow'
 import Alert from '../../Components/DaisyUI/Alert'
 import Pagination from '@/Components/DaisyUI/Pagination'
 
-export default function OnlineUsersTable({apitoken}) {
-   const [onlineUsersData,setOnlineUsersData] = useState({users:[],errMessage:'',loading:true})
-   const {users,errMessage,loading} = onlineUsersData
+export default function OnlineUsersTable({ apitoken }) {
+  const [onlineUsersData, setOnlineUsersData] = useState({ users: [], errMessage: '', loading: true })
+  const { users, errMessage, loading } = onlineUsersData
 
-    const instance = axios.create({
-        baseURL: 'https://rapi.earthlink.iq/api/reseller',
-        headers: { 'Authorization': `Bearer ${apitoken}` }
-        });
+  const instance = axios.create({
+    baseURL: 'https://rapi.earthlink.iq/api/reseller',
+    headers: { 'Authorization': `Bearer ${apitoken}` }
+  });
 
     useEffect(()=>{
        instance.get('/user/filter/WillBeDisabledIn2Days/10/10')
@@ -45,35 +45,35 @@ export default function OnlineUsersTable({apitoken}) {
       </tr>
     </thead>
 
-    <tbody>
+        <tbody>
           {
-                loading && <span className="loading loading-spinner loading-lg"></span>
-            }
-            
-           {
-               users.length && users.map(user => <OnlineUsersTableRow user={user} key={user.userIndex}/>) 
-               
-           }
+            loading && <span className="loading loading-spinner loading-lg"></span>
+          }
 
-           {
-                errMessage && <tr className='text-error'><td>{errMessage}</td></tr>
-           }
-    </tbody>
-    {/* foot */}
-    <tfoot>
-      <tr>
-        <th>#</th>
-        <th>Username</th>
-        <th>Customer Name</th>
-        <th>Accounting Info</th>
-        <th>Expiration Date</th>
-        <th>Account Info</th>
-        <th>Online Status</th>
-        <th>Others</th>
-      </tr>
-    </tfoot>
-    
-  </table>
-</div>
+          {
+            users.length && users.map(user => <OnlineUsersTableRow user={user} key={user.userIndex} />)
+
+          }
+
+          {
+            errMessage && <tr className='text-error'><td>{errMessage}</td></tr>
+          }
+        </tbody>
+        {/* foot */}
+        <tfoot>
+          <tr>
+            <th>#</th>
+            <th>Username</th>
+            <th>Customer Name</th>
+            <th>Accounting Info</th>
+            <th>Expiration Date</th>
+            <th>Account Info</th>
+            <th>Online Status</th>
+            <th>Others</th>
+          </tr>
+        </tfoot>
+
+      </table>
+    </div>
   )
 }

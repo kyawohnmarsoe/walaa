@@ -6,9 +6,10 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\AccountController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AffiliateController;
+use App\Http\Controllers\CustomerController;
  
 // Route::get('/user/{id}', [UserController::class, 'show']);
 // Route::get('/user/{id}', function () {    
@@ -55,6 +56,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/affiliates', [AffiliateController::class, 'index'])->name('affiliates');
     Route::get('/affiliates/store', [AffiliateController::class, 'store'])->name('affiliates.store');
+
+    Route::get('/customers', [CustomerController::class, 'index'])->name('customers');
+    Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create');
+    Route::get('/customers/store', [CustomerController::class, 'store'])->name('customers.store');
 });
 
 Route::middleware('auth')->group(function () {

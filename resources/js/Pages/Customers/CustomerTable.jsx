@@ -2,22 +2,22 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { router } from '@inertiajs/react'
 
-export default function AffiliatesTable({ affiliates }) {
+export default function CustomerTable({ customers }) {
     const [loading, setLoading] = useState(false);
 
     const addApiClick = () => {
-        router.get('/affiliates/store')
+        router.get('/customers/create')
     }
 
-    const onDeleteClick = aff => {
+    const onDeleteClick = cus => {
         if (!window.confirm("Are you sure you want to delete this data?")) {
             return
         }
-        console.log(aff.id);
+        console.log(cus.id);
     }
 
     useEffect(() => {
-        console.log(affiliates);
+        console.log(customers);
 
     }, [])
 
@@ -28,14 +28,14 @@ export default function AffiliatesTable({ affiliates }) {
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded float-right mb-6"
                 onClick={ev => addApiClick()}
             >
-                Add Affiliate Api Data
+                Add user
             </button>
 
             <table className="table">
                 <thead>
                     <tr className='bg-emerald-300'>
-                        <th>Affiliate Index</th>
-                        <th>Affiliate Name</th>
+                        <th>Customer Index</th>
+                        <th>Customer Name</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -51,17 +51,17 @@ export default function AffiliatesTable({ affiliates }) {
                 }
                 {!loading &&
                     <tbody>
-                        {affiliates && affiliates.map(aff => (
-                            <tr key={aff.affiliate_index}>
-                                <td>{aff.affiliate_index}</td>
-                                <td>{aff.affiliate_name}</td>
+                        {customers && customers.map(cus => (
+                            <tr key={cus.id}>
+                                <td>{cus.id}</td>
+                                <td>{cus.first_name}</td>
                                 <td>
                                     <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                         Edit
                                     </button>
                                     &nbsp;
                                     <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                                        onClick={ev => onDeleteClick(aff)}>
+                                        onClick={ev => onDeleteClick(cus)}>
                                         Delete
                                     </button>
                                 </td>
