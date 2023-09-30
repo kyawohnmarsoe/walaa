@@ -3,23 +3,33 @@ import TextInput from '@/Components/TextInput';
 import Checkbox from '@/Components/Checkbox';
 import PrimaryButton from '@/Components/PrimaryButton';
 import { useForm } from '@inertiajs/react';
-
+import { useEffect } from 'react';
 
 export default function AccessDetails({ user,className = '' }) {
 
-     const { data, setData, post, processing, errors, reset } = useForm({});
+     const { data, setData, post, processing, errors, reset } = useForm({
+        userName:user?.userObject?.userId,
+        displayName:user?.userObject?.displayName,
+        macAddress:user?.macAddress,
+        affilate:user?.affiliateName,
+        userNotes:user?.userNotes,
+        router:user?.router,
+        active: !!user?.activeDaysLeft
 
-    //  useEffect(() => {
-    //     return () => {
-    //         reset('password');
-    //     };
-    // }, []);
+     });
+
+     useEffect(() => {
+        
+        // return () => {
+        //     reset('password');
+        // };
+    }, []);
 
     const submit = (e) => {
         e.preventDefault();
 
-        // post(route('login'));
-        alert('submit')
+        post(route('user.update'));
+       
     };
 
     return (
@@ -42,10 +52,11 @@ export default function AccessDetails({ user,className = '' }) {
                     <TextInput
                         id="userName"
                         className="mt-1 block w-full "
-                        value={user.userObject.userId}
+                        value={data.userName}
                         required
                         isFocused
                         autoComplete="userName"
+                        onChange={(e) => setData('userName', e.target.value)}
                     />
 
                     {/* <InputError className="mt-2" message={errors.name} /> */}
@@ -57,10 +68,11 @@ export default function AccessDetails({ user,className = '' }) {
                     <TextInput
                         id="displayName"
                         className="mt-1 block w-full "
-                        value={user.userObject.displayName}
+                        value={data?.displayName}
                         required
                         isFocused
                         autoComplete="displayName"
+                         onChange={(e) => setData('displayName', e.target.value)}
                     />
 
                     {/* <InputError className="mt-2" message={errors.name} /> */}
@@ -72,10 +84,11 @@ export default function AccessDetails({ user,className = '' }) {
                     <TextInput
                         id="macAddress"
                         className="mt-1 block w-full "
-                        value={user.userObject.displayName}
+                        value={data?.macAddress}
                         required
                         isFocused
                         autoComplete="macAddress"
+                         onChange={(e) => setData('macAddress', e.target.value)}
                     />
 
                     {/* <InputError className="mt-2" message={errors.name} /> */}
@@ -87,11 +100,9 @@ export default function AccessDetails({ user,className = '' }) {
                     <TextInput
                         id="affiliate"
                         className="mt-1 block w-full disabled bg-gray-100"
-                        value={user.affiliateName}
-                        required
+                        value={data?.affilate}
                         isFocused
                         autoComplete="affiliate"
-                        editable = {false}
                         disabled
                     />
 
@@ -104,10 +115,10 @@ export default function AccessDetails({ user,className = '' }) {
                     <TextInput
                         id="userNotes"
                         className="mt-1 block w-full "
-                        value={user.userNotes}
-                        required
+                        value={data?.userNotes}
                         isFocused
                         autoComplete="userNotes"
+                         onChange={(e) => setData('userNotes', e.target.value)}
                     />
 
                     {/* <InputError className="mt-2" message={errors.name} /> */}
@@ -119,10 +130,10 @@ export default function AccessDetails({ user,className = '' }) {
                     <TextInput
                         id="router"
                         className="mt-1 block w-full "
-                        value={user.userNotes}
-                        required
+                        value={data?.router}
                         isFocused
                         autoComplete="router"
+                         onChange={(e) => setData('router', e.target.value)}
                     />
 
                     {/* <InputError className="mt-2" message={errors.name} /> */}
@@ -132,9 +143,8 @@ export default function AccessDetails({ user,className = '' }) {
                     <label className="flex items-center">
                         <Checkbox
                             name="active"
-                            checked={true}
+                            checked={data.active}
                             onChange={(e) => setData('active', e.target.checked)}
-                           
                         />
                        
                         <InputLabel htmlFor="active" value="Active"  className='ml-2'/>

@@ -21,9 +21,9 @@ class UserController extends Controller
         return Inertia::render('Users/Details',['apitoken' => $token,'id' => $id]);
     }
 
-    public function test(): Response
+    public function updateUserDetails(Request $request): Response
     {
-        return Inertia::render('Users/Test');
+        return Inertia::render('Dashboard');
     }
 
 

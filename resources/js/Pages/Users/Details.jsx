@@ -57,7 +57,7 @@ export default function Details({ auth,apitoken,id }) {
                                 className="max-w-none"/>
                         </div>
 
-                        <div className='grid md:grid-cols-2 gap-4'>
+                        {/* <div className='grid md:grid-cols-2 gap-4'>
                                 <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                                 <UserStatus  
                                     user={user}
@@ -78,7 +78,7 @@ export default function Details({ auth,apitoken,id }) {
                                     user={user}
                                     className="max-w-xl" />
                             </div>
-                        </div>
+                        </div> */}
                 </div>)
                 }
                     </div>

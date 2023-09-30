@@ -50,6 +50,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     
     Route::get('/users/online', [UserController::class, 'showOnlineUsers'])->name('users.online');
     Route::get('/user/{id}', [UserController::class, 'getUserDetails'])->name('user.details');
+    Route::post('/user/update', [UserController::class, 'updateUserDetails'])->name('user.update');
     
     Route::get('/accounts', [AccountController::class, 'index'])->name('accounts');
     Route::get('/accounts/store', [AccountController::class, 'store'])->name('accounts.store');

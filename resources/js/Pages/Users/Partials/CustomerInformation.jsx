@@ -18,7 +18,7 @@ export default function CustomerInformation({ user,className = '' }) {
                 </tr>
                 <tr>
                     <td>Mobile Phone</td>
-                    <td>: {user?.customer.customerPhoneNumber}</td>
+                    <td>: {user?.customer?.customerPhoneNumber}</td>
                 </tr>
                 <tr>
                     <td>2nd Mobile Phone</td>

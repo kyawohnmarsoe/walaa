@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
-import Textarea from '@/Components/Textarea';
+// import Textarea from '@/Components/Textarea';
 import SelectOption from '@/Components/SelectOption';
 import { router } from '@inertiajs/react';
 import { useForm } from '@inertiajs/react';
@@ -258,14 +258,14 @@ export default function AddForm({ className = '', accounts, affiliates }) {
                 <div>
                     <InputLabel htmlFor="customer_user_notes" value="User Notes" />
 
-                    <Textarea
+                    {/* <Textarea
                         id="customer_user_notes"
                         placeholder="Notes..."
                         value={values.customer_user_notes}
                         onChange={handleChange}
                         className="mt-1 block w-full"
                         minRows={5}
-                    />
+                    /> */}
                 </div>
 
                 <div className="flex items-center gap-4">

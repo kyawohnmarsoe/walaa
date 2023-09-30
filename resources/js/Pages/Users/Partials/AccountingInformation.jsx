@@ -36,7 +36,7 @@ export default function AccountingInformation({ user,className = '' }) {
                 </tr>
                 <tr>
                     <td>Last Modified</td>
-                    <td>: {user?.customer.updatedAt}</td>
+                    <td>: {user?.customer?.updatedAt}</td>
                 </tr>
                 <tr>
                     <td>Manual Expiration Date:</td>
