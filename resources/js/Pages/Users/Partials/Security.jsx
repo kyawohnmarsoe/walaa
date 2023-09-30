@@ -4,6 +4,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
+import Modal from '@/Components/DaisyUI/Modal';
 
 export default function UserStatus({ user,className = '' }) {
     // const user = usePage().props.auth.user;
@@ -13,11 +14,23 @@ export default function UserStatus({ user,className = '' }) {
     //     email: user.email,
     // });
 
-    // const submit = (e) => {
-    //     e.preventDefault();
+    const submit = (e) => {
+        e.preventDefault();
+        alert('submit')
+        // patch(route('profile.update'));
+    };
+    const modalIds = {
+        passwordShow : 'passwordShowModal',
+        passwordChange : 'passwordChangeModal',
+        accPasswordShow : 'accPasswordShowModal',
+        accPasswordChange : 'accPasswordChangeModal',
 
-    //     patch(route('profile.update'));
-    // };
+    }
+
+    const callModal = (id) =>{
+        // alert('callModal')
+        document.getElementById(id).showModal()
+    }
 
     return (
         <section className={className}>
@@ -28,6 +41,106 @@ export default function UserStatus({ user,className = '' }) {
                     Update your account's profile information and email address.
                 </p> */}
             </header>
+            <Modal id={modalIds.passwordShow} title="Password Viewer">
+                <form onSubmit={submit} className="space-y-6 ">
+                <div className='grid grid-cols-1 gap-4'>
+                 
+                <div>
+                    <InputLabel htmlFor="userName" value="User Name :" />
+
+                    <TextInput
+                        id="userName"
+                        className="mt-1 block w-full "
+                        value={user?.userObject?.userId}
+                        required
+                        isFocused
+                        autoComplete="userName"
+                    />
+
+                    {/* <InputError className="mt-2" message={errors.name} /> */}
+                </div>
+
+                <div>
+                    <InputLabel htmlFor="password" value="Password:" />
+
+                    <TextInput
+                        id="password"
+                        className="mt-1 block w-full "
+                        value={user?.userObject?.userId}
+                        required
+                        isFocused
+                        autoComplete="password"
+                    />
+
+                    {/* <InputError className="mt-2" message={errors.name} /> */}
+                </div>
+            </div>
+                
+                <div className="flex items-center gap-4">
+                    {/* <PrimaryButton disabled={processing}>Update</PrimaryButton> */}
+                   
+                    {/* <Transition
+                        show={recentlySuccessful}
+                        enter="transition ease-in-out"
+                        enterFrom="opacity-0"
+                        leave="transition ease-in-out"
+                        leaveTo="opacity-0"
+                    >
+                        <p className="text-sm text-gray-600">Saved.</p>
+                    </Transition> */}
+                </div>
+            </form>
+            </Modal>
+            <Modal id={modalIds.passwordChange} title="Change Password">
+                <form onSubmit={submit} className="space-y-6 ">
+                <div className='grid grid-cols-1 gap-4'>
+                 
+                <div>
+                    <InputLabel htmlFor="newPassword" value="New Password:" />
+
+                    <TextInput
+                        id="newPassword"
+                        className="mt-1 block w-full "
+                        value=''
+                        required
+                        isFocused
+                        autoComplete="newPassword"
+                    />
+
+                    {/* <InputError className="mt-2" message={errors.name} /> */}
+                </div>
+
+                <div>
+                    <InputLabel htmlFor="confirmNewPassword" value="Confirm New Password:" />
+
+                    <TextInput
+                        id="confirmNewPassword"
+                        className="mt-1 block w-full "
+                        value=''
+                        required
+                        isFocused
+                        autoComplete="confirmNewPassword"
+                    />
+
+                    {/* <InputError className="mt-2" message={errors.name} /> */}
+                </div>
+            </div>
+                
+                <div className="flex items-center gap-4">
+                    {/* <PrimaryButton disabled={processing}>Update</PrimaryButton> */}
+                   
+                    {/* <Transition
+                        show={recentlySuccessful}
+                        enter="transition ease-in-out"
+                        enterFrom="opacity-0"
+                        leave="transition ease-in-out"
+                        leaveTo="opacity-0"
+                    >
+                        <p className="text-sm text-gray-600">Saved.</p>
+                    </Transition> */}
+                </div>
+            </form>
+            </Modal>
             
             <div className="mt-6 space-y-6 ">
                 
@@ -38,7 +151,7 @@ export default function UserStatus({ user,className = '' }) {
                    The password used on the router
                 </p>
 
-                <a href="#" className=' text-primary'>Show</a> | <a href="#" className='text-primary'>Change</a>
+                <span className=' text-primary' onClick={()=>callModal(modalIds.passwordShow)}>Show</span> |  <span className=' text-primary' onClick={()=>callModal(modalIds.passwordChange)}>Change</span>
                 
                 </div>
                
@@ -49,11 +162,112 @@ export default function UserStatus({ user,className = '' }) {
                    The account password is used to prevent the user from changing the subscription password from the subscriber information page until he enters it.
                 </p>
 
-                <a href="#" className=' text-primary'>Show</a> | <a href="#" className='text-primary'>Change</a>
+                <span className=' text-primary' onClick={()=>callModal(modalIds.accPasswordShow)}>Show</span> |  <span className=' text-primary' onClick={()=>callModal(modalIds.accPasswordChange)}>Change</span>
                 
                 </div>
             
             </div>
+            
+            <Modal id={modalIds.accPasswordShow} title="Account Password Viewer">
+                <form onSubmit={submit} className="space-y-6 ">
+                <div className='grid grid-cols-1 gap-4'>
+                 
+                <div>
+                    <InputLabel htmlFor="userName" value="User Name :" />
+
+                    <TextInput
+                        id="userName"
+                        className="mt-1 block w-full "
+                        value={user?.userObject?.userId}
+                        required
+                        isFocused
+                        autoComplete="userName"
+                    />
+
+                    {/* <InputError className="mt-2" message={errors.name} /> */}
+                </div>
+
+                <div>
+                    <InputLabel htmlFor="accPassword" value="Account Password:" />
+
+                    <TextInput
+                        id="accPassword"
+                        className="mt-1 block w-full "
+                        value={user?.userObject?.userId}
+                        required
+                        isFocused
+                        autoComplete="accPassword"
+                    />
+
+                    {/* <InputError className="mt-2" message={errors.name} /> */}
+                </div>
+            </div>
+                
+                <div className="flex items-center gap-4">
+                    {/* <PrimaryButton disabled={processing}>Update</PrimaryButton> */}
+                   
+                    {/* <Transition
+                        show={recentlySuccessful}
+                        enter="transition ease-in-out"
+                        enterFrom="opacity-0"
+                        leave="transition ease-in-out"
+                        leaveTo="opacity-0"
+                    >
+                        <p className="text-sm text-gray-600">Saved.</p>
+                    </Transition> */}
+                </div>
+            </form>
+            </Modal>
+            <Modal id={modalIds.accPasswordChange} title="Change Account Password">
+                <form onSubmit={submit} className="space-y-6 ">
+                <div className='grid grid-cols-1 gap-4'>
+                 
+                <div>
+                    <InputLabel htmlFor="newAccPassword" value="New Account Password:" />
+
+                    <TextInput
+                        id="newAccPassword"
+                        className="mt-1 block w-full "
+                        value=''
+                        required
+                        isFocused
+                        autoComplete="newAccPassword"
+                    />
+
+                    {/* <InputError className="mt-2" message={errors.name} /> */}
+                </div>
+
+                <div>
+                    <InputLabel htmlFor="confirmNewAccPassword" value="Confirm New Account Password:" />
+
+                    <TextInput
+                        id="confirmNewAccPassword"
+                        className="mt-1 block w-full "
+                        value=''
+                        required
+                        isFocused
+                        autoComplete="confirmNewAccPassword"
+                    />
+
+                    {/* <InputError className="mt-2" message={errors.name} /> */}
+                </div>
+            </div>
+                
+                <div className="flex items-center gap-4">
+                    {/* <PrimaryButton disabled={processing}>Update</PrimaryButton> */}
+                   
+                    {/* <Transition
+                        show={recentlySuccessful}
+                        enter="transition ease-in-out"
+                        enterFrom="opacity-0"
+                        leave="transition ease-in-out"
+                        leaveTo="opacity-0"
+                    >
+                        <p className="text-sm text-gray-600">Saved.</p>
+                    </Transition> */}
+                </div>
+            </form>
+            </Modal>
             
         </section>
     );

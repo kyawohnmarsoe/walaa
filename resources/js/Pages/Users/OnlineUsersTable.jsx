@@ -46,8 +46,8 @@ export default function OnlineUsersTable({ apitoken }) {
     </thead>
 
         <tbody>
-          {
-            loading && <span className="loading loading-spinner loading-lg"></span>
+           {
+            loading && <div className='text-center'><span className="loading loading-spinner loading-lg"></span></div>
           }
 
           {

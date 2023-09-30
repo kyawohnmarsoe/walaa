@@ -29,9 +29,9 @@ export default function StatsList({ apitoken }) {
    
     return (
         <div className='flex flex-wrap justify-center'>
-            {
-                loading && <span className="loading loading-spinner loading-lg"></span>
-            }
+             {
+            loading && <div className='text-center'><span className="loading loading-spinner loading-lg"></span></div>
+          }
             
            {
                 stats.length && stats.map(s => <Stats stats={s} key={s.sortIndex}/>) 

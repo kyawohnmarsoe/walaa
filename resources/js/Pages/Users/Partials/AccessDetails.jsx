@@ -1,30 +1,26 @@
-import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
-import { Link, useForm, usePage } from '@inertiajs/react';
-import { Transition } from '@headlessui/react';
-import { useEffect } from 'react';
 import Checkbox from '@/Components/Checkbox';
+import PrimaryButton from '@/Components/PrimaryButton';
+import { useForm } from '@inertiajs/react';
 
 
 export default function AccessDetails({ user,className = '' }) {
-    
-    // const user = usePage().props.auth.user;
 
-    // const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
-    //     userName: user.userObject.userId,
-    // });
+     const { data, setData, post, processing, errors, reset } = useForm({});
 
-    // const submit = (e) => {
-    //     e.preventDefault();
+    //  useEffect(() => {
+    //     return () => {
+    //         reset('password');
+    //     };
+    // }, []);
 
-    //     patch(route('profile.update'));
-    // };
+    const submit = (e) => {
+        e.preventDefault();
 
-    useEffect(()=>{
-        console.log('access details '+user.userObject.userId)
-    },[user])
+        // post(route('login'));
+        alert('submit')
+    };
 
     return (
         <section className={className}>
@@ -37,7 +33,7 @@ export default function AccessDetails({ user,className = '' }) {
             </header>
 
             {/* <form onSubmit={submit} className="mt-6 space-y-6"> */}
-            <form className="mt-6 space-y-6 ">
+            <form onSubmit={submit} className="mt-6 space-y-6 ">
                 <div className='grid grid-cols-3 gap-4'>
                  
                 <div>
@@ -54,8 +50,6 @@ export default function AccessDetails({ user,className = '' }) {
 
                     {/* <InputError className="mt-2" message={errors.name} /> */}
                 </div>
-
-               
 
                 <div>
                     <InputLabel htmlFor="displayName" value="Display Name" />
@@ -151,8 +145,8 @@ export default function AccessDetails({ user,className = '' }) {
 
 
                 <div className="flex items-center gap-4">
-                    {/* <PrimaryButton disabled={processing}>Save</PrimaryButton> */}
-
+                    <PrimaryButton disabled={processing}>Update</PrimaryButton>
+                   
                     {/* <Transition
                         show={recentlySuccessful}
                         enter="transition ease-in-out"

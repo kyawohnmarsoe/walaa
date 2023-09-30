@@ -7,7 +7,7 @@ export default function OnlineUsers({ auth, apitoken }) {
     return (
         <AuthenticatedLayout
             user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">OnlineUsers</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Online Users</h2>}
         >
             <Head title="Online Users" />
 
