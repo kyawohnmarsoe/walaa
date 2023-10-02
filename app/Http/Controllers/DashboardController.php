@@ -11,6 +11,7 @@ class DashboardController extends Controller
     public function dashboard()
     {
         $token = $this->GetApiToken();      
+        // $token = null;      
         
         return Inertia::render('Dashboard', [
             'apitoken' => $token

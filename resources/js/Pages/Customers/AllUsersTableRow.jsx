@@ -23,7 +23,7 @@ console.log(user)
               </div>
             </div> */}
             <div>
-              <div className="font-bold text-emerald-700"><Link href={`/user/${user.userIndex}`}>{user.userID && user.userID}</Link></div>
+              <div className="font-bold text-sky-700"><Link href={`/user/${user.userIndex}`}>{user.userID && user.userID}</Link></div>
              
              <div> <strong>Affiliate </strong><span className="text-sm opacity-50"> : {user?.affiliateName}</span></div>
             </div>

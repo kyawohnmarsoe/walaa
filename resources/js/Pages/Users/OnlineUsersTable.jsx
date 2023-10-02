@@ -4,27 +4,8 @@ import OnlineUsersTableRow from './OnlineUsersTableRow'
 import Alert from '../../Components/DaisyUI/Alert'
 import Pagination from '@/Components/DaisyUI/Pagination'
 
-export default function OnlineUsersTable({ apitoken }) {
-  const [onlineUsersData, setOnlineUsersData] = useState({ users: [], errMessage: '', loading: true })
-  const { users, errMessage, loading } = onlineUsersData
 
-  const instance = axios.create({
-    baseURL: 'https://rapi.earthlink.iq/api/reseller',
-    headers: { 'Authorization': `Bearer ${apitoken}` }
-  });
-
-    useEffect(()=>{
-       instance.post('/user/all',{params: { OrderBy: 'Online Status'}})
-        .then(res => {
-            setOnlineUsersData({users:res.data.value.itemsList,errMessage:'',loading:false}) 
-            // console.log(res.data.value.itemsList[0].customer.customerFullName)
-            console.log(res.data.value.itemsList[0])
-        })
-        .catch(err => {
-          setOnlineUsersData({users:[],errMessage:err.message,loading:false})
-          console.log(err)
-        })
-    },[])
+export default function OnlineUsersTable({ users }) {
 
   return (
     <div className="overflow-x-auto">
@@ -36,28 +17,20 @@ export default function OnlineUsersTable({ apitoken }) {
         <th>#</th>
         {/* <th>User Index</th> */}
         <th>Username</th>
-        <th>Customer Name</th>
-        <th>Accounting Info</th>
-        <th>Expiration Date</th>
-        <th>Account Info</th>
         <th>Online Status</th>
-        <th>Others</th>
+        <th>Online Time</th>
+        <th>Online Since</th>
+        <th>MAC Address</th>
+        <th>Expiration Date</th>
+        <th>UserIP</th>
+        <th>Login From</th>
+        <th>Login Affiliate</th>
+        <th>Action</th>
       </tr>
     </thead>
 
         <tbody>
-           {
-            loading && <div className='text-center'><span className="loading loading-spinner loading-lg"></span></div>
-          }
-
-          {
-            users.length && users.map(user => <OnlineUsersTableRow user={user} key={user.userIndex} />)
-
-          }
-
-          {
-            errMessage && <tr className='text-error'><td>{errMessage}</td></tr>
-          }
+            { users?.map(user => <OnlineUsersTableRow user = {user} key={user.userIndex} />)}
         </tbody>
 
         {/* foot */}
@@ -65,12 +38,15 @@ export default function OnlineUsersTable({ apitoken }) {
           <tr>
             <th>#</th>
             <th>Username</th>
-            <th>Customer Name</th>
-            <th>Accounting Info</th>
-            <th>Expiration Date</th>
-            <th>Account Info</th>
             <th>Online Status</th>
-            <th>Others</th>
+            <th>Online Time</th>
+            <th>Online Since</th>
+            <th>MAC Address</th>
+            <th>Expiration Date</th>
+            <th>UserIP</th>
+            <th>Login From</th>
+            <th>Login Affiliate</th>
+            <th>Action</th>
           </tr>
         </tfoot>
 

@@ -4,7 +4,7 @@
     margin: 5px;
 }
 
-.pagination li {
+.pagination li a {
   color: black;
   float: left;
   padding: 8px 16px;
@@ -13,7 +13,7 @@
   border: 1px solid #ddd;
 }
 
-.pagination li.selected {
+.pagination li.selected a{
   background-color: rgb(110 231 183 / var(--tw-bg-opacity));
   border: 1px solid rgb(110 231 183 / var(--tw-bg-opacity));
 }

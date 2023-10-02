@@ -19,7 +19,7 @@ export default function Dashboard({ auth, apitoken }) {
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-4">
                     <div className=" overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="text-gray-900">
-                            <StatsList apitoken={apitoken} />
+                           { !!apitoken ?  <StatsList apitoken={apitoken} /> : 'something wrong'}
                         </div>
                     </div>
                 </div>
