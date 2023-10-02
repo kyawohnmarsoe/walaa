@@ -31,12 +31,18 @@ class UserController extends Controller
      public function showOnlineUsers(): Response
     {
         $token = $this->getSessionToken();      
-        return Inertia::render('Users/OnlineUsers',['apitoken' => $token, 'affiliates' => Affiliate::all()]);
+        return Inertia::render('Users/OnlineUsers',[
+            'apitoken' => $token, 
+            'affiliates' => Affiliate::all()
+        ]);
     }
 
      public function showAllUsers(): Response
     {
         $token = $this->getSessionToken();      
-        return Inertia::render('Customers/Management',['apitoken' => $token]);
+        return Inertia::render('Customers/Management',[
+            'apitoken' => $token, 
+            'affiliates' => Affiliate::all()
+        ]);
     }
 }

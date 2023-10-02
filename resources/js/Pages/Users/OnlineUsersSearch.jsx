@@ -4,176 +4,182 @@ import Checkbox from '@/Components/Checkbox';
 import PrimaryButton from '@/Components/PrimaryButton';
 import { useForm } from '@inertiajs/react';
 import { useEffect } from 'react';
-import SelectOption from '@/Components/SelectOption';
-import Select from '@/Components/DaisyUI/Select';
 
-export default function OnlineUsersSearch({ className = '',affiliates }) {
-   console.log(affiliates)
-     const { data, setData, post, processing, errors, reset } = useForm({
-        userName:'',
-        userIP:'',
-        affiliateName:'',
-        callerMAC:'',
-        loginFrom:'',
-        sessionType:['Any','Normal (With Internet)','Connected Only (Without Internet'],
-        active:false
+export default function OnlineUsersSearch ({ className = '', affiliates })
+{
+    console.log(affiliates)
+    const { data, setData, post, processing, errors, reset } = useForm({
+        userName: '',
+        userIP: '',
+        affiliateName: '',
+        callerMAC: '',
+        loginFrom: '',
+        sessionType: ['Any', 'Normal (With Internet)', 'Connected Only (Without Internet'],
+        active: false
 
-     });
+    });
 
-     useEffect(() => {
-        
+    useEffect(() =>
+    {
+
         // return () => {
         //     reset('password');
         // };
     }, []);
 
-    const submit = (e) => {
+    const submit = (e) =>
+    {
         e.preventDefault();
 
         // post(route('user.update'));
         alert('submit')
-       
+
     };
 
     return (
-         <div className="pt-12 ">
-                <div className="max-w-8xl mx-auto sm:px-6 lg:px-4">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-        <section className={className}>
-            <header>
-                <h2 className="text-lg font-medium text-sky-600">Online Users</h2>
+        <div className="pt-12 ">
+            <div className="max-w-8xl mx-auto sm:px-6 lg:px-4">
+                <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <section className={ className }>
+                        <header>
+                            <h2 className="text-lg font-medium text-sky-600">Online Users</h2>
 
-                {/* <p className="mt-1 text-sm text-gray-600">
-                    Update your account's profile information and email address.
-                </p> */}
-            </header>
+                            {/* <p className="mt-1 text-sm text-gray-600">
+                            Update your account's profile information and email address.
+                        </p> */}
+                        </header>
 
-            <form onSubmit={submit} className="mt-6 space-y-6 ">
-                <div className='grid grid-cols-3 gap-4'>
-                 
-                <div>
-                    <InputLabel htmlFor="userName" value="Username" />
+                        <form onSubmit={ submit } className="mt-6 space-y-6 ">
+                            <div className='grid grid-cols-3 gap-4'>
 
-                    <TextInput
-                        id="userName"
-                        className="mt-1 block w-full "
-                        value={data.userName}
-                        required
-                        isFocused
-                        autoComplete="userName"
-                        onChange={(e) => setData('userName', e.target.value)}
-                    />
+                                <div>
+                                    <InputLabel htmlFor="userName" value="Username" />
 
-                    {/* <InputError className="mt-2" message={errors.name} /> */}
-                </div>
+                                    <TextInput
+                                        id="userName"
+                                        className="mt-1 block w-full "
+                                        value={ data.userName }
+                                        isFocused
+                                        autoComplete="userName"
+                                        onChange={ (e) => setData('userName', e.target.value) }
+                                    />
 
-                <div>
-                    <InputLabel htmlFor="userIP" value="Display Name" />
+                                    {/* <InputError className="mt-2" message={errors.name} /> */ }
+                                </div>
 
-                    <TextInput
-                        id="userIP"
-                        className="mt-1 block w-full "
-                        value={data?.userIP}
-                        required
-                        isFocused
-                        autoComplete="userIP"
-                         onChange={(e) => setData('userIP', e.target.value)}
-                    />
+                                <div>
+                                    <InputLabel htmlFor="userIP" value="User IP" />
 
-                    {/* <InputError className="mt-2" message={errors.name} /> */}
-                </div>
+                                    <TextInput
+                                        id="userIP"
+                                        className="mt-1 block w-full "
+                                        value={ data?.userIP }
+                                        isFocused
+                                        autoComplete="userIP"
+                                        onChange={ (e) => setData('userIP', e.target.value) }
+                                    />
 
-                <div>
-                    <InputLabel htmlFor="affiliateName" value="Affiliate" />
+                                    {/* <InputError className="mt-2" message={errors.name} /> */ }
+                                </div>
 
-                    <select 
-                    name="affiliateName" 
-                    id="affiliateName" 
-                    className='mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm '>
-                      {affiliates.map(a=><option value={a.affiliate_index}>{a.affiliate_name}</option>)}
-                    </select>
+                                <div>
+                                    <InputLabel htmlFor="affiliateName" value="Affiliate" />
 
-                    {/* <InputError className="mt-2" message={errors.name} /> */}
-                </div>
+                                    <select
+                                        name="affiliateName"
+                                        id="affiliateName"
+                                        className='mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm '
+                                        value={ data?.affiliateName }
+                                        onChange={ (e) => setData('affiliateName', e.target.value) }
+                                    >
+                                        <option value='all'>All</option>
+                                        {
+                                            affiliates?.map(a => <option value={ a.affiliate_index }>
+                                                { a.affiliate_name }
+                                            </option>)
+                                        }
 
-                <div>
-                    <InputLabel htmlFor="callerMAC" value="Caller MAC" />
+                                    </select>
 
-                    <TextInput
-                        id="callerMAC"
-                        className="mt-1 block w-full"
-                        value={data?.callerMAC}
-                        isFocused
-                        autoComplete="callerMAC"
-                    />
+                                    {/* <InputError className="mt-2" message={errors.name} /> */ }
+                                </div>
 
-                    
+                                <div>
+                                    <InputLabel htmlFor="callerMAC" value="Caller MAC" />
 
-                    {/* <InputError className="mt-2" message={errors.name} /> */}
-                </div>
+                                    <TextInput
+                                        id="callerMAC"
+                                        className="mt-1 block w-full"
+                                        value={ data?.callerMAC }
+                                        isFocused
+                                        autoComplete="callerMAC"
+                                    />
 
-                <div>
-                    <InputLabel htmlFor="loginFrom" value="Login From" />
+                                    {/* <InputError className="mt-2" message={errors.name} /> */ }
+                                </div>
 
-                    <TextInput
-                        id="loginFrom"
-                        className="mt-1 block w-full "
-                        value={data?.loginFrom}
-                        isFocused
-                        autoComplete="loginFrom"
-                         onChange={(e) => setData('loginFrom', e.target.value)}
-                    />
+                                <div>
+                                    <InputLabel htmlFor="loginFrom" value="Login From" />
 
-                    {/* <InputError className="mt-2" message={errors.name} /> */}
-                </div>
+                                    <TextInput
+                                        id="loginFrom"
+                                        className="mt-1 block w-full "
+                                        value={ data?.loginFrom }
+                                        isFocused
+                                        autoComplete="loginFrom"
+                                        onChange={ (e) => setData('loginFrom', e.target.value) }
+                                    />
 
-                <div>
-                    <InputLabel htmlFor="router" value="Router/Nano IP:" />
+                                    {/* <InputError className="mt-2" message={errors.name} /> */ }
+                                </div>
 
-                    <TextInput
-                        id="router"
-                        className="mt-1 block w-full "
-                        value={data?.router}
-                        isFocused
-                        autoComplete="router"
-                         onChange={(e) => setData('router', e.target.value)}
-                    />
+                                <div>
+                                    <InputLabel htmlFor="router" value="Router/Nano IP:" />
 
-                    {/* <InputError className="mt-2" message={errors.name} /> */}
-                </div>
+                                    <TextInput
+                                        id="router"
+                                        className="mt-1 block w-full "
+                                        value={ data?.router }
+                                        isFocused
+                                        autoComplete="router"
+                                        onChange={ (e) => setData('router', e.target.value) }
+                                    />
 
-                <div >
-                    <label className="flex items-center">
-                        <Checkbox
-                            name="securityIssues"
-                            checked={data.securityIssues}
-                            onChange={(e) => setData('securityIssues', e.target.checked)}
-                        />
-                       
-                        <InputLabel htmlFor="securityIssues" value="Users with security issues only"  className='ml-2'/>
-                    </label>
+                                    {/* <InputError className="mt-2" message={errors.name} /> */ }
+                                </div>
+
+                                <div >
+                                    <label className="flex items-center">
+                                        <Checkbox
+                                            name="securityIssues"
+                                            checked={ data.securityIssues }
+                                            onChange={ (e) => setData('securityIssues', e.target.checked) }
+                                        />
+
+                                        <InputLabel htmlFor="securityIssues" value="Users with security issues only" className='ml-2' />
+                                    </label>
+                                </div>
+
+                            </div>
+
+
+                            <div className="flex items-center gap-4">
+                                <PrimaryButton disabled={ processing }>Search</PrimaryButton>
+
+                                {/* <Transition
+                                show={recentlySuccessful}
+                                enter="transition ease-in-out"
+                                enterFrom="opacity-0"
+                                leave="transition ease-in-out"
+                                leaveTo="opacity-0"
+                            >
+                                <p className="text-sm text-gray-600">Saved.</p>
+                            </Transition> */}
+                            </div>
+                        </form>
+                    </section>
                 </div>
             </div>
-                
-
-
-                <div className="flex items-center gap-4">
-                    <PrimaryButton disabled={processing}>Search</PrimaryButton>
-                   
-                    {/* <Transition
-                        show={recentlySuccessful}
-                        enter="transition ease-in-out"
-                        enterFrom="opacity-0"
-                        leave="transition ease-in-out"
-                        leaveTo="opacity-0"
-                    >
-                        <p className="text-sm text-gray-600">Saved.</p>
-                    </Transition> */}
-                </div>
-            </form>
-        </section>
-        </div>
-        </div>
         </div>
     );
 }
