@@ -11,10 +11,10 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AffiliateController;
 use App\Http\Controllers\CustomerController;
  
-// Route::get('/user/{id}', [UserController::class, 'show']);
-// Route::get('/user/{id}', function () {    
-//     return Inertia::render('Users/Details');
-// })->name('user.details');
+
+Route::get('/test', function () {    
+    return Inertia::render('Test');
+})->name('test');
 
 Route::get('/', function () {   
     return Inertia::render('Welcome', [
@@ -51,6 +51,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/users/online', [UserController::class, 'showOnlineUsers'])->name('users.online');
     Route::get('/user/{id}', [UserController::class, 'getUserDetails'])->name('user.details');
     Route::post('/user/update', [UserController::class, 'updateUserDetails'])->name('user.update');
+   
     
     Route::get('/accounts', [AccountController::class, 'index'])->name('accounts');
     Route::get('/accounts/store', [AccountController::class, 'store'])->name('accounts.store');
@@ -61,6 +62,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/customers', [CustomerController::class, 'index'])->name('customers');
     Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create');
     Route::get('/customers/store', [CustomerController::class, 'store'])->name('customers.store');
+    Route::get('/users/management', [UserController::class, 'showAllUsers'])->name('users.management');
 });
 
 Route::middleware('auth')->group(function () {

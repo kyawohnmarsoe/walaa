@@ -28,7 +28,8 @@ export default function AccessDetails({ user,className = '' }) {
     const submit = (e) => {
         e.preventDefault();
 
-        post(route('user.update'));
+        // post(route('user.update'));
+        alert('submit')
        
     };
 
@@ -85,7 +86,6 @@ export default function AccessDetails({ user,className = '' }) {
                         id="macAddress"
                         className="mt-1 block w-full "
                         value={data?.macAddress}
-                        required
                         isFocused
                         autoComplete="macAddress"
                          onChange={(e) => setData('macAddress', e.target.value)}

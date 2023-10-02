@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "@inertiajs/react";
 
-export default function OnlineUsersTableRow({user}) {
+export default function AllUsersTableRow({user}) {
 
 console.log(user)
 
@@ -25,7 +25,7 @@ console.log(user)
             <div>
               <div className="font-bold text-emerald-700"><Link href={`/user/${user.userIndex}`}>{user.userID && user.userID}</Link></div>
              
-              {/* <div className="text-sm opacity-50">United States</div> */}
+             <div> <strong>Affiliate </strong><span className="text-sm opacity-50"> : {user?.affiliateName}</span></div>
             </div>
           </div>
         </td>
@@ -63,6 +63,16 @@ console.log(user)
           <strong>IP</strong> : {user.userIP && user.userIP}
           <br/>
           <strong>Lock MAC</strong> : {user.lockMac && +user.lockMac}
+        </td>
+
+        <td>
+            <strong>Mobile</strong> : {user?.customer?.customerPhoneNumber}
+          <br/>
+          <strong>Mobile 2</strong> : { user?.customer?.customerSecondPhoneNumber } 
+          <br/>
+          <strong>User Notes</strong> : {user?.userNotes}
+          <br/>
+          <strong>Router IP</strong> : {user?.router}
         </td>
       </tr>
   )

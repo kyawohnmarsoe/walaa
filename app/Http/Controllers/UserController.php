@@ -32,4 +32,10 @@ class UserController extends Controller
         $token = $this->GetApiToken();      
         return Inertia::render('Users/OnlineUsers',['apitoken' => $token]);
     }
+
+     public function showAllUsers(): Response
+    {
+        $token = $this->GetApiToken();      
+        return Inertia::render('Customers/Management',['apitoken' => $token]);
+    }
 }

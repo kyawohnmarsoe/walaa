@@ -14,7 +14,7 @@ export default function OnlineUsersTable({ apitoken }) {
   });
 
     useEffect(()=>{
-       instance.get('/user/filter/WillBeDisabledIn2Days/10/10')
+       instance.post('/user/all',{params: { OrderBy: 'Online Status'}})
         .then(res => {
             setOnlineUsersData({users:res.data.value.itemsList,errMessage:'',loading:false}) 
             // console.log(res.data.value.itemsList[0].customer.customerFullName)
@@ -59,6 +59,7 @@ export default function OnlineUsersTable({ apitoken }) {
             errMessage && <tr className='text-error'><td>{errMessage}</td></tr>
           }
         </tbody>
+
         {/* foot */}
         <tfoot>
           <tr>
