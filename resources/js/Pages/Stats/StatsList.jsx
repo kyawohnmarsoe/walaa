@@ -15,7 +15,7 @@ export default function StatsList({ apitoken }) {
 
     useEffect(()=>{
 
-       instance.get('/home/Dashboard')
+       instance.get('/home/Dashboard1')
         .then(res => {
             setStatsData({stats:res.data.value,errMessage:'',loading:false}) 
             console.log(res.data.value)
@@ -28,20 +28,26 @@ export default function StatsList({ apitoken }) {
     },[])
    
     return (
-        <div className='flex flex-wrap justify-center'>
-             {
+        // <div className='flex flex-wrap justify-center'>
+        <div>
+           {
             loading && <div className='text-center'><span className="loading loading-spinner loading-lg"></span></div>
           }
-            
-           {
-                stats.length && stats.map(s => <Stats stats={s} key={s.sortIndex}/>) 
-               
-           }
-
            {
                 errMessage && <Alert msg={errMessage} css='alert alert-error'/>
            }
+        <div className='grid lg:grid-cols-5 grid-cols-2 md:grid-cols-3 gap-1'>
+
+         
             
+           {
+              !!stats.length && stats.map(s => <Stats stats={s} key={s.sortIndex}/>) 
+               
+           }
+
+          
+            
+    </div>
     </div>
     )
 }

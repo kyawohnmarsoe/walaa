@@ -90,7 +90,7 @@ export default function OnlineUsers({ auth, apitoken }) {
                                 }
 
                                 {
-                                    users.length && <PaginatedItems itemsPerPage={4} items={users} />
+                                    !!users.length && <PaginatedItems itemsPerPage={4} items={users} />
 
                                 }
 

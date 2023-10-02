@@ -87,18 +87,20 @@ const [onlineUsersData, setOnlineUsersData] = useState({ users: [], errMessage: 
 
             <div className="py-12 ">
                 <div className="max-w-8xl mx-auto sm:px-6 lg:px-4">
-                    <div className="bg-white overflow-hidden shadow-sm ">
-                        <div className="text-gray-900">
-                             {
+                   {
                                 loading && <div className='text-center'><span className="loading loading-spinner loading-lg"></span></div>
                             }
                              {
-                                users?.length && <PaginatedItems itemsPerPage={4} items={users} />
-
-                            } 
-                            {
                                 errMessage && <tr className='text-error'><td>{errMessage}</td></tr>
                             }
+                    <div className="bg-white overflow-hidden shadow-sm ">
+                        <div className="text-gray-900">
+                            
+                             {
+                                !!users.length && <PaginatedItems itemsPerPage={4} items={users} />
+
+                            } 
+                           
                            
                         </div>
                     </div>
