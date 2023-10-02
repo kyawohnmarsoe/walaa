@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
+import { useForm, router } from '@inertiajs/react';
+import { Transition } from '@headlessui/react';
+
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
-// import Textarea from '@/Components/Textarea';
+import Textarea from '@/Components/Textarea';
 import SelectOption from '@/Components/SelectOption';
-import { router } from '@inertiajs/react';
-import { useForm } from '@inertiajs/react';
-import { Transition } from '@headlessui/react';
 
-export default function AddForm({ className = '', accounts, affiliates }) {
+export default function AddForm({ className = '', accounts, affiliates, apitoken }) {
+
     const { processing, recentlySuccessful } = useForm();
 
     const [values, setValues] = useState({
@@ -31,6 +32,14 @@ export default function AddForm({ className = '', accounts, affiliates }) {
 
     const [optionsAffiliates, setOptionsAffiliates] = useState([])
     const [optionsAccounts, setOptionsAccounts] = useState([])
+
+    const [showAffiliateValue, setShowAffiliateValue] = useState(false)
+    const [showAccountValue, setShowAccountValue] = useState(false)
+
+    const [filteredAffiliate, setFilteredAffiliate] = useState([])
+    const [filteredAccount, setFilteredAccount] = useState([])
+
+    let span = document.getElementById("deposit_msg");
 
     const getAffiliates = () => {
         let optionsAffiliatesArr = [];
@@ -65,7 +74,56 @@ export default function AddForm({ className = '', accounts, affiliates }) {
     useEffect(() => {
         getAffiliates()
         getAccounts()
+
     }, [])
+
+    function affiliatesHandleChange(e) {
+        const value = e.target.value
+        // console.log(value);
+        setShowAffiliateValue(false)
+
+        const filteredRes = affiliates.filter(aff => aff.affiliate_index == value);
+        if (filteredRes) {
+            setShowAffiliateValue(true)
+            setFilteredAffiliate(filteredRes)
+            // console.log(filteredRes)
+        }
+    }
+
+    function accountsHandleChange(e) {
+        const value = e.target.value
+        // console.log(value);
+        setShowAccountValue(false)
+
+        const filteredRes = accounts.filter(acc => acc.account_index == value);
+        if (filteredRes) {
+            setShowAccountValue(true)
+            setFilteredAccount(filteredRes)
+            // console.log(filteredRes)
+
+            // to get Affiliate deposit
+            const instance = axios.create({
+                baseURL: 'https://rapi.earthlink.iq/api/reseller/affiliate/deposit/confirmationmsg',
+                headers: { 'Authorization': `Bearer ${apitoken}` }
+            });
+            let postData = {
+                // UserID: '',
+                TargetAffiliateID: showAffiliateValue ? filteredAffiliate[0]['affiliate_index'] : 4336,
+                AccountID: showAccountValue ? filteredAccount[0]['account_index'] : 56,
+                AffiliateTypeID: 1
+            }
+            instance.post('', postData).then(res => {
+                if (res) {
+                    // res.value == true ?? 
+                    console.log(res.data.responseMessage)
+                    span.innerHTML = res.data.responseMessage;
+                }
+
+            }).catch(err => {
+                console.log(err.message)
+            })
+        }
+    }
 
     function handleChange(e) {
         const key = e.target.id;
@@ -80,6 +138,26 @@ export default function AddForm({ className = '', accounts, affiliates }) {
         e.preventDefault()
         router.post('/customers/store', values)
     }
+
+    let showDiv = showAccountValue || showAffiliateValue ?
+        <div>
+            {
+                showAccountValue ?
+                    <span className='font-bold text-emerald-700'>
+                        Account Price : {filteredAccount[0]['account_price']}
+                    </span>
+                    : ''
+            }
+
+            {
+                showAffiliateValue ?
+                    <span className='p-4 font-bold text-emerald-700'>
+                        {/* Affiliate Deposit :  */}
+                    </span>
+                    : ''
+            }
+        </div>
+        : '';
 
     return (
         <section className={className}>
@@ -96,6 +174,7 @@ export default function AddForm({ className = '', accounts, affiliates }) {
                         className="mt-1 block w-full"
                         options={optionsAffiliates}
                         name="affiliate_index"
+                        onChange={affiliatesHandleChange}
                     />
                 </div>
 
@@ -107,8 +186,13 @@ export default function AddForm({ className = '', accounts, affiliates }) {
                         className="mt-1 block w-full"
                         options={optionsAccounts}
                         name="account_index"
+                        onChange={accountsHandleChange}
                     />
                 </div>
+
+                {showDiv}
+
+                <span className='font-bold text-emerald-700' id="deposit_msg"></span>
 
                 <div>
                     <InputLabel htmlFor="first_name" value="First Name" />
@@ -258,14 +342,14 @@ export default function AddForm({ className = '', accounts, affiliates }) {
                 <div>
                     <InputLabel htmlFor="customer_user_notes" value="User Notes" />
 
-                    {/* <Textarea
+                    <Textarea
                         id="customer_user_notes"
                         placeholder="Notes..."
                         value={values.customer_user_notes}
                         onChange={handleChange}
                         className="mt-1 block w-full"
                         minRows={5}
-                    /> */}
+                    />
                 </div>
 
                 <div className="flex items-center gap-4">

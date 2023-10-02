@@ -17,7 +17,7 @@ class UserController extends Controller
         // return Inertia::render('Users/Details', [
         //     'user' => User::findOrFail($id)
         // ]);
-         $token = $this->GetApiToken();  
+         $token = $this->getSessionToken();  
         return Inertia::render('Users/Details',['apitoken' => $token,'id' => $id]);
     }
 
@@ -29,13 +29,13 @@ class UserController extends Controller
 
      public function showOnlineUsers(): Response
     {
-        $token = $this->GetApiToken();      
+        $token = $this->getSessionToken();      
         return Inertia::render('Users/OnlineUsers',['apitoken' => $token]);
     }
 
      public function showAllUsers(): Response
     {
-        $token = $this->GetApiToken();      
+        $token = $this->getSessionToken();      
         return Inertia::render('Customers/Management',['apitoken' => $token]);
     }
 }

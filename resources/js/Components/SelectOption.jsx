@@ -12,7 +12,7 @@ export default forwardRef(function SelectOption({ className = '', options, ...pr
             key={options}
         >
 
-            <option disabled value="">
+            <option value="">
                 Select an option
             </option>
             {options.map((option) => (

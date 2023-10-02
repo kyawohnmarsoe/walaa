@@ -3,7 +3,15 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, usePage } from '@inertiajs/react';
 import AddForm from './Partials/AddForm';
 
-export default function Edit({ auth, mustVerifyEmail, customers, show_data, affiliates, accounts }) {
+export default function Edit({
+    auth,
+    mustVerifyEmail,
+    customers,
+    show_data,
+    affiliates,
+    accounts,
+    apitoken
+}) {
 
     const { flash } = usePage().props
 
@@ -46,6 +54,7 @@ export default function Edit({ auth, mustVerifyEmail, customers, show_data, affi
                                 className="max-w-xl"
                                 accounts={accounts}
                                 affiliates={affiliates}
+                                apitoken={apitoken}
                             />
                         </div>
                     }
