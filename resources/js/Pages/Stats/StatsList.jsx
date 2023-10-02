@@ -15,7 +15,7 @@ export default function StatsList({ apitoken }) {
 
     useEffect(()=>{
 
-       instance.get('/home/Dashboard1')
+       instance.get('/home/Dashboard')
         .then(res => {
             setStatsData({stats:res.data.value,errMessage:'',loading:false}) 
             console.log(res.data.value)

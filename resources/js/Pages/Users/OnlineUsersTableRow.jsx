@@ -3,8 +3,6 @@ import { Link } from "@inertiajs/react";
 
 export default function OnlineUsersTableRow({user}) {
 
-console.log(user)
-
   return (
     <tr>
         {/* <th>

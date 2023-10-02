@@ -7,6 +7,7 @@ use App\Models\User;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\Request;
+use App\Models\Affiliate;
 
  
 class UserController extends Controller
@@ -17,7 +18,7 @@ class UserController extends Controller
         // return Inertia::render('Users/Details', [
         //     'user' => User::findOrFail($id)
         // ]);
-         $token = $this->GetApiToken();  
+         $token = $this->getSessionToken();  
         return Inertia::render('Users/Details',['apitoken' => $token,'id' => $id]);
     }
 
@@ -29,13 +30,13 @@ class UserController extends Controller
 
      public function showOnlineUsers(): Response
     {
-        $token = $this->GetApiToken();      
-        return Inertia::render('Users/OnlineUsers',['apitoken' => $token]);
+        $token = $this->getSessionToken();      
+        return Inertia::render('Users/OnlineUsers',['apitoken' => $token, 'affiliates' => Affiliate::all()]);
     }
 
      public function showAllUsers(): Response
     {
-        $token = $this->GetApiToken();      
+        $token = $this->getSessionToken();      
         return Inertia::render('Customers/Management',['apitoken' => $token]);
     }
 }

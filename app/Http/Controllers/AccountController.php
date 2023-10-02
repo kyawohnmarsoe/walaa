@@ -17,7 +17,8 @@ class AccountController extends Controller
     } // index
 
     public function store() { // insert API data to db
-        $token = $this->GetApiToken();
+        $token = $this->getSessionToken();
+        
         $headers = [
             'Authorization'=>'Bearer '.$token, 
             'Accept' => 'application/json'

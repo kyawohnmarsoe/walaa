@@ -36,14 +36,11 @@ export default function AccountsTable({ accounts }) {
                 </thead>
 
                 {loading &&
-                    <tbody>
-                        <tr>
-                            <td colSpan="6" className="text-center">
-                                Loading...
-                            </td>
-                        </tr>
-                    </tbody>
+                    <div className='text-center'>
+                        <span className="loading loading-spinner loading-lg"></span>
+                    </div>
                 }
+
                 {!loading &&
                     <tbody>
                         {accounts && accounts.map(acc => (

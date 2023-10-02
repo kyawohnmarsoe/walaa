@@ -4,17 +4,19 @@ import Checkbox from '@/Components/Checkbox';
 import PrimaryButton from '@/Components/PrimaryButton';
 import { useForm } from '@inertiajs/react';
 import { useEffect } from 'react';
+import SelectOption from '@/Components/SelectOption';
+import Select from '@/Components/DaisyUI/Select';
 
-export default function AccessDetails({ user,className = '' }) {
-
+export default function OnlineUsersSearch({ className = '',affiliates }) {
+   console.log(affiliates)
      const { data, setData, post, processing, errors, reset } = useForm({
-        userName:user?.userObject?.userId,
-        displayName:user?.userObject?.displayName,
-        macAddress:user?.macAddress,
-        affilate:user?.affiliateName,
-        userNotes:user?.userNotes,
-        router:user?.router,
-        active: !!user?.activeDaysLeft
+        userName:'',
+        userIP:'',
+        affiliateName:'',
+        callerMAC:'',
+        loginFrom:'',
+        sessionType:['Any','Normal (With Internet)','Connected Only (Without Internet'],
+        active:false
 
      });
 
@@ -34,16 +36,18 @@ export default function AccessDetails({ user,className = '' }) {
     };
 
     return (
+         <div className="pt-12 ">
+                <div className="max-w-8xl mx-auto sm:px-6 lg:px-4">
+                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <section className={className}>
             <header>
-                <h2 className="text-lg font-medium text-sky-600">Access Details</h2>
+                <h2 className="text-lg font-medium text-sky-600">Online Users</h2>
 
                 {/* <p className="mt-1 text-sm text-gray-600">
                     Update your account's profile information and email address.
                 </p> */}
             </header>
 
-            {/* <form onSubmit={submit} className="mt-6 space-y-6"> */}
             <form onSubmit={submit} className="mt-6 space-y-6 ">
                 <div className='grid grid-cols-3 gap-4'>
                  
@@ -64,61 +68,60 @@ export default function AccessDetails({ user,className = '' }) {
                 </div>
 
                 <div>
-                    <InputLabel htmlFor="displayName" value="Display Name" />
+                    <InputLabel htmlFor="userIP" value="Display Name" />
 
                     <TextInput
-                        id="displayName"
+                        id="userIP"
                         className="mt-1 block w-full "
-                        value={data?.displayName}
+                        value={data?.userIP}
                         required
                         isFocused
-                        autoComplete="displayName"
-                         onChange={(e) => setData('displayName', e.target.value)}
+                        autoComplete="userIP"
+                         onChange={(e) => setData('userIP', e.target.value)}
                     />
 
                     {/* <InputError className="mt-2" message={errors.name} /> */}
                 </div>
 
                 <div>
-                    <InputLabel htmlFor="macAddress" value="MAC Address" />
+                    <InputLabel htmlFor="affiliateName" value="Affiliate" />
+
+                    <select 
+                    name="affiliateName" 
+                    id="affiliateName" 
+                    className='mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm '>
+                      {affiliates.map(a=><option value={a.affiliate_index}>{a.affiliate_name}</option>)}
+                    </select>
+
+                    {/* <InputError className="mt-2" message={errors.name} /> */}
+                </div>
+
+                <div>
+                    <InputLabel htmlFor="callerMAC" value="Caller MAC" />
 
                     <TextInput
-                        id="macAddress"
+                        id="callerMAC"
+                        className="mt-1 block w-full"
+                        value={data?.callerMAC}
+                        isFocused
+                        autoComplete="callerMAC"
+                    />
+
+                    
+
+                    {/* <InputError className="mt-2" message={errors.name} /> */}
+                </div>
+
+                <div>
+                    <InputLabel htmlFor="loginFrom" value="Login From" />
+
+                    <TextInput
+                        id="loginFrom"
                         className="mt-1 block w-full "
-                        value={data?.macAddress}
+                        value={data?.loginFrom}
                         isFocused
-                        autoComplete="macAddress"
-                         onChange={(e) => setData('macAddress', e.target.value)}
-                    />
-
-                    {/* <InputError className="mt-2" message={errors.name} /> */}
-                </div>
-
-                <div>
-                    <InputLabel htmlFor="affiliate" value="Affiliate" />
-
-                    <TextInput
-                        id="affiliate"
-                        className="mt-1 block w-full disabled bg-gray-100"
-                        value={data?.affilate}
-                        isFocused
-                        autoComplete="affiliate"
-                        disabled
-                    />
-
-                    {/* <InputError className="mt-2" message={errors.name} /> */}
-                </div>
-
-                <div>
-                    <InputLabel htmlFor="userNotes" value="User Notes" />
-
-                    <TextInput
-                        id="userNotes"
-                        className="mt-1 block w-full "
-                        value={data?.userNotes}
-                        isFocused
-                        autoComplete="userNotes"
-                         onChange={(e) => setData('userNotes', e.target.value)}
+                        autoComplete="loginFrom"
+                         onChange={(e) => setData('loginFrom', e.target.value)}
                     />
 
                     {/* <InputError className="mt-2" message={errors.name} /> */}
@@ -142,12 +145,12 @@ export default function AccessDetails({ user,className = '' }) {
                 <div >
                     <label className="flex items-center">
                         <Checkbox
-                            name="active"
-                            checked={data.active}
-                            onChange={(e) => setData('active', e.target.checked)}
+                            name="securityIssues"
+                            checked={data.securityIssues}
+                            onChange={(e) => setData('securityIssues', e.target.checked)}
                         />
                        
-                        <InputLabel htmlFor="active" value="Active"  className='ml-2'/>
+                        <InputLabel htmlFor="securityIssues" value="Users with security issues only"  className='ml-2'/>
                     </label>
                 </div>
             </div>
@@ -155,7 +158,7 @@ export default function AccessDetails({ user,className = '' }) {
 
 
                 <div className="flex items-center gap-4">
-                    <PrimaryButton disabled={processing}>Update</PrimaryButton>
+                    <PrimaryButton disabled={processing}>Search</PrimaryButton>
                    
                     {/* <Transition
                         show={recentlySuccessful}
@@ -169,5 +172,8 @@ export default function AccessDetails({ user,className = '' }) {
                 </div>
             </form>
         </section>
+        </div>
+        </div>
+        </div>
     );
 }

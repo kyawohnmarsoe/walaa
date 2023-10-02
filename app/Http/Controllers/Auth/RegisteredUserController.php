@@ -47,6 +47,12 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
+        $apitoken = $this->GetApiToken(); 
+        session([
+            'apitoken' => $apitoken, 
+            'current_time' => time()
+        ]);
+
         return redirect(RouteServiceProvider::HOME);
     }
 }
