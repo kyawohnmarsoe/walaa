@@ -36,56 +36,55 @@ export default function UserStatus ({ user, className = '' })
     }
 
     return (
-        <div className="pt-12 ">
-            <div className="max-w-8xl mx-auto sm:px-6 lg:px-4">
-                <div className="bg-white overflow-hidden sm:rounded-lg">
-                    <section className={ className }>
-                        <header>
-                            <h2 className="text-lg font-medium text-primary">Security</h2>
+        <div className="max-w-8xl mx-auto sm:px-6 lg:px-4">
+            <div className="bg-white overflow-hidden sm:rounded-lg">
+                <section className={ className }>
+                    <header>
+                        <h2 className="text-lg font-medium text-primary">Security</h2>
 
-                            {/* <p className="mt-1 text-sm text-gray-600">
+                        {/* <p className="mt-1 text-sm text-gray-600">
                     Update your account's profile information and email address.
                 </p> */}
-                        </header>
-                        <Modal id={ modalIds.passwordShow } title="Password Viewer">
-                            <form onSubmit={ submit } className="space-y-6 ">
-                                <div className='grid grid-cols-1 gap-4'>
+                    </header>
+                    <Modal id={ modalIds.passwordShow } title="Password Viewer">
+                        <form onSubmit={ submit } className="space-y-6 ">
+                            <div className='grid grid-cols-1 gap-4'>
 
-                                    <div>
-                                        <InputLabel htmlFor="userName" value="User Name :" />
+                                <div>
+                                    <InputLabel htmlFor="userName" value="User Name :" />
 
-                                        <TextInput
-                                            id="userName"
-                                            className="mt-1 block w-full "
-                                            value={ user?.userObject?.userId }
-                                            required
-                                            isFocused
-                                            autoComplete="userName"
-                                        />
+                                    <TextInput
+                                        id="userName"
+                                        className="mt-1 block w-full "
+                                        value={ user?.userObject?.userId }
+                                        required
+                                        isFocused
+                                        autoComplete="userName"
+                                    />
 
-                                        {/* <InputError className="mt-2" message={errors.name} /> */ }
-                                    </div>
-
-                                    <div>
-                                        <InputLabel htmlFor="password" value="Password:" />
-
-                                        <TextInput
-                                            id="password"
-                                            className="mt-1 block w-full "
-                                            value={ user?.userObject?.userId }
-                                            required
-                                            isFocused
-                                            autoComplete="password"
-                                        />
-
-                                        {/* <InputError className="mt-2" message={errors.name} /> */ }
-                                    </div>
+                                    {/* <InputError className="mt-2" message={errors.name} /> */ }
                                 </div>
 
-                                <div className="flex items-center gap-4">
-                                    {/* <PrimaryButton disabled={processing}>Update</PrimaryButton> */ }
+                                <div>
+                                    <InputLabel htmlFor="password" value="Password:" />
 
-                                    {/* <Transition
+                                    <TextInput
+                                        id="password"
+                                        className="mt-1 block w-full "
+                                        value={ user?.userObject?.userId }
+                                        required
+                                        isFocused
+                                        autoComplete="password"
+                                    />
+
+                                    {/* <InputError className="mt-2" message={errors.name} /> */ }
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-4">
+                                {/* <PrimaryButton disabled={processing}>Update</PrimaryButton> */ }
+
+                                {/* <Transition
                         show={recentlySuccessful}
                         enter="transition ease-in-out"
                         enterFrom="opacity-0"
@@ -94,48 +93,48 @@ export default function UserStatus ({ user, className = '' })
                     >
                         <p className="text-sm text-gray-600">Saved.</p>
                     </Transition> */}
-                                </div>
-                            </form>
-                        </Modal>
-                        <Modal id={ modalIds.passwordChange } title="Change Password">
-                            <form onSubmit={ submit } className="space-y-6 ">
-                                <div className='grid grid-cols-1 gap-4'>
+                            </div>
+                        </form>
+                    </Modal>
+                    <Modal id={ modalIds.passwordChange } title="Change Password">
+                        <form onSubmit={ submit } className="space-y-6 ">
+                            <div className='grid grid-cols-1 gap-4'>
 
-                                    <div>
-                                        <InputLabel htmlFor="newPassword" value="New Password:" />
+                                <div>
+                                    <InputLabel htmlFor="newPassword" value="New Password:" />
 
-                                        <TextInput
-                                            id="newPassword"
-                                            className="mt-1 block w-full "
-                                            value=''
-                                            required
-                                            isFocused
-                                            autoComplete="newPassword"
-                                        />
+                                    <TextInput
+                                        id="newPassword"
+                                        className="mt-1 block w-full "
+                                        value=''
+                                        required
+                                        isFocused
+                                        autoComplete="newPassword"
+                                    />
 
-                                        {/* <InputError className="mt-2" message={errors.name} /> */ }
-                                    </div>
-
-                                    <div>
-                                        <InputLabel htmlFor="confirmNewPassword" value="Confirm New Password:" />
-
-                                        <TextInput
-                                            id="confirmNewPassword"
-                                            className="mt-1 block w-full "
-                                            value=''
-                                            required
-                                            isFocused
-                                            autoComplete="confirmNewPassword"
-                                        />
-
-                                        {/* <InputError className="mt-2" message={errors.name} /> */ }
-                                    </div>
+                                    {/* <InputError className="mt-2" message={errors.name} /> */ }
                                 </div>
 
-                                <div className="flex items-center gap-4">
-                                    {/* <PrimaryButton disabled={processing}>Update</PrimaryButton> */ }
+                                <div>
+                                    <InputLabel htmlFor="confirmNewPassword" value="Confirm New Password:" />
 
-                                    {/* <Transition
+                                    <TextInput
+                                        id="confirmNewPassword"
+                                        className="mt-1 block w-full "
+                                        value=''
+                                        required
+                                        isFocused
+                                        autoComplete="confirmNewPassword"
+                                    />
+
+                                    {/* <InputError className="mt-2" message={errors.name} /> */ }
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-4">
+                                {/* <PrimaryButton disabled={processing}>Update</PrimaryButton> */ }
+
+                                {/* <Transition
                         show={recentlySuccessful}
                         enter="transition ease-in-out"
                         enterFrom="opacity-0"
@@ -144,75 +143,75 @@ export default function UserStatus ({ user, className = '' })
                     >
                         <p className="text-sm text-gray-600">Saved.</p>
                     </Transition> */}
-                                </div>
-                            </form>
-                        </Modal>
-
-                        <div className="mt-6 space-y-6 ">
-
-                            <div>
-                                Password
-
-                                <p className=" mb-1 text-sm text-gray-600">
-                                    The password used on the router
-                                </p>
-
-                                <span className=' text-primary' onClick={ () => callModal(modalIds.passwordShow) }>Show</span> |  <span className=' text-primary' onClick={ () => callModal(modalIds.passwordChange) }>Change</span>
-
                             </div>
+                        </form>
+                    </Modal>
 
-                            <div>
-                                Account Password
+                    <div className="mt-6 space-y-6 ">
 
-                                <p className=" mb-1 text-sm text-gray-600">
-                                    The account password is used to prevent the user from changing the subscription password from the subscriber information page until he enters it.
-                                </p>
+                        <div>
+                            Password
 
-                                <span className=' text-primary' onClick={ () => callModal(modalIds.accPasswordShow) }>Show</span> |  <span className=' text-primary' onClick={ () => callModal(modalIds.accPasswordChange) }>Change</span>
+                            <p className=" mb-1 text-sm text-gray-600">
+                                The password used on the router
+                            </p>
 
-                            </div>
+                            <span className=' text-primary' onClick={ () => callModal(modalIds.passwordShow) }>Show</span> |  <span className=' text-primary' onClick={ () => callModal(modalIds.passwordChange) }>Change</span>
 
                         </div>
 
-                        <Modal id={ modalIds.accPasswordShow } title="Account Password Viewer">
-                            <form onSubmit={ submit } className="space-y-6 ">
-                                <div className='grid grid-cols-1 gap-4'>
+                        <div>
+                            Account Password
 
-                                    <div>
-                                        <InputLabel htmlFor="userName" value="User Name :" />
+                            <p className=" mb-1 text-sm text-gray-600">
+                                The account password is used to prevent the user from changing the subscription password from the subscriber information page until he enters it.
+                            </p>
 
-                                        <TextInput
-                                            id="userName"
-                                            className="mt-1 block w-full "
-                                            value={ user?.userObject?.userId }
-                                            required
-                                            isFocused
-                                            autoComplete="userName"
-                                        />
+                            <span className=' text-primary' onClick={ () => callModal(modalIds.accPasswordShow) }>Show</span> |  <span className=' text-primary' onClick={ () => callModal(modalIds.accPasswordChange) }>Change</span>
 
-                                        {/* <InputError className="mt-2" message={errors.name} /> */ }
-                                    </div>
+                        </div>
 
-                                    <div>
-                                        <InputLabel htmlFor="accPassword" value="Account Password:" />
+                    </div>
 
-                                        <TextInput
-                                            id="accPassword"
-                                            className="mt-1 block w-full "
-                                            value={ user?.userObject?.userId }
-                                            required
-                                            isFocused
-                                            autoComplete="accPassword"
-                                        />
+                    <Modal id={ modalIds.accPasswordShow } title="Account Password Viewer">
+                        <form onSubmit={ submit } className="space-y-6 ">
+                            <div className='grid grid-cols-1 gap-4'>
 
-                                        {/* <InputError className="mt-2" message={errors.name} /> */ }
-                                    </div>
+                                <div>
+                                    <InputLabel htmlFor="userName" value="User Name :" />
+
+                                    <TextInput
+                                        id="userName"
+                                        className="mt-1 block w-full "
+                                        value={ user?.userObject?.userId }
+                                        required
+                                        isFocused
+                                        autoComplete="userName"
+                                    />
+
+                                    {/* <InputError className="mt-2" message={errors.name} /> */ }
                                 </div>
 
-                                <div className="flex items-center gap-4">
-                                    {/* <PrimaryButton disabled={processing}>Update</PrimaryButton> */ }
+                                <div>
+                                    <InputLabel htmlFor="accPassword" value="Account Password:" />
 
-                                    {/* <Transition
+                                    <TextInput
+                                        id="accPassword"
+                                        className="mt-1 block w-full "
+                                        value={ user?.userObject?.userId }
+                                        required
+                                        isFocused
+                                        autoComplete="accPassword"
+                                    />
+
+                                    {/* <InputError className="mt-2" message={errors.name} /> */ }
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-4">
+                                {/* <PrimaryButton disabled={processing}>Update</PrimaryButton> */ }
+
+                                {/* <Transition
                         show={recentlySuccessful}
                         enter="transition ease-in-out"
                         enterFrom="opacity-0"
@@ -221,48 +220,48 @@ export default function UserStatus ({ user, className = '' })
                     >
                         <p className="text-sm text-gray-600">Saved.</p>
                     </Transition> */}
-                                </div>
-                            </form>
-                        </Modal>
-                        <Modal id={ modalIds.accPasswordChange } title="Change Account Password">
-                            <form onSubmit={ submit } className="space-y-6 ">
-                                <div className='grid grid-cols-1 gap-4'>
+                            </div>
+                        </form>
+                    </Modal>
+                    <Modal id={ modalIds.accPasswordChange } title="Change Account Password">
+                        <form onSubmit={ submit } className="space-y-6 ">
+                            <div className='grid grid-cols-1 gap-4'>
 
-                                    <div>
-                                        <InputLabel htmlFor="newAccPassword" value="New Account Password:" />
+                                <div>
+                                    <InputLabel htmlFor="newAccPassword" value="New Account Password:" />
 
-                                        <TextInput
-                                            id="newAccPassword"
-                                            className="mt-1 block w-full "
-                                            value=''
-                                            required
-                                            isFocused
-                                            autoComplete="newAccPassword"
-                                        />
+                                    <TextInput
+                                        id="newAccPassword"
+                                        className="mt-1 block w-full "
+                                        value=''
+                                        required
+                                        isFocused
+                                        autoComplete="newAccPassword"
+                                    />
 
-                                        {/* <InputError className="mt-2" message={errors.name} /> */ }
-                                    </div>
-
-                                    <div>
-                                        <InputLabel htmlFor="confirmNewAccPassword" value="Confirm New Account Password:" />
-
-                                        <TextInput
-                                            id="confirmNewAccPassword"
-                                            className="mt-1 block w-full "
-                                            value=''
-                                            required
-                                            isFocused
-                                            autoComplete="confirmNewAccPassword"
-                                        />
-
-                                        {/* <InputError className="mt-2" message={errors.name} /> */ }
-                                    </div>
+                                    {/* <InputError className="mt-2" message={errors.name} /> */ }
                                 </div>
 
-                                <div className="flex items-center gap-4">
-                                    {/* <PrimaryButton disabled={processing}>Update</PrimaryButton> */ }
+                                <div>
+                                    <InputLabel htmlFor="confirmNewAccPassword" value="Confirm New Account Password:" />
 
-                                    {/* <Transition
+                                    <TextInput
+                                        id="confirmNewAccPassword"
+                                        className="mt-1 block w-full "
+                                        value=''
+                                        required
+                                        isFocused
+                                        autoComplete="confirmNewAccPassword"
+                                    />
+
+                                    {/* <InputError className="mt-2" message={errors.name} /> */ }
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-4">
+                                {/* <PrimaryButton disabled={processing}>Update</PrimaryButton> */ }
+
+                                {/* <Transition
                         show={recentlySuccessful}
                         enter="transition ease-in-out"
                         enterFrom="opacity-0"
@@ -271,12 +270,11 @@ export default function UserStatus ({ user, className = '' })
                     >
                         <p className="text-sm text-gray-600">Saved.</p>
                     </Transition> */}
-                                </div>
-                            </form>
-                        </Modal>
+                            </div>
+                        </form>
+                    </Modal>
 
-                    </section>
-                </div>
+                </section>
             </div>
         </div>
     );
