@@ -1,6 +1,6 @@
 import CustomerTable from './CustomerTable';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, usePage } from '@inertiajs/react';
+import { Head, usePage, router } from '@inertiajs/react';
 import AddForm from './Partials/AddForm';
 
 export default function Edit({
@@ -10,7 +10,8 @@ export default function Edit({
     show_data,
     affiliates,
     accounts,
-    apitoken
+    apitoken,
+    new_user_response
 }) {
 
     const { flash } = usePage().props
@@ -40,6 +41,13 @@ export default function Edit({
                         </div>
                     }
 
+                    {flash.message &&
+                        <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
+                            <p className="font-bold">Warning</p>
+                            <p>{flash.message}</p>
+                        </div>
+                    }
+
                     {
                         show_data == 'list' &&
                         <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
@@ -51,10 +59,11 @@ export default function Edit({
                         show_data == 'add_form' &&
                         <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                             <AddForm
-                                className="max-w-xl"
+                                className="p-4"
                                 accounts={accounts}
                                 affiliates={affiliates}
                                 apitoken={apitoken}
+                                new_user_response={new_user_response}
                             />
                         </div>
                     }

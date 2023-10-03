@@ -8,11 +8,12 @@ import TextInput from '@/Components/TextInput';
 import Textarea from '@/Components/Textarea';
 import SelectOption from '@/Components/SelectOption';
 
-export default function AddForm({ className = '', accounts, affiliates, apitoken }) {
+export default function AddForm({ className = '', accounts, affiliates, apitoken, new_user_response }) {
 
     const { processing, recentlySuccessful } = useForm();
 
     const [values, setValues] = useState({
+        deposit_password: '',
         first_name: '',
         last_name: '',
         customer_user_id: '',
@@ -74,7 +75,18 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
     useEffect(() => {
         getAffiliates()
         getAccounts()
+        console.log(apitoken);
+        // let return_data = JSON.parse(apitoken).original;
+        // let time_diff = return_data.current_time - return_data.session_current_time;
 
+        // console.log(return_data.session_api_token);
+        // console.log(return_data.current_time);
+        // console.log(return_data.session_current_time);
+
+        // console.log(time_diff);
+        // console.log(time_diff + '>' + return_data.maxIdleTime);
+
+        console.log(new_user_response);
     }, [])
 
     function affiliatesHandleChange(e) {
@@ -114,13 +126,19 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
             }
             instance.post('', postData).then(res => {
                 if (res) {
-                    // res.value == true ?? 
-                    console.log(res.data.responseMessage)
+                    console.log(res.data.value)
+                    res.value == true ??
+                        console.log(res.data.responseMessage)
                     span.innerHTML = res.data.responseMessage;
                 }
 
             }).catch(err => {
-                console.log(err.message)
+                if (err) {
+                    console.log(err.message)
+                    // router.visit('/customers/create', {
+                    //     only: ['customers'],
+                    // })
+                }
             })
         }
     }
@@ -137,6 +155,28 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
     function handleSubmit(e) {
         e.preventDefault()
         router.post('/customers/store', values)
+
+        // post new user with deposit
+        // const instance = axios.create({
+        //     baseURL: 'https://rapi.earthlink.iq/api/reseller/user/newuserdeposit',
+        //     headers: { 'Authorization': `Bearer ${apitoken}` }
+        // });
+        // let postData = {
+        //     DepositPassword: "Elink3",
+        //     AgentIndex: 2199,
+        //     AffiliateIndex: 2199,
+        //     AccountIndex: 60
+        // }
+        // instance.post('', postData).then(res => {
+        //     if (res) {
+        //         console.log(res.data)
+        //     }
+
+        // }).catch(err => {
+        //     if (err) {
+        //         console.log(err.message)
+        //     }
+        // })
     }
 
     let showDiv = showAccountValue || showAffiliateValue ?
@@ -162,198 +202,223 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
     return (
         <section className={className}>
             <header>
-                <h2 className="text-lg font-medium text-gray-900">Add User</h2>
+                <h2 className="text-lg font-medium text-sky-600">Add User</h2>
             </header>
 
-            <form onSubmit={handleSubmit} className="mt-6 space-y-6">
-                <div>
-                    <InputLabel htmlFor="affiliate_index" value="Affiliates" />
-
-                    <SelectOption
-                        id="affiliate_index"
-                        className="mt-1 block w-full"
-                        options={optionsAffiliates}
-                        name="affiliate_index"
-                        onChange={affiliatesHandleChange}
-                    />
-                </div>
-
-                <div>
-                    <InputLabel htmlFor="account_index" value="Accounts" />
-
-                    <SelectOption
-                        id="account_index"
-                        className="mt-1 block w-full"
-                        options={optionsAccounts}
-                        name="account_index"
-                        onChange={accountsHandleChange}
-                    />
-                </div>
-
+            <form onSubmit={handleSubmit} className="mt-6 space-y-6 ">
                 {showDiv}
 
                 <span className='font-bold text-emerald-700' id="deposit_msg"></span>
 
-                <div>
-                    <InputLabel htmlFor="first_name" value="First Name" />
+                <div className='grid grid-cols-3 gap-4'>
+                    <div>
+                        <InputLabel htmlFor="affiliate_index" value="Affiliates" />
 
-                    <TextInput
-                        id="first_name"
-                        name="first_name"
-                        value={values.first_name}
-                        onChange={handleChange}
-                        type="text"
-                        className="mt-1 block w-full"
-                        autoComplete="off"
-                    />
-                </div>
+                        <SelectOption
+                            id="affiliate_index"
+                            className="mt-1 block w-full"
+                            options={optionsAffiliates}
+                            name="affiliate_index"
+                            onChange={affiliatesHandleChange}
+                        />
+                    </div>
 
-                <div>
-                    <InputLabel htmlFor="last_name" value="Last Name" />
+                    <div>
+                        <InputLabel htmlFor="account_index" value="Accounts" />
 
-                    <TextInput
-                        id="last_name"
-                        value={values.last_name}
-                        onChange={handleChange}
-                        type="text"
-                        className="mt-1 block w-full"
-                        autoComplete="off"
-                    />
-                </div>
+                        <SelectOption
+                            id="account_index"
+                            className="mt-1 block w-full"
+                            options={optionsAccounts}
+                            name="account_index"
+                            onChange={accountsHandleChange}
+                        />
+                    </div>
 
-                <div>
-                    <InputLabel htmlFor="email" value="Email" />
+                    <div>
+                        <InputLabel htmlFor="first_name" value="Deposit Password" />
 
-                    <TextInput
-                        id="email"
-                        value={values.email}
-                        onChange={handleChange}
-                        type="text"
-                        className="mt-1 block w-full"
-                        autoComplete="off"
-                    />
-                </div>
+                        <TextInput
+                            id="deposit_password"
+                            name="deposit_password"
+                            value={values.deposit_password}
+                            onChange={handleChange}
+                            type="password"
+                            className="mt-1 block w-full"
+                            autoComplete="off"
+                        />
+                    </div>
 
-                <div>
-                    <InputLabel htmlFor="mobile_number" value="Mobile Number" />
+                    <div>
+                        <InputLabel htmlFor="first_name" value="First Name" />
 
-                    <TextInput
-                        id="mobile_number"
-                        value={values.mobile_number}
-                        onChange={handleChange}
-                        type="text"
-                        className="mt-1 block w-full"
-                        autoComplete="off"
-                    />
-                </div>
+                        <TextInput
+                            id="first_name"
+                            name="first_name"
+                            value={values.first_name}
+                            onChange={handleChange}
+                            type="text"
+                            className="mt-1 block w-full"
+                            autoComplete="off"
+                        />
+                    </div>
 
-                <div>
-                    <InputLabel htmlFor="company" value="Company" />
+                    <div>
+                        <InputLabel htmlFor="last_name" value="Last Name" />
 
-                    <TextInput
-                        id="company"
-                        value={values.company}
-                        onChange={handleChange}
-                        type="text"
-                        className="mt-1 block w-full"
-                        autoComplete="off"
-                    />
-                </div>
+                        <TextInput
+                            id="last_name"
+                            value={values.last_name}
+                            onChange={handleChange}
+                            type="text"
+                            className="mt-1 block w-full"
+                            autoComplete="off"
+                        />
+                    </div>
 
-                <div>
-                    <InputLabel htmlFor="display_name" value="Display Name" />
+                    <div>
+                        <InputLabel htmlFor="email" value="Email" />
 
-                    <TextInput
-                        id="display_name"
-                        value={values.display_name}
-                        onChange={handleChange}
-                        type="text"
-                        className="mt-1 block w-full"
-                        autoComplete="off"
-                    />
-                </div>
+                        <TextInput
+                            id="email"
+                            name="email"
+                            value={values.email}
+                            onChange={handleChange}
+                            type="text"
+                            className="mt-1 block w-full"
+                            autoComplete="off"
+                        />
+                    </div>
 
-                <div>
-                    <InputLabel htmlFor="address" value="Address" />
+                    <div>
+                        <InputLabel htmlFor="mobile_number" value="Mobile Number" />
 
-                    <TextInput
-                        id="address"
-                        value={values.address}
-                        onChange={handleChange}
-                        type="text"
-                        className="mt-1 block w-full"
-                        autoComplete="off"
-                    />
-                </div>
+                        <TextInput
+                            id="mobile_number"
+                            name="mobile_number"
+                            value={values.mobile_number}
+                            onChange={handleChange}
+                            type="text"
+                            className="mt-1 block w-full"
+                            autoComplete="off"
+                        />
+                    </div>
 
-                <div>
-                    <InputLabel htmlFor="city" value="City" />
+                    <div>
+                        <InputLabel htmlFor="company" value="Company" />
 
-                    <TextInput
-                        id="city"
-                        value={values.city}
-                        onChange={handleChange}
-                        type="text"
-                        className="mt-1 block w-full"
-                        autoComplete="off"
-                    />
-                </div>
+                        <TextInput
+                            id="company"
+                            name="company"
+                            value={values.company}
+                            onChange={handleChange}
+                            type="text"
+                            className="mt-1 block w-full"
+                            autoComplete="off"
+                        />
+                    </div>
 
-                <div>
-                    <InputLabel htmlFor="state" value="State" />
+                    <div>
+                        <InputLabel htmlFor="display_name" value="Display Name" />
 
-                    <TextInput
-                        id="state"
-                        value={values.state}
-                        onChange={handleChange}
-                        type="text"
-                        className="mt-1 block w-full"
-                        autoComplete="off"
-                    />
-                </div>
+                        <TextInput
+                            id="display_name"
+                            name="display_name"
+                            value={values.display_name}
+                            onChange={handleChange}
+                            type="text"
+                            className="mt-1 block w-full"
+                            autoComplete="off"
+                        />
+                    </div>
 
-                <div>
-                    <InputLabel htmlFor="customer_user_id" value="User Id" />
+                    <div>
+                        <InputLabel htmlFor="address" value="Address" />
 
-                    <TextInput
-                        id="customer_user_id"
-                        value={values.customer_user_id}
-                        onChange={handleChange}
-                        type="text"
-                        className="mt-1 block w-full"
-                        autoComplete="off"
-                    />
-                </div>
+                        <TextInput
+                            id="address"
+                            name="address"
+                            value={values.address}
+                            onChange={handleChange}
+                            type="text"
+                            className="mt-1 block w-full"
+                            autoComplete="off"
+                        />
+                    </div>
 
-                <div>
-                    <InputLabel htmlFor="customer_user_index" value="User Index" />
+                    <div>
+                        <InputLabel htmlFor="city" value="City" />
 
-                    <TextInput
-                        id="customer_user_index"
-                        value={values.customer_user_index}
-                        onChange={handleChange}
-                        type="text"
-                        className="mt-1 block w-full"
-                        autoComplete="off"
-                    />
-                </div>
+                        <TextInput
+                            id="city"
+                            name="city"
+                            value={values.city}
+                            onChange={handleChange}
+                            type="text"
+                            className="mt-1 block w-full"
+                            autoComplete="off"
+                        />
+                    </div>
 
+                    <div>
+                        <InputLabel htmlFor="state" value="State" />
 
-                <div>
-                    <InputLabel htmlFor="customer_user_notes" value="User Notes" />
+                        <TextInput
+                            id="state"
+                            name="state"
+                            value={values.state}
+                            onChange={handleChange}
+                            type="text"
+                            className="mt-1 block w-full"
+                            autoComplete="off"
+                        />
+                    </div>
 
-                    <Textarea
-                        id="customer_user_notes"
-                        placeholder="Notes..."
-                        value={values.customer_user_notes}
-                        onChange={handleChange}
-                        className="mt-1 block w-full"
-                        minRows={5}
-                    />
+                    <div>
+                        <InputLabel htmlFor="customer_user_id" value="User Id" />
+
+                        <TextInput
+                            id="customer_user_id"
+                            name="customer_user_id"
+                            value={values.customer_user_id}
+                            onChange={handleChange}
+                            type="text"
+                            className="mt-1 block w-full"
+                            autoComplete="off"
+                        />
+                    </div>
+
+                    <div>
+                        <InputLabel htmlFor="customer_user_index" value="User Index" />
+
+                        <TextInput
+                            id="customer_user_index"
+                            name="customer_user_index"
+                            value={values.customer_user_index}
+                            onChange={handleChange}
+                            type="text"
+                            className="mt-1 block w-full"
+                            autoComplete="off"
+                        />
+                    </div>
+
+                    <div>
+                        <InputLabel htmlFor="customer_user_notes" value="User Notes" />
+
+                        <Textarea
+                            id="customer_user_notes"
+                            name="customer_user_notes"
+                            placeholder="Notes..."
+                            value={values.customer_user_notes}
+                            onChange={handleChange}
+                            className="mt-1 block w-full"
+                            minRows={5}
+                        />
+                    </div>
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <PrimaryButton disabled={processing}>Add</PrimaryButton>
+                    <PrimaryButton disabled={processing} type="submit">Add</PrimaryButton>
 
                     <Transition
                         show={recentlySuccessful}

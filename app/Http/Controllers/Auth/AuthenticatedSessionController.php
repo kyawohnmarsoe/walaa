@@ -54,8 +54,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        // Session::forget('apitoken');
-        session()->forget('apitoken', 'current_time');
+        session()->forget(['apitoken', 'current_time']);
 
         return redirect('/');
     }
