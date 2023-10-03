@@ -35,14 +35,14 @@ class Controller extends BaseController
         $session_api_token = session('apitoken'); 
 
         $maxIdleTime = config('session.lifetime') * 60;
-        if (Auth::check() && session()->has('current_time') && (time() - session()->get('current_time') > $maxIdleTime)) {
-            // session()->forget('apitoken', 'current_time');
+        if (time() - session()->get('current_time') > $maxIdleTime) {
+            session()->forget('apitoken', 'current_time');
             $session_api_token = $this->GetApiToken(); 
-            // session([
-            //     'apitoken' => $session_api_token, 
-            //     'current_time' => time()
-            // ]);
-
+            session([
+                'apitoken' => $session_api_token, 
+                'current_time' => time()
+            ]);
+            $session_api_token = session('apitoken'); 
         }
         return $session_api_token;
     }

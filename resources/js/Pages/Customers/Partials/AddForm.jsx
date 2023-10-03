@@ -114,8 +114,9 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
             }
             instance.post('', postData).then(res => {
                 if (res) {
-                    // res.value == true ?? 
-                    console.log(res.data.responseMessage)
+                    console.log(res.data.value)
+                    res.value == true ??
+                        console.log(res.data.responseMessage)
                     span.innerHTML = res.data.responseMessage;
                 }
 
