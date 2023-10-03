@@ -75,7 +75,7 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
     useEffect(() => {
         getAffiliates()
         getAccounts()
-        // console.log(apitoken);
+        console.log(apitoken);
         // let return_data = JSON.parse(apitoken).original;
         // let time_diff = return_data.current_time - return_data.session_current_time;
 
@@ -133,9 +133,9 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
             }).catch(err => {
                 if (err) {
                     console.log(err.message)
-                    router.visit('/customers/create', {
-                        only: ['customers'],
-                    })
+                    // router.visit('/customers/create', {
+                    //     only: ['customers'],
+                    // })
                 }
             })
         }

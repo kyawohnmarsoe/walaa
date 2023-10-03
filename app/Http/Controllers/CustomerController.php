@@ -20,7 +20,7 @@ class CustomerController extends Controller
     } // index
 
     public function create() {
-        $token = $this->getSessionToken();
+        // $token = $this->getSessionToken();
         // $session_data = json_encode($token, true);
        
         return Inertia::render('Customers/Customers', [
@@ -28,7 +28,7 @@ class CustomerController extends Controller
             'accounts' => Account::all(),
             'affiliates' => Affiliate::all(),
             // 'apitoken' => $session_data,
-            'apitoken' => $token,
+            'apitoken' => session('apitoken'),
         ]);
     } // create
     

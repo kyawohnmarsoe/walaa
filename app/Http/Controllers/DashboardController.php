@@ -10,7 +10,7 @@ class DashboardController extends Controller
 {
     public function dashboard()
     {
-        $token = $this->getSessionToken();     
+        $token = session('apitoken');     
         
         return Inertia::render('Dashboard', [
             'apitoken' => $token
