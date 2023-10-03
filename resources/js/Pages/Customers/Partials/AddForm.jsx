@@ -8,7 +8,7 @@ import TextInput from '@/Components/TextInput';
 import Textarea from '@/Components/Textarea';
 import SelectOption from '@/Components/SelectOption';
 
-export default function AddForm({ className = '', accounts, affiliates, apitoken }) {
+export default function AddForm({ className = '', accounts, affiliates, apitoken, new_user_response }) {
 
     const { processing, recentlySuccessful } = useForm();
 
@@ -85,6 +85,8 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
 
         // console.log(time_diff);
         // console.log(time_diff + '>' + return_data.maxIdleTime);
+
+        console.log(new_user_response);
     }, [])
 
     function affiliatesHandleChange(e) {
@@ -153,6 +155,28 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
     function handleSubmit(e) {
         e.preventDefault()
         router.post('/customers/store', values)
+
+        // post new user with deposit
+        // const instance = axios.create({
+        //     baseURL: 'https://rapi.earthlink.iq/api/reseller/user/newuserdeposit',
+        //     headers: { 'Authorization': `Bearer ${apitoken}` }
+        // });
+        // let postData = {
+        //     DepositPassword: "Elink3",
+        //     AgentIndex: 2199,
+        //     AffiliateIndex: 2199,
+        //     AccountIndex: 60
+        // }
+        // instance.post('', postData).then(res => {
+        //     if (res) {
+        //         console.log(res.data)
+        //     }
+
+        // }).catch(err => {
+        //     if (err) {
+        //         console.log(err.message)
+        //     }
+        // })
     }
 
     let showDiv = showAccountValue || showAffiliateValue ?
@@ -257,6 +281,7 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
 
                         <TextInput
                             id="email"
+                            name="email"
                             value={values.email}
                             onChange={handleChange}
                             type="text"
@@ -270,6 +295,7 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
 
                         <TextInput
                             id="mobile_number"
+                            name="mobile_number"
                             value={values.mobile_number}
                             onChange={handleChange}
                             type="text"
@@ -283,6 +309,7 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
 
                         <TextInput
                             id="company"
+                            name="company"
                             value={values.company}
                             onChange={handleChange}
                             type="text"
@@ -296,6 +323,7 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
 
                         <TextInput
                             id="display_name"
+                            name="display_name"
                             value={values.display_name}
                             onChange={handleChange}
                             type="text"
@@ -309,6 +337,7 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
 
                         <TextInput
                             id="address"
+                            name="address"
                             value={values.address}
                             onChange={handleChange}
                             type="text"
@@ -322,6 +351,7 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
 
                         <TextInput
                             id="city"
+                            name="city"
                             value={values.city}
                             onChange={handleChange}
                             type="text"
@@ -335,6 +365,7 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
 
                         <TextInput
                             id="state"
+                            name="state"
                             value={values.state}
                             onChange={handleChange}
                             type="text"
@@ -348,6 +379,7 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
 
                         <TextInput
                             id="customer_user_id"
+                            name="customer_user_id"
                             value={values.customer_user_id}
                             onChange={handleChange}
                             type="text"
@@ -361,6 +393,7 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
 
                         <TextInput
                             id="customer_user_index"
+                            name="customer_user_index"
                             value={values.customer_user_index}
                             onChange={handleChange}
                             type="text"
@@ -374,6 +407,7 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
 
                         <Textarea
                             id="customer_user_notes"
+                            name="customer_user_notes"
                             placeholder="Notes..."
                             value={values.customer_user_notes}
                             onChange={handleChange}
@@ -384,7 +418,7 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <PrimaryButton disabled={processing}>Add</PrimaryButton>
+                    <PrimaryButton disabled={processing} type="submit">Add</PrimaryButton>
 
                     <Transition
                         show={recentlySuccessful}

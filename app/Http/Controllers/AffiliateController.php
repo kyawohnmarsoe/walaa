@@ -17,7 +17,7 @@ class AffiliateController extends Controller
     } // index
 
     public function store() { // insert API data to db
-        $token = session('apitoken');
+        $token = $this->getSessionToken();
         
         $headers = [
             'Authorization'=>'Bearer '.$token, 

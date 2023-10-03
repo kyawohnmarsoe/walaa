@@ -9,8 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AffiliateController;
-use App\Http\Controllers\CustomerController;
- 
+use App\Http\Controllers\CustomerController; 
 
 Route::get('/test', function () {    
     return Inertia::render('Test');
@@ -25,25 +24,6 @@ Route::get('/', function () {
     ]);
 });
 
-// Route::get('/dashboard', function () {    
-//     return Inertia::render('Dashboard', [
-//         'api_token' => session('api_token') ?? ''
-//     ]);
-// })->middleware(['auth', 'verified'])->name('dashboard');
-
-// Route::get('/online/users', function () {
-//     return Inertia::render('Online/Users', [
-//         'api_token' => session('api_token') ?? ''
-//     ]);
-// })->middleware(['auth', 'verified'])->name('online.users');
-
-// Route::get('/accounts', function () {
-//     return Inertia::render('Accounts/Accounts', [
-//         'api_token' => session('api_token') ?? ''
-//     ]);
-//   }
-// )->middleware(['auth', 'verified'])->name('accounts');
-
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
@@ -52,7 +32,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/user/{id}', [UserController::class, 'getUserDetails'])->name('user.details');
     Route::post('/user/update', [UserController::class, 'updateUserDetails'])->name('user.update');
    
-    
     Route::get('/accounts', [AccountController::class, 'index'])->name('accounts');
     Route::get('/accounts/store', [AccountController::class, 'store'])->name('accounts.store');
 
@@ -61,7 +40,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/customers', [CustomerController::class, 'index'])->name('customers');
     Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create');
-    Route::get('/customers/store', [CustomerController::class, 'store'])->name('customers.store');
+    Route::post('/customers/store', [CustomerController::class, 'store'])->name('customers.store');
     Route::get('/users/management', [UserController::class, 'showAllUsers'])->name('users.management');
 });
 
