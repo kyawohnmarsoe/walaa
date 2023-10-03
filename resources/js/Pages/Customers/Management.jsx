@@ -6,7 +6,7 @@ import Alert from '../../Components/DaisyUI/Alert'
 import React, { useState, useEffect } from 'react'
 import '../../../css/paginate.css'
 import Loading from '@/Components/DaisyUI/Loading';
-import OnlineUsersSearch from '../Users/OnlineUsersSearch';
+import UserManagementSearch from './UserManagementSearch';
 
 function PaginatedItems ({ itemsPerPage, items })
 {
@@ -51,11 +51,12 @@ function PaginatedItems ({ itemsPerPage, items })
   );
 }
 
-export default function Management ({ auth, apitoken, affiliates })
+export default function Management ({ auth, apitoken, affiliates, accountTypes })
 {
 
   const [onlineUsersData, setOnlineUsersData] = useState({ users: [], errMessage: '', loading: true })
   const { users, errMessage, loading } = onlineUsersData
+  const [filterObj, setFilterObj] = useState({})
 
   const instance = axios.create({
     baseURL: 'https://rapi.earthlink.iq/api/reseller',
@@ -64,19 +65,23 @@ export default function Management ({ auth, apitoken, affiliates })
 
   useEffect(() =>
   {
-    instance.post('/user/all', { params: { OrderBy: 'Online Status' } })
+    instance.post('/user/all', {
+      ...filterObj,
+      // CallerId: '64:D1:54:23:A3:AA',
+      OrderBy: 'Account Name'
+    })
       .then(res =>
       {
         setOnlineUsersData({ users: res.data.value.itemsList, errMessage: '', loading: false })
         // setOnlineUsersData({ users: [], errMessage: '', loading: false })
-        console.log(res.data.value.itemsList[0])
+        console.log(res.data.value.itemsList)
       })
       .catch(err =>
       {
         setOnlineUsersData({ users: [], errMessage: err.message, loading: false })
         console.log(err)
       })
-  }, [])
+  }, [filterObj])
 
 
   return (
@@ -89,7 +94,7 @@ export default function Management ({ auth, apitoken, affiliates })
       { loading && <Loading className="mt-12 " /> }
       { errMessage && <Alert className="mt-12" msg={ errMessage } /> }
 
-      { !errMessage && !loading && <OnlineUsersSearch className='p-4' affiliates={ affiliates } /> }
+      { !errMessage && !loading && <UserManagementSearch className='p-4' affiliates={ affiliates } accountTypes={ accountTypes } setFilterObj={ setFilterObj } /> }
 
       <div className="py-12 ">
         <div className="max-w-8xl mx-auto sm:px-6 lg:px-4">

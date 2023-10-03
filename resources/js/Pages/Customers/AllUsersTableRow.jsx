@@ -59,7 +59,7 @@ export default function AllUsersTableRow ({ user })
         {/* <strong>Status</strong> : { user?.onlineStatus && <span style={ { color: user?.onlineStatusColor } }>{ user?.onlineStatus }</span> } */ }
         <strong>Status</strong> : <span style={ { color: user?.onlineStatusColor } }>{ user?.onlineStatus }</span>
         <br />
-        <strong>MAC</strong> : { user?.mac }
+        <strong>MAC</strong> : { user?.callerID }
         <br />
         <strong>IP</strong> : { user?.userIP }
         <br />
@@ -67,9 +67,9 @@ export default function AllUsersTableRow ({ user })
       </td>
 
       <td>
-        <strong>Mobile</strong> : { user?.customer?.customerPhoneNumber }
+        <strong>Mobile</strong> : { user?.mobileNumber }
         <br />
-        <strong>Mobile 2</strong> : { user?.customer?.customerSecondPhoneNumber }
+        <strong>Mobile 2</strong> : { user?.mobileNumber2 }
         <br />
         <strong>User Notes</strong> : { user?.userNotes }
         <br />

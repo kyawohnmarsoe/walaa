@@ -8,6 +8,8 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\Request;
 use App\Models\Affiliate;
+use App\Models\Account;
+
 
  
 class UserController extends Controller
@@ -42,7 +44,8 @@ class UserController extends Controller
         $token = $this->getSessionToken();      
         return Inertia::render('Customers/Management',[
             'apitoken' => $token, 
-            'affiliates' => Affiliate::all()
+            'affiliates' => Affiliate::all(),
+            'accountTypes' => Account::all()
         ]);
     }
 }

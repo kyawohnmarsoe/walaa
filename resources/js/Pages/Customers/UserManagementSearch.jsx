@@ -5,19 +5,19 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import { useForm } from '@inertiajs/react';
 import { useEffect } from 'react';
 
-export default function OnlineUsersSearch ({ className = '', affiliates, setFilterObj })
+export default function UserManagementSearch ({ className = '', affiliates, accountTypes, setFilterObj })
 {
-    const sessionTypes = ['Any', 'Normal (With Internet)', 'Connected Only (Without Internet)'];
+    const status = ['All', 'Active', 'Inactive', 'Online', 'Offline', 'Will Expire', 'Expired', 'Activated', 'Didn\'t Pay', 'Paid', '', 'Manually suspended']
 
     const { data, setData, post, processing, errors, reset } = useForm({
         userId: '',
-        IP: '',
-        affiliateId: '',
-        MAC: '',
-        CalledStation: '',
-        sessionType: '',
-        securityIssues: false
-
+        FirstName: '',
+        SubAffliateIndex: '',
+        CallerId: '',
+        Notes: '',
+        PhoneFax: '',
+        // AccountType: '',
+        AccountStatusID: ''
     });
 
     useEffect(() =>
@@ -33,8 +33,8 @@ export default function OnlineUsersSearch ({ className = '', affiliates, setFilt
         e.preventDefault();
 
         // post(route('user.update'));
-        // console.log(data)
         setFilterObj(data)
+        console.log(data)
 
     };
 
@@ -44,7 +44,7 @@ export default function OnlineUsersSearch ({ className = '', affiliates, setFilt
                 <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <section className={ className }>
                         <header>
-                            <h2 className="text-lg font-medium text-sky-600">Online Users</h2>
+                            <h2 className="text-lg font-medium text-sky-600">User Management</h2>
 
                             {/* <p className="mt-1 text-sm text-gray-600">
                             Update your account's profile information and email address.
@@ -70,29 +70,29 @@ export default function OnlineUsersSearch ({ className = '', affiliates, setFilt
                                 </div>
 
                                 <div>
-                                    <InputLabel htmlFor="IP" value="User IP" />
+                                    <InputLabel htmlFor="FirstName" value="Customer First Name" />
 
                                     <TextInput
-                                        id="IP"
+                                        id="FirstName"
                                         className="mt-1 block w-full "
-                                        value={ data?.IP }
+                                        value={ data?.FirstName }
                                         isFocused
-                                        autoComplete="IP"
-                                        onChange={ (e) => setData('IP', e.target.value) }
+                                        autoComplete="FirstName"
+                                        onChange={ (e) => setData('FirstName', e.target.value) }
                                     />
 
                                     {/* <InputError className="mt-2" message={errors.name} /> */ }
                                 </div>
 
                                 <div>
-                                    <InputLabel htmlFor="affiliateId" value="Affiliate" />
+                                    <InputLabel htmlFor="SubAffliateIndex" value="Affiliate" />
 
                                     <select
-                                        name="affiliateId"
-                                        id="affiliateId"
+                                        name="SubAffliateIndex"
+                                        id="SubAffliateIndex"
                                         className='mt-1 block w-full border-gray-300 focus:border-sky-500 focus:ring-sky-500 rounded-md shadow-sm '
-                                        value={ data?.affiliateId }
-                                        onChange={ (e) => setData('affiliateId', e.target.value) }
+                                        value={ data?.SubAffliateIndex }
+                                        onChange={ (e) => setData('SubAffliateIndex', e.target.value) }
                                     >
                                         <option value=''>All</option>
                                         {
@@ -107,48 +107,86 @@ export default function OnlineUsersSearch ({ className = '', affiliates, setFilt
                                 </div>
 
                                 <div>
-                                    <InputLabel htmlFor="MAC" value="Caller MAC" />
+                                    <InputLabel htmlFor="CallerId" value="MAC Address" />
 
                                     <TextInput
-                                        id="MAC"
+                                        id="CallerId"
                                         className="mt-1 block w-full"
-                                        value={ data?.MAC }
+                                        value={ data?.CallerId }
                                         isFocused
-                                        autoComplete="MAC"
-                                        onChange={ (e) => setData('MAC', e.target.value) }
+                                        autoComplete="CallerId"
+                                        onChange={ (e) => setData('CallerId', e.target.value) }
                                     />
 
                                     {/* <InputError className="mt-2" message={errors.name} /> */ }
                                 </div>
 
                                 <div>
-                                    <InputLabel htmlFor="CalledStation" value="Login From" />
+                                    <InputLabel htmlFor="Notes" value="User Notes" />
 
                                     <TextInput
-                                        id="CalledStation"
+                                        id="Notes"
                                         className="mt-1 block w-full "
-                                        value={ data?.CalledStation }
+                                        value={ data?.Notes }
                                         isFocused
-                                        autoComplete="CalledStation"
-                                        onChange={ (e) => setData('CalledStation', e.target.value) }
+                                        autoComplete="Notes"
+                                        onChange={ (e) => setData('Notes', e.target.value) }
                                     />
 
                                     {/* <InputError className="mt-2" message={errors.name} /> */ }
                                 </div>
 
                                 <div>
-                                    <InputLabel htmlFor="sessionType" value="Session Type" />
+                                    <InputLabel htmlFor="PhoneFax" value="Mobile Number" />
+
+                                    <TextInput
+                                        id="PhoneFax"
+                                        className="mt-1 block w-full "
+                                        value={ data?.PhoneFax }
+                                        isFocused
+                                        autoComplete="PhoneFax"
+                                        onChange={ (e) => setData('PhoneFax', e.target.value) }
+                                    />
+
+                                    {/* <InputError className="mt-2" message={errors.name} /> */ }
+                                </div>
+
+                                {/* <div>
+                                    <InputLabel htmlFor="AccountType" value="Account Type" />
 
                                     <select
-                                        name="sessionType"
-                                        id="sessionType"
+                                        name="AccountType"
+                                        id="AccountType"
                                         className='mt-1 block w-full border-gray-300 focus:border-sky-500 focus:ring-sky-500 rounded-md shadow-sm '
-                                        value={ data?.sessionType }
-                                        onChange={ (e) => setData('sessionType', e.target.value) }
+                                        value={ data?.AccountType }
+                                        onChange={ (e) => setData('AccountType', e.target.value) }
+                                    >
+                                        <option value=''>All</option>
+
+                                        {
+                                            accountTypes?.map((a, account_index) => <option value={ account_index } key={ account_index }>
+                                                { a.account_name }
+                                            </option>)
+                                        }
+
+                                    </select>
+
+                                     <InputError className="mt-2" message={errors.name} /> 
+                                </div> */}
+
+                                <div>
+                                    <InputLabel htmlFor="AccountStatusID" value="User Status" />
+
+                                    <select
+                                        name="AccountStatusID"
+                                        id="AccountStatusID"
+                                        className='mt-1 block w-full border-gray-300 focus:border-sky-500 focus:ring-sky-500 rounded-md shadow-sm '
+                                        value={ data?.AccountStatusID }
+                                        onChange={ (e) => setData('AccountStatusID', e.target.value) }
                                     >
 
                                         {
-                                            sessionTypes?.map((a, index) => <option value={ index } key={ index }>
+                                            status?.map((a, index) => !!a && <option value={ index } key={ index }>
                                                 { a }
                                             </option>)
                                         }
@@ -158,17 +196,8 @@ export default function OnlineUsersSearch ({ className = '', affiliates, setFilt
                                     {/* <InputError className="mt-2" message={errors.name} /> */ }
                                 </div>
 
-                                <div >
-                                    <label className="flex items-center">
-                                        <Checkbox
-                                            name="securityIssues"
-                                            checked={ data.securityIssues }
-                                            onChange={ (e) => setData('securityIssues', e.target.checked) }
-                                        />
 
-                                        <InputLabel htmlFor="securityIssues" value="Users with security issues only" className='ml-2' />
-                                    </label>
-                                </div>
+
 
                             </div>
 
