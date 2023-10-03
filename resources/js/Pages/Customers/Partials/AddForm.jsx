@@ -74,6 +74,7 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
     useEffect(() => {
         getAffiliates()
         getAccounts()
+        console.log(apitoken)
 
     }, [])
 
@@ -122,6 +123,7 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
 
             }).catch(err => {
                 console.log(err.message)
+
             })
         }
     }

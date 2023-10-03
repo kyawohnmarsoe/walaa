@@ -35,11 +35,11 @@ class Controller extends BaseController
         $session_api_token = session('apitoken'); 
 
         $maxIdleTime = config('session.lifetime') * 60;
-        if (time() - session()->get('current_time') > $maxIdleTime) {
+        if (time() - session('current_time') > $maxIdleTime) {
             session()->forget('apitoken', 'current_time');
-            $session_api_token = $this->GetApiToken(); 
+            $api_token = $this->GetApiToken();
             session([
-                'apitoken' => $session_api_token, 
+                'apitoken' => $api_token, 
                 'current_time' => time()
             ]);
             $session_api_token = session('apitoken'); 
