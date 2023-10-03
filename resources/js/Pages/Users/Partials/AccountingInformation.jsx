@@ -5,7 +5,8 @@ import TextInput from '@/Components/TextInput';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
 
-export default function AccountingInformation({ user,className = '' }) {
+export default function AccountingInformation ({ user, className = '' })
+{
     // const user = usePage().props.auth.user;
 
     // const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
@@ -20,46 +21,52 @@ export default function AccountingInformation({ user,className = '' }) {
     // };
 
     return (
-        <section className={className}>
-            <header>
-                <h2 className="text-lg font-medium text-primary">Accounting Information</h2>
+        <div className="pt-12 ">
+            <div className="max-w-8xl mx-auto sm:px-6 lg:px-4">
+                <div className="bg-white overflow-hidden sm:rounded-lg">
+                    <section className={ className }>
+                        <header>
+                            <h2 className="text-lg font-medium text-primary">Accounting Information</h2>
 
-                {/* <p className="mt-1 text-sm text-error">
+                            {/* <p className="mt-1 text-sm text-error">
                     Information in this section is publicly available to the user and can only be modified by the customer!
                 </p> */}
-            </header>
-            
-             <table className="mt-6 space-y-6 ">
-                <tr>
-                    <td>User Creation Date</td>
-                    <td>: {user?.customer?.createdAt}</td>
-                </tr>
-                <tr>
-                    <td>Last Modified</td>
-                    <td>: {user?.customer?.updatedAt}</td>
-                </tr>
-                <tr>
-                    <td>Manual Expiration Date:</td>
-                    <td>: {user?.manualExpirationDate}</td>
-                </tr>
-                <tr>
-                    <td>Last Refill Date</td>
-                    <td>: {user?.lastRefill}</td>
-                </tr>
-                <tr>
-                    <td>Last User Payment Date</td>
-                    <td>: {user?.lastPayment}</td>
-                </tr>
-                <tr>
-                    <td>Last Logout On</td>
-                    <td>: {user?.logout}</td>
-                </tr>
-                <tr>
-                    <td>Last Error Log</td>
-                    <td>: {user?.error}</td>
-                </tr>
-             </table>
-            
-        </section>
+                        </header>
+
+                        <table className="mt-6 space-y-6 ">
+                            <tr>
+                                <td>User Creation Date</td>
+                                <td>: { user?.customer?.createdAt }</td>
+                            </tr>
+                            <tr>
+                                <td>Last Modified</td>
+                                <td>: { user?.customer?.updatedAt }</td>
+                            </tr>
+                            <tr>
+                                <td>Manual Expiration Date:</td>
+                                <td>: { user?.manualExpirationDate }</td>
+                            </tr>
+                            <tr>
+                                <td>Last Refill Date</td>
+                                <td>: { user?.lastRefill }</td>
+                            </tr>
+                            <tr>
+                                <td>Last User Payment Date</td>
+                                <td>: { user?.lastPayment }</td>
+                            </tr>
+                            <tr>
+                                <td>Last Logout On</td>
+                                <td>: { user?.logout }</td>
+                            </tr>
+                            <tr>
+                                <td>Last Error Log</td>
+                                <td>: { user?.error }</td>
+                            </tr>
+                        </table>
+
+                    </section>
+                </div>
+            </div>
+        </div>
     );
 }
