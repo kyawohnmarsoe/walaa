@@ -55,6 +55,7 @@ export default function OnlineUsers ({ auth, apitoken, affiliates })
 {
   const [onlineUsersData, setOnlineUsersData] = useState({ users: [], errMessage: '', loading: true })
   const { users, errMessage, loading } = onlineUsersData
+  const [filterObj, setFilterObj] = useState({})
 
   const instance = axios.create({
     baseURL: 'https://rapi.earthlink.iq/api/reseller',
@@ -63,19 +64,21 @@ export default function OnlineUsers ({ auth, apitoken, affiliates })
 
   useEffect(() =>
   {
-    instance.post('/activesessions', { parms: { Orderby: 'OnlineTime' } })
+    instance.post('/activesessions', { ...filterObj, Orderby: 'OnlineTime' })
       .then(res =>
       {
         setOnlineUsersData({ users: res.data.value.itemsList, errMessage: '', loading: false })
         // setOnlineUsersData({ users: [], errMessage: '', loading: false })
-        console.log(res.data.value.itemsList[0])
+        console.log(res.data.value.itemsList)
       })
       .catch(err =>
       {
         setOnlineUsersData({ users: [], errMessage: err.message, loading: false })
         console.log(err)
       })
-  }, [])
+  }, [filterObj])
+
+
 
   return (
     <AuthenticatedLayout
@@ -87,7 +90,7 @@ export default function OnlineUsers ({ auth, apitoken, affiliates })
       { loading && <Loading className="mt-12 " /> }
       { errMessage && <Alert className="mt-12" msg={ errMessage } /> }
 
-      { !errMessage && !loading && <OnlineUsersSearch className='p-4' affiliates={ affiliates } /> }
+      { !errMessage && !loading && <OnlineUsersSearch className='p-4' affiliates={ affiliates } setFilterObj={ setFilterObj } /> }
 
       <div className="py-12 ">
         <div className="max-w-8xl mx-auto sm:px-6 lg:px-4">

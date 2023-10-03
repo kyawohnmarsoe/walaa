@@ -5,16 +5,17 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import { useForm } from '@inertiajs/react';
 import { useEffect } from 'react';
 
-export default function OnlineUsersSearch ({ className = '', affiliates })
+export default function OnlineUsersSearch ({ className = '', affiliates, setFilterObj })
 {
-    console.log(affiliates)
+    const sessionTypes = ['Any', 'Normal (With Internet)', 'Connected Only (Without Internet)'];
+
     const { data, setData, post, processing, errors, reset } = useForm({
-        userName: '',
+        userId: '',
         userIP: '',
-        affiliateName: '',
+        affiliateId: '',
         callerMAC: '',
         loginFrom: '',
-        sessionType: ['Any', 'Normal (With Internet)', 'Connected Only (Without Internet'],
+        sessionType: '',
         active: false
 
     });
@@ -32,7 +33,8 @@ export default function OnlineUsersSearch ({ className = '', affiliates })
         e.preventDefault();
 
         // post(route('user.update'));
-        alert('submit')
+        // console.log(data)
+        setFilterObj(data)
 
     };
 
@@ -53,15 +55,15 @@ export default function OnlineUsersSearch ({ className = '', affiliates })
                             <div className='grid grid-cols-3 gap-4'>
 
                                 <div>
-                                    <InputLabel htmlFor="userName" value="Username" />
+                                    <InputLabel htmlFor="userId" value="UserId" />
 
                                     <TextInput
-                                        id="userName"
+                                        id="userId"
                                         className="mt-1 block w-full "
-                                        value={ data.userName }
+                                        value={ data.userId }
                                         isFocused
-                                        autoComplete="userName"
-                                        onChange={ (e) => setData('userName', e.target.value) }
+                                        autoComplete="userId"
+                                        onChange={ (e) => setData('userId', e.target.value) }
                                     />
 
                                     {/* <InputError className="mt-2" message={errors.name} /> */ }
@@ -83,18 +85,18 @@ export default function OnlineUsersSearch ({ className = '', affiliates })
                                 </div>
 
                                 <div>
-                                    <InputLabel htmlFor="affiliateName" value="Affiliate" />
+                                    <InputLabel htmlFor="affiliateId" value="Affiliate" />
 
                                     <select
-                                        name="affiliateName"
-                                        id="affiliateName"
-                                        className='mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm '
-                                        value={ data?.affiliateName }
-                                        onChange={ (e) => setData('affiliateName', e.target.value) }
+                                        name="affiliateId"
+                                        id="affiliateId"
+                                        className='mt-1 block w-full border-gray-300 focus:border-sky-500 focus:ring-sky-500 rounded-md shadow-sm '
+                                        value={ data?.affiliateId }
+                                        onChange={ (e) => setData('affiliateId', e.target.value) }
                                     >
-                                        <option value='all'>All</option>
+                                        <option value=''>All</option>
                                         {
-                                            affiliates?.map(a => <option value={ a.affiliate_index }>
+                                            affiliates?.map(a => <option value={ a.affiliate_index } key={ a.affiliate_index }>
                                                 { a.affiliate_name }
                                             </option>)
                                         }
@@ -113,6 +115,7 @@ export default function OnlineUsersSearch ({ className = '', affiliates })
                                         value={ data?.callerMAC }
                                         isFocused
                                         autoComplete="callerMAC"
+                                        onChange={ (e) => setData('callerMAC', e.target.value) }
                                     />
 
                                     {/* <InputError className="mt-2" message={errors.name} /> */ }
@@ -134,16 +137,23 @@ export default function OnlineUsersSearch ({ className = '', affiliates })
                                 </div>
 
                                 <div>
-                                    <InputLabel htmlFor="router" value="Router/Nano IP:" />
+                                    <InputLabel htmlFor="sessionType" value="Session Type" />
 
-                                    <TextInput
-                                        id="router"
-                                        className="mt-1 block w-full "
-                                        value={ data?.router }
-                                        isFocused
-                                        autoComplete="router"
-                                        onChange={ (e) => setData('router', e.target.value) }
-                                    />
+                                    <select
+                                        name="sessionType"
+                                        id="sessionType"
+                                        className='mt-1 block w-full border-gray-300 focus:border-sky-500 focus:ring-sky-500 rounded-md shadow-sm '
+                                        value={ data?.sessionType }
+                                        onChange={ (e) => setData('sessionType', e.target.value) }
+                                    >
+
+                                        {
+                                            sessionTypes?.map((a, index) => <option value={ index } key={ index }>
+                                                { a }
+                                            </option>)
+                                        }
+
+                                    </select>
 
                                     {/* <InputError className="mt-2" message={errors.name} /> */ }
                                 </div>

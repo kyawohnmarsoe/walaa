@@ -22,7 +22,7 @@ export default function Dashboard ({ auth, apitoken })
                         <div className="text-gray-900">
                             {
                                 !!apitoken ? <StatsList apitoken={ apitoken } />
-                                    : <Alert className='alert alert-error' msg='Session Expired' />
+                                    : <Alert msg='Session Expired' />
                             }
                         </div>
                     </div>
