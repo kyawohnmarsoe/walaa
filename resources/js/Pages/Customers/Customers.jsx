@@ -10,7 +10,7 @@ export default function Edit({
     show_data,
     affiliates,
     accounts,
-    apitoken
+    apitoken,
 }) {
 
     const { flash } = usePage().props
@@ -51,7 +51,7 @@ export default function Edit({
                         show_data == 'add_form' &&
                         <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                             <AddForm
-                                className="max-w-xl"
+                                className="p-4"
                                 accounts={accounts}
                                 affiliates={affiliates}
                                 apitoken={apitoken}

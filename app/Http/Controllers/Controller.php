@@ -34,9 +34,11 @@ class Controller extends BaseController
     public function getSessionToken() {
         $session_api_token = session('apitoken'); 
 
-        $maxIdleTime = config('session.lifetime') * 60;
+        // $maxIdleTime = config('session.lifetime') * 60;
+        $maxIdleTime = 3600;
         if (time() - session('current_time') > $maxIdleTime) {
-            session()->forget('apitoken', 'current_time');
+            session()->forget(['apitoken', 'current_time']);
+
             $api_token = $this->GetApiToken();
             session([
                 'apitoken' => $api_token, 
@@ -44,7 +46,10 @@ class Controller extends BaseController
             ]);
             $session_api_token = session('apitoken'); 
         }
+        // $session_current_time = session('current_time');
+        // $current_time = time();
         return $session_api_token;
+        // return response(compact('session_api_token', 'session_current_time', 'current_time', 'maxIdleTime'));
     }
     
 }
