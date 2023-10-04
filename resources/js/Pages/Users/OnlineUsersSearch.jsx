@@ -175,7 +175,7 @@ export default function OnlineUsersSearch ({ className = '', affiliates, setFilt
 
                             <div className="flex items-center gap-4">
                                 <PrimaryButton disabled={ processing }>Search</PrimaryButton>
-                                <PrimaryButton disabled={ processing } onClick={ () => reset() } className="bg-gray-500">Reset</PrimaryButton>
+                                <PrimaryButton disabled={ processing } onClick={ () => reset() } className="resetBtn">Reset</PrimaryButton>
 
                                 {/* <Transition
                                 show={recentlySuccessful}
