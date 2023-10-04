@@ -1,23 +1,18 @@
 import React from "react";
 import InputLabel from "../InputLabel";
 
-export default function PageSize ({ className, pagingData, setPagingData })
+export default function PageSize ({ className, filterObj, setFilterObj })
 {
     const onChangeHandler = (e) =>
     {
-        setPagingData({ ...pagingData, pageSize: e.target.value })
+        setFilterObj({ ...filterObj, RowCount: e.target.value })
     }
 
-    // useEffect(() =>
-    // {
-    //     setPagingData({ ...pagingData, pageSize: e.target.value })
-
-    // }, [itemOffset])
     return (
         <div className="pagination-wrapper">
             <InputLabel htmlFor="sessionType" value="Page Size" /> :
             <select className={ className }
-                value={ pagingData.pageSize }
+                value={ filterObj.RowCount }
                 onChange={ (e) => onChangeHandler(e) }
             >
                 <option value="10">10</option>

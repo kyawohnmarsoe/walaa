@@ -10,12 +10,11 @@ import PaginatedItems from '@/Components/DaisyUI/PaginatedItems';
 
 export default function OnlineUsers ({ auth, apitoken, affiliates })
 {
-  const [onlineUsersData, setOnlineUsersData] = useState({ users: [], errMessage: '', loading: true })
-  const { users, errMessage, loading } = onlineUsersData
-  const [filterObj, setFilterObj] = useState({})
-  const [pagingData, setPagingData] = useState({ pageSize: 10, currentData: null })
+  const [onlineUsersData, setOnlineUsersData] = useState({ users: [], total: 0, errMessage: '', loading: true })
+  const { users, total, errMessage, loading } = onlineUsersData
+  const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10, Orderby: 'OnlineTime' })
 
-  console.log('current-items: ' + pagingData?.currentData?.length)
+  // console.log(filterObj)
 
   const instance = axios.create({
     baseURL: 'https://rapi.earthlink.iq/api/reseller',
@@ -24,30 +23,20 @@ export default function OnlineUsers ({ auth, apitoken, affiliates })
 
   useEffect(() =>
   {
-    instance.post('/activesessions', { ...filterObj, Orderby: 'OnlineTime' })
+    instance.post('/activesessions', filterObj)
       .then(res =>
       {
-        setOnlineUsersData({ users: res.data.value.itemsList, errMessage: '', loading: false })
+        setOnlineUsersData({ users: res?.data?.value?.itemsList, total: res?.data?.value?.totalCount, errMessage: '', loading: false })
         // setOnlineUsersData({ users: [], errMessage: '', loading: false })
-        console.log(res.data.value.itemsList)
+        console.log(res?.data?.value?.itemsList?.length)
       })
       .catch(err =>
       {
-        setOnlineUsersData({ users: [], errMessage: err.message, loading: false })
+        setOnlineUsersData({ users: [], errMessage: err?.message, loading: false })
         console.log(err)
       })
   }, [filterObj])
 
-
-  // useEffect(renderTable =>
-  // {
-  //   return <OnlineUsersTable users={ pagingData.currentData } />
-  // }, [pagingData])
-
-  // const renderTable = () =>
-  // {
-  //   return <OnlineUsersTable users={ pagingData.currentData } />
-  // }
 
   return (
     <AuthenticatedLayout
@@ -74,13 +63,14 @@ export default function OnlineUsers ({ auth, apitoken, affiliates })
             <div className="text-gray-900">
               { !errMessage && !loading &&
                 <PaginatedItems
-                  itemsPerPage={ pagingData.pageSize }
+                  itemsPerPage={ filterObj.RowCount }
                   items={ users }
-                  pagingData={ pagingData }
-                  setPagingData={ setPagingData }
+                  total={ total }
+                  setFilterObj={ setFilterObj }
+                  filterObj={ filterObj }
                 >
 
-                  <OnlineUsersTable users={ pagingData.currentData } />
+                  <OnlineUsersTable users={ users } />
                   {/* { renderTable() } */ }
                 </PaginatedItems>
 

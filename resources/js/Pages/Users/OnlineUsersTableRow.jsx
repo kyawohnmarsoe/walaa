@@ -12,7 +12,8 @@ export default function OnlineUsersTableRow ({ user, index })
           </label>
         </th> */}
 
-      <td>{ index }</td>
+      {/* <td>{ user?.userIndex }</td> */ }
+      <td></td>
 
       <td>
         <div className="flex items-center space-x-3">
