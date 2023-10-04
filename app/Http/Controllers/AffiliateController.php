@@ -12,9 +12,9 @@ class AffiliateController extends Controller
     public function index()
     {
         return Inertia::render('Affiliates/Affiliates', [
-            'affiliates' => Affiliate::all()
+            'affiliates' => Affiliate::all() 
         ]);
-    } // index
+    } // index    
 
     public function store() { // insert API data to db
         $token = $this->getSessionToken();

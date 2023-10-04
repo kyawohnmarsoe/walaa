@@ -1,10 +1,15 @@
-import AffiliatesTable from './AffiliatesTable';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, usePage } from '@inertiajs/react';
+import { Head, usePage, router } from '@inertiajs/react';
+import PaginatedItems from "@/Components/PaginatedItems";
+import PrimaryButton from '@/Components/PrimaryButton';
 
-export default function Edit({ auth, mustVerifyEmail, affiliates }) {
+export default function Affiliates({ auth, mustVerifyEmail, affiliates }) {
 
     const { flash } = usePage().props
+
+    const addApiClick = () => {
+        router.get('/affiliates/store')
+    }
 
     return (
         <AuthenticatedLayout
@@ -13,7 +18,7 @@ export default function Edit({ auth, mustVerifyEmail, affiliates }) {
                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">Affiliates</h2>
             }
         >
-            <Head title="Accounts" />
+            <Head title="Affiliates" />
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-4 space-y-6">
@@ -32,7 +37,14 @@ export default function Edit({ auth, mustVerifyEmail, affiliates }) {
                     }
 
                     <div className="sm:p-8 bg-white shadow sm:rounded-lg">
-                        <AffiliatesTable affiliates={affiliates} />
+                        <PrimaryButton disabled='' onClick={ev => addApiClick()}>
+                            Add Api Affiliate Data
+                        </PrimaryButton>
+
+                        {
+                            affiliates.length > 0 &&
+                            <PaginatedItems itemsPerPage={4} items={affiliates} tableName="affiliate" />
+                        }
                     </div>
                 </div>
             </div>
