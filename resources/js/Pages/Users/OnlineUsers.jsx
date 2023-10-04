@@ -1,67 +1,21 @@
 import OnlineUsersTable from './OnlineUsersTable';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import ReactPaginate from 'react-paginate';
 import Alert from '../../Components/DaisyUI/Alert'
 import React, { useState, useEffect } from 'react'
 import '../../../css/paginate.css'
 import OnlineUsersSearch from './OnlineUsersSearch';
 import Loading from '@/Components/DaisyUI/Loading';
-import PageSize from '@/Components/DaisyUI/PageSize';
 import PaginatedItems from '@/Components/DaisyUI/PaginatedItems';
-
-// function PaginatedItems ({ itemsPerPage, items, setItemsPerPage })
-// {
-//   // Here we use item offsets; we could also use page offsets
-//   // following the API or data you're working with.
-//   const [itemOffset, setItemOffset] = useState(0);
-
-//   // Simulate fetching items from another resources.
-//   // (This could be items from props; or items loaded in a local state
-//   // from an API endpoint with useEffect and useState)
-//   const endOffset = itemOffset + itemsPerPage;
-//   console.log(`Loading items from ${ itemOffset } to ${ endOffset }`);
-//   const currentItems = items.slice(itemOffset, endOffset);
-//   const pageCount = Math.ceil(items.length / itemsPerPage);
-
-//   // Invoke when user click to request another page.
-//   const handlePageClick = (event) =>
-//   {
-//     const newOffset = (event.selected * itemsPerPage) % items.length;
-//     console.log(
-//       `User requested page number ${ event.selected }, which is offset ${ newOffset }`
-//     );
-//     setItemOffset(newOffset);
-
-//   };
-
-//   return (
-//     <>
-//       <div className='pagination-wrapper'>
-//         <PageSize className="pagination" setItemsPerPage={ setItemsPerPage } itemsPerPage={ itemsPerPage } />
-//         <ReactPaginate
-//           breakLabel="..."
-//           nextLabel="next >"
-//           onPageChange={ handlePageClick }
-//           pageRangeDisplayed={ 5 }
-//           pageCount={ pageCount }
-//           previousLabel="< previous"
-//           renderOnZeroPageCount={ null }
-//           className="pagination"
-//         />
-//       </div>
-//       <OnlineUsersTable users={ currentItems } />
-//     </>
-//   );
-// }
 
 export default function OnlineUsers ({ auth, apitoken, affiliates })
 {
   const [onlineUsersData, setOnlineUsersData] = useState({ users: [], errMessage: '', loading: true })
   const { users, errMessage, loading } = onlineUsersData
   const [filterObj, setFilterObj] = useState({})
-  const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [currentItems, setCurrentItems] = useState(null);
+  const [pagingData, setPagingData] = useState({ pageSize: 10, currentData: null })
+
+  console.log('current-items: ' + pagingData?.currentData?.length)
 
   const instance = axios.create({
     baseURL: 'https://rapi.earthlink.iq/api/reseller',
@@ -85,6 +39,15 @@ export default function OnlineUsers ({ auth, apitoken, affiliates })
   }, [filterObj])
 
 
+  // useEffect(renderTable =>
+  // {
+  //   return <OnlineUsersTable users={ pagingData.currentData } />
+  // }, [pagingData])
+
+  // const renderTable = () =>
+  // {
+  //   return <OnlineUsersTable users={ pagingData.currentData } />
+  // }
 
   return (
     <AuthenticatedLayout
@@ -101,6 +64,7 @@ export default function OnlineUsers ({ auth, apitoken, affiliates })
           className='p-4'
           affiliates={ affiliates }
           setFilterObj={ setFilterObj }
+          filterObj={ filterObj }
 
         /> }
 
@@ -110,13 +74,14 @@ export default function OnlineUsers ({ auth, apitoken, affiliates })
             <div className="text-gray-900">
               { !errMessage && !loading &&
                 <PaginatedItems
-                  itemsPerPage={ itemsPerPage }
+                  itemsPerPage={ pagingData.pageSize }
                   items={ users }
-                  setItemsPerPage={ setItemsPerPage }
-                  setCurrentItems={ setCurrentItems }
+                  pagingData={ pagingData }
+                  setPagingData={ setPagingData }
                 >
-                  <OnlineUsersTable users={ currentItems } />
 
+                  <OnlineUsersTable users={ pagingData.currentData } />
+                  {/* { renderTable() } */ }
                 </PaginatedItems>
 
               }

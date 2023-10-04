@@ -5,7 +5,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import { useForm } from '@inertiajs/react';
 import { useEffect } from 'react';
 
-export default function OnlineUsersSearch ({ className = '', affiliates, setFilterObj })
+export default function OnlineUsersSearch ({ className = '', affiliates, filterObj, setFilterObj })
 {
     const sessionTypes = ['Any', 'Normal (With Internet)', 'Connected Only (Without Internet)'];
 
@@ -34,7 +34,7 @@ export default function OnlineUsersSearch ({ className = '', affiliates, setFilt
 
         // post(route('user.update'));
         // console.log(data)
-        setFilterObj(data)
+        setFilterObj(...filterObj, data)
 
     };
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "@inertiajs/react";
 
-export default function OnlineUsersTableRow ({ user })
+export default function OnlineUsersTableRow ({ user, index })
 {
 
   return (
@@ -11,8 +11,8 @@ export default function OnlineUsersTableRow ({ user })
             <input type="checkbox" className="checkbox" />
           </label>
         </th> */}
-      <td></td>
-      {/* <td>{user.userIndex && user.userIndex}</td> */ }
+
+      <td>{ index }</td>
 
       <td>
         <div className="flex items-center space-x-3">

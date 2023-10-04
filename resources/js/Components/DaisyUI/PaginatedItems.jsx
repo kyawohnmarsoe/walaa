@@ -3,8 +3,9 @@ import ReactPaginate from 'react-paginate';
 import OnlineUsersTable from '@/Pages/Users/OnlineUsersTable';
 import { useEffect, useState } from 'react';
 
-export default function PaginatedItems ({ itemsPerPage, items, setItemsPerPage, setCurrentItems, children })
+export default function PaginatedItems ({ itemsPerPage, items, pagingData, setPagingData, children })
 {
+
     // Here we use item offsets; we could also use page offsets
     // following the API or data you're working with.
     const [itemOffset, setItemOffset] = useState(0);
@@ -16,6 +17,8 @@ export default function PaginatedItems ({ itemsPerPage, items, setItemsPerPage, 
     console.log(`Loading items from ${ itemOffset } to ${ endOffset }`);
     const currentItems = items.slice(itemOffset, endOffset);
     const pageCount = Math.ceil(items.length / itemsPerPage);
+
+
 
     // Invoke when user click to request another page.
     const handlePageClick = (event) =>
@@ -30,16 +33,17 @@ export default function PaginatedItems ({ itemsPerPage, items, setItemsPerPage, 
 
     useEffect(() =>
     {
-        setCurrentItems(currentItems);
-    }, [itemsPerPage])
+        setPagingData({ ...pagingData, currentData: currentItems })
+
+    }, [itemOffset, itemsPerPage])
 
     return (
         <>
             <div className='pagination-wrapper'>
                 <PageSize
                     className="pagination"
-                    setItemsPerPage={ setItemsPerPage }
-                    itemsPerPage={ itemsPerPage }
+                    pagingData={ pagingData }
+                    setPagingData={ setPagingData }
                 />
                 <ReactPaginate
                     breakLabel="..."
@@ -52,7 +56,7 @@ export default function PaginatedItems ({ itemsPerPage, items, setItemsPerPage, 
                     className="pagination"
                 />
             </div>
-            {/* <OnlineUsersTable users={ currentItems } /> */ }
+
             { children }
         </>
     );

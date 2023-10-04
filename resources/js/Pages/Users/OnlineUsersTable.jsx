@@ -27,7 +27,7 @@ export default function OnlineUsersTable ({ users })
 
         <tbody>
           {
-            !!users?.length ? users.map(user => <OnlineUsersTableRow user={ user } key={ user.userIndex } />)
+            !!users?.length ? users.map((user, index) => <OnlineUsersTableRow user={ user } key={ user.userIndex } index={ index } />)
               : <tr><td className='text-error'>No User Found!</td></tr>
           }
         </tbody>
