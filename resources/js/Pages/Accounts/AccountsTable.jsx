@@ -1,27 +1,15 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { router } from '@inertiajs/react'
 
 export default function AccountsTable({ accounts }) {
     const [loading, setLoading] = useState(false);
-
-    const addApiClick = () => {
-        router.get('/accounts/store')
-    }
 
     useEffect(() => {
         console.log(accounts);
     }, [])
 
     return (
-        <div className="overflow-x-auto">
-
-            <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded float-right mb-6"
-                onClick={ev => addApiClick()}
-            >
-                Add Account Api Data
-            </button>
+        <div className="overflow-x-auto mt-3">
 
             <table className="table">
                 <thead>
@@ -31,7 +19,7 @@ export default function AccountsTable({ accounts }) {
                         <th>Description</th>
                         <th>Account Price</th>
                         <th>End User Account Price</th>
-                        {/* <th>Image</th> */}
+                        <th>Image</th>
                     </tr>
                 </thead>
 
@@ -52,7 +40,7 @@ export default function AccountsTable({ accounts }) {
                                 </td>
                                 <td>{acc.account_price}</td>
                                 <td>{acc.end_user_account_price}</td>
-                                {/* <td>
+                                <td>
                                     {
                                         acc.account_image_path ?
                                             <img
@@ -63,7 +51,7 @@ export default function AccountsTable({ accounts }) {
                                             :
                                             ''
                                     }
-                                </td> */}
+                                </td>
                             </tr>
                         ))}
                     </tbody>

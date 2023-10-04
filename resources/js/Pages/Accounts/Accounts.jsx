@@ -1,10 +1,15 @@
-import AccountsTable from './AccountsTable';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, usePage } from '@inertiajs/react';
+import { Head, usePage, router } from '@inertiajs/react';
+import PaginatedItems from "@/Components/PaginatedItems";
+import PrimaryButton from '@/Components/PrimaryButton';
 
-export default function Edit({ auth, mustVerifyEmail, accounts }) {
+export default function Accounts({ auth, mustVerifyEmail, accounts }) {
 
     const { flash } = usePage().props
+
+    const addApiClick = () => {
+        router.get('/accounts/store')
+    }
 
     return (
         <AuthenticatedLayout
@@ -32,7 +37,15 @@ export default function Edit({ auth, mustVerifyEmail, accounts }) {
                     }
 
                     <div className="sm:p-8 bg-white shadow sm:rounded-lg">
-                        <AccountsTable accounts={accounts} />
+
+                        <PrimaryButton disabled='' onClick={ev => addApiClick()}>
+                            Add Api Account Data
+                        </PrimaryButton>
+
+                        {
+                            accounts.length > 0 &&
+                            <PaginatedItems itemsPerPage={4} items={accounts} tableName="account" />
+                        }
                     </div>
                 </div>
             </div>
