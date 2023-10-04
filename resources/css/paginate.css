@@ -1,3 +1,19 @@
+.pagination-wrapper{
+  display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.pagination-wrapper label{
+  font-size: 1em;
+}
+.pagination-wrapper select{
+  color: black;
+  float: left;
+  /* padding: 8px 16px; */
+  text-decoration: none;
+  transition: background-color .3s;
+  border: 1px solid #ddd;
+}
 .pagination {
     display: flex;
     justify-content: flex-end;
@@ -19,3 +35,4 @@
 }
 
 .pagination li:hover:not(.selected) {background-color: #ddd;}
+

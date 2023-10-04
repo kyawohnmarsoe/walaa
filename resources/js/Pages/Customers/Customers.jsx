@@ -4,11 +4,7 @@ import AddForm from './Partials/AddForm';
 import PrimaryButton from '@/Components/PrimaryButton';
 import PaginatedItems from '@/Components/PaginatedItems';
 
-<<<<<<< HEAD
-export default function Edit ({
-=======
-export default function Customers({
->>>>>>> 1e75a18150887b2a082771af53bcdaacf7680c30
+export default function Customers ({
     auth,
     mustVerifyEmail,
     customers,
@@ -22,7 +18,8 @@ export default function Customers({
 
     const { flash } = usePage().props
 
-    const addCustomerClick = () => {
+    const addCustomerClick = () =>
+    {
         router.get('/customers/create')
     }
 
@@ -61,18 +58,14 @@ export default function Customers({
                     {
                         show_data == 'list' &&
                         <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-<<<<<<< HEAD
-                            <CustomerTable customers={ customers } />
-=======
-                            <PrimaryButton disabled='' onClick={ev => addCustomerClick()}>
+                            <PrimaryButton disabled='' onClick={ ev => addCustomerClick() }>
                                 Add User
                             </PrimaryButton>
 
                             {
                                 customers.length > 0 &&
-                                <PaginatedItems itemsPerPage={4} items={customers} tableName="customer" />
+                                <PaginatedItems itemsPerPage={ 4 } items={ customers } tableName="customer" />
                             }
->>>>>>> 1e75a18150887b2a082771af53bcdaacf7680c30
                         </div>
                     }
 
