@@ -5,7 +5,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import { useForm } from '@inertiajs/react';
 import { useEffect } from 'react';
 
-export default function UserManagementSearch ({ className = '', affiliates, accountTypes, setFilterObj })
+export default function UserManagementSearch ({ className = '', affiliates, accountTypes, filterObj, setFilterObj })
 {
     const status = ['All', 'Active', 'Inactive', 'Online', 'Offline', 'Will Expire', 'Expired', 'Activated', 'Didn\'t Pay', 'Paid', '', 'Manually suspended']
 
@@ -33,8 +33,8 @@ export default function UserManagementSearch ({ className = '', affiliates, acco
         e.preventDefault();
 
         // post(route('user.update'));
-        setFilterObj(data)
-        console.log(data)
+        setFilterObj({ ...filterObj, ...data })
+        console.log(filterObj)
 
     };
 
