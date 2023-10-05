@@ -4,6 +4,7 @@ import '../../css/paginate.css'
 import AccountsTable from '@/Pages/Accounts/AccountsTable';
 import CustomerTable from '@/Pages/Customers/CustomerTable';
 import AffiliatesTable from '@/Pages/Affiliates/AffiliatesTable';
+import TicketTable from '@/Pages/Tickets/TicketsTable';
 
 
 export default function PaginatedLinks({ itemsPerPage, items, tableName, apitoken }) {
@@ -46,6 +47,10 @@ export default function PaginatedLinks({ itemsPerPage, items, tableName, apitoke
 
             {
                 tableName == 'affiliate' && <AffiliatesTable affiliates={currentItems} apitoken={apitoken} />
+            }
+
+            {
+                tableName == 'ticket' && <TicketTable tickets={currentItems} />
             }
         </>
     );

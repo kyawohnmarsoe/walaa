@@ -9,8 +9,7 @@ import Loading from '@/Components/DaisyUI/Loading';
 import UserManagementSearch from './UserManagementSearch';
 import PaginatedItems from '@/Components/DaisyUI/PaginatedItems';
 
-export default function Management ({ auth, apitoken, affiliates, accountTypes })
-{
+export default function Management({ auth, apitoken, affiliates, accountTypes }) {
 
   const [onlineUsersData, setOnlineUsersData] = useState({ users: [], total: 0, errMessage: '', loading: true })
   const { users, total, errMessage, loading } = onlineUsersData
@@ -18,24 +17,21 @@ export default function Management ({ auth, apitoken, affiliates, accountTypes }
 
   const instance = axios.create({
     baseURL: 'https://rapi.earthlink.iq/api/reseller',
-    headers: { 'Authorization': `Bearer ${ apitoken }` }
+    headers: { 'Authorization': `Bearer ${apitoken}` }
   });
 
-  useEffect(() =>
-  {
+  useEffect(() => {
     instance.post('/user/all', {
       ...filterObj,
       // CallerId: '64:D1:54:23:A3:AA',
       OrderBy: 'Account Name'
     })
-      .then(res =>
-      {
+      .then(res => {
         setOnlineUsersData({ users: res?.data?.value?.itemsList, total: res?.data?.value?.totalCount, errMessage: '', loading: false })
         // setOnlineUsersData({ users: [], errMessage: '', loading: false })
         console.log(res?.data?.value?.itemsList)
       })
-      .catch(err =>
-      {
+      .catch(err => {
         setOnlineUsersData({ users: [], total: 0, errMessage: err.message, loading: false })
         console.log(err)
       })
@@ -44,38 +40,38 @@ export default function Management ({ auth, apitoken, affiliates, accountTypes }
 
   return (
     <AuthenticatedLayout
-      user={ auth.user }
-      header={ <h2 className="font-semibold text-xl text-gray-800 leading-tight">User Management</h2> }
+      user={auth.user}
+      header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">User Management</h2>}
     >
       <Head title="User Management" />
 
-      { loading && <Loading className="mt-12 " /> }
-      { errMessage && <Alert className="mt-12" msg={ errMessage } /> }
+      {loading && <Loading className="mt-12 " />}
+      {errMessage && <Alert className="mt-12" msg={errMessage} />}
 
-      { !errMessage && !loading &&
+      {!errMessage && !loading &&
         <UserManagementSearch
           className='p-4'
-          affiliates={ affiliates }
-          accountTypes={ accountTypes }
-          setFilterObj={ setFilterObj }
-          filterObj={ filterObj }
-        /> }
+          affiliates={affiliates}
+          accountTypes={accountTypes}
+          setFilterObj={setFilterObj}
+          filterObj={filterObj}
+        />}
 
       <div className="py-12 ">
         <div className="max-w-8xl mx-auto sm:px-6 lg:px-4">
           <div className="bg-white overflow-hidden shadow-sm ">
             <div className="text-gray-900">
 
-              { !errMessage && !loading &&
+              {!errMessage && !loading &&
                 <PaginatedItems
-                  itemsPerPage={ filterObj.RowCount }
-                  items={ users }
-                  total={ total }
-                  setFilterObj={ setFilterObj }
-                  filterObj={ filterObj }
+                  itemsPerPage={filterObj.RowCount}
+                  items={users}
+                  total={total}
+                  setFilterObj={setFilterObj}
+                  filterObj={filterObj}
                 >
 
-                  <AllUsersTable users={ users } />
+                  <AllUsersTable users={users} />
 
                 </PaginatedItems>
               }
