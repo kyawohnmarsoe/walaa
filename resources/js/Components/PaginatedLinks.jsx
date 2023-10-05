@@ -22,16 +22,19 @@ export default function PaginatedLinks({ itemsPerPage, items, tableName, apitoke
 
     return (
         <>
-            <ReactPaginate
-                breakLabel="..."
-                nextLabel="next >"
-                onPageChange={handlePageClick}
-                pageRangeDisplayed={5}
-                pageCount={pageCount}
-                previousLabel="< previous"
-                renderOnZeroPageCount={null}
-                className="pagination"
-            />
+            {
+                pageCount > 1 &&
+                <ReactPaginate
+                    breakLabel="..."
+                    nextLabel="next >"
+                    onPageChange={handlePageClick}
+                    pageRangeDisplayed={5}
+                    pageCount={pageCount}
+                    previousLabel="< previous"
+                    renderOnZeroPageCount={null}
+                    className="pagination"
+                />
+            }
 
             {
                 tableName == 'account' && <AccountsTable accounts={currentItems} />
