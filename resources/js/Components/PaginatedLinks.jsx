@@ -10,15 +10,12 @@ export default function PaginatedLinks({ itemsPerPage, items, tableName, apitoke
     const [itemOffset, setItemOffset] = useState(0);
 
     const endOffset = itemOffset + itemsPerPage;
-    console.log(`Loading items from ${itemOffset} to ${endOffset}`);
     const currentItems = items.slice(itemOffset, endOffset);
     const pageCount = Math.ceil(items.length / itemsPerPage);
 
     const handlePageClick = (event) => {
         const newOffset = (event.selected * itemsPerPage) % items.length;
-        console.log(
-            `User requested page number ${event.selected}, which is offset ${newOffset}`
-        );
+
         setItemOffset(newOffset);
 
     };
@@ -37,15 +34,15 @@ export default function PaginatedLinks({ itemsPerPage, items, tableName, apitoke
             />
 
             {
-                tableName == 'account' && <AccountsTable accounts={items} />
+                tableName == 'account' && <AccountsTable accounts={currentItems} />
             }
 
             {
-                tableName == 'customer' && <CustomerTable customers={items} />
+                tableName == 'customer' && <CustomerTable customers={currentItems} />
             }
 
             {
-                tableName == 'affiliate' && <AffiliatesTable affiliates={items} apitoken={apitoken} />
+                tableName == 'affiliate' && <AffiliatesTable affiliates={currentItems} apitoken={apitoken} />
             }
         </>
     );

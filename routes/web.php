@@ -10,6 +10,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AffiliateController;
 use App\Http\Controllers\CustomerController; 
+use App\Http\Controllers\TicketController;
 
 Route::get('/test', function () {    
     return Inertia::render('Test');
@@ -42,6 +43,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create');
     Route::post('/customers/store', [CustomerController::class, 'store'])->name('customers.store');
     Route::get('/users/management', [UserController::class, 'showAllUsers'])->name('users.management');
+
+    Route::get('/tickets', [TicketController::class, 'index'])->name('tickets');
 });
 
 Route::middleware('auth')->group(function () {
