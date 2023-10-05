@@ -24,9 +24,13 @@ export default function CustomerTable({ customers }) {
                     <tr className='bg-emerald-300'>
                         <th>Index</th>
                         <th>Name</th>
+                        <th>Display Name</th>
                         <th>Email</th>
-                        <th>Account Name</th>
+                        <th>User Status</th>
                         <th>Affiliate Name</th>
+                        <th>Account Name</th>
+                        <th>Account Status</th>
+                        <th>Account Package Type</th>
                         {/* <th>Action</th> */}
                     </tr>
                 </thead>
@@ -46,9 +50,13 @@ export default function CustomerTable({ customers }) {
                             <tr key={cus.id}>
                                 <td>{cus.id}</td>
                                 <td>{cus.first_name} {cus.last_name}</td>
+                                <td>{cus.display_name}</td>
                                 <td>{cus.email}</td>
-                                <td>{cus.account_name}</td>
+                                <td>{cus.status}</td>
                                 <td>{cus.affiliate_name}</td>
+                                <td>{cus.account_name}</td>
+                                <td>{cus.account_status}</td>
+                                <td>{cus.account_package_type}</td>
                                 {/* <td>
                                     <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                         Edit

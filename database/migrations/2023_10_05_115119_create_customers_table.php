@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id();
             $table->integer('account_index');
             $table->integer('affiliate_index');
-            $table->string('first_name');
-            $table->string('last_name');
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
             $table->string('customer_user_id');
             $table->string('customer_user_index');
-            $table->string('mobile_number');
+            $table->string('mobile_number')->nullable();
             $table->string('mobile_number2')->nullable();
-            $table->string('address');
+            $table->string('address')->nullable();
             $table->string('email');
             $table->string('city')->nullable();
             $table->string('user_active_manage')->nullable();
@@ -30,6 +30,9 @@ return new class extends Migration
             $table->string('display_name')->nullable();
             $table->string('caller_id')->nullable();
             $table->text('customer_user_notes')->nullable();
+            $table->string('status')->nullable();
+            $table->string('account_status')->nullable();
+            $table->string('account_package_type')->nullable();
             $table->timestamps();
         });
     }

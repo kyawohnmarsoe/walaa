@@ -19,6 +19,9 @@ export default function Customers({
     const addCustomerClick = () => {
         router.get('/customers/create')
     }
+    const addApiCustomerClick = () => {
+        router.get('/customers/store/api')
+    }
 
     return (
         <AuthenticatedLayout
@@ -57,6 +60,10 @@ export default function Customers({
                         <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                             <PrimaryButton disabled='' onClick={ev => addCustomerClick()}>
                                 Add User
+                            </PrimaryButton>
+
+                            <PrimaryButton className=" ml-12" disabled='' onClick={ev => addApiCustomerClick()}>
+                                Get API data
                             </PrimaryButton>
 
                             {

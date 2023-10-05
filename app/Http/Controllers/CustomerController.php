@@ -92,4 +92,68 @@ class CustomerController extends Controller
         return redirect()->route('customers')->with('status', 422);
        
     } // store
+
+    public function store_api() {
+        $token   = $this->getSessionToken();
+        $apiURL  = 'https://rapi.earthlink.iq/api/reseller/user/all' ;  
+        $headers = [
+            'Authorization'=>'Bearer '.$token, 
+            'Accept' => 'application/json'
+        ];
+        $post_data = [
+            "Rowcount"   => 4327,
+            "OrderBy"    => 'Account Name',
+            
+        ]; 
+        $all_users_api = Http::withHeaders($headers)->post($apiURL, $post_data);
+        $all_users_response  = json_decode($all_users_api->getBody(), true);
+
+        // return response(compact('all_users_response'));
+
+        if ($all_users_response) {
+            if($all_users_response['isSuccessful'] === true) {                 
+                $affiliates = Affiliate::all();
+
+                foreach ($all_users_response['value']['itemsList'] as $dt) {  
+                    foreach ($affiliates as $aff) {
+                        $affiliate_index = 0;
+                        if ($aff['affiliate_name'] == $dt['affiliateName']) {
+                            $affiliate_index = $aff['affiliate_index'];
+                        }
+                    }            
+                    Customer::insert([
+                        'account_index'     => $dt['accountIndex'],
+                        'affiliate_index'   => $affiliate_index, // get index from table
+                        'first_name'        => '',
+                        'last_name'         => '',
+                        'customer_user_id'  => $dt['userID'],
+                        'customer_user_index'   => $dt['userIndex'],
+                        'mobile_number'         => $dt['mobileNumber'],
+                        'mobile_number2'        => $dt['mobileNumber2'],
+                        'address'               => '',
+                        'email'                 => $dt['userID'] ,
+                        'city'                  => '',
+                        'user_active_manage'    => '',
+                        'company'               => '',
+                        'state'                => '',
+                        'display_name'         => $dt['displayName'],
+                        'caller_id'            => $dt['callerID'],
+                        'customer_user_notes'  => $dt['userNotes'],
+                        'status'               => $dt['onlineStatus'],
+                        'account_status'       => $dt['accountStatus'],
+                        'account_package_type' =>  $dt['accountPackageType']                 
+                    ]);   
+                }     
+                
+                return redirect()->route('customers')->with('status', 201);
+            } else {
+                return redirect()->route('customers')->with(
+                    'message', $all_users_response['responseMessage']
+                );
+            }           
+        }
+        
+        return redirect()->route('customers')->with('status', 422);
+       
+    } // store
 }
