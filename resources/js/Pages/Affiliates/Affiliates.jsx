@@ -1,9 +1,9 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, usePage, router } from '@inertiajs/react';
-import PaginatedItems from "@/Components/PaginatedItems";
+import PaginatedLinks from "@/Components/PaginatedLinks";
 import PrimaryButton from '@/Components/PrimaryButton';
 
-export default function Affiliates({ auth, mustVerifyEmail, affiliates }) {
+export default function Affiliates({ auth, mustVerifyEmail, affiliates, apitoken }) {
 
     const { flash } = usePage().props
 
@@ -43,7 +43,7 @@ export default function Affiliates({ auth, mustVerifyEmail, affiliates }) {
 
                         {
                             affiliates.length > 0 &&
-                            <PaginatedItems itemsPerPage={4} items={affiliates} tableName="affiliate" />
+                            <PaginatedLinks itemsPerPage={4} items={affiliates} tableName="affiliate" apitoken={apitoken} />
                         }
                     </div>
                 </div>

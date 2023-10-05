@@ -19,7 +19,7 @@ export default function AccountsTable({ accounts }) {
                         <th>Description</th>
                         <th>Account Price</th>
                         <th>End User Account Price</th>
-                        <th>Image</th>
+                        {/* <th>Image</th> */}
                     </tr>
                 </thead>
 
@@ -40,7 +40,7 @@ export default function AccountsTable({ accounts }) {
                                 </td>
                                 <td>{acc.account_price}</td>
                                 <td>{acc.end_user_account_price}</td>
-                                <td>
+                                {/* <td>
                                     {
                                         acc.account_image_path ?
                                             <img
@@ -51,7 +51,7 @@ export default function AccountsTable({ accounts }) {
                                             :
                                             ''
                                     }
-                                </td>
+                                </td> */}
                             </tr>
                         ))}
                     </tbody>

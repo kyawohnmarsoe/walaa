@@ -20,11 +20,11 @@ return new class extends Migration
             $table->string('customer_user_id');
             $table->string('customer_user_index');
             $table->string('mobile_number');
-            $table->string('mobile_number2');
+            $table->string('mobile_number2')->nullable();
             $table->string('address');
             $table->string('email');
             $table->string('city')->nullable();
-            $table->string('user_active_manage');
+            $table->string('user_active_manage')->nullable();
             $table->string('company')->nullable();
             $table->string('state')->nullable();
             $table->string('display_name')->nullable();

@@ -24,7 +24,10 @@ export default function CustomerTable({ customers }) {
                     <tr className='bg-emerald-300'>
                         <th>Index</th>
                         <th>Name</th>
-                        <th>Action</th>
+                        <th>Email</th>
+                        <th>Account Name</th>
+                        <th>Affiliate Name</th>
+                        {/* <th>Action</th> */}
                     </tr>
                 </thead>
 
@@ -42,8 +45,11 @@ export default function CustomerTable({ customers }) {
                         {customers && customers.map(cus => (
                             <tr key={cus.id}>
                                 <td>{cus.id}</td>
-                                <td>{cus.first_name}</td>
-                                <td>
+                                <td>{cus.first_name} {cus.last_name}</td>
+                                <td>{cus.email}</td>
+                                <td>{cus.account_name}</td>
+                                <td>{cus.affiliate_name}</td>
+                                {/* <td>
                                     <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                         Edit
                                     </button>
@@ -52,7 +58,7 @@ export default function CustomerTable({ customers }) {
                                         onClick={ev => onDeleteClick(cus)}>
                                         Delete
                                     </button>
-                                </td>
+                                </td> */}
                             </tr>
                         ))}
                     </tbody>

@@ -8,11 +8,13 @@ import TextInput from '@/Components/TextInput';
 import Textarea from '@/Components/Textarea';
 import SelectOption from '@/Components/SelectOption';
 
-export default function AddForm({ className = '', accounts, affiliates, apitoken, new_user_response }) {
+export default function AddForm({ className = '', accounts, affiliates, apitoken }) {
 
     const { processing, recentlySuccessful } = useForm();
 
     const [values, setValues] = useState({
+        account_index: '',
+        affiliate_index: '',
         deposit_password: '',
         first_name: '',
         last_name: '',
@@ -86,13 +88,17 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
         // console.log(time_diff);
         // console.log(time_diff + '>' + return_data.maxIdleTime);
 
-        console.log(new_user_response);
     }, [])
 
     function affiliatesHandleChange(e) {
         const value = e.target.value
         // console.log(value);
         setShowAffiliateValue(false)
+
+        setValues(values => ({
+            ...values,
+            'affiliate_index': value,
+        }))
 
         const filteredRes = affiliates.filter(aff => aff.affiliate_index == value);
         if (filteredRes) {
@@ -106,6 +112,10 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
         const value = e.target.value
         // console.log(value);
         setShowAccountValue(false)
+        setValues(values => ({
+            ...values,
+            'account_index': value,
+        }))
 
         const filteredRes = accounts.filter(acc => acc.account_index == value);
         if (filteredRes) {
@@ -156,7 +166,7 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
         e.preventDefault()
         router.post('/customers/store', values)
 
-        // post new user with deposit
+        // testing for result to post new user with deposit
         // const instance = axios.create({
         //     baseURL: 'https://rapi.earthlink.iq/api/reseller/user/newuserdeposit',
         //     headers: { 'Authorization': `Bearer ${apitoken}` }
@@ -165,11 +175,28 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
         //     DepositPassword: "Elink3",
         //     AgentIndex: 2199,
         //     AffiliateIndex: 2199,
-        //     AccountIndex: 60
+        //     AccountIndex: 60,
+        //     UserID: "newtestuser11@hus",
+        //     UserPass: 1,
+        //     EarthMaxMAC: '',
+        //     AffiliateTypeID: '',
+        //     FirstName: values.first_name,
+        //     LastName: values.last_name,
+        //     Company: values.company,
+        //     Address: values.address,
+        //     City: values.city,
+        //     State: values.state,
+        //     Country: '',
+        //     Zip: '',
+        //     Email: values.email,
+        //     MobileNumber: values.mobile_number,
+        //     MobileNumber2: values.mobile_number2,
+        //     DisplayName: values.display_name
         // }
         // instance.post('', postData).then(res => {
         //     if (res) {
         //         console.log(res.data)
+        //         console.log(postData)
         //     }
 
         // }).catch(err => {
@@ -427,7 +454,7 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
                         leave="transition ease-in-out"
                         leaveTo="opacity-0"
                     >
-                        <p className="text-sm text-gray-600">Add.</p>
+                        <p className="text-sm text-gray-600">Add</p>
                     </Transition>
                 </div>
             </form>

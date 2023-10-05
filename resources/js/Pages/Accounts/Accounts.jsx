@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, usePage, router } from '@inertiajs/react';
-import PaginatedItems from "@/Components/PaginatedItems";
+import PaginatedLinks from "@/Components/PaginatedLinks";
 import PrimaryButton from '@/Components/PrimaryButton';
 
 export default function Accounts({ auth, mustVerifyEmail, accounts }) {
@@ -44,7 +44,7 @@ export default function Accounts({ auth, mustVerifyEmail, accounts }) {
 
                         {
                             accounts.length > 0 &&
-                            <PaginatedItems itemsPerPage={4} items={accounts} tableName="account" />
+                            <PaginatedLinks itemsPerPage={4} items={accounts} tableName="account" />
                         }
                     </div>
                 </div>

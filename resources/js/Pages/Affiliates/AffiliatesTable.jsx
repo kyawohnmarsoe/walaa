@@ -1,8 +1,33 @@
 import React from "react";
 import { useEffect, useState } from "react";
 
-export default function AffiliatesTable({ affiliates }) {
+export default function AffiliatesTable({ affiliates, apitoken }) {
     const [loading, setLoading] = useState(false);
+
+    function handleSubmit(e) {
+        e.preventDefault()
+
+        // get deposit balance
+        const instance = axios.create({
+            baseURL: 'https://rapi.earthlink.iq/api/reseller/affiliate/deposit/balance',
+            headers: { 'Authorization': `Bearer ${apitoken}` }
+        });
+        let passData = {
+            TargetAffiliateIndex: "11111",
+            Amount: "1",
+            DepositPassword: "Elink3"
+        }
+        instance.get('', passData).then(res => {
+            if (res) {
+                console.log(res.data)
+            }
+
+        }).catch(err => {
+            if (err) {
+                console.log(err.message)
+            }
+        })
+    }
 
     const onDeleteClick = aff => {
         if (!window.confirm("Are you sure you want to delete this data?")) {
@@ -23,7 +48,7 @@ export default function AffiliatesTable({ affiliates }) {
                     <tr className='bg-emerald-300'>
                         <th>Affiliate Index</th>
                         <th>Affiliate Name</th>
-                        <th>Action</th>
+                        {/* <th>Action</th> */}
                     </tr>
                 </thead>
 
@@ -42,7 +67,7 @@ export default function AffiliatesTable({ affiliates }) {
                             <tr key={aff.affiliate_index}>
                                 <td>{aff.affiliate_index}</td>
                                 <td>{aff.affiliate_name}</td>
-                                <td>
+                                {/* <td>
                                     <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                         Edit
                                     </button>
@@ -51,7 +76,7 @@ export default function AffiliatesTable({ affiliates }) {
                                         onClick={ev => onDeleteClick(aff)}>
                                         Delete
                                     </button>
-                                </td>
+                                </td> */}
                             </tr>
                         ))}
                     </tbody>
