@@ -33,9 +33,9 @@ export default function OnlineUsersSearch ({ className = '', affiliates, filterO
         e.preventDefault();
 
         // post(route('user.update'));
-        // console.log(data)
-        setFilterObj(...filterObj, data)
 
+        setFilterObj({ ...filterObj, ...data })
+        console.log(filterObj)
     };
 
     return (
