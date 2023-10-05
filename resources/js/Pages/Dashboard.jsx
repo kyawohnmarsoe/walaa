@@ -15,12 +15,6 @@ export default function Dashboard({ auth, apitoken }) {
         >
             <Head title="Dashboard" />
 
-            <div>Merge Test</div>
-
-            <div>Test</div>
-            <div>Test</div>
-            <div>Test</div>
-
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-4">
                     <div className=" overflow-hidden sm:rounded-lg">
