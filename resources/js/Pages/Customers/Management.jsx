@@ -7,56 +7,14 @@ import React, { useState, useEffect } from 'react'
 import '../../../css/paginate.css'
 import Loading from '@/Components/DaisyUI/Loading';
 import UserManagementSearch from './UserManagementSearch';
-
-function PaginatedItems ({ itemsPerPage, items })
-{
-  // Here we use item offsets; we could also use page offsets
-  // following the API or data you're working with.
-  const [itemOffset, setItemOffset] = useState(0);
-
-  // Simulate fetching items from another resources.
-  // (This could be items from props; or items loaded in a local state
-  // from an API endpoint with useEffect and useState)
-  const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${ itemOffset } to ${ endOffset }`);
-  const currentItems = items.slice(itemOffset, endOffset);
-  const pageCount = Math.ceil(items.length / itemsPerPage);
-
-  // Invoke when user click to request another page.
-  const handlePageClick = (event) =>
-  {
-    const newOffset = (event.selected * itemsPerPage) % items.length;
-    console.log(
-      `User requested page number ${ event.selected }, which is offset ${ newOffset }`
-    );
-    setItemOffset(newOffset);
-
-  };
-
-  return (
-    <>
-      <ReactPaginate
-        breakLabel="..."
-        nextLabel="next >"
-        onPageChange={ handlePageClick }
-        pageRangeDisplayed={ 5 }
-        pageCount={ pageCount }
-        previousLabel="< previous"
-        renderOnZeroPageCount={ null }
-        className="pagination"
-      />
-
-      <AllUsersTable users={ currentItems } />
-    </>
-  );
-}
+import PaginatedItems from '@/Components/DaisyUI/PaginatedItems';
 
 export default function Management ({ auth, apitoken, affiliates, accountTypes })
 {
 
-  const [onlineUsersData, setOnlineUsersData] = useState({ users: [], errMessage: '', loading: true })
-  const { users, errMessage, loading } = onlineUsersData
-  const [filterObj, setFilterObj] = useState({})
+  const [onlineUsersData, setOnlineUsersData] = useState({ users: [], total: 0, errMessage: '', loading: true })
+  const { users, total, errMessage, loading } = onlineUsersData
+  const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10, Orderby: 'OnlineTime' })
 
   const instance = axios.create({
     baseURL: 'https://rapi.earthlink.iq/api/reseller',
@@ -72,13 +30,13 @@ export default function Management ({ auth, apitoken, affiliates, accountTypes }
     })
       .then(res =>
       {
-        setOnlineUsersData({ users: res.data.value.itemsList, errMessage: '', loading: false })
+        setOnlineUsersData({ users: res?.data?.value?.itemsList, total: res?.data?.value?.totalCount, errMessage: '', loading: false })
         // setOnlineUsersData({ users: [], errMessage: '', loading: false })
-        console.log(res.data.value.itemsList)
+        console.log(res?.data?.value?.itemsList)
       })
       .catch(err =>
       {
-        setOnlineUsersData({ users: [], errMessage: err.message, loading: false })
+        setOnlineUsersData({ users: [], total: 0, errMessage: err.message, loading: false })
         console.log(err)
       })
   }, [filterObj])
@@ -94,14 +52,33 @@ export default function Management ({ auth, apitoken, affiliates, accountTypes }
       { loading && <Loading className="mt-12 " /> }
       { errMessage && <Alert className="mt-12" msg={ errMessage } /> }
 
-      { !errMessage && !loading && <UserManagementSearch className='p-4' affiliates={ affiliates } accountTypes={ accountTypes } setFilterObj={ setFilterObj } /> }
+      { !errMessage && !loading &&
+        <UserManagementSearch
+          className='p-4'
+          affiliates={ affiliates }
+          accountTypes={ accountTypes }
+          setFilterObj={ setFilterObj }
+          filterObj={ filterObj }
+        /> }
 
       <div className="py-12 ">
         <div className="max-w-8xl mx-auto sm:px-6 lg:px-4">
           <div className="bg-white overflow-hidden shadow-sm ">
             <div className="text-gray-900">
 
-              { !errMessage && !loading && <PaginatedItems itemsPerPage={ 4 } items={ users } /> }
+              { !errMessage && !loading &&
+                <PaginatedItems
+                  itemsPerPage={ filterObj.RowCount }
+                  items={ users }
+                  total={ total }
+                  setFilterObj={ setFilterObj }
+                  filterObj={ filterObj }
+                >
+
+                  <AllUsersTable users={ users } />
+
+                </PaginatedItems>
+              }
 
             </div>
           </div>
