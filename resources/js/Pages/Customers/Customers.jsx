@@ -68,7 +68,7 @@ export default function Customers({
 
                             {
                                 customers.length > 0 &&
-                                <PaginatedLinks itemsPerPage={4} items={customers} tableName="customer" />
+                                <PaginatedLinks itemsPerPage={10} items={customers} tableName="customer" />
                             }
                         </div>
                     }

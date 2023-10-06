@@ -93,6 +93,89 @@ class CustomerController extends Controller
        
     } // store
 
+    // public function store_api() {
+    //     $token   = $this->getSessionToken();
+    //     $apiURL  = 'https://rapi.earthlink.iq/api/reseller/user/all' ;  
+    //     $headers = [
+    //         'Authorization'=>'Bearer '.$token, 
+    //         'Accept' => 'application/json'
+    //     ];
+    //     $post_data_toget_total_count = [           
+    //         "OrderBy"    => 'Account Name',            
+    //     ]; 
+    //     $total_count_users_api = Http::withHeaders($headers)->post($apiURL, $post_data_toget_total_count);
+    //     $total_count_users_response  = json_decode($total_count_users_api->getBody(), true);
+    //     // return response(compact('total_count_users_response'));
+
+    //     if ($total_count_users_response) {
+    //         if($total_count_users_response['isSuccessful'] === true) {   
+    //             $total_count = $total_count_users_response['value']['totalCount'];
+    //             $page_count = ceil($total_count/50);
+
+    //             for ($i=0; $i <= $page_count ; $i++) { 
+    //                 $start_index = ($i * 50) % $total_count;
+    //                 $post_data = [
+    //                     "Startindex"  => $start_index,
+    //                     "Rowcount"   => 50,
+    //                     "OrderBy"    => 'Account Name',            
+    //                 ]; 
+    //                 $all_users_api = Http::withHeaders($headers)->post($apiURL, $post_data);
+    //                 $all_users_response  = json_decode($all_users_api->getBody(), true);
+
+    //                 if ($all_users_response) {
+    //                     if($all_users_response['isSuccessful'] === true) {                 
+    //                         $affiliates = Affiliate::all();
+            
+    //                         foreach ($all_users_response['value']['itemsList'] as $dt) {  
+    //                             $affiliate_index = 0;
+    //                             foreach ($affiliates as $aff) {                        
+    //                                 $db_affiliate_name  = str_replace(' ', '', $aff['affiliate_name']);
+    //                                 $api_affiliate_name = str_replace(' ', '', $dt['affiliateName']);
+            
+    //                                 if ($db_affiliate_name ==  $api_affiliate_name) {
+    //                                     $affiliate_index = $aff['affiliate_index'];
+    //                                 }
+    //                             }            
+    //                             Customer::insert([
+    //                                 'account_index'     => $dt['accountIndex'],
+    //                                 'affiliate_index'   => $affiliate_index, 
+    //                                 'first_name'        => '',
+    //                                 'last_name'         => '',
+    //                                 'customer_user_id'  => $dt['userID'],
+    //                                 'customer_user_index'   => $dt['userIndex'],
+    //                                 'mobile_number'         => $dt['mobileNumber'],
+    //                                 'mobile_number2'        => $dt['mobileNumber2'],
+    //                                 'address'               => '',
+    //                                 'email'                 => $dt['userID'] ,
+    //                                 'city'                  => '',
+    //                                 'user_active_manage'    => '',
+    //                                 'company'               => '',
+    //                                 'state'                => '',
+    //                                 'display_name'         => $dt['displayName'],
+    //                                 'caller_id'            => $dt['callerID'],
+    //                                 'customer_user_notes'  => $dt['userNotes'],
+    //                                 'status'               => $dt['onlineStatus'],
+    //                                 'account_status'       => $dt['accountStatus'],
+    //                                 'account_package_type' =>  $dt['accountPackageType']                 
+    //                             ]);   
+    //                         }  // end foreach                               
+                            
+    //                     } else {
+    //                         return redirect()->route('customers')->with(
+    //                             'message', $all_users_response['responseMessage']
+    //                         );
+    //                     }           
+    //                 }
+                    
+    //             } // end for loop
+    //             return redirect()->route('customers')->with('status', 201);
+    //         }
+    //     }             
+
+    //     return redirect()->route('customers')->with('status', 422);
+       
+    // } // store_api
+
     public function store_api() {
         $token   = $this->getSessionToken();
         $apiURL  = 'https://rapi.earthlink.iq/api/reseller/user/all' ;  
@@ -115,8 +198,8 @@ class CustomerController extends Controller
                 $affiliates = Affiliate::all();
 
                 foreach ($all_users_response['value']['itemsList'] as $dt) {  
-                    foreach ($affiliates as $aff) {
-                        $affiliate_index = 0;
+                    $affiliate_index = 0;
+                    foreach ($affiliates as $aff) {                        
                         if ($aff['affiliate_name'] == $dt['affiliateName']) {
                             $affiliate_index = $aff['affiliate_index'];
                         }
@@ -155,5 +238,5 @@ class CustomerController extends Controller
         
         return redirect()->route('customers')->with('status', 422);
        
-    } // store
+    } // store_api
 }
