@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('customer_user_id');
-            $table->string('customer_user_index');
+            $table->integer('customer_user_index')->unique();
             $table->string('mobile_number')->nullable();
             $table->string('mobile_number2')->nullable();
             $table->string('address')->nullable();
