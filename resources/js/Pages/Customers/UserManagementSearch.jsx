@@ -9,6 +9,41 @@ export default function UserManagementSearch ({ className = '', affiliates, acco
 {
     const status = ['All', 'Active', 'Inactive', 'Online', 'Offline', 'Will Expire', 'Expired', 'Activated', 'Didn\'t Pay', 'Paid', '', 'Manually suspended']
 
+    const filterValue = new URLSearchParams(document.location.search).get("filterValue");
+
+    const getAccountStatusID = () =>
+    {
+        switch (filterValue)
+        {
+            case 'ActiveUsers':
+                return 1;
+                break;
+            case 'Expired':
+                return 6;
+                break;
+            case 'WillBeDisabledIn2Days':
+                return 5;
+                break;
+            case 'DisabledInLast7Days':
+                return 5;
+                break;
+            case 'Online':
+                return 3;
+                break;
+            case 'Offline':
+                return 4;
+                break;
+            case 'DidntPayUsers':
+                return 8;
+                break;
+            case 'ManualSuspendedUsers':
+                return 11;
+                break;
+            default:
+                return 0;
+        }
+    }
+
     const { data, setData, post, processing, errors, reset } = useForm({
         userId: '',
         FirstName: '',
@@ -17,7 +52,7 @@ export default function UserManagementSearch ({ className = '', affiliates, acco
         Notes: '',
         PhoneFax: '',
         // AccountType: '',
-        AccountStatusID: ''
+        AccountStatusID: getAccountStatusID()
     });
 
     useEffect(() =>
@@ -26,7 +61,10 @@ export default function UserManagementSearch ({ className = '', affiliates, acco
         // return () => {
         //     reset('password');
         // };
-    }, []);
+
+
+
+    }, [filterValue]);
 
     const submit = (e) =>
     {

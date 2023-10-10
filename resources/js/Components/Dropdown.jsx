@@ -11,6 +11,8 @@ const Dropdown = ({ children }) =>
     const toggleOpen = () =>
     {
         setOpen((previousState) => !previousState);
+
+        console.log(open)
     };
 
     return (
@@ -26,8 +28,7 @@ const Trigger = ({ children }) =>
 
     return (
         <>
-            {/* <div onClick={ toggleOpen }>{ children }</div> */ }
-            <div onMouseOver={ toggleOpen }>{ children }</div>
+            <div onClick={ toggleOpen }>{ children }</div>
 
             { open && <div className="fixed inset-0 z-40" onClick={ () => setOpen(false) }></div> }
         </>

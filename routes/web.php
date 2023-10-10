@@ -11,10 +11,15 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AffiliateController;
 use App\Http\Controllers\CustomerController; 
 use App\Http\Controllers\TicketController;
+use App\Http\Controllers\EarthlinkProfileController;
 
 Route::get('/test', function () {    
     return Inertia::render('Test');
 })->name('test');
+
+Route::get('/earthlink/profile', function () {    
+    return Inertia::render('Profile/Earthlink/Edit');
+});
 
 Route::get('/', function () {   
     return Inertia::render('Welcome', [
@@ -53,5 +58,11 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+// Route::middleware('auth')->group(function () {
+//     Route::get('/earthlink/profile', [EarthlinkProfileController::class, 'edit'])->name('earthlink.edit');
+//     Route::patch('/earthlink/profile', [EarthlinkProfileController::class, 'update'])->name('earthlink.update');
+//     Route::delete('/earthlink/profile', [EarthlinkProfileController::class, 'destroy'])->name('earthlink.destroy');
+// });
 
 require __DIR__.'/auth.php';
