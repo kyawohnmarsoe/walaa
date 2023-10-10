@@ -22,7 +22,7 @@ export default function CustomerTable({ customers }) {
             <table className="table">
                 <thead>
                     <tr className='bg-emerald-300'>
-                        <th>Index</th>
+                        <th>User Index</th>
                         <th>Name</th>
                         <th>Display Name</th>
                         <th>Email</th>
@@ -48,7 +48,7 @@ export default function CustomerTable({ customers }) {
                     <tbody>
                         {customers && customers.map(cus => (
                             <tr key={cus.id}>
-                                <td>{cus.id}</td>
+                                <td>{cus.customer_user_index}</td>
                                 <td>{cus.first_name} {cus.last_name}</td>
                                 <td>{cus.display_name}</td>
                                 <td>{cus.email}</td>

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-// use Illuminate\Http\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Inertia\Inertia;
 use App\Models\Customer;
@@ -17,14 +17,15 @@ class CustomerController extends Controller
         // select cus.*, aff.affiliate_name, acc.account_name from customers cus
         // inner join affiliates aff on aff.affiliate_index=cus.affiliate_index
         // inner join accounts acc on acc.account_index=cus.account_index;
-
+        $token = $this->getSessionToken();
         $customers = Customer::join('affiliates', 'affiliates.affiliate_index', '=', 'customers.affiliate_index')
               ->join('accounts', 'accounts.account_index', '=', 'customers.account_index')
               ->get(['customers.*', 'affiliates.affiliate_name', 'accounts.account_name']);
 
         return Inertia::render('Customers/Customers', [
             'customers' => $customers,
-            'show_data' => 'list'            
+            'show_data' => 'list',
+            'apitoken' => $token,            
         ]);
     } // index
 
@@ -209,7 +210,8 @@ class CustomerController extends Controller
        
     // } // store_api
 
-    public function store_api() {
+    public function store_api(Request $request) {
+        $row_count = $request->totalCount;
         $token   = $this->getSessionToken();
         $apiURL  = 'https://rapi.earthlink.iq/api/reseller/user/all' ;  
         $headers = [
@@ -217,14 +219,14 @@ class CustomerController extends Controller
             'Accept' => 'application/json'
         ];
         $post_data = [
-            "Rowcount"   => 4327,
+            "Rowcount"   => $row_count,
             "OrderBy"    => 'Account Name',
             
         ]; 
         $all_users_api = Http::withHeaders($headers)->post($apiURL, $post_data);
         $all_users_response  = json_decode($all_users_api->getBody(), true);
 
-        // return response(compact('all_users_response'));
+        // return response(compact('all_users_response', 'row_count'));
 
         if ($all_users_response) {
             if($all_users_response['isSuccessful'] === true) {                 
