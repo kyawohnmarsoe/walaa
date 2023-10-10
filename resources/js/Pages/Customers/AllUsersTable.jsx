@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import AllUsersTableRow from './AllUsersTableRow'
 
-export default function AllUsersTable ({ users })
+export default function AllUsersTable ({ users, tableRef })
 {
 
   return (
     <div className="overflow-x-auto">
-      <table className="table">
+
+      <table className="table" ref={ tableRef }>
         {/* head */ }
         <thead>
           <tr className='bg-emerald-300'>
