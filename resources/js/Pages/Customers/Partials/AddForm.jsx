@@ -77,7 +77,7 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
     useEffect(() => {
         getAffiliates()
         getAccounts()
-        console.log(apitoken);
+        // console.log(apitoken);
         // let return_data = JSON.parse(apitoken).original;
         // let time_diff = return_data.current_time - return_data.session_current_time;
 
@@ -295,6 +295,7 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
 
                         <TextInput
                             id="last_name"
+                            name="last_name"
                             value={values.last_name}
                             onChange={handleChange}
                             type="text"

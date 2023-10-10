@@ -42,7 +42,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/customers', [CustomerController::class, 'index'])->name('customers');
     Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create');
     Route::post('/customers/store', [CustomerController::class, 'store'])->name('customers.store');
-    Route::get('/customers/store/api', [CustomerController::class, 'store_api'])->name('customers.store.api');
+    Route::get('/customers/store/api/{totalCount}', [CustomerController::class, 'store_api'])->name('customers.store.api');
     Route::get('/users/management', [UserController::class, 'showAllUsers'])->name('users.management');
 
     Route::get('/tickets', [TicketController::class, 'index'])->name('tickets');

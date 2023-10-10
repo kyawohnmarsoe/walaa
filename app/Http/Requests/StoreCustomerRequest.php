@@ -19,7 +19,7 @@ class StoreCustomerRequest extends FormRequest
             'first_name'=> '',
             'last_name'=> '',
             'customer_user_id'=> 'required',
-            'customer_user_index'=> 'required',
+            'customer_user_index'=> '',
             'mobile_number'=> '',
             'mobile_number2'=> '',
             'address'=> '',

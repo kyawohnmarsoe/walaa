@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-// use Illuminate\Http\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Inertia\Inertia;
 use App\Models\Customer;
@@ -17,14 +17,15 @@ class CustomerController extends Controller
         // select cus.*, aff.affiliate_name, acc.account_name from customers cus
         // inner join affiliates aff on aff.affiliate_index=cus.affiliate_index
         // inner join accounts acc on acc.account_index=cus.account_index;
-
+        $token = $this->getSessionToken();
         $customers = Customer::join('affiliates', 'affiliates.affiliate_index', '=', 'customers.affiliate_index')
               ->join('accounts', 'accounts.account_index', '=', 'customers.account_index')
               ->get(['customers.*', 'affiliates.affiliate_name', 'accounts.account_name']);
 
         return Inertia::render('Customers/Customers', [
             'customers' => $customers,
-            'show_data' => 'list'            
+            'show_data' => 'list',
+            'apitoken' => $token,            
         ]);
     } // index
 
@@ -49,7 +50,7 @@ class CustomerController extends Controller
             'Accept' => 'application/json'
         ];
         $post_data = [
-            "DepositPassword"   => 'Elink3',
+            "DepositPassword"   => $request->deposit_password, // 6666667
             "AgentIndex"        => 2199,
             "AffiliateIndex"    => $request->affiliate_index,
             "AccountIndex"      => $request->account_index,
@@ -76,23 +77,56 @@ class CustomerController extends Controller
         // return response(compact('new_user_response'));
 
         if ($new_user_response) {
-            // if($new_user_response['value'] === false) {                 
-            //     return redirect()->route('customers.create')->with(
-            //         'message', $new_user_response['error']['message']
-            //     );  
-            // } else {
-                 // Just for Testing insert into db
-                $data = $request->validated();
-                $customer = Customer::create($data);
+            if($new_user_response['value'] === false || $new_user_response['value'] === 0) { 
+                $error_msg = $new_user_response['error']['message']; 
+                if ($new_user_response['error']['validationErrors']) {
+                    $error_msg = $new_user_response['error']['validationErrors'][0]['validationMessage'];
+                }               
+                return redirect()->route('customers.create')->with('message', $error_msg);  
+            } else {
 
-                return redirect()->route('customers')->with('status', 201);
-            // }           
+                if($new_user_response['isSuccessful'] === true) {
+                    // Just for Testing insert into db
+                    // $data = $request->validated();
+                    // $customer = Customer::create($data);
+                    Customer::insert([
+                        'account_index'     => $request->accountIndex,
+                        'affiliate_index'   => $request->affiliate_index, 
+                        'first_name'        => $request->first_name,
+                        'last_name'         => $request->last_name,
+                        'customer_user_id'  => $request->customer_user_id,
+                        'customer_user_index'   => $new_user_response['value'],
+                        'mobile_number'         => $request->mobile_number,
+                        'mobile_number2'        => '',
+                        'address'               => $request->address,
+                        'email'                 => $request->email,
+                        'city'                  => $request->city,
+                        'user_active_manage'    => '',
+                        'company'               => $request->company,
+                        'state'                => $request->state,
+                        'display_name'         => $request->display_name,
+                        'caller_id'            => '',
+                        'customer_user_notes'  => $request->customer_user_notes,
+                        'status'               => 'Offline',
+                        'account_status'       => 'Active',
+                        'account_package_type' => 'MonthlyPrepaid'                 
+                    ]);
+                    
+                    return redirect()->route('customers')->with('message', $new_user_response['responseMessage']);
+                } else {
+                    return redirect()->route('customers.create')->with(
+                        'message', $new_user_response['error']
+                    );
+                }             
+                
+            }           
         }
         
         return redirect()->route('customers')->with('status', 422);
        
     } // store
 
+    // not use because [maximum execution time]
     // public function store_api() {
     //     $token   = $this->getSessionToken();
     //     $apiURL  = 'https://rapi.earthlink.iq/api/reseller/user/all' ;  
@@ -176,7 +210,8 @@ class CustomerController extends Controller
        
     // } // store_api
 
-    public function store_api() {
+    public function store_api(Request $request) {
+        $row_count = $request->totalCount;
         $token   = $this->getSessionToken();
         $apiURL  = 'https://rapi.earthlink.iq/api/reseller/user/all' ;  
         $headers = [
@@ -184,14 +219,14 @@ class CustomerController extends Controller
             'Accept' => 'application/json'
         ];
         $post_data = [
-            "Rowcount"   => 4327,
+            "Rowcount"   => $row_count,
             "OrderBy"    => 'Account Name',
             
         ]; 
         $all_users_api = Http::withHeaders($headers)->post($apiURL, $post_data);
         $all_users_response  = json_decode($all_users_api->getBody(), true);
 
-        // return response(compact('all_users_response'));
+        // return response(compact('all_users_response', 'row_count'));
 
         if ($all_users_response) {
             if($all_users_response['isSuccessful'] === true) {                 
@@ -206,7 +241,7 @@ class CustomerController extends Controller
                     }            
                     Customer::insert([
                         'account_index'     => $dt['accountIndex'],
-                        'affiliate_index'   => $affiliate_index, // get index from table
+                        'affiliate_index'   => $affiliate_index,
                         'first_name'        => '',
                         'last_name'         => '',
                         'customer_user_id'  => $dt['userID'],
