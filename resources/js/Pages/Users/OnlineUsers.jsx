@@ -3,7 +3,6 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import Alert from '../../Components/DaisyUI/Alert'
 import React, { useState, useEffect } from 'react'
-import '../../../css/paginate.css'
 import OnlineUsersSearch from './OnlineUsersSearch';
 import Loading from '@/Components/DaisyUI/Loading';
 import PaginatedItems from '@/Components/DaisyUI/PaginatedItems';

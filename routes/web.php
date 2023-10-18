@@ -12,6 +12,7 @@ use App\Http\Controllers\AffiliateController;
 use App\Http\Controllers\CustomerController; 
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\EarthlinkProfileController;
+use App\Http\Controllers\LogController;
 
 Route::get('/test', function () {    
     return Inertia::render('Test');
@@ -51,6 +52,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/users/management', [UserController::class, 'showAllUsers'])->name('users.management');
 
     Route::get('/tickets', [TicketController::class, 'index'])->name('tickets');
+
+    Route::get('/log/error', [LogController::class, 'getErrorLog'])->name('log.error');
+    Route::get('/log/audit', [LogController::class, 'getAuditLog'])->name('log.audit');
 });
 
 Route::middleware('auth')->group(function () {
