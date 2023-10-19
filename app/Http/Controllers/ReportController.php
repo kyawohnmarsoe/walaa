@@ -14,4 +14,12 @@ class ReportController extends Controller
             'affiliates' => Affiliate::all()
     ]);
     }
+
+    public function getPrepaidNeeded(){
+        $token = $this->getSessionToken();  
+        return Inertia::render('Reports/Prepaid/PrepaidNeeded',[
+            'apitoken' => $token,
+            'affiliates' => Affiliate::all()
+    ]);
+    }
 }

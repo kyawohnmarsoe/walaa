@@ -58,6 +58,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/log/audit', [LogController::class, 'getAuditLog'])->name('log.audit');
 
     Route::get('/usersessions', [ReportController::class, 'getUserSessions'])->name('usersessions');
+    Route::get('/prepaid/needed', [ReportController::class, 'getPrepaidNeeded'])->name('prepaid.needed');
 
 });
 
