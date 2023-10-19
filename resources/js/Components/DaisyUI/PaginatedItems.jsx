@@ -3,7 +3,7 @@ import ReactPaginate from 'react-paginate';
 import { useEffect, useState } from 'react';
 import TotalItemsCount from './TotalItemsCount';
 
-export default function PaginatedItems ({ itemsPerPage, items, total, children, filterObj, setFilterObj })
+export default function PaginatedItems ({ type = 'Users', itemsPerPage, items, total, children, filterObj, setFilterObj })
 {
 
     const [itemOffset, setItemOffset] = useState(0);
@@ -34,7 +34,7 @@ export default function PaginatedItems ({ itemsPerPage, items, total, children, 
     return (
         <>
             <div className='pagination-wrapper'>
-                <TotalItemsCount total={ total } type='Users' />
+                <TotalItemsCount total={ total } type={ type } />
 
                 <ReactPaginate
                     breakLabel="..."

@@ -5,3 +5,8 @@
 .resetBtn{
     background-color: gray;
 }
+
+.react-datepicker-wrapper{
+    width: 100%;
+    display: block;
+}
