@@ -1,29 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 
-const Test = () =>
+const Test = ({ apitoken }) =>
 {
-  const [startDate, setStartDate] = useState(Date.now());
+  console.log(apitoken)
 
+  const [statsData, setStatsData] = useState({ stats: [], errMessage: '', loading: true })
+  const { stats, errMessage, loading } = statsData
 
+  const instance = axios.create({
+    baseURL: 'https://rapi.earthlink.iq/api/reseller',
+    headers: { 'Authorization': `Bearer ${ apitoken }` }
+  });
 
-  const onDateChange = (date) =>
+  useEffect(() =>
   {
-    const d = date.toLocaleDateString()
-    // setStartDate(d)
-    console.log(d)
-  }
+
+    instance.get('/home/Dashboard')
+      .then(res =>
+      {
+        setStatsData({ stats: res.data.value, errMessage: '', loading: false })
+        // setStatsData({ stats: [], errMessage: '', loading: false })
+        console.log(res.data.value)
+      })
+      .catch(err =>
+      {
+        setStatsData({ stats: [], errMessage: err.message, loading: false })
+        console.log(err.message)
+      })
+
+  }, [])
 
   return (
     <div style={ { margin: 'auto', width: '500px' } }>
-      {/* <DatePicker selected={ startDate } onChange={ (date) => setStartDate(date) } /> */ }
-      <DatePicker
-        selected={ startDate }
-        onChange={ (date) => onDateChange(date) }
-        dateFormat="dd/MM/yyyy"
-      />
+
     </div>
   );
 }

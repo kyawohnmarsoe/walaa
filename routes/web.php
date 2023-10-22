@@ -15,9 +15,7 @@ use App\Http\Controllers\EarthlinkProfileController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\ReportController;
 
-Route::get('/test', function () {    
-    return Inertia::render('Test');
-})->name('test');
+Route::get('/test', [DashboardController::class, 'test'])->name('test');
 
 Route::get('/earthlink/profile', function () {    
     return Inertia::render('Profile/Earthlink/Edit');

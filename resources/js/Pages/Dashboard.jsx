@@ -6,6 +6,7 @@ import ServicePhones from './ServicePhones';
 
 export default function Dashboard ({ auth, apitoken })
 {
+
     return (
         <AuthenticatedLayout
             user={ auth.user }

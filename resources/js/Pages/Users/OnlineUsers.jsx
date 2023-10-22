@@ -69,7 +69,7 @@ export default function OnlineUsers ({ auth, apitoken, affiliates })
                   filterObj={ filterObj }
                 >
 
-                  <OnlineUsersTable users={ users } />
+                  <OnlineUsersTable users={ users } apitoken={ apitoken } />
 
                 </PaginatedItems>
 

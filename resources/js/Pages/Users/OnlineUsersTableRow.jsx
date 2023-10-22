@@ -1,8 +1,42 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "@inertiajs/react";
+import Modal from '@/Components/DaisyUI/Modal';
 
-export default function OnlineUsersTableRow ({ user, index })
+
+export default function OnlineUsersTableRow ({ user, index, apitoken })
 {
+  const [data, setData] = useState({ errMessage: '', loading: true })
+
+  const instance = axios.create({
+    baseURL: 'https://rapi.earthlink.iq/api/reseller',
+    headers: { 'Authorization': `Bearer ${ apitoken }` }
+  });
+
+  const disconnectUser = () =>
+  {
+    instance.post('/activesessions/disconnect', { userindex: user.userIndex, userid: user.userID })
+      .then(res =>
+      {
+        console.log(res.data.responseMessage)
+        setData({ errMessage: '', loading: false })
+
+      })
+      .catch(err =>
+      {
+        console.log(err.message)
+        setData({ errMessage: err?.message, loading: false })
+
+      })
+
+    console.log('disconnectUser running..')
+  }
+
+
+  const disconnectHandler = () =>
+  {
+    const result = confirm("Are you sure you want to disconnect this user!")
+    result && disconnectUser()
+  }
 
   return (
     <tr>
@@ -12,8 +46,8 @@ export default function OnlineUsersTableRow ({ user, index })
           </label>
         </th> */}
 
-      {/* <td>{ user?.userIndex }</td> */ }
-      <td></td>
+      <td>{ user?.userIndex }</td>
+
 
       <td>
         <div className="flex items-center space-x-3">
@@ -38,11 +72,11 @@ export default function OnlineUsersTableRow ({ user, index })
       <td>{ user?.onlineSince }</td>
       <td>{ user?.callerMAC }</td>
       <td>{ user?.expirationDate }</td>
-      <td>{ user?.userIP }</td>
+      <td><a href={ `http://${ user?.userIP }` } className="text-sky-700" target="_blank">{ user?.userIP }</a></td>
       <td>{ user?.loginFrom }</td>
       <td>{ user?.affiliateName }</td>
-      <td><span className="text-sky-700">Disconnect</span></td>
+      <td><span className="text-sky-700" onClick={ disconnectHandler }>Disconnect</span></td>
 
-    </tr>
+    </tr >
   )
 }

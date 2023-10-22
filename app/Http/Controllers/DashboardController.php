@@ -16,4 +16,15 @@ class DashboardController extends Controller
             'apitoken' => $token
         ]);
     } // dashboard
+
+     public function test()
+    {
+        $token = $this->getSessionToken();     
+        
+        return Inertia::render('Test', [
+            'apitoken' => $token
+        ]);
+    } // dashboard
+
+   
 }

@@ -16,7 +16,7 @@ export default function OnlineUsersSearch ({ className = '', affiliates, filterO
         MAC: '',
         CalledStation: '',
         sessionType: '',
-        securityIssues: false
+        // securityIssues: false
 
     });
 
@@ -158,7 +158,7 @@ export default function OnlineUsersSearch ({ className = '', affiliates, filterO
                                     {/* <InputError className="mt-2" message={errors.name} /> */ }
                                 </div>
 
-                                <div >
+                                {/* <div >
                                     <label className="flex items-center">
                                         <Checkbox
                                             name="securityIssues"
@@ -168,7 +168,7 @@ export default function OnlineUsersSearch ({ className = '', affiliates, filterO
 
                                         <InputLabel htmlFor="securityIssues" value="Users with security issues only" className='ml-2' />
                                     </label>
-                                </div>
+                                </div> */}
 
                             </div>
 

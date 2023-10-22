@@ -27,12 +27,14 @@ export default function ServicePhones ({ apitoken })
             { phones && <div className="pt-12 ">
                 <h2 className="text-lg font-medium text-gray-800 pb-4">Service phones:</h2>
                 <table>
-                    {
-                        phones?.map((p, index) => <tr key={ index }>
-                            <td>{ p.providerName } </td>
-                            <td> : { p.number }</td>
-                        </tr>)
-                    }
+                    <tbody>
+                        {
+                            phones?.map((p, index) => <tr key={ index }>
+                                <td>{ p.providerName } </td>
+                                <td> : { p.number }</td>
+                            </tr>)
+                        }
+                    </tbody>
                 </table></div> }
         </>
     )
