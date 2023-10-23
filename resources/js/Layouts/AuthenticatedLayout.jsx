@@ -4,6 +4,7 @@ import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
+import '../../css/paginate.css'
 
 export default function Authenticated ({ user, header, children })
 {
@@ -57,6 +58,78 @@ export default function Authenticated ({ user, header, children })
                                             <Dropdown.Content align={ 'left' }>
                                                 <Dropdown.Link href={ route('users.online') }>Online Users</Dropdown.Link>
                                                 <Dropdown.Link href={ route('users.management') }> Manage Users</Dropdown.Link >
+                                            </Dropdown.Content>
+                                        </Dropdown>
+                                    </div>
+                                </div>
+
+                                <div className="sm:flex sm:items-center">
+                                    <div className="relative">
+                                        <Dropdown>
+                                            <Dropdown.Trigger>
+                                                <span className="inline-flex rounded-md">
+                                                    <button
+                                                        type="button"
+                                                        className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                                    >
+                                                        Logs
+
+                                                        <svg
+                                                            className="ml-2 -mr-0.5 h-4 w-4"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            viewBox="0 0 20 20"
+                                                            fill="currentColor"
+                                                        >
+                                                            <path
+                                                                fillRule="evenodd"
+                                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                                clipRule="evenodd"
+                                                            />
+                                                        </svg>
+                                                    </button>
+
+                                                </span>
+                                            </Dropdown.Trigger>
+
+                                            <Dropdown.Content align={ 'left' }>
+                                                <Dropdown.Link href={ route('log.error') }>Error Log</Dropdown.Link>
+                                                {/* <Dropdown.Link href={ route('log.audit') }>Audit Log</Dropdown.Link > */ }
+                                            </Dropdown.Content>
+                                        </Dropdown>
+                                    </div>
+                                </div>
+
+                                <div className="sm:flex sm:items-center">
+                                    <div className="relative">
+                                        <Dropdown>
+                                            <Dropdown.Trigger>
+                                                <span className="inline-flex rounded-md">
+                                                    <button
+                                                        type="button"
+                                                        className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                                    >
+                                                        Report
+
+                                                        <svg
+                                                            className="ml-2 -mr-0.5 h-4 w-4"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            viewBox="0 0 20 20"
+                                                            fill="currentColor"
+                                                        >
+                                                            <path
+                                                                fillRule="evenodd"
+                                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                                clipRule="evenodd"
+                                                            />
+                                                        </svg>
+                                                    </button>
+
+                                                </span>
+                                            </Dropdown.Trigger>
+
+                                            <Dropdown.Content align={ 'left' }>
+                                                <Dropdown.Link href={ route('usersessions') }>User Sessions</Dropdown.Link>
+                                                <Dropdown.Link href={ route('prepaid.needed') }>Prepaid Needed</Dropdown.Link >
                                             </Dropdown.Content>
                                         </Dropdown>
                                     </div>

@@ -1,6 +1,6 @@
 import OnlineUsersTableRow from './OnlineUsersTableRow'
 
-export default function OnlineUsersTable ({ users })
+export default function OnlineUsersTable ({ users, apitoken })
 {
 
   return (
@@ -10,7 +10,7 @@ export default function OnlineUsersTable ({ users })
         {/* head */ }
         <thead>
           <tr className='bg-emerald-300'>
-            <th>#</th>
+            <th>#Index</th>
             {/* <th>User Index</th> */ }
             <th>Username</th>
             <th>Online Status</th>
@@ -27,7 +27,7 @@ export default function OnlineUsersTable ({ users })
 
         <tbody>
           {
-            !!users?.length ? users.map((user, index) => <OnlineUsersTableRow user={ user } key={ user.userIndex } index={ index } />)
+            !!users?.length ? users.map((user, index) => <OnlineUsersTableRow apitoken={ apitoken } user={ user } key={ user.userIndex } index={ index } />)
               : <tr><td className='text-error'>No User Found!</td></tr>
           }
         </tbody>
@@ -35,7 +35,7 @@ export default function OnlineUsersTable ({ users })
         {/* foot */ }
         <tfoot>
           <tr>
-            <th>#</th>
+            <th>#Index</th>
             <th>Username</th>
             <th>Online Status</th>
             <th>Online Time</th>

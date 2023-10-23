@@ -12,10 +12,10 @@ use App\Http\Controllers\AffiliateController;
 use App\Http\Controllers\CustomerController; 
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\EarthlinkProfileController;
+use App\Http\Controllers\LogController;
+use App\Http\Controllers\ReportController;
 
-Route::get('/test', function () {    
-    return Inertia::render('Test');
-})->name('test');
+Route::get('/test', [DashboardController::class, 'test'])->name('test');
 
 Route::get('/earthlink/profile', function () {    
     return Inertia::render('Profile/Earthlink/Edit');
@@ -53,6 +53,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/tickets', [TicketController::class, 'index'])->name('tickets');
     Route::get('/tickets/create', [TicketController::class, 'create'])->name('tickets.create');
     Route::post('/tickets/store', [TicketController::class, 'store'])->name('tickets.store');
+
+    Route::get('/log/error', [LogController::class, 'getErrorLog'])->name('log.error');
+    Route::get('/log/audit', [LogController::class, 'getAuditLog'])->name('log.audit');
+
+    Route::get('/usersessions', [ReportController::class, 'getUserSessions'])->name('usersessions');
+    Route::get('/prepaid/needed', [ReportController::class, 'getPrepaidNeeded'])->name('prepaid.needed');
+
 });
 
 Route::middleware('auth')->group(function () {
