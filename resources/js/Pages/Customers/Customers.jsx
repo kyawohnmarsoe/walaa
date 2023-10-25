@@ -6,7 +6,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import PaginatedLinks from '@/Components/PaginatedLinks';
 import TextInput from '@/Components/TextInput';
 
-export default function Customers({
+export default function Customers ({
     auth,
     mustVerifyEmail,
     customers,
@@ -15,56 +15,70 @@ export default function Customers({
     accounts,
     sub_accounts,
     apitoken,
-}) {
+})
+{
+
+    const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10 })
 
     const { flash } = usePage().props
 
     const [search_val, setSearchVal] = useState('')
     const [filter_res, setFilterRes] = useState([])
 
-    const addCustomerClick = () => {
+    const addCustomerClick = () =>
+    {
         router.get('/customers/create')
     }
-    const addApiCustomerClick = () => {
+    const addApiCustomerClick = () =>
+    {
         // router.get('/customers/store/api')
 
         // get total count of API users
         const instance = axios.create({
             baseURL: 'https://rapi.earthlink.iq/api/reseller/user/all',
-            headers: { 'Authorization': `Bearer ${apitoken}` }
+            headers: { 'Authorization': `Bearer ${ apitoken }` }
         });
         let postData = {
             Rowcount: 1,
             OrderBy: 'Account Name',
         }
-        instance.post('', postData).then(res => {
-            if (res) {
+        instance.post('', postData).then(res =>
+        {
+            if (res)
+            {
                 // console.log(res.data.isSuccessful)
-                if (res.data.isSuccessful == true) {
+                if (res.data.isSuccessful == true)
+                {
                     // console.log(res.data.value.totalCount)
 
                     let totalCount = res.data.value.totalCount;
                     router.get('/customers/store/api/' + totalCount)
                 }
             }
-        }).catch(err => {
-            if (err) {
+        }).catch(err =>
+        {
+            if (err)
+            {
                 console.log(err.message)
             }
         })
     }
-    const handleSearch = (ev) => {
+    const handleSearch = (ev) =>
+    {
         let search = ev.target.value;
         setSearchVal(search)
         // console.log(search);
 
-        if (search_val !== '') {
-            const filterdata = customers.filter((item) => {
+        if (search_val !== '')
+        {
+            const filterdata = customers.filter((item) =>
+            {
                 return Object.values(item).join("").toLowerCase().includes(search_val.toLowerCase())
             });
 
             setFilterRes(filterdata)
-        } else {
+        } else
+        {
             setFilterRes(customers)
         }
     }
@@ -72,7 +86,7 @@ export default function Customers({
 
     return (
         <AuthenticatedLayout
-            user={auth.user}
+            user={ auth.user }
             header={
                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">Users</h2>
             }
@@ -82,30 +96,30 @@ export default function Customers({
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
-                    {flash.status == 422 &&
+                    { flash.status == 422 &&
                         <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
                             <p className="font-bold">Warning</p>
                             <p>Something went wrong!</p>
                         </div>
                     }
 
-                    {flash.status == 201 &&
+                    { flash.status == 201 &&
                         <div className="alert alert-success">
                             Data created successfully.
                         </div>
                     }
 
-                    {flash.message &&
+                    { flash.message &&
                         <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4" role="alert">
-                            {/* <p className="font-bold">Success</p> */}
-                            <p>{flash.message}</p>
+                            {/* <p className="font-bold">Success</p> */ }
+                            <p>{ flash.message }</p>
                         </div>
                     }
 
-                    {flash.error_message &&
+                    { flash.error_message &&
                         <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
                             <p className="font-bold">Warning</p>
-                            <p>{flash.error_message}</p>
+                            <p>{ flash.error_message }</p>
                         </div>
                     }
 
@@ -114,11 +128,11 @@ export default function Customers({
                         <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
 
                             <div dir="ltr">
-                                <PrimaryButton disabled='' onClick={ev => addCustomerClick()}>
+                                <PrimaryButton disabled='' onClick={ ev => addCustomerClick() }>
                                     Add User
                                 </PrimaryButton>
 
-                                <PrimaryButton className="ml-12" disabled='' onClick={ev => addApiCustomerClick()}>
+                                <PrimaryButton className="ml-12" disabled='' onClick={ ev => addApiCustomerClick() }>
                                     Get API data
                                 </PrimaryButton>
                             </div>
@@ -127,19 +141,21 @@ export default function Customers({
                                 <TextInput
                                     id="search_val"
                                     name="search_val"
-                                    value={search_val}
+                                    value={ search_val }
                                     className="max-w"
                                     placeholder="Enter search keywords..."
-                                    onChange={handleSearch}
+                                    onChange={ handleSearch }
                                 />
                             </div>
 
                             {
                                 search_val.length > 1 ?
-                                    <PaginatedLinks itemsPerPage={10} items={filter_res} tableName="customer" sub_accounts={sub_accounts} />
+                                    <PaginatedLinks itemsPerPage={ filterObj.RowCount } items={ filter_res } tableName="customer" sub_accounts={ sub_accounts } setFilterObj={ setFilterObj }
+                                        filterObj={ filterObj } />
                                     :
                                     customers.length > 0 &&
-                                    <PaginatedLinks itemsPerPage={10} items={customers} tableName="customer" sub_accounts={sub_accounts} />
+                                    <PaginatedLinks itemsPerPage={ filterObj.RowCount } items={ customers } tableName="customer" sub_accounts={ sub_accounts } setFilterObj={ setFilterObj }
+                                        filterObj={ filterObj } />
                             }
                         </div>
                     }
@@ -149,10 +165,10 @@ export default function Customers({
                         <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                             <AddForm
                                 className="p-4"
-                                accounts={accounts}
-                                sub_accounts={sub_accounts}
-                                affiliates={affiliates}
-                                apitoken={apitoken}
+                                accounts={ accounts }
+                                sub_accounts={ sub_accounts }
+                                affiliates={ affiliates }
+                                apitoken={ apitoken }
                             />
                         </div>
                     }
