@@ -52,7 +52,7 @@ export default function Details ({ auth, apitoken, id })
             { user &&
 
                 <div>
-                    <AccessDetails user={ user } className='p-4' />
+                    <AccessDetails user={ user } apitoken={ apitoken } className='p-4' />
 
                     <div className='grid md:grid-cols-2 gap-4 pt-4 px-4 pb-12'>
                         <div className="bg-white shadow sm:rounded-lg">

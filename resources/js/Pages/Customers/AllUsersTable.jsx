@@ -11,8 +11,8 @@ export default function AllUsersTable ({ users, tableRef })
         {/* head */ }
         <thead>
           <tr className='bg-emerald-300'>
-            <th>#</th>
-            {/* <th>User Index</th> */ }
+            <th>#Index</th>
+            <th>Actions</th>
             <th>Username</th>
             <th>Customer Name</th>
             <th>Accounting Info</th>
@@ -35,7 +35,8 @@ export default function AllUsersTable ({ users, tableRef })
         {/* foot */ }
         <tfoot>
           <tr>
-            <th>#</th>
+            <th>#Index</th>
+            <th>Actions</th>
             <th>Username</th>
             <th>Customer Name</th>
             <th>Accounting Info</th>

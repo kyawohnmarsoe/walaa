@@ -3,11 +3,12 @@ import TextInput from '@/Components/TextInput';
 import Checkbox from '@/Components/Checkbox';
 import PrimaryButton from '@/Components/PrimaryButton';
 import { useForm } from '@inertiajs/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
-export default function AccessDetails ({ user, className = '' })
+export default function AccessDetails ({ apitoken, user, className = '' })
 {
-    // console.log(user)
+    const [userData, setUserData] = useState({ errMessage: '', loading: true })
+    const { errMessage, loading } = userData
 
     const { data, setData, post, processing, errors, reset } = useForm({
         userId: user?.userObject?.userId,
@@ -19,20 +20,28 @@ export default function AccessDetails ({ user, className = '' })
         userActive: user?.userActive
     });
 
-    useEffect(() =>
-    {
-
-        // return () => {
-        //     reset('password');
-        // };
-    }, []);
+    const instance = axios.create({
+        baseURL: 'https://rapi.earthlink.iq/api/reseller',
+        headers: { 'Authorization': `Bearer ${ apitoken }` }
+    });
 
     const submit = (e) =>
     {
         e.preventDefault();
 
+        instance.post(`/user/${ data.userId }`, { ...data })
+            .then(res =>
+            {
+                setUserData({ errMessage: '', loading: false })
+                // setUserData({ user: null, errMessage: '', loading: false })
+                console.log('response' + res.data.value)
+            })
+            .catch(err =>
+            {
+                setUserData({ errMessage: err.message, loading: false })
+                console.log('error' + err)
+            })
         // post(route('user.update'));
-        alert('submit')
 
     };
 
@@ -108,10 +117,8 @@ export default function AccessDetails ({ user, className = '' })
                                     <TextInput
                                         id="affiliateName"
                                         className="mt-1 block w-full disabled bg-gray-100"
-                                        value={ data?.affiliateName }
-                                        isFocused
-                                        autoComplete="affiliateName"
-                                        disabled
+                                        defaultValue={ data?.affiliateName }
+                                        readOnly={ true }
                                     />
 
                                     {/* <InputError className="mt-2" message={errors.name} /> */ }

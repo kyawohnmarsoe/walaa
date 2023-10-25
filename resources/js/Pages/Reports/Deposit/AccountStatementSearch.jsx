@@ -7,7 +7,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 
-export default function PrepaidNeededSearch ({ className = '', affiliates, setFilterObj, filterObj })
+export default function AccountStatementSearch ({ className = '', affiliates, setFilterObj, filterObj })
 {
 
 

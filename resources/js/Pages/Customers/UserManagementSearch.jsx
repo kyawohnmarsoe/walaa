@@ -46,7 +46,7 @@ export default function UserManagementSearch ({ className = '', affiliates, acco
 
     const { data, setData, post, processing, errors, reset } = useForm({
         userId: '',
-        FirstName: '',
+        displayName: '',
         SubAffliateIndex: '',
         CallerId: '',
         Notes: '',
@@ -108,15 +108,15 @@ export default function UserManagementSearch ({ className = '', affiliates, acco
                                 </div>
 
                                 <div>
-                                    <InputLabel htmlFor="FirstName" value="Customer First Name" />
+                                    <InputLabel htmlFor="displayName" value="Display Name" />
 
                                     <TextInput
-                                        id="FirstName"
+                                        id="displayName"
                                         className="mt-1 block w-full "
-                                        value={ data?.FirstName }
+                                        value={ data?.displayName }
                                         isFocused
-                                        autoComplete="FirstName"
-                                        onChange={ (e) => setData('FirstName', e.target.value) }
+                                        autoComplete="displayName"
+                                        onChange={ (e) => setData('displayName', e.target.value) }
                                     />
 
                                     {/* <InputError className="mt-2" message={errors.name} /> */ }

@@ -57,6 +57,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/usersessions', [ReportController::class, 'getUserSessions'])->name('usersessions');
     Route::get('/prepaid/needed', [ReportController::class, 'getPrepaidNeeded'])->name('prepaid.needed');
+    Route::get('/deposit/statement', [ReportController::class, 'getAccountStatement'])->name('deposit.statement');
+    Route::get('/deposit/transfer', [ReportController::class, 'getBalanceTransfer'])->name('deposit.transfer');
+    Route::get('/affiliate/group', [ReportController::class, 'getAffiliateGroup'])->name('affiliate.group');
 
 });
 

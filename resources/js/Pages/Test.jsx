@@ -5,11 +5,11 @@ import "react-datepicker/dist/react-datepicker.css";
 
 const Test = ({ apitoken }) =>
 {
-  console.log(apitoken)
-
-  const [statsData, setStatsData] = useState({ stats: [], errMessage: '', loading: true })
-  const { stats, errMessage, loading } = statsData
-
+  const data = {
+    TargetAffiliateIndex: '61304',
+    Amount: '0',
+    DepositPassword: '666666666'
+  }
   const instance = axios.create({
     baseURL: 'https://rapi.earthlink.iq/api/reseller',
     headers: { 'Authorization': `Bearer ${ apitoken }` }
@@ -17,25 +17,21 @@ const Test = ({ apitoken }) =>
 
   useEffect(() =>
   {
-
-    instance.get('/home/Dashboard')
+    instance.post('/affiliate/deposit/transferBalance', data)
       .then(res =>
       {
-        setStatsData({ stats: res.data.value, errMessage: '', loading: false })
-        // setStatsData({ stats: [], errMessage: '', loading: false })
-        console.log(res.data.value)
+        console.log(res.data)
       })
       .catch(err =>
       {
-        setStatsData({ stats: [], errMessage: err.message, loading: false })
+        // setMain({ ...main, failMessage: err.message })
         console.log(err.message)
       })
-
   }, [])
 
   return (
     <div style={ { margin: 'auto', width: '500px' } }>
-
+      Testing...
     </div>
   );
 }
