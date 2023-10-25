@@ -44,7 +44,7 @@ export default function PrepaidNeededSearch ({ className = '', affiliates, setFi
                         </header>
 
                         <form onSubmit={ submit } className="mt-6 space-y-6 ">
-                            <div className='grid grid-cols-3 gap-4'>
+                            <div className='grid grid-cols-1 gap-4'>
                                 <div>
                                     <InputLabel htmlFor="Days" value="Number of prepaid cards needed for the next "
                                         className='inline' />
@@ -63,7 +63,7 @@ export default function PrepaidNeededSearch ({ className = '', affiliates, setFi
                                 </div>
                             </div>
 
-                            <div className='grid grid-cols-3 gap-4'>
+                            <div className='grid grid-cols-2 md:grid-cols-3 gap-4'>
 
                                 <div>
                                     <InputLabel htmlFor="AffiliateIndex" value="Affiliate" />
@@ -106,7 +106,7 @@ export default function PrepaidNeededSearch ({ className = '', affiliates, setFi
 
                             </div>
 
-                            <div className='grid grid-cols-3 gap-4'>
+                            <div className='grid grid-cols-1  gap-4'>
                                 <div className="font-medium text-sm text-gray-700 italic">
                                     Your current deposit balance : <span className="text-emerald-700">3,869,000 IQD</span>
                                     <br />

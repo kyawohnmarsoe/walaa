@@ -36,7 +36,7 @@ export default function TestUsageSearch ({ className = '', affiliates, filterObj
                         </header>
 
                         <form onSubmit={ submit } className="mt-6 space-y-6 ">
-                            <div className='grid grid-cols-3 gap-4'>
+                            <div className='grid md:grid-cols-3 gap-4'>
 
                                 <div>
                                     <InputLabel htmlFor="affiliateId" value="Affiliate" />

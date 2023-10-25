@@ -152,7 +152,7 @@ export default function BalanceTransfer ({ className = '', affiliates, apitoken,
                                         <div className="text-red-500">Cannot retrive main affiliate data from the server, please try again!</div>
                                     </div>
                                 }
-                                <div className='grid grid-cols-3 gap-4'>
+                                <div className='grid md:grid-cols-3 gap-4'>
                                     <h2 className="text-lg font-medium text-gray-600">From Affiliate Account</h2>
 
                                     <div>
@@ -169,7 +169,7 @@ export default function BalanceTransfer ({ className = '', affiliates, apitoken,
                                     </div>
                                 </div>
 
-                                <div className='grid grid-cols-3 gap-4'>
+                                <div className='grid md:grid-cols-3 gap-4'>
                                     <h2 className="text-lg font-medium text-gray-600">To Affiliate Account</h2>
 
                                     <div>
@@ -200,7 +200,7 @@ export default function BalanceTransfer ({ className = '', affiliates, apitoken,
                                 </div>
 
 
-                                <div className='grid grid-cols-3 gap-4'>
+                                <div className='grid md:grid-cols-3 gap-4'>
                                     <div>
                                         <h2 className="text-lg font-medium text-gray-600">Transfer details</h2>
                                         <div className="font-medium text-sm text-gray-700 italic">
@@ -234,7 +234,7 @@ export default function BalanceTransfer ({ className = '', affiliates, apitoken,
                                 </div>
 
 
-                                <div className='grid grid-cols-3 gap-4'>
+                                <div className='grid md:grid-cols-3 gap-4'>
                                     <div></div>
                                     <div className="flex items-center gap-4">
                                         <PrimaryBtn onClick={ confirmTransfer }>Transfer</PrimaryBtn>

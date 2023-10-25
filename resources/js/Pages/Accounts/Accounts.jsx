@@ -124,7 +124,8 @@ export default function Accounts ({ auth, mustVerifyEmail, accounts, show_data, 
 
                             {
                                 search_val.length > 1 ?
-                                    <PaginatedLinks itemsPerPage={ filterObj.RowCount } items={ filter_res } tableName="account" setFilterObj={ setFilterObj }
+                                    <PaginatedLinks itemsPerPage={ filterObj.RowCount } items={ filter_res } tableName="account"
+                                        setFilterObj={ setFilterObj }
                                         filterObj={ filterObj } />
                                     :
                                     accounts.length > 0 &&

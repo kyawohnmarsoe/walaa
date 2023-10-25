@@ -24,7 +24,7 @@ export default function ServicePhones ({ apitoken })
 
     return (
         <>
-            { phones && <div className="pt-12 ">
+            { phones && <div className="pt-12 px-3 ">
                 <h2 className="text-lg font-medium text-gray-800 pb-4">Service phones:</h2>
                 <table>
                     <tbody>

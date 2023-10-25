@@ -29,6 +29,7 @@ export default function Authenticated ({ user, header, children })
                                     Dashboard
                                 </NavLink>
 
+                                {/* Users  */ }
                                 <div className="sm:flex sm:items-center">
                                     <div className="relative">
                                         <Dropdown>
@@ -65,8 +66,7 @@ export default function Authenticated ({ user, header, children })
                                     </div>
                                 </div>
 
-
-
+                                {/* Reports  */ }
                                 <div className="sm:flex sm:items-center">
                                     <div className="relative">
                                         <Dropdown>
@@ -105,9 +105,7 @@ export default function Authenticated ({ user, header, children })
                                     </div>
                                 </div>
 
-
-
-
+                                {/* Statistics  */ }
                                 <div className="sm:flex sm:items-center">
                                     <div className="relative">
                                         <Dropdown>
@@ -144,6 +142,7 @@ export default function Authenticated ({ user, header, children })
                                     </div>
                                 </div>
 
+                                {/* Logs */ }
                                 <div className="sm:flex sm:items-center">
                                     <div className="relative">
                                         <Dropdown>
@@ -180,16 +179,6 @@ export default function Authenticated ({ user, header, children })
                                     </div>
                                 </div>
 
-
-
-                                {/* <NavLink href={ route('users.online') } active={ route().current('users.online') }>
-                                    Online Users
-                                </NavLink> */}
-
-                                {/* <NavLink href={ route('users.management') } active={ route().current('users.management') }>
-                                    User Management
-                                </NavLink> */}
-
                                 <NavLink href={ route('accounts') } active={ url.startsWith('/accounts') }>
                                     Accounts
                                 </NavLink>
@@ -205,6 +194,7 @@ export default function Authenticated ({ user, header, children })
                             </div>
                         </div>
 
+                        {/* Auth  */ }
                         <div className="hidden sm:flex sm:items-center sm:ml-6">
                             <div className="ml-3 relative">
                                 <Dropdown>
@@ -243,6 +233,7 @@ export default function Authenticated ({ user, header, children })
                             </div>
                         </div>
 
+                        {/* Mobile Menu Humbergur */ }
                         <div className="-mr-2 flex items-center sm:hidden">
                             <button
                                 onClick={ () => setShowingNavigationDropdown((previousState) => !previousState) }
@@ -269,11 +260,45 @@ export default function Authenticated ({ user, header, children })
                     </div>
                 </div>
 
+
+                {/* Mobile Menu Dropdown */ }
                 <div className={ (showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden' }>
                     <div className="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink href={ route('dashboard') } active={ route().current('dashboard') }>
                             Dashboard
                         </ResponsiveNavLink>
+                    </div>
+
+                    <div className="pt-2 pb-3 space-y-1 border-t">
+                        <ResponsiveNavLink href={ route('users.online') } active={ route().current('users.online') }>
+                            Online Users
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink href={ route('users.management') } active={ route().current('users.management') }>
+                            Manage Users
+                        </ResponsiveNavLink>
+                    </div>
+
+                    <div className="pt-2 pb-3 space-y-1 border-t">
+                        <ResponsiveNavLink href={ route('usersessions') } active={ route().current('usersessions') }>
+                            User Sessions
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink href={ route('prepaid.needed') } active={ route().current('prepaid.needed') }>
+                            Prepaid Needed
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink href={ route('deposit.transfer') } active={ route().current('deposit.transfer') }>
+                            Balance Transfer
+                        </ResponsiveNavLink>
+
+                        <ResponsiveNavLink href={ route('affiliate.group') } active={ route().current('affiliate.group') }>
+                            Affiliate Group Report
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink href={ route('test.usage') } active={ route().current('test.usage') }>
+                            Test Usage Report
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink href={ route('deposit.transfer') } active={ route().current('deposit.transfer') }>
+                            Balance Transfer
+                        </ResponsiveNavLink>
+
                     </div>
 
                     <div className="pt-4 pb-1 border-t border-gray-200">

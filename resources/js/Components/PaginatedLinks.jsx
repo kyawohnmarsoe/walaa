@@ -35,11 +35,11 @@ export default function PaginatedLinks ({ itemsPerPage, items, tableName, apitok
 
                     <ReactPaginate
                         breakLabel="..."
-                        nextLabel="next >"
+                        nextLabel=" >>"
                         onPageChange={ handlePageClick }
-                        pageRangeDisplayed={ 5 }
+                        pageRangeDisplayed={ 3 }
                         pageCount={ pageCount }
-                        previousLabel="< previous"
+                        previousLabel="<<"
                         renderOnZeroPageCount={ null }
                         className="pagination"
                     />
