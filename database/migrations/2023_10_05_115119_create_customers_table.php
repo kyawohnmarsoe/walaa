@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
             $table->integer('account_index');
+            $table->integer('sub_account_id')->dafault(0);
             $table->integer('affiliate_index');
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();

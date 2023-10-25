@@ -15,6 +15,7 @@ class StoreCustomerRequest extends FormRequest
     {
         return [         
             'account_index' => 'required',
+            'sub_account_id' => '',
             'affiliate_index' => 'required',             
             'first_name'=> '',
             'last_name'=> '',

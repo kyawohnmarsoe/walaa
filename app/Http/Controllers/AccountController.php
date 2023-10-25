@@ -6,27 +6,82 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Inertia\Inertia;
 use App\Models\Account;
+use App\Models\Sub_account;
+use App\Http\Requests\StoreSubAccountRequest;
 
 class AccountController extends Controller
 {
     public function index()
     {
+        $accounts = Account::join('sub_accounts', 'sub_accounts.account_index', '=', 'accounts.account_index')
+              ->get(['accounts.account_price', 'sub_accounts.*']);
         return Inertia::render('Accounts/Accounts', [
-            'accounts' => Account::all()
+            'accounts' => $accounts,
+            'show_data' => 'list',
         ]);
     } // index
+    
+    public function api_list()
+    {
+        $accounts = Account::all();
+        return Inertia::render('Accounts/Accounts', [
+            'accounts' => $accounts,
+            'show_data' => 'apilist',
+        ]);
+    } // api_list
 
-    public function store() { // insert API data to db
+    public function create() {
+        $token = $this->getSessionToken();
+        
+        return Inertia::render('Accounts/Accounts', [
+            'show_data'  => 'add_form',
+            'accounts' => Account::all(),
+        ]);
+    } // create    
+
+    public function insert(StoreSubAccountRequest $request) { 
+        $token = $this->getSessionToken();       
+        $data = $request->validated();        
+        $sub_account = Sub_account::create($data);
+        return redirect()->route('accounts')->with('status', 201);   
+    } // insert
+
+    public function edit($id) {
+        $token = $this->getSessionToken();       
+       
+        return Inertia::render('Accounts/Accounts', [
+            'show_data'  => 'edit_form',
+            'account' => Sub_account::findOrFail($id),
+            'accounts' => Account::all()
+        ]);
+    } // edit
+
+    public function update(Request $request, $id) 
+    {
+		$input = $request->all();
+		$data = Sub_account::findOrFail($id);
+        // return response(compact('input'));  
+		$data->update($input);
+        return redirect()->route('accounts')->with('status', 200); 
+	} // update
+
+    public function destroy($id)
+    {
+        Sub_account::findOrFail($id)->delete();
+        return redirect()->route('accounts')->with('status', 204); 
+    } // destroy
+
+    public function store_api() { // insert API data to db
         $token = $this->getSessionToken();
         
         $headers = [
             'Authorization'=>'Bearer '.$token, 
             'Accept' => 'application/json'
-        ];
+        ];        
 
         $resellerPriceApiURL = 'https://rapi.earthlink.iq/api/reseller/prepaycard/prices/forreseller' ;      
         $resellerPrice_api_response = Http::withHeaders($headers)->get($resellerPriceApiURL);  
-        $resellerPrice     = json_decode($resellerPrice_api_response->getBody(), true); 
+        $resellerPrice     = json_decode($resellerPrice_api_response->getBody(), true);         
         
         $userPriceApiURL = 'https://rapi.earthlink.iq/api/reseller/prepaycard/prices/foruser' ;      
         $userPrice_api_response = Http::withHeaders($headers)->get($userPriceApiURL);  
@@ -41,7 +96,7 @@ class AccountController extends Controller
         $accountIndex->all(); 
         $account = Account::whereIn('account_index', $accountIndex)->first();
 
-        $accounts = Account::all();
+        $accounts = Account::all();         
 
         if(!is_null($account)){ 
 
@@ -79,5 +134,6 @@ class AccountController extends Controller
             return redirect()->route('accounts')->with('status', 201);
         }            
 
-    } // store
+    } // store_api
+    
 }

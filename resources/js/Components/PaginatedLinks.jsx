@@ -7,7 +7,7 @@ import AffiliatesTable from '@/Pages/Affiliates/AffiliatesTable';
 import TicketTable from '@/Pages/Tickets/TicketsTable';
 
 
-export default function PaginatedLinks({ itemsPerPage, items, tableName, apitoken }) {
+export default function PaginatedLinks({ itemsPerPage, items, tableName, apitoken, listname, sub_accounts }) {
     const [itemOffset, setItemOffset] = useState(0);
 
     const endOffset = itemOffset + itemsPerPage;
@@ -38,11 +38,11 @@ export default function PaginatedLinks({ itemsPerPage, items, tableName, apitoke
             }
 
             {
-                tableName == 'account' && <AccountsTable accounts={currentItems} />
+                tableName == 'account' && <AccountsTable accounts={currentItems} listname={listname} />
             }
 
             {
-                tableName == 'customer' && <CustomerTable customers={currentItems} />
+                tableName == 'customer' && <CustomerTable customers={currentItems} sub_accounts={sub_accounts} />
             }
 
             {

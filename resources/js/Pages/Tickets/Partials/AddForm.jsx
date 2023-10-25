@@ -160,6 +160,7 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                             id="user_id"
                             className="mt-1 block w-full"
                             options={optionsCustomers}
+                            select_text="Users"
                             name="user_id"
                             onChange={customersHandleChange}
                         />
@@ -172,6 +173,7 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                             id="ticket_source"
                             className="mt-1 block w-full"
                             options={optionsTicketSource}
+                            select_text="Ticket Source"
                             name="ticket_source"
                             onChange={ticketSourceHandleChange}
                         />
@@ -184,6 +186,7 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                             id="topic"
                             className="mt-1 block w-full"
                             options={optionsTopic}
+                            select_text="Topic"
                             name="topic"
                             onChange={topicHandleChange}
                         />
@@ -210,6 +213,7 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                             id="level_of_importance"
                             className="mt-1 block w-full"
                             options={optionsLevelImp}
+                            select_text="Level"
                             name="level_of_importance"
                             onChange={levelImpHandleChange}
                         />
