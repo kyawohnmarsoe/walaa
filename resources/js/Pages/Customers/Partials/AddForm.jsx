@@ -8,18 +8,18 @@ import TextInput from '@/Components/TextInput';
 import Textarea from '@/Components/Textarea';
 import SelectOption from '@/Components/SelectOption';
 
-export default function AddForm({ className = '', accounts, affiliates, apitoken }) {
+export default function AddForm({ className = '', accounts, sub_accounts, affiliates, apitoken }) {
 
     const { processing, recentlySuccessful } = useForm();
 
     const [values, setValues] = useState({
         account_index: '',
+        sub_account_id: '',
         affiliate_index: '',
         deposit_password: '',
         first_name: '',
         last_name: '',
         customer_user_id: '',
-        customer_user_index: '',
         mobile_number: '',
         mobile_number2: '',
         address: '',
@@ -35,6 +35,7 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
 
     const [optionsAffiliates, setOptionsAffiliates] = useState([])
     const [optionsAccounts, setOptionsAccounts] = useState([])
+    const [optionsSubAccounts, setOptionsSubAccounts] = useState([])
 
     const [showAffiliateValue, setShowAffiliateValue] = useState(false)
     const [showAccountValue, setShowAccountValue] = useState(false)
@@ -77,17 +78,6 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
     useEffect(() => {
         getAffiliates()
         getAccounts()
-        // console.log(apitoken);
-        // let return_data = JSON.parse(apitoken).original;
-        // let time_diff = return_data.current_time - return_data.session_current_time;
-
-        // console.log(return_data.session_api_token);
-        // console.log(return_data.current_time);
-        // console.log(return_data.session_current_time);
-
-        // console.log(time_diff);
-        // console.log(time_diff + '>' + return_data.maxIdleTime);
-
     }, [])
 
     function affiliatesHandleChange(e) {
@@ -151,6 +141,29 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
                 }
             })
         }
+
+        let optionsSubAccountsArr = [];
+        {
+            sub_accounts.filter((subacc) => {
+                if (subacc.account_index == value) {
+                    optionsSubAccountsArr.push(
+                        {
+                            "index": subacc.id,
+                            "name": subacc.account_name
+                        }
+                    );
+                }
+            });
+        }
+        setOptionsSubAccounts(optionsSubAccountsArr)
+    }
+
+    function subAccountsHandleChange(e) {
+        const value = e.target.value
+        setValues(values => ({
+            ...values,
+            'sub_account_id': value,
+        }))
     }
 
     function handleChange(e) {
@@ -240,11 +253,11 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
                 <div className='grid grid-cols-3 gap-4'>
                     <div>
                         <InputLabel htmlFor="affiliate_index" value="Affiliates" />
-
                         <SelectOption
                             id="affiliate_index"
                             className="mt-1 block w-full"
                             options={optionsAffiliates}
+                            select_text="Affiliates"
                             name="affiliate_index"
                             onChange={affiliatesHandleChange}
                         />
@@ -252,19 +265,30 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
 
                     <div>
                         <InputLabel htmlFor="account_index" value="Accounts" />
-
                         <SelectOption
                             id="account_index"
                             className="mt-1 block w-full"
                             options={optionsAccounts}
+                            select_text="Main Accounts"
                             name="account_index"
                             onChange={accountsHandleChange}
                         />
                     </div>
 
                     <div>
-                        <InputLabel htmlFor="first_name" value="Deposit Password" />
+                        <InputLabel htmlFor="account_index" value="Sub Accounts" />
+                        <SelectOption
+                            id="sub_account_id"
+                            className="mt-1 block w-full"
+                            options={optionsSubAccounts}
+                            select_text="Sub Accounts"
+                            name="sub_account_id"
+                            onChange={subAccountsHandleChange}
+                        />
+                    </div>
 
+                    <div>
+                        <InputLabel htmlFor="first_name" value="Deposit Password" />
                         <TextInput
                             id="deposit_password"
                             name="deposit_password"
@@ -278,7 +302,6 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
 
                     <div>
                         <InputLabel htmlFor="first_name" value="First Name" />
-
                         <TextInput
                             id="first_name"
                             name="first_name"
@@ -292,7 +315,6 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
 
                     <div>
                         <InputLabel htmlFor="last_name" value="Last Name" />
-
                         <TextInput
                             id="last_name"
                             name="last_name"
@@ -306,7 +328,6 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
 
                     <div>
                         <InputLabel htmlFor="email" value="Email" />
-
                         <TextInput
                             id="email"
                             name="email"
@@ -320,7 +341,6 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
 
                     <div>
                         <InputLabel htmlFor="mobile_number" value="Mobile Number" />
-
                         <TextInput
                             id="mobile_number"
                             name="mobile_number"
@@ -334,7 +354,6 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
 
                     <div>
                         <InputLabel htmlFor="company" value="Company" />
-
                         <TextInput
                             id="company"
                             name="company"
@@ -348,7 +367,6 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
 
                     <div>
                         <InputLabel htmlFor="display_name" value="Display Name" />
-
                         <TextInput
                             id="display_name"
                             name="display_name"
@@ -362,7 +380,6 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
 
                     <div>
                         <InputLabel htmlFor="address" value="Address" />
-
                         <TextInput
                             id="address"
                             name="address"
@@ -376,7 +393,6 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
 
                     <div>
                         <InputLabel htmlFor="city" value="City" />
-
                         <TextInput
                             id="city"
                             name="city"
@@ -390,7 +406,6 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
 
                     <div>
                         <InputLabel htmlFor="state" value="State" />
-
                         <TextInput
                             id="state"
                             name="state"
@@ -404,7 +419,6 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
 
                     <div>
                         <InputLabel htmlFor="customer_user_id" value="User Id" />
-
                         <TextInput
                             id="customer_user_id"
                             name="customer_user_id"
@@ -417,22 +431,7 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
                     </div>
 
                     <div>
-                        <InputLabel htmlFor="customer_user_index" value="User Index" />
-
-                        <TextInput
-                            id="customer_user_index"
-                            name="customer_user_index"
-                            value={values.customer_user_index}
-                            onChange={handleChange}
-                            type="text"
-                            className="mt-1 block w-full"
-                            autoComplete="off"
-                        />
-                    </div>
-
-                    <div>
                         <InputLabel htmlFor="customer_user_notes" value="User Notes" />
-
                         <Textarea
                             id="customer_user_notes"
                             name="customer_user_notes"
@@ -447,7 +446,6 @@ export default function AddForm({ className = '', accounts, affiliates, apitoken
 
                 <div className="flex items-center gap-4">
                     <PrimaryButton disabled={processing} type="submit">Add</PrimaryButton>
-
                     <Transition
                         show={recentlySuccessful}
                         enter="transition ease-in-out"

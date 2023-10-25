@@ -13,6 +13,7 @@ export default function Customers({
     show_data,
     affiliates,
     accounts,
+    sub_accounts,
     apitoken,
 }) {
 
@@ -95,9 +96,16 @@ export default function Customers({
                     }
 
                     {flash.message &&
+                        <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4" role="alert">
+                            {/* <p className="font-bold">Success</p> */}
+                            <p>{flash.message}</p>
+                        </div>
+                    }
+
+                    {flash.error_message &&
                         <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
                             <p className="font-bold">Warning</p>
-                            <p>{flash.message}</p>
+                            <p>{flash.error_message}</p>
                         </div>
                     }
 
@@ -128,10 +136,10 @@ export default function Customers({
 
                             {
                                 search_val.length > 1 ?
-                                    <PaginatedLinks itemsPerPage={10} items={filter_res} tableName="customer" />
+                                    <PaginatedLinks itemsPerPage={10} items={filter_res} tableName="customer" sub_accounts={sub_accounts} />
                                     :
                                     customers.length > 0 &&
-                                    <PaginatedLinks itemsPerPage={10} items={customers} tableName="customer" />
+                                    <PaginatedLinks itemsPerPage={10} items={customers} tableName="customer" sub_accounts={sub_accounts} />
                             }
                         </div>
                     }
@@ -142,6 +150,7 @@ export default function Customers({
                             <AddForm
                                 className="p-4"
                                 accounts={accounts}
+                                sub_accounts={sub_accounts}
                                 affiliates={affiliates}
                                 apitoken={apitoken}
                             />

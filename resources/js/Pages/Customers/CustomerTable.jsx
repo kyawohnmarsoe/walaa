@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 
-export default function CustomerTable({ customers }) {
+export default function CustomerTable({ customers, sub_accounts }) {
     const [loading, setLoading] = useState(false);
 
     const onDeleteClick = cus => {
@@ -12,7 +12,7 @@ export default function CustomerTable({ customers }) {
     }
 
     useEffect(() => {
-        console.log(customers);
+        console.log(sub_accounts);
 
     }, [])
 
@@ -31,6 +31,7 @@ export default function CustomerTable({ customers }) {
                         <th>Account Name</th>
                         <th>Account Status</th>
                         <th>Account Package Type</th>
+                        <th>Sub Account Name</th>
                         {/* <th>Action</th> */}
                     </tr>
                 </thead>
@@ -57,6 +58,15 @@ export default function CustomerTable({ customers }) {
                                 <td>{cus.account_name}</td>
                                 <td>{cus.account_status}</td>
                                 <td>{cus.account_package_type}</td>
+                                <td>
+                                    {
+                                        sub_accounts.filter(subacc => subacc.id == cus.sub_account_id)
+                                            .map(filteredRes => (
+                                                filteredRes.account_name
+                                            ))
+                                    }
+                                </td>
+
                                 {/* <td>
                                     <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                         Edit
@@ -73,6 +83,6 @@ export default function CustomerTable({ customers }) {
                 }
 
             </table>
-        </div>
+        </div >
     )
 }

@@ -38,8 +38,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/user/{id}', [UserController::class, 'getUserDetails'])->name('user.details');
     Route::post('/user/update', [UserController::class, 'updateUserDetails'])->name('user.update');
    
-    Route::get('/accounts', [AccountController::class, 'index'])->name('accounts');
-    Route::get('/accounts/store', [AccountController::class, 'store'])->name('accounts.store');
+    Route::get('/accounts', [AccountController::class, 'index'])->name('accounts'); 
+    Route::get('/accounts/apilist', [AccountController::class, 'api_list'])->name('accounts.apilist');   
+    Route::get('/accounts/create', [AccountController::class, 'create'])->name('accounts.create');
+    Route::post('/accounts/insert', [AccountController::class, 'insert'])->name('accounts.insert');
+    Route::get('/accounts/store', [AccountController::class, 'store_api'])->name('accounts.store_api');
+    Route::get('/accounts/{id}', [AccountController::class, 'edit'])->name('accounts.edit');
+    Route::post('/accounts/{id}', [AccountController::class, 'update'])->name('accounts.update');    
+    Route::delete('/accounts/{id}', [AccountController::class, 'destroy'])->name('accounts.destroy');   
 
     Route::get('/affiliates', [AffiliateController::class, 'index'])->name('affiliates');
     Route::get('/affiliates/store', [AffiliateController::class, 'store'])->name('affiliates.store');
@@ -51,6 +57,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/users/management', [UserController::class, 'showAllUsers'])->name('users.management');
 
     Route::get('/tickets', [TicketController::class, 'index'])->name('tickets');
+    Route::get('/tickets/create', [TicketController::class, 'create'])->name('tickets.create');
+    Route::post('/tickets/store', [TicketController::class, 'store'])->name('tickets.store');
 
     Route::get('/log/error', [LogController::class, 'getErrorLog'])->name('log.error');
     Route::get('/log/audit', [LogController::class, 'getAuditLog'])->name('log.audit');

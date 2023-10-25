@@ -8,6 +8,7 @@ use Inertia\Inertia;
 use App\Models\Customer;
 use App\Models\Affiliate;
 use App\Models\Account;
+use App\Models\Sub_account;
 use App\Http\Requests\StoreCustomerRequest;
 
 class CustomerController extends Controller
@@ -24,6 +25,7 @@ class CustomerController extends Controller
 
         return Inertia::render('Customers/Customers', [
             'customers' => $customers,
+            'sub_accounts' => Sub_account::all(),
             'show_data' => 'list',
             'apitoken' => $token,            
         ]);
@@ -36,6 +38,7 @@ class CustomerController extends Controller
         return Inertia::render('Customers/Customers', [
             'show_data'  => 'add_form',
             'accounts' => Account::all(),
+            'sub_accounts' => Sub_account::all(),
             'affiliates' => Affiliate::all(),
             // 'apitoken' => $session_data,
             'apitoken' => $token,
@@ -82,20 +85,24 @@ class CustomerController extends Controller
                 if ($new_user_response['error']['validationErrors']) {
                     $error_msg = $new_user_response['error']['validationErrors'][0]['validationMessage'];
                 }               
-                return redirect()->route('customers.create')->with('message', $error_msg);  
+                return redirect()->route('customers.create')->with('error_message', $error_msg);  
             } else {
 
                 if($new_user_response['isSuccessful'] === true) {
-                    // Just for Testing insert into db
-                    // $data = $request->validated();
-                    // $customer = Customer::create($data);
+                    // Just for Testing insert into db   
+                    $sub_account_id = 0;
+                    if ($request->sub_account_id != '') {
+                        $sub_account_id = $request->sub_account_id;
+                    }  
+                    $customer_user_index = $new_user_response['value'];          
                     Customer::insert([
-                        'account_index'     => $request->accountIndex,
+                        'account_index'     => $request->account_index,
+                        'sub_account_id'     => $sub_account_id,
                         'affiliate_index'   => $request->affiliate_index, 
                         'first_name'        => $request->first_name,
                         'last_name'         => $request->last_name,
                         'customer_user_id'  => $request->customer_user_id,
-                        'customer_user_index'   => $new_user_response['value'],
+                        'customer_user_index'   => $customer_user_index,
                         'mobile_number'         => $request->mobile_number,
                         'mobile_number2'        => '',
                         'address'               => $request->address,
@@ -111,16 +118,14 @@ class CustomerController extends Controller
                         'account_status'       => 'Active',
                         'account_package_type' => 'MonthlyPrepaid'                 
                     ]);
-                    
                     return redirect()->route('customers')->with('message', $new_user_response['responseMessage']);
                 } else {
                     return redirect()->route('customers.create')->with(
-                        'message', $new_user_response['error']
+                        'error_message', $new_user_response['error']
                     );
-                }             
-                
+                }           
             }           
-        }
+        } // new_user_response
         
         return redirect()->route('customers')->with('status', 422);
        

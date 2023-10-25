@@ -2,15 +2,23 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, usePage, router } from '@inertiajs/react';
 import PrimaryButton from '@/Components/PrimaryButton';
 import PaginatedLinks from '@/Components/PaginatedLinks';
+import AddForm from './Partials/AddForm';
 
 export default function Tickets({
     auth,
     mustVerifyEmail,
     tickets,
     show_data,
+    customers,
+    apitoken,
+    errors
 }) {
 
     const { flash } = usePage().props
+
+    const addTicketClick = () => {
+        router.get('/tickets/create')
+    }
 
     return (
         <AuthenticatedLayout
@@ -53,8 +61,23 @@ export default function Tickets({
 
                             {
                                 tickets.length > 0 &&
-                                <PaginatedLinks itemsPerPage={4} items={tickets} tableName="ticket" />
+                                <PaginatedLinks
+                                    itemsPerPage={4}
+                                    items={tickets}
+                                    tableName="ticket" />
                             }
+                        </div>
+                    }
+
+                    {
+                        show_data == 'add_form' &&
+                        <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+                            <AddForm
+                                className="p-4"
+                                customers={customers}
+                                apitoken={apitoken}
+                                errors={errors}
+                            />
                         </div>
                     }
 

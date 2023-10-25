@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useRef } from 'react';
 
-export default forwardRef(function SelectOption({ className = '', options, ...props }, ref) {
+export default forwardRef(function SelectOption({ className = '', options, select_text = ' an option', ...props }, ref) {
 
     return (
         <select
@@ -13,7 +13,7 @@ export default forwardRef(function SelectOption({ className = '', options, ...pr
         >
 
             <option value="">
-                Select an option
+                Select {select_text}
             </option>
             {options.map((option) => (
                 <option
@@ -24,6 +24,6 @@ export default forwardRef(function SelectOption({ className = '', options, ...pr
                 </option>
             ))}
 
-        </select>
+        </select >
     );
 });
