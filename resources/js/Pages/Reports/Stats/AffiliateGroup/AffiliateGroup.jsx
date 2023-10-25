@@ -32,9 +32,9 @@ export default function AffiliateGroup ({ className = '', auth, apitoken })
     return (
         <AuthenticatedLayout
             user={ auth.user }
-            header={ <h2 className="font-semibold text-xl text-gray-800 leading-tight">Online Users</h2> }
+            header={ <h2 className="font-semibold text-xl text-gray-800 leading-tight">Affilate Group Report</h2> }
         >
-            <Head title="Online Users" />
+            <Head title="Affilate Group Report" />
 
             { loading && <Loading className="mt-12 " /> }
             { errMessage && <Alert className="mt-12" msg={ errMessage } /> }

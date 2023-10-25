@@ -47,5 +47,13 @@ class ReportController extends Controller
     ]);
     }
 
+     public function getTestUsage(){
+        $token = $this->getSessionToken();  
+        return Inertia::render('Reports/Stats/TestUsage/TestUsage',[
+            'apitoken' => $token,
+            'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get()
+    ]);
+    }
+
 
 }
