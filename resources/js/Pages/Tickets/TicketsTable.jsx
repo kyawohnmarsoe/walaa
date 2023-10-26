@@ -81,7 +81,7 @@ export default function TicketTable({ tickets }) {
                     <tbody>
                         {tickets && tickets.map(dt => (
                             <tr key={dt.id}>
-                                <td>{dt.user_id}</td>
+                                <td>{dt.customer_user_id}</td>
                                 <td>{dt.ticket_number}</td>
                                 <td>{ticketSource[0][dt.ticket_source]}</td>
                                 <td>{topicData[0][dt.topic]}</td>
