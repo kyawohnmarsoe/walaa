@@ -15,4 +15,8 @@
     border: 0px
 }
 
+.stats:hover{
+    background-color: rgba(232, 230, 230, 0.424);
+}
+
 /* NavBar */

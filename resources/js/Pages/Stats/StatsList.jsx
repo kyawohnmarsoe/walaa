@@ -16,9 +16,9 @@ export default function StatsList ({ apitoken })
     "Online": `users/management?filterValue=Online`,
     "Offline": `users/management?filterValue=Offline`,
     "DidntPayUsers": `users/management?filterValue=DidntPayUsers`,
-    "PrepaidNeeded": `users/management?filterValue=PrepaidNeeded`,
+    "PrepaidNeeded": `prepaid/needed`,
     "ManualSuspendedUsers": `users/management?filterValue=ManualSuspendedUsers`,
-    "ActivatedThisMonth": `users/management?filterValue=ActivatedThisMonth`,
+    "ActivatedThisMonth": ``,
   }
 
   const instance = axios.create({
