@@ -1,2 +1,5 @@
 emerald
 sky
+
+hover
+rgba(232, 230, 230, 0.424);
