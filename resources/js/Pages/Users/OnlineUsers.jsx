@@ -11,7 +11,7 @@ export default function OnlineUsers ({ auth, apitoken, affiliates })
 {
   const [onlineUsersData, setOnlineUsersData] = useState({ users: [], total: 0, errMessage: '', loading: true })
   const { users, total, errMessage, loading } = onlineUsersData
-  const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10, Orderby: 'OnlineTime' })
+  const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10, Orderby: 'userId' })
 
   // console.log(filterObj)
 

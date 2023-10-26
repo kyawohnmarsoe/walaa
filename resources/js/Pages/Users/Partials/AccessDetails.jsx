@@ -7,17 +7,17 @@ import { useEffect, useState } from 'react';
 
 export default function AccessDetails ({ apitoken, user, className = '' })
 {
-    const [userData, setUserData] = useState({ errMessage: '', loading: true })
-    const { errMessage, loading } = userData
+    const [userData, setUserData] = useState({ value: '', errMessage: '', loading: true })
+    const { value, errMessage, loading } = userData
 
     const { data, setData, post, processing, errors, reset } = useForm({
-        userId: user?.userObject?.userId,
-        displayName: user?.userObject?.displayName,
-        callerMAC: user?.onlineSession?.callerMAC,
-        affiliateName: user?.affiliateName,
-        userNotes: user?.userNotes,
-        router: user?.router,
-        userActive: user?.userActive
+        userId: user?.userObject?.userId || '',
+        displayName: user?.userObject?.displayName || '',
+        callerMAC: user?.onlineSession?.callerMAC || '',
+        affiliateName: user?.affiliateName || '',
+        userNotes: user?.userNotes || '',
+        router: user?.routerIp || '',
+        userActive: user?.userActive || false
     });
 
     const instance = axios.create({
@@ -29,16 +29,18 @@ export default function AccessDetails ({ apitoken, user, className = '' })
     {
         e.preventDefault();
 
-        instance.post(`/user/${ data.userId }`, { ...data })
+        instance.post(`/user/${ user.userIndex }`, { ...data })
             .then(res =>
             {
-                setUserData({ errMessage: '', loading: false })
-                // setUserData({ user: null, errMessage: '', loading: false })
+                res.data.value ? setUserData({ errMessage: '', loading: false, value: res.data.value }) :
+                    setUserData({ errMessage: res.data.error.detailMessage, loading: false, value: '' })
+
                 console.log('response' + res.data.value)
+
             })
             .catch(err =>
             {
-                setUserData({ errMessage: err.message, loading: false })
+                setUserData({ errMessage: err.message, loading: false, value: '' })
                 console.log('error' + err)
             })
         // post(route('user.update'));
@@ -169,6 +171,10 @@ export default function AccessDetails ({ apitoken, user, className = '' })
 
                             <div className="flex items-center gap-4">
                                 <PrimaryButton disabled={ processing }>Update</PrimaryButton>
+
+                                { value && <span className='text-success'>Update Success</span> }
+
+                                { errMessage && <span className='text-red-500'>{ errMessage }</span> }
 
                                 {/* <Transition
                                         show={recentlySuccessful}

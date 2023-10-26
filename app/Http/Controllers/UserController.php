@@ -35,7 +35,7 @@ class UserController extends Controller
         $token = $this->getSessionToken();      
         return Inertia::render('Users/OnlineUsers',[
             'apitoken' => $token, 
-            'affiliates' => Affiliate::all()
+            'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get()
         ]);
     }
 
@@ -44,7 +44,7 @@ class UserController extends Controller
         $token = $this->getSessionToken();      
         return Inertia::render('Customers/Management',[
             'apitoken' => $token, 
-            'affiliates' => Affiliate::all(),
+            'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get(),
             'accountTypes' => Account::all()
         ]);
     }

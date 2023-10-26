@@ -5,8 +5,9 @@ import TextInput from '@/Components/TextInput';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
 import Modal from '@/Components/DaisyUI/Modal';
+import { useEffect, useState } from 'react';
 
-export default function UserStatus ({ user, className = '' })
+export default function UserStatus ({ user, className = '', apitoken })
 {
     // const user = usePage().props.auth.user;
 
@@ -14,6 +15,23 @@ export default function UserStatus ({ user, className = '' })
     //     name: user.name,
     //     email: user.email,
     // });
+
+    const [pass, setPass] = useState('')
+
+    const instance = axios.create({
+        baseURL: 'https://rapi.earthlink.iq/api/reseller',
+        headers: { 'Authorization': `Bearer ${ apitoken }` }
+    });
+
+    useEffect(() =>
+    {
+        instance.post('user/showpassword', { userindex: user?.userIndex, userid: user?.userObject?.userId })
+            .then(res =>
+            {
+                console.log(res.value)
+            })
+            .catch(res => { console.log(err.message) })
+    }, [])
 
     const submit = (e) =>
     {
@@ -34,6 +52,7 @@ export default function UserStatus ({ user, className = '' })
         // alert('callModal')
         document.getElementById(id).showModal()
     }
+
 
     return (
         <div className="max-w-8xl mx-auto sm:px-6 lg:px-4">
@@ -56,10 +75,8 @@ export default function UserStatus ({ user, className = '' })
                                     <TextInput
                                         id="userName"
                                         className="mt-1 block w-full "
-                                        value={ user?.userObject?.userId }
-                                        required
-                                        isFocused
-                                        autoComplete="userName"
+                                        placeholder={ user?.userObject?.userId }
+                                        readOnly={ true }
                                     />
 
                                     {/* <InputError className="mt-2" message={errors.name} /> */ }
@@ -71,29 +88,14 @@ export default function UserStatus ({ user, className = '' })
                                     <TextInput
                                         id="password"
                                         className="mt-1 block w-full "
-                                        value={ user?.userObject?.userId }
-                                        required
-                                        isFocused
-                                        autoComplete="password"
+                                        value={ pass }
+                                        readOnly={ true }
                                     />
 
                                     {/* <InputError className="mt-2" message={errors.name} /> */ }
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-4">
-                                {/* <PrimaryButton disabled={processing}>Update</PrimaryButton> */ }
-
-                                {/* <Transition
-                        show={recentlySuccessful}
-                        enter="transition ease-in-out"
-                        enterFrom="opacity-0"
-                        leave="transition ease-in-out"
-                        leaveTo="opacity-0"
-                    >
-                        <p className="text-sm text-gray-600">Saved.</p>
-                    </Transition> */}
-                            </div>
                         </form>
                     </Modal>
                     <Modal id={ modalIds.passwordChange } title="Change Password">
