@@ -10,7 +10,7 @@ export default function PageSize ({ className, filterObj, setFilterObj })
 
     return (
         <div className="pagination-wrapper">
-            <InputLabel htmlFor="sessionType" value="Page Size" /> :
+            <InputLabel htmlFor="sessionType" value="Page Size" className="pl-3" /> :
             <select className={ className }
                 value={ filterObj.RowCount }
                 onChange={ (e) => onChangeHandler(e) }

@@ -3,8 +3,9 @@ import { Head, usePage, router } from '@inertiajs/react';
 import PrimaryButton from '@/Components/PrimaryButton';
 import PaginatedLinks from '@/Components/PaginatedLinks';
 import AddForm from './Partials/AddForm';
+import { useState } from 'react'
 
-export default function Tickets({
+export default function Tickets ({
     auth,
     mustVerifyEmail,
     tickets,
@@ -12,17 +13,20 @@ export default function Tickets({
     customers,
     apitoken,
     errors
-}) {
+})
+{
+    const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10 })
 
     const { flash } = usePage().props
 
-    const addTicketClick = () => {
+    const addTicketClick = () =>
+    {
         router.get('/tickets/create')
     }
 
     return (
         <AuthenticatedLayout
-            user={auth.user}
+            user={ auth.user }
             header={
                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">Tickets</h2>
             }
@@ -32,39 +36,41 @@ export default function Tickets({
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
-                    {flash.status == 422 &&
+                    { flash.status == 422 &&
                         <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
                             <p className="font-bold">Warning</p>
                             <p>Something went wrong!</p>
                         </div>
                     }
 
-                    {flash.status == 201 &&
+                    { flash.status == 201 &&
                         <div className="alert alert-success">
                             Data created successfully.
                         </div>
                     }
 
-                    {flash.message &&
+                    { flash.message &&
                         <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
                             <p className="font-bold">Warning</p>
-                            <p>{flash.message}</p>
+                            <p>{ flash.message }</p>
                         </div>
                     }
 
                     {
                         show_data == 'list' &&
                         <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                            <PrimaryButton disabled='' onClick={ev => addTicketClick()}>
+                            <PrimaryButton disabled='' onClick={ ev => addTicketClick() }>
                                 Add Ticket
                             </PrimaryButton>
 
                             {
                                 tickets.length > 0 &&
                                 <PaginatedLinks
-                                    itemsPerPage={4}
-                                    items={tickets}
-                                    tableName="ticket" />
+                                    itemsPerPage={ filterObj.RowCount }
+                                    items={ tickets }
+                                    tableName="ticket"
+                                    setFilterObj={ setFilterObj }
+                                    filterObj={ filterObj } />
                             }
                         </div>
                     }
@@ -74,9 +80,9 @@ export default function Tickets({
                         <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                             <AddForm
                                 className="p-4"
-                                customers={customers}
-                                apitoken={apitoken}
-                                errors={errors}
+                                customers={ customers }
+                                apitoken={ apitoken }
+                                errors={ errors }
                             />
                         </div>
                     }

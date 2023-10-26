@@ -11,8 +11,23 @@ export default function AllUsersTableRow ({ user })
             <input type="checkbox" className="checkbox" />
           </label>
         </th> */}
-      <td></td>
-      {/* <td>{user.userIndex && user.userIndex}</td> */ }
+
+      <td>{ user?.userIndex }</td>
+      <td>
+
+        <button className="btn btn-xs btn-outline btn-block btn-info mb-1">Refill</button>
+
+        <br />
+
+        <button className="btn btn-xs btn-outline btn-block btn-success mb-1">Change</button>
+
+        <br />
+
+        <button className="btn btn-xs btn-outline btn-block btn-warning">Extend</button>
+
+
+        {/* <span className="badge badge-ghost badge-sm">Desktop Support Technician</span> */ }
+      </td>
 
       <td>
         <div className="flex items-center space-x-3">
@@ -29,7 +44,7 @@ export default function AllUsersTableRow ({ user })
         </div>
       </td>
 
-      <td> { user?.customer?.customerFullName }</td>
+      <td> { user?.displayName }</td>
 
       <td>
         <strong>Last Refill</strong> : { user?.lastRefill }
@@ -61,7 +76,7 @@ export default function AllUsersTableRow ({ user })
         <br />
         <strong>MAC</strong> : { user?.callerID }
         <br />
-        <strong>IP</strong> : { user?.userIP }
+        <strong>IP</strong> : <a href={ `http://${ user?.userIP }` } className="text-sky-700" target="_blank">{ user?.userIP }</a>
         <br />
         <strong>Lock MAC</strong> : { +user?.lockMac }
       </td>

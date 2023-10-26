@@ -4,6 +4,9 @@ import PrepaidNeededTableRow from "./PrepaidNeededTableRow";
 
 export default function PrepaidNeededTable ({ prepaid })
 {
+    const totalNeeded = prepaid.map((p) => p.needed).reduce((acc, current) => acc + current, 0);
+    const totalCost = prepaid.map((p) => p.needed * p.accountCost).reduce((acc, current) => acc + current, 0);
+
     return (
         <div className="overflow-x-auto">
             {/* <Pagination /> */ }
@@ -11,8 +14,7 @@ export default function PrepaidNeededTable ({ prepaid })
                 {/* head */ }
                 <thead>
                     <tr className='bg-emerald-300'>
-                        <th>#</th>
-                        {/* <th>User Index</th> */ }
+                        <th>#Index</th>
                         <th>Account Type</th>
                         <th>Expire Users Count</th>
                         <th>Available Cards</th>
@@ -34,15 +36,13 @@ export default function PrepaidNeededTable ({ prepaid })
                 {/* foot */ }
                 <tfoot>
                     <tr className='bg-emerald-300'>
-                        <th>#</th>
                         <th></th>
                         <th></th>
                         <th></th>
-                        <th>Needed count</th>
                         <th></th>
-                        <th>Total </th>
-
-
+                        <th>{ totalNeeded }</th>
+                        <th></th>
+                        <th>Total ≈ { totalCost.toLocaleString() } IQD</th>
                     </tr>
                 </tfoot>
 

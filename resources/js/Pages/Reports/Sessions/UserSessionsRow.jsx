@@ -5,7 +5,7 @@ export default function UserSessionsTableRow ({ ses })
     return (
         <tr>
 
-            <td></td>
+            <td>{ ses?.userIndex }</td>
 
             <td>
                 <div className="flex items-center space-x-3">

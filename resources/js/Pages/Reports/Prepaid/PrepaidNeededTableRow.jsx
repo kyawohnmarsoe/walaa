@@ -5,7 +5,7 @@ export default function PrepaidNeededTableRow ({ pre })
     return (
         <tr>
 
-            <td></td>
+            <td>{ pre?.accountIndex }</td>
 
             <td>
                 <div className="flex items-center space-x-3">

@@ -13,7 +13,7 @@ class AffiliateController extends Controller
     {
         $token = $this->getSessionToken();
         return Inertia::render('Affiliates/Affiliates', [
-            'affiliates' => Affiliate::all(),
+            'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get(),
             'apitoken' => $token
         ]);
     } // index    
