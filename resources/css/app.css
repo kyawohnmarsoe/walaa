@@ -10,6 +10,10 @@
     width: 100%;
     display: block;
 }
+.autoselect [type='text']:focus {
+    --tw-ring-shadow : none !important;
+    border: 0px
+}
 
 .stats:hover{
     background-color: rgba(232, 230, 230, 0.424);

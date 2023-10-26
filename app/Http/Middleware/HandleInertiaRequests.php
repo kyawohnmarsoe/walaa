@@ -40,10 +40,14 @@ class HandleInertiaRequests extends Middleware
                 'location' => $request->url(),
             ],
             'flash' => [
-                'message' => fn () => $request->session()->get('message'),
+                'message'       => fn () => $request->session()->get('message'),
                 'error_message' => fn () => $request->session()->get('error_message'),
-                'status' => fn () => $request->session()->get('status'),
+                'status'        => fn () => $request->session()->get('status'),
             ],
+            'ticket_source' => config('constants.ticket_source'),
+            'topic'         => config('constants.topic'),
+            'level_of_importance' => config('constants.level_of_importance'),
+            
         ];
     }
 }

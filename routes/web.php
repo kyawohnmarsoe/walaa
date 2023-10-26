@@ -59,6 +59,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/tickets', [TicketController::class, 'index'])->name('tickets');
     Route::get('/tickets/create', [TicketController::class, 'create'])->name('tickets.create');
     Route::post('/tickets/store', [TicketController::class, 'store'])->name('tickets.store');
+    Route::get('/tickets/{id}', [TicketController::class, 'edit'])->name('tickets.edit');
+    Route::post('/tickets/{id}', [TicketController::class, 'update'])->name('tickets.update');    
+    Route::delete('/tickets/{id}', [TicketController::class, 'destroy'])->name('tickets.destroy');
 
     Route::get('/log/error', [LogController::class, 'getErrorLog'])->name('log.error');
     Route::get('/log/audit', [LogController::class, 'getAuditLog'])->name('log.audit');

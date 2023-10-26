@@ -7,6 +7,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import Textarea from '@/Components/Textarea';
 import SelectOption from '@/Components/SelectOption';
+import NavLink from '@/Components/NavLink';
 
 export default function AddForm({ className = '', accounts, sub_accounts, affiliates, apitoken }) {
 
@@ -241,6 +242,14 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
 
     return (
         <section className={className}>
+            <div className='flex items-center justify-end gap-4 p-2'>
+                <NavLink className='border-b-2 border-sky-700 text-gray-900 focus:border-sky-700' href={route('customers')}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
+                    </svg>
+                    Users List
+                </NavLink>
+            </div>
             <header>
                 <h2 className="text-lg font-medium text-sky-600">Add User</h2>
             </header>

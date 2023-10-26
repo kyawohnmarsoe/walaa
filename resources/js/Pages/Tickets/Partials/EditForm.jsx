@@ -7,30 +7,25 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import Textarea from '@/Components/Textarea';
 import SelectOption from '@/Components/SelectOption';
-import InputError from '@/Components/InputError';
 import Select, { components } from "react-select";
 import NavLink from '@/Components/NavLink';
 
-export default function AddForm({ className = '', customers, apitoken, errors }) {
+export default function EditForm({ className = '', ticket, customers }) {
 
     const { processing, recentlySuccessful } = useForm();
 
-
-    const Input = (props) => {
-        const { autoComplete = props.autoComplete } = props.selectProps;
-        return <components.Input {...props} autoComplete={autoComplete} />;
-    };
-
     const [values, setValues] = useState({
-        user_id: '',
-        ticket_source: '',
-        topic: '',
-        ticket_address: '',
-        level_of_importance: '',
-        ticket_number: ''
+        user_id: ticket.user_id,
+        ticket_source: ticket.ticket_source,
+        topic: ticket.topic,
+        ticket_address: ticket.ticket_address,
+        level_of_importance: ticket.level_of_importance,
+        ticket_number: ticket.ticket_number
+
     });
 
-    const [optionsCustomers, setOptionsCustomers] = useState([])
+    const [optionsCustomers, setoptionsCustomers] = useState([])
+    const [selectedOpt, setSelectedOpt] = useState('')
 
     const optionsTicketSource = [
         {
@@ -87,6 +82,11 @@ export default function AddForm({ className = '', customers, apitoken, errors })
         }
     ];
 
+    const Input = (props) => {
+        const { autoComplete = props.autoComplete } = props.selectProps;
+        return <components.Input {...props} autoComplete={autoComplete} />;
+    };
+
     const getCustomers = () => {
         let optionsCustomersArr = [];
         {
@@ -99,22 +99,33 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                 );
             });
         }
-        setOptionsCustomers(optionsCustomersArr)
+        setoptionsCustomers(optionsCustomersArr)
+    }
+
+    const getSelectedCustomer = (selected_id) => {
+        {
+            let selectedRes = customers.filter(cus => selected_id == cus.id)
+            // console.log("selected user ", selectedRes[0]['customer_user_id'])
+            setSelectedOpt(selectedRes[0]['customer_user_id'])
+        }
     }
 
     useEffect(() => {
         getCustomers()
-
+        getSelectedCustomer(ticket.user_id)
+        // console.log("old user value ", values.user_id)
     }, [])
 
     function customersHandleChange(e) {
         const value = e.value
-        // console.log(value);
         setValues(values => ({
             ...values,
             'user_id': value,
         }))
+        // console.log('onchange user value ', value)
+        getSelectedCustomer(value)
     }
+
     function ticketSourceHandleChange(e) {
         const value = e.target.value
         setValues(values => ({
@@ -148,7 +159,7 @@ export default function AddForm({ className = '', customers, apitoken, errors })
 
     function handleSubmit(e) {
         e.preventDefault()
-        router.post('/tickets/store', values)
+        router.post(`/tickets/${ticket.id}`, values)
     }
 
     return (
@@ -162,7 +173,7 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                 </NavLink>
             </div>
             <header>
-                <h2 className="text-lg font-medium text-sky-600">Add Ticket</h2>
+                <h2 className="text-lg font-medium text-sky-600">Edit Ticket</h2>
             </header>
 
             <form onSubmit={handleSubmit} className="mt-6 space-y-6 ">
@@ -170,6 +181,7 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                 <span className='font-bold text-emerald-700' id="deposit_msg"></span>
 
                 <div className='grid grid-cols-3 gap-4'>
+
                     <div>
                         <InputLabel htmlFor="user_id" value="Users" />
                         <Select
@@ -177,11 +189,11 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                             className="autoselect border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
                             components={{ Input }}
                             autoComplete="user_id"
+                            value={{ value: values.user_id, label: selectedOpt }}
                             options={optionsCustomers}
-                            onChange={customersHandleChange}
+                            onChange={(e) => customersHandleChange(e)}
                             noOptionsMessage={() => "No Users found..."}
                         />
-                        <InputError className="mt-2" message={errors.user_id} />
                     </div>
 
                     <div>
@@ -193,9 +205,8 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                             select_text="Ticket Source"
                             name="ticket_source"
                             onChange={ticketSourceHandleChange}
-
+                            value={values.ticket_source}
                         />
-                        <InputError className="mt-2" message={errors.ticket_source} />
                     </div>
 
                     <div>
@@ -207,8 +218,8 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                             select_text="Topic"
                             name="topic"
                             onChange={topicHandleChange}
+                            value={values.topic}
                         />
-                        <InputError className="mt-2" message={errors.topic} />
                     </div>
 
                     <div>
@@ -222,7 +233,6 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                             className="mt-1 block w-full"
                             minRows={5}
                         />
-                        <InputError className="mt-2" message={errors.ticket_address} />
                     </div>
 
                     <div>
@@ -234,8 +244,8 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                             select_text="Level"
                             name="level_of_importance"
                             onChange={levelImpHandleChange}
+                            value={values.level_of_importance}
                         />
-                        <InputError className="mt-2" message={errors.level_of_importance} />
                     </div>
 
                     <div>
@@ -249,12 +259,11 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                             className="mt-1 block w-full"
                             autoComplete="off"
                         />
-                        <InputError className="mt-2" message={errors.ticket_number} />
                     </div>
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <PrimaryButton disabled={processing} type="submit">Add</PrimaryButton>
+                    <PrimaryButton disabled={processing} type="submit">Update</PrimaryButton>
 
                     <Transition
                         show={recentlySuccessful}
@@ -263,7 +272,7 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                         leave="transition ease-in-out"
                         leaveTo="opacity-0"
                     >
-                        <p className="text-sm text-gray-600">Add</p>
+                        <p className="text-sm text-gray-600">Update</p>
                     </Transition>
                 </div>
             </form>
