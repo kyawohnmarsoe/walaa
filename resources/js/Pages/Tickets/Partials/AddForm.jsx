@@ -8,10 +8,17 @@ import TextInput from '@/Components/TextInput';
 import Textarea from '@/Components/Textarea';
 import SelectOption from '@/Components/SelectOption';
 import InputError from '@/Components/InputError';
+import Select, { components } from "react-select";
 
 export default function AddForm({ className = '', customers, apitoken, errors }) {
 
     const { processing, recentlySuccessful } = useForm();
+
+
+    const Input = (props) => {
+        const { autoComplete = props.autoComplete } = props.selectProps;
+        return <components.Input {...props} autoComplete={autoComplete} />;
+    };
 
     const [values, setValues] = useState({
         user_id: '',
@@ -23,6 +30,7 @@ export default function AddForm({ className = '', customers, apitoken, errors })
     });
 
     const [optionsCustomers, setOptionsCustomers] = useState([])
+
     const optionsTicketSource = [
         {
             "index": "ts_1",
@@ -84,8 +92,8 @@ export default function AddForm({ className = '', customers, apitoken, errors })
             customers.map((e) => {
                 optionsCustomersArr.push(
                     {
-                        "index": e.id,
-                        "name": e.customer_user_id
+                        "value": e.id,
+                        "label": e.customer_user_id
                     }
                 );
             });
@@ -99,7 +107,7 @@ export default function AddForm({ className = '', customers, apitoken, errors })
     }, [])
 
     function customersHandleChange(e) {
-        const value = e.target.value
+        const value = e.value
         // console.log(value);
         setValues(values => ({
             ...values,
@@ -153,15 +161,14 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                 <span className='font-bold text-emerald-700' id="deposit_msg"></span>
 
                 <div className='grid grid-cols-3 gap-4'>
-
                     <div>
-                        <InputLabel htmlFor="user_id" value="Users" />
-                        <SelectOption
-                            id="user_id"
-                            className="mt-1 block w-full"
-                            options={optionsCustomers}
-                            select_text="Users"
+                        <InputLabel htmlFor="user_id" value="Autocomplete Users" />
+                        <Select
                             name="user_id"
+                            className="autoselect border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
+                            components={{ Input }}
+                            autoComplete="user_id"
+                            options={optionsCustomers}
                             onChange={customersHandleChange}
                         />
                         <InputError className="mt-2" message={errors.user_id} />

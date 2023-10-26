@@ -10,3 +10,7 @@
     width: 100%;
     display: block;
 }
+.autoselect [type='text']:focus {
+    --tw-ring-shadow : none !important;
+    border: 0px
+}
