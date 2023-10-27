@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PrepaidNeededTableRow from "./PrepaidNeededTableRow";
 
 
-export default function PrepaidNeededTable ({ prepaid })
+export default function PrepaidNeededTable ({ prepaid, deposit, setDeposit })
 {
     const totalNeeded = prepaid.map((p) => p.needed).reduce((acc, current) => acc + current, 0);
     const totalCost = prepaid.map((p) => p.needed * p.accountCost).reduce((acc, current) => acc + current, 0);
+
+    useEffect(() =>
+    {
+        setDeposit({ ...deposit, remaining: deposit.current - totalCost })
+    }, [totalCost])
 
     return (
         <div className="overflow-x-auto">
@@ -29,7 +34,7 @@ export default function PrepaidNeededTable ({ prepaid })
                 <tbody>
                     {
                         !!prepaid?.length ? prepaid.map((pre, index) => <PrepaidNeededTableRow pre={ pre } key={ index } />)
-                            : <tr><td className='text-error'>No Sessions Found!</td></tr>
+                            : <tr><td className='text-error'>No Data Found!</td></tr>
                     }
                 </tbody>
 

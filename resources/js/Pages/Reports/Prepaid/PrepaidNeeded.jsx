@@ -13,7 +13,15 @@ export default function PrepaidNeeded ({ apitoken, auth, affiliates })
     const { prepaid, total, errMessage, loading } = data
     const [filterObj, setFilterObj] = useState({ Days: 7 })
 
-    // console.log(filterObj)
+    const [deposit, setDeposit] = useState({ current: 0, remaining: 0 })
+    console.log(deposit)
+    useEffect(() =>
+    {
+        instance.get('/affiliate/deposit/balance')
+            .then(res =>
+            { setDeposit({ ...deposit, current: res.data.value }) })
+            .catch(err => { console.log(err.message) })
+    }, [])
 
     const instance = axios.create({
         baseURL: 'https://rapi.earthlink.iq/api/reseller',
@@ -25,22 +33,23 @@ export default function PrepaidNeeded ({ apitoken, auth, affiliates })
         instance.post('/prepaycard/prepaidneeded', filterObj)
             .then(res =>
             {
-                if (!res?.data?.value)
-                {
-                    return setData({ prepaid: [], total: 0, errMessage: '', loading: false })
+                // if (!res?.data?.value)
+                // {
+                //     return setData({ prepaid: [], total: 0, errMessage: '', loading: false })
 
-                }
+                // }
                 setData({ prepaid: res?.data?.value, total: res?.data?.value?.length, errMessage: '', loading: false })
-                // setData({ users: [], errMessage: '', loading: false })
-                // console.log(res?.data?.value?.itemsList)
-                console.log(data)
+
             })
             .catch(err =>
             {
                 setData({ prepaid: [], total: 0, errMessage: err?.message, loading: false })
-                // console.log(err)
+                console.log(err)
             })
     }, [filterObj])
+
+
+
 
     return (
         <AuthenticatedLayout
@@ -57,6 +66,7 @@ export default function PrepaidNeeded ({ apitoken, auth, affiliates })
                     affiliates={ affiliates }
                     setFilterObj={ setFilterObj }
                     filterObj={ filterObj }
+                    deposit={ deposit }
 
                 /> }
 
@@ -64,7 +74,7 @@ export default function PrepaidNeeded ({ apitoken, auth, affiliates })
                 <div className="max-w-8xl mx-auto sm:px-6 lg:px-4">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="text-gray-900">
-                            { !errMessage && !loading &&
+                            { !errMessage && !loading && !!prepaid.length &&
                                 // <PaginatedItems
                                 //     itemsPerPage={ filterObj.RowCount }
                                 //     items={ prepaid }
@@ -74,7 +84,7 @@ export default function PrepaidNeeded ({ apitoken, auth, affiliates })
                                 //     type='Items'
                                 // >
 
-                                <PrepaidNeededTable prepaid={ prepaid } />
+                                < PrepaidNeededTable prepaid={ prepaid } deposit={ deposit } setDeposit={ setDeposit } />
 
                                 // </PaginatedItems>
 
@@ -83,7 +93,7 @@ export default function PrepaidNeeded ({ apitoken, auth, affiliates })
                     </div>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </AuthenticatedLayout >
     )
 }
 

@@ -7,12 +7,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 
-export default function PrepaidNeededSearch ({ className = '', affiliates, setFilterObj, filterObj })
+export default function PrepaidNeededSearch ({ className = '', affiliates, setFilterObj, filterObj, deposit })
 {
-
-
-    const errorMsg = ['Wrong Password', 'User is Online', 'Access-Reject-User-Status is Inactive'];
-
     const { data, setData, post, processing, errors, reset } = useForm({
         AffiliateIndex: '',
         Days: 7,
@@ -23,11 +19,8 @@ export default function PrepaidNeededSearch ({ className = '', affiliates, setFi
     {
         e.preventDefault();
 
-        setFilterObj({
-            ...filterObj,
-            ...data
-        })
-        console.log(filterObj)
+        setFilterObj({ ...data })
+
     };
 
     return (
@@ -97,8 +90,8 @@ export default function PrepaidNeededSearch ({ className = '', affiliates, setFi
                                         value={ data?.Show }
                                         onChange={ (e) => setData('Show', e.target.value) }
                                     >
-                                        <option value=''>All</option>
-                                        <option value=''>Needed</option>
+                                        <option value='All'>All</option>
+                                        <option value='Needed'>Needed</option>
                                     </select>
 
                                     {/* <InputError className="mt-2" message={errors.name} /> */ }
@@ -108,9 +101,9 @@ export default function PrepaidNeededSearch ({ className = '', affiliates, setFi
 
                             <div className='grid grid-cols-1  gap-4'>
                                 <div className="font-medium text-sm text-gray-700 italic">
-                                    Your current deposit balance : <span className="text-emerald-700">3,869,000 IQD</span>
+                                    Your current deposit balance : <span className="text-emerald-700">{ deposit.current.toLocaleString() } IQD</span>
                                     <br />
-                                    Remaining balance after this: <span className="text-red-700"> 57,500 IQD</span>
+                                    Remaining balance after this: <span className="text-red-700"> { deposit.remaining.toLocaleString() } IQD</span>
                                 </div>
                             </div>
 

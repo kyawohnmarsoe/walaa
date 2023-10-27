@@ -4,6 +4,17 @@ import { Link } from "@inertiajs/react";
 export default function AllUsersTableRow ({ user })
 {
 
+  const getButton = (type) =>
+  {
+    const str = user?.accountStatus.toLowerCase()
+    const position = str.indexOf(type);
+    if (position !== -1)
+    {
+      return true
+    } else { return false }
+  }
+
+
   return (
     <tr>
       {/* <th>
@@ -15,16 +26,11 @@ export default function AllUsersTableRow ({ user })
       <td>{ user?.userIndex }</td>
       <td>
 
-        <button className="btn btn-xs btn-outline btn-block btn-info mb-1">Refill</button>
+        <button className="btn btn-xs btn-outline btn-block btn-info mb-1">Refill</button> <br />
 
-        <br />
+        { getButton('suspended') && <><button className="btn btn-xs btn-outline btn-block btn-success mb-1">Change</button> <br /> </> }
 
-        <button className="btn btn-xs btn-outline btn-block btn-success mb-1">Change</button>
-
-        <br />
-
-        <button className="btn btn-xs btn-outline btn-block btn-warning">Extend</button>
-
+        { getButton('expiringsoon') && <><button className="btn btn-xs btn-outline btn-block btn-warning">Extend</button> </> }
 
         {/* <span className="badge badge-ghost badge-sm">Desktop Support Technician</span> */ }
       </td>

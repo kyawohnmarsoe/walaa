@@ -1,20 +1,16 @@
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
+import SecondaryButton from '@/Components/SecondaryButton';
 import TextInput from '@/Components/TextInput';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
-import Modal from '@/Components/DaisyUI/Modal';
+import Modal from '@/Components/Modal';
+import { useState } from 'react'
 
 export default function UserStatus ({ user, className = '' })
 {
-    // const user = usePage().props.auth.user;
-
-    // const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
-    //     name: user.name,
-    //     email: user.email,
-    // });
-
+    const [data, setData] = useState({ errMessage: '', loading: true })
     const submit = (e) =>
     {
         e.preventDefault();
@@ -22,13 +18,67 @@ export default function UserStatus ({ user, className = '' })
         // patch(route('profile.update'));
     };
 
-    const modalIds = { refill: 'refillModal' }
-
-    const callModal = (id) =>
+    const disconnectUser = () =>
     {
-        // alert('callModal')
-        document.getElementById(id).showModal()
+        instance.post('/activesessions/disconnect', { userindex: user.userIndex, userid: user.userID })
+            .then(res =>
+            {
+                console.log(res.data.responseMessage)
+                setData({ errMessage: '', loading: false })
+
+            })
+            .catch(err =>
+            {
+                console.log(err.message)
+                setData({ errMessage: err?.message, loading: false })
+
+            })
+
+        console.log('disconnectUser running..')
     }
+
+
+    const disconnectHandler = () =>
+    {
+        const result = confirm("Are you sure you want to disconnect this user!")
+        result && disconnectUser()
+    }
+
+    const checkOnlineStatus = () =>
+    {
+        const str = user?.userObject?.status.toLowerCase()
+        const position = str.indexOf('online');
+        if (position !== -1)
+        {
+            return true
+        } else { return false }
+    }
+
+    const [updateInfo, setUpdateInfo] = useState({ value: '', errMessage: '' })
+    const { value, errMessage } = updateInfo
+
+
+    const [modals, setModals] = useState({
+        refill: false,
+    })
+    console.log(modals)
+    const closeModal = () =>
+    {
+        setModals({
+            refill: false,
+        });
+
+
+        // setUpdateInfo({ errMessage: '', value: '' })
+        // setPasswordChange({
+        //     ...passwordChange,
+        //     NewPassword: '',
+        //     confirmNewPassword: ''
+        // })
+
+    };
+
+    const refill = () => { }
 
     return (
         <div className="max-w-8xl mx-auto sm:px-6 lg:px-4">
@@ -42,95 +92,57 @@ export default function UserStatus ({ user, className = '' })
                 </p> */}
                     </header>
 
-                    <Modal id={ modalIds.refill } title="Refill User" description="To continue, please create or link the customer account benefiting from the service" descColor="text-warning">
-                        <form onSubmit={ submit } className="space-y-6 ">
-                            <div className='grid grid-cols-1 gap-4'>
+                    <Modal show={ modals.refill } onClose={ closeModal } maxWidth={ 'xl' }>
+                        <form onSubmit={ (e) => refill(e) } className="p-6" >
+                            <h2 className="text-lg font-medium text-gray-900">
+                                Change Password
+                            </h2>
 
-                                <div>
-                                    <InputLabel htmlFor="fullName" value="Full Name :" />
+                            <p className="mt-1 text-sm text-red-600">
+                                { }
+                            </p>
 
-                                    <TextInput
-                                        id="fullName"
-                                        className="mt-1 block w-full "
-                                        value={ user?.userObject?.userId }
-                                        required
-                                        isFocused
-                                        autoComplete="fullName"
-                                    />
+                            <div className="mt-6">
+                                <InputLabel htmlFor="NewPassword" value="New Password:" />
 
-                                    {/* <InputError className="mt-2" message={errors.name} /> */ }
-                                </div>
+                                <TextInput
+                                    id="NewPassword"
+                                    className="mt-1 block w-full "
+                                    // value={ passwordChange.NewPassword }
+                                    required
+                                    isFocused
+                                    autoComplete="NewPassword"
+                                // onChange={ (e) => setPasswordChange({ ...passwordChange, NewPassword: e.target.value }) }
+                                />
 
-                                <div>
-                                    <InputLabel htmlFor="phone" value="Phone Number:" />
-
-                                    <TextInput
-                                        id="phone"
-                                        className="mt-1 block w-full "
-                                        value={ user?.userObject?.userId }
-                                        required
-                                        isFocused
-                                        autoComplete="phone"
-                                    />
-
-                                    {/* <InputError className="mt-2" message={errors.name} /> */ }
-                                </div>
-                                <div>
-                                    <InputLabel htmlFor="secondPhone" value="Second Phone Number:" />
-
-                                    <TextInput
-                                        id="secondPhone"
-                                        className="mt-1 block w-full "
-                                        value={ user?.userObject?.userId }
-                                        required
-                                        isFocused
-                                        autoComplete="secondPhone"
-                                    />
-
-                                    {/* <InputError className="mt-2" message={errors.name} /> */ }
-                                </div>
-                                <div>
-                                    <InputLabel htmlFor="email" value="Email:" />
-
-                                    <TextInput
-                                        id="email"
-                                        className="mt-1 block w-full "
-                                        value={ user?.userObject?.userId }
-                                        required
-                                        isFocused
-                                        autoComplete="email"
-                                    />
-
-                                    {/* <InputError className="mt-2" message={errors.name} /> */ }
-                                </div>
-                                <div>
-                                    <InputLabel htmlFor="address" value="Address:" />
-
-                                    <TextInput
-                                        id="address"
-                                        className="mt-1 block w-full "
-                                        value={ user?.userObject?.userId }
-                                        required
-                                        isFocused
-                                        autoComplete="address"
-                                    />
-
-                                    {/* <InputError className="mt-2" message={errors.name} /> */ }
-                                </div>
+                                {/* <InputError message={ errors.DepositPassword } className="mt-2" /> */ }
                             </div>
 
-                            <div className="flex items-center gap-4">
-                                {/* <PrimaryButton disabled={processing}>Update</PrimaryButton> */ }
+                            <div className="mt-6">
+                                <InputLabel htmlFor="confirmNewPassword" value="Confirm New Password:" />
 
-                                {/* <Transition
-                        show={recentlySuccessful}
-                        enter="transition ease-in-out"
-                        enterFrom="opacity-0"
-                        leave="transition ease-in-out"
-                        leaveTo="opacity-0"
-                    >
-                        <p className="text-sm text-gray-600">Saved.</p>
-                    </Transition> */}
+                                <TextInput
+                                    id="confirmNewPassword"
+                                    className="mt-1 block w-full "
+                                    // value={ passwordChange.confirmNewPassword }
+                                    required
+                                    isFocused
+                                    autoComplete="confirmNewPassword"
+                                // onChange={ (e) => setPasswordChange({ ...passwordChange, confirmNewPassword: e.target.value }) }
+                                />
+
+                            </div>
+
+                            <div className="mt-6 flex justify-end gap-4">
+                                { value && <span className='text-success'> Update Success </span> }
+
+                                { errMessage && <span className='text-red-500'> { errMessage } </span> }
+
+                                <SecondaryButton onClick={ closeModal }>Cancel</SecondaryButton>
+
+                                <PrimaryButton className="ml-3">
+                                    Submit
+                                </PrimaryButton>
                             </div>
                         </form>
                     </Modal>
@@ -138,7 +150,15 @@ export default function UserStatus ({ user, className = '' })
                     <table className="mt-6 space-y-6 ">
                         <tr>
                             <td>Status</td>
-                            <td>: { user?.accountStatus && (<span style={ { color: user.serviceStatusColorHex } }>{ user.accountStatus }</span>) }</td>
+                            <td>: { user?.accountStatus && (<span style={ { color: user.serviceStatusColorHex } }>{ user.accountStatus }</span>) }
+
+                                {/* { (user?.userObject?.status == 'Online') &&
+                                    < span className=' text-primary pl-4' onClick={ disconnectHandler }>Disconnect</span>
+                                } */}
+
+                                { checkOnlineStatus() && < span className='cursor-pointer text-primary pl-4' onClick={ disconnectHandler }>Disconnect</span> }
+
+                            </td>
                         </tr>
                         <tr>
                             <td>MAC</td>
@@ -150,7 +170,9 @@ export default function UserStatus ({ user, className = '' })
                         </tr>
                         <tr>
                             <td>Account Type</td>
-                            <td>: { user?.accountPackageType } <span className=' text-primary' onClick={ () => callModal(modalIds.refill) }>Refill</span></td>
+                            <td>: { user?.accountPackageType }
+                                {/* <span className='cursor-pointer text-primary' onClick={ () => setModals({ ...modals, refill: true }) }>Refill</span> */ }
+                            </td>
                         </tr>
                     </table>
 

@@ -56,9 +56,9 @@ export default function Details ({ auth, apitoken, id })
 
                     <div className='grid md:grid-cols-2 gap-4 pt-4 px-4 pb-12'>
                         <div className="bg-white shadow sm:rounded-lg">
-                            {/* <UserStatus
+                            <UserStatus
                                 user={ user }
-                                className="p-4" /> */}
+                                className="p-4" />
                         </div>
                         <div className="bg-white shadow sm:rounded-lg">
                             <Security
@@ -67,14 +67,14 @@ export default function Details ({ auth, apitoken, id })
                                 apitoken={ apitoken } />
                         </div>
                         <div className="bg-white shadow sm:rounded-lg">
-                            {/* <CustomerInformation
+                            <CustomerInformation
                                 user={ user }
-                                className="p-4" /> */}
+                                className="p-4" />
                         </div>
                         <div className="bg-white shadow sm:rounded-lg">
-                            {/* <AccountingInformation
+                            <AccountingInformation
                                 user={ user }
-                                className="p-4" /> */}
+                                className="p-4" />
                         </div>
                     </div>
                 </div>

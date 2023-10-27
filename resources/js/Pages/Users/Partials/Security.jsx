@@ -210,7 +210,7 @@ export default function UserStatus ({ user, className = '', apitoken })
                                 The password used on the router
                             </p>
 
-                            <span className=' text-primary' onClick={ () => setModals({ ...modals, passwordShow: true }) }>Show</span> |  <span className=' text-primary' onClick={ () => setModals({ ...modals, passwordChange: true }) }>Change</span>
+                            <span className='cursor-pointer text-primary' onClick={ () => setModals({ ...modals, passwordShow: true }) }>Show</span> |  <span className='cursor-pointer text-primary' onClick={ () => setModals({ ...modals, passwordChange: true }) }>Change</span>
 
                         </div>
 
@@ -221,7 +221,7 @@ export default function UserStatus ({ user, className = '', apitoken })
                                 The account password is used to prevent the user from changing the subscription password from the subscriber information page until he enters it.
                             </p>
 
-                            <span className=' text-primary' onClick={ () => setModals({ ...modals, accPasswordShow: true }) }>Show</span> |  <span className=' text-primary' onClick={ () => setModals({ ...modals, accPasswordShow: true }) }>Change</span>
+                            <span className='cursor-pointer text-primary' onClick={ () => setModals({ ...modals, accPasswordShow: true }) }>Show</span> |  <span className='cursor-pointer text-primary' onClick={ () => setModals({ ...modals, accPasswordShow: true }) }>Change</span>
 
                         </div>
 

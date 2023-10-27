@@ -35,7 +35,7 @@ export default function TestUsageSearch ({ className = '', affiliates, filterObj
                             </p>
                         </header>
 
-                        <form onSubmit={ submit } className="mt-6 space-y-6 ">
+                        <form onSubmit={ submit } className="mt-6 space-y-6 " style={ { display: 'none' } }>
                             <div className='grid md:grid-cols-3 gap-4'>
 
                                 <div>
