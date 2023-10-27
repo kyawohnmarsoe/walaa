@@ -177,6 +177,8 @@ export default function OnlineUsersSearch ({ className = '', affiliates, filterO
                                 <PrimaryButton disabled={ processing }>Search</PrimaryButton>
                                 <PrimaryButton disabled={ processing } onClick={ () => reset() } className="resetBtn">Reset</PrimaryButton>
 
+
+
                                 {/* <Transition
                                 show={recentlySuccessful}
                                 enter="transition ease-in-out"
@@ -189,6 +191,7 @@ export default function OnlineUsersSearch ({ className = '', affiliates, filterO
                             </div>
 
                         </form>
+
                     </section>
                 </div>
             </div>

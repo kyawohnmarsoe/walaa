@@ -134,6 +134,7 @@ export default function UserStatus ({ user, className = '' })
                             </div>
                         </form>
                     </Modal>
+
                     <table className="mt-6 space-y-6 ">
                         <tr>
                             <td>Status</td>

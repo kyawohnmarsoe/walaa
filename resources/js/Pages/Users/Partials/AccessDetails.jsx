@@ -35,7 +35,7 @@ export default function AccessDetails ({ apitoken, user, className = '' })
                 res.data.value ? setUserData({ errMessage: '', loading: false, value: res.data.value }) :
                     setUserData({ errMessage: res.data.error.detailMessage, loading: false, value: '' })
 
-                console.log('response' + res.data.value)
+                // console.log('response' + res.data.value)
 
             })
             .catch(err =>
@@ -118,7 +118,7 @@ export default function AccessDetails ({ apitoken, user, className = '' })
 
                                     <TextInput
                                         id="affiliateName"
-                                        className="mt-1 block w-full disabled bg-gray-100"
+                                        className="mt-1 block w-full bg-gray-100"
                                         defaultValue={ data?.affiliateName }
                                         readOnly={ true }
                                     />

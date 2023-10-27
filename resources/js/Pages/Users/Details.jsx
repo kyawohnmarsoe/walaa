@@ -25,8 +25,8 @@ export default function Details ({ auth, apitoken, id })
             .then(res =>
             {
                 setUserData({ user: res.data.value, errMessage: '', loading: false })
-                // setUserData({ user: null, errMessage: '', loading: false })
-                console.log('response' + res.data.value)
+
+                // console.log('response' + res.data.value)
             })
             .catch(err =>
             {
@@ -54,11 +54,11 @@ export default function Details ({ auth, apitoken, id })
                 <div>
                     <AccessDetails user={ user } apitoken={ apitoken } className='p-4' />
 
-                    {/* <div className='grid md:grid-cols-2 gap-4 pt-4 px-4 pb-12'>
+                    <div className='grid md:grid-cols-2 gap-4 pt-4 px-4 pb-12'>
                         <div className="bg-white shadow sm:rounded-lg">
-                            <UserStatus
+                            {/* <UserStatus
                                 user={ user }
-                                className="p-4" />
+                                className="p-4" /> */}
                         </div>
                         <div className="bg-white shadow sm:rounded-lg">
                             <Security
@@ -67,16 +67,16 @@ export default function Details ({ auth, apitoken, id })
                                 apitoken={ apitoken } />
                         </div>
                         <div className="bg-white shadow sm:rounded-lg">
-                            <CustomerInformation
+                            {/* <CustomerInformation
                                 user={ user }
-                                className="p-4" />
+                                className="p-4" /> */}
                         </div>
                         <div className="bg-white shadow sm:rounded-lg">
-                            <AccountingInformation
+                            {/* <AccountingInformation
                                 user={ user }
-                                className="p-4" />
+                                className="p-4" /> */}
                         </div>
-                    </div> */}
+                    </div>
                 </div>
 
             }
