@@ -4,7 +4,7 @@ export default function TestUsageTableRow ({ item, index })
 {
     return (
         <tr>
-            <td>{ index + 1 }</td>
+            <td></td>
             <td>{ item?.affiliateName }</td>
             <td>{ item?.testCount }</td>
             <td>{ item?.lastDateUsed }</td>

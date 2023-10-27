@@ -13,8 +13,8 @@ import InputError from '@/Components/InputError';
 
 export default function BalanceTransfer ({ className = '', affiliates, apitoken, auth })
 {
-    const [main, setMain] = useState({ affiliate: '', errMessage: '', failMessage: '' })
-
+    const [main, setMain] = useState({ affiliate: '', errMessage: '', failMessage: '', value: '' })
+    const { affiliate, errMessage, failMessage, value } = main
     const { data, setData, post, processing, errors, reset } = useForm({
         TargetAffiliateIndex: '',
         Amount: '',
@@ -27,17 +27,27 @@ export default function BalanceTransfer ({ className = '', affiliates, apitoken,
         headers: { 'Authorization': `Bearer ${ apitoken }` }
     });
 
+    const [deposit, setDeposit] = useState({ current: '' })
+
+    useEffect(() =>
+    {
+        instance.get('/affiliate/deposit/balance')
+            .then(res =>
+            { setDeposit({ ...deposit, current: res.data.value }) })
+            .catch(err => { console.log(err.message) })
+    }, [value])
+
     useEffect(() =>
     {
         instance.get('/affiliate')
             .then(res =>
             {
-                setMain({ affiliate: res.data.value.mainAffiliate, errMessage: '', failMessage: '' })
+                setMain({ affiliate: res.data.value.mainAffiliate, errMessage: '', failMessage: '', value: '' })
 
             })
             .catch(err =>
             {
-                setMain({ affiliate: '', errMessage: err.message, failMessage: '' })
+                setMain({ affiliate: '', errMessage: err.message, failMessage: '', value: '' })
                 console.log(err.message)
             })
     }, [])
@@ -66,23 +76,15 @@ export default function BalanceTransfer ({ className = '', affiliates, apitoken,
             .then(res =>
             {
                 console.log(res.data)
+                res.data.value ? setMain({ ...main, failMessage: '', value: res.data.value }) :
+                    setMain({ ...main, failMessage: res.data.error.message, value: '' })
+
             })
             .catch(err =>
             {
-                setMain({ ...main, failMessage: err.message })
+                setMain({ ...main, failMessage: err.message, value: '' })
                 console.log(err.message)
             })
-
-        console.log(data)
-
-        // destroy(route('profile.destroy'), {
-        //     preserveScroll: true,
-        //     onSuccess: () => closeModal(),
-        //     onError: () => passwordInput.current.focus(),
-        //     onFinish: () => reset(),
-        // });
-
-
 
     };
 
@@ -99,9 +101,9 @@ export default function BalanceTransfer ({ className = '', affiliates, apitoken,
                         Please type deposit password to confirm your transfer?
                     </h2>
 
-                    <p className="mt-1 text-sm text-red-600">
+                    {/* <p className="mt-1 text-sm text-red-600">
                         { main?.failMessage }
-                    </p>
+                    </p> */}
 
                     <div className="mt-6">
                         <InputLabel htmlFor="DepositPassword" value="DepositPassword" className="sr-only" />
@@ -121,6 +123,10 @@ export default function BalanceTransfer ({ className = '', affiliates, apitoken,
                     </div>
 
                     <div className="mt-6 flex justify-end">
+                        { value && <span className='text-success pr-4'> Transfer Success </span> }
+
+                        { failMessage && <span className='text-red-500 pr-4'> { failMessage } </span> }
+
                         <SecondaryButton onClick={ closeModal }>Cancel</SecondaryButton>
 
                         <PrimaryButton className="ml-3" disabled={ processing }>
@@ -204,7 +210,7 @@ export default function BalanceTransfer ({ className = '', affiliates, apitoken,
                                     <div>
                                         <h2 className="text-lg font-medium text-gray-600">Transfer details</h2>
                                         <div className="font-medium text-sm text-gray-700 italic">
-                                            Your current deposit balance : <span className="text-emerald-700">3,869,000 IQD</span>
+                                            Your current deposit balance : <span className="text-emerald-700">{ deposit.current.toLocaleString() } IQD </span>
                                             <br />
                                             {/* Remaining balance after this: <span className="text-red-700"> 57,500 IQD</span> */ }
                                         </div>
