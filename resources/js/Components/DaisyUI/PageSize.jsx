@@ -6,6 +6,7 @@ export default function PageSize ({ className, filterObj, setFilterObj })
     const onChangeHandler = (e) =>
     {
         setFilterObj({ ...filterObj, RowCount: e.target.value })
+
     }
 
     return (

@@ -14,22 +14,25 @@ export default function PaginatedLinks ({ itemsPerPage, items, tableName, apitok
 {
     const [itemOffset, setItemOffset] = useState(0);
 
-    const endOffset = itemOffset + itemsPerPage;
+    let pageSize = +itemsPerPage
+
+    const endOffset = itemOffset + (pageSize);
     const currentItems = items.slice(itemOffset, endOffset);
-    const pageCount = Math.ceil(items.length / itemsPerPage);
+    const pageCount = Math.ceil(items.length / pageSize);
 
     const handlePageClick = (event) =>
     {
-        const newOffset = (event.selected * itemsPerPage) % items.length;
+        const newOffset = (event.selected * pageSize) % items.length;
 
         setItemOffset(newOffset);
+        console.log(typeof (pageSize))
 
     };
 
     return (
         <>
             {
-                pageCount > 1 &&
+                // pageCount > 1 &&
                 <div className='pagination-wrapper'>
                     <TotalItemsCount total={ items.length } />
 

@@ -15,8 +15,8 @@ export default function TestUsage ({ className = '', auth, apitoken, affiliates 
     const tableRef = useRef(null);
     const [data, setData] = useState({ items: [], total: 0, errMessage: '', loading: true })
     const { items, total, errMessage, loading } = data
-    const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10 })
-
+    const [filterObj, setFilterObj] = useState({ RowCount: 10 })
+    console.log(filterObj)
     const instance = axios.create({
         baseURL: 'https://rapi.earthlink.iq/api/reseller',
         headers: { 'Authorization': `Bearer ${ apitoken }` }
