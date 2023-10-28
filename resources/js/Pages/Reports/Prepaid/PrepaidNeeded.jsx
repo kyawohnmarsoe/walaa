@@ -54,9 +54,9 @@ export default function PrepaidNeeded ({ apitoken, auth, affiliates })
     return (
         <AuthenticatedLayout
             user={ auth.user }
-            header={ <h2 className="font-semibold text-xl text-gray-800 leading-tight">User Sessions</h2> }
+            header={ <h2 className="font-semibold text-xl text-gray-800 leading-tight">Prepaid Needed</h2> }
         >
-            <Head title="Online Users" />
+            <Head title="Prepaid Needed" />
             { loading && <Loading className="mt-12 " /> }
             { errMessage && <Alert className="mt-12" msg={ errMessage } /> }
 

@@ -72,6 +72,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/deposit/transfer', [ReportController::class, 'getBalanceTransfer'])->name('deposit.transfer');
     Route::get('/affiliate/group', [ReportController::class, 'getAffiliateGroup'])->name('affiliate.group');
     Route::get('/test/usage', [ReportController::class, 'getTestUsage'])->name('test.usage');
+    Route::get('/account/stats', [ReportController::class, 'getAccountStats'])->name('account.stats');
+    Route::get('/affiliate/stats', [ReportController::class, 'getAffiliateStats'])->name('affiliate.stats');
+    
 
 });
 

@@ -55,5 +55,21 @@ class ReportController extends Controller
     ]);
     }
 
+     public function getAccountStats(){
+        $token = $this->getSessionToken();  
+        return Inertia::render('Reports/Stats/AccountTypeStats/AccountTypeStats',[
+            'apitoken' => $token,
+            'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get()
+    ]);
+    }
+
+     public function getAffiliateStats(){
+        $token = $this->getSessionToken();  
+        return Inertia::render('Reports/Stats/AffiliateStats/AffiliateStats',[
+            'apitoken' => $token,
+            'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get()
+    ]);
+    }
+
 
 }
