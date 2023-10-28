@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('ticket_address');
             $table->string('level_of_importance'); // not important, normal, a task, very important
             $table->string('ticket_number')->nullable();
+            $table->integer('ticket_status')->default(0);
             $table->timestamps();
         });
     }

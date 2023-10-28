@@ -63,6 +63,7 @@ export default function TicketTable({ tickets }) {
                         <th>Topic</th>
                         <th>Address</th>
                         <th>Level of Importance</th>
+                        <th>Status</th>
                         <th colspan="2">Actions</th>
                     </tr>
                 </thead>
@@ -80,13 +81,14 @@ export default function TicketTable({ tickets }) {
                 {!loading &&
                     <tbody>
                         {tickets && tickets.map(dt => (
-                            <tr key={dt.id}>
+                            <tr key={dt.id} className={dt.ticket_status == 0 ? '' : 'bg-teal-100'}>
                                 <td>{dt.customer_user_id}</td>
                                 <td>{dt.ticket_number}</td>
                                 <td>{ticketSource[0][dt.ticket_source]}</td>
                                 <td>{topicData[0][dt.topic]}</td>
                                 <td>{dt.ticket_address}</td>
                                 <td>{levelData[0][dt.level_of_importance]}</td>
+                                <td>{dt.ticket_status == 0 ? 'Opened' : 'Closed'}</td>
                                 <td>
                                     <PrimaryButton className="bg-sky-800" onClick={() => editData(dt.id)}>
                                         <svg class="h-5 w-6 text-white" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">

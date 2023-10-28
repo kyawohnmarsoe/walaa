@@ -4,6 +4,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import PaginatedLinks from '@/Components/PaginatedLinks';
 import AddForm from './Partials/AddForm';
 import EditForm from './Partials/EditForm';
+import TextInput from '@/Components/TextInput';
 import { useState } from 'react'
 
 export default function Tickets({
@@ -19,6 +20,24 @@ export default function Tickets({
     const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10 })
 
     const { flash } = usePage().props
+    const [search_val, setSearchVal] = useState('')
+    const [filter_res, setFilterRes] = useState([])
+
+    const handleSearch = (ev) => {
+        let search = ev.target.value;
+        setSearchVal(search)
+        // console.log(search);
+
+        if (search_val !== '') {
+            const filterdata = tickets.filter((item) => {
+                return Object.values(item).join("").toLowerCase().includes(search_val.toLowerCase())
+            });
+
+            setFilterRes(filterdata)
+        } else {
+            setFilterRes(tickets)
+        }
+    }
 
     const addTicketClick = () => {
         router.get('/tickets/create')
@@ -75,14 +94,26 @@ export default function Tickets({
                                 Add Ticket
                             </PrimaryButton>
 
+                            <div className='flex md:flex md:flex-grow flex-row justify-end py-4'>
+                                <TextInput
+                                    id="search_val"
+                                    name="search_val"
+                                    value={search_val}
+                                    className="max-w"
+                                    placeholder="Enter search keywords..."
+                                    onChange={handleSearch}
+                                />
+                            </div>
+
                             {
-                                tickets.length > 0 &&
-                                <PaginatedLinks
-                                    itemsPerPage={filterObj.RowCount}
-                                    items={tickets}
-                                    tableName="ticket"
-                                    setFilterObj={setFilterObj}
-                                    filterObj={filterObj} />
+                                search_val.length > 1 ?
+                                    <PaginatedLinks itemsPerPage={filterObj.RowCount} items={filter_res} tableName="ticket"
+                                        setFilterObj={setFilterObj}
+                                        filterObj={filterObj} />
+                                    :
+                                    tickets.length > 0 &&
+                                    <PaginatedLinks itemsPerPage={filterObj.RowCount} items={tickets} tableName="ticket" setFilterObj={setFilterObj}
+                                        filterObj={filterObj} />
                             }
                         </div>
                     }

@@ -20,8 +20,8 @@ export default function EditForm({ className = '', ticket, customers }) {
         topic: ticket.topic,
         ticket_address: ticket.ticket_address,
         level_of_importance: ticket.level_of_importance,
-        ticket_number: ticket.ticket_number
-
+        ticket_number: ticket.ticket_number,
+        ticket_status: ticket.ticket_status
     });
 
     const [optionsCustomers, setoptionsCustomers] = useState([])
@@ -79,6 +79,16 @@ export default function EditForm({ className = '', ticket, customers }) {
         {
             "index": "lv_4",
             "name": "Very Important"
+        }
+    ];
+    const optionsStatus = [
+        {
+            "index": "0",
+            "name": "Opened"
+        },
+        {
+            "index": "1",
+            "name": "Closed"
         }
     ];
 
@@ -145,6 +155,13 @@ export default function EditForm({ className = '', ticket, customers }) {
         setValues(values => ({
             ...values,
             'level_of_importance': value,
+        }))
+    }
+    function statusHandleChange(e) {
+        const value = e.target.value
+        setValues(values => ({
+            ...values,
+            'ticket_status': value,
         }))
     }
 
@@ -258,6 +275,19 @@ export default function EditForm({ className = '', ticket, customers }) {
                             type="text"
                             className="mt-1 block w-full"
                             autoComplete="off"
+                        />
+                    </div>
+
+                    <div>
+                        <InputLabel htmlFor="ticket_status" value="Status" />
+                        <SelectOption
+                            id="ticket_status"
+                            className="mt-1 block w-full"
+                            options={optionsStatus}
+                            select_text="Status"
+                            name="ticket_status"
+                            onChange={statusHandleChange}
+                            value={values.ticket_status}
                         />
                     </div>
                 </div>
