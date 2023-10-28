@@ -140,6 +140,7 @@ export default function Authenticated ({ user, header, children })
                                                 <Dropdown.Link href={ route('affiliate.group') }>Affiliate Group Report</Dropdown.Link>
                                                 <Dropdown.Link href={ route('test.usage') }>Test Usage Report</Dropdown.Link >
                                                 <Dropdown.Link href={ route('account.stats') }>User Account Type Stats</Dropdown.Link >
+                                                <Dropdown.Link href={ route('affiliate.stats') }>Affiliate Subscriptions Stats</Dropdown.Link >
                                             </Dropdown.Content>
                                         </Dropdown>
                                     </div>
@@ -298,8 +299,16 @@ export default function Authenticated ({ user, header, children })
                         <ResponsiveNavLink href={ route('test.usage') } active={ route().current('test.usage') }>
                             Test Usage Report
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink href={ route('deposit.transfer') } active={ route().current('deposit.transfer') }>
-                            Balance Transfer
+
+                        <ResponsiveNavLink href={ route('account.stats') } active={ route().current('account.stats') }>
+                            User Account Type Stats
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink href={ route('affiliate.stats') } active={ route().current('affiliate.stats') }>
+                            Affiliate Subscriptions Stats
+                        </ResponsiveNavLink>
+
+                        <ResponsiveNavLink href={ route('log.error') } active={ route().current('log.error') }>
+                            Error Log
                         </ResponsiveNavLink>
                     </div>
 
