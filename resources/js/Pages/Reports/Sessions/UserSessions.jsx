@@ -47,7 +47,7 @@ export default function UserSessions ({ apitoken, auth, affiliates })
             user={ auth.user }
             header={ <h2 className="font-semibold text-xl text-gray-800 leading-tight">User Sessions</h2> }
         >
-            <Head title="Online Users" />
+            <Head title="User Sessions" />
             { loading && <Loading className="mt-12 " /> }
             { errMessage && <Alert className="mt-12" msg={ errMessage } /> }
 

@@ -139,6 +139,7 @@ export default function Authenticated ({ user, header, children })
                                             <Dropdown.Content align={ 'left' }>
                                                 <Dropdown.Link href={ route('affiliate.group') }>Affiliate Group Report</Dropdown.Link>
                                                 <Dropdown.Link href={ route('test.usage') }>Test Usage Report</Dropdown.Link >
+                                                <Dropdown.Link href={ route('account.stats') }>User Account Type Stats</Dropdown.Link >
                                             </Dropdown.Content>
                                         </Dropdown>
                                     </div>

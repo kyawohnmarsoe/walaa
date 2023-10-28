@@ -91,9 +91,9 @@ export default function BalanceTransfer ({ className = '', affiliates, apitoken,
     return (
         <AuthenticatedLayout
             user={ auth.user }
-            header={ <h2 className="font-semibold text-xl text-gray-800 leading-tight">User Sessions</h2> }
+            header={ <h2 className="font-semibold text-xl text-gray-800 leading-tight">Balance Transfer</h2> }
         >
-            <Head title="Online Users" />
+            <Head title="Balance Transfer" />
 
             <Modal show={ confirmingTransfer } onClose={ closeModal } maxWidth={ 'xl' }>
                 <form onSubmit={ submit } className="p-6" >
