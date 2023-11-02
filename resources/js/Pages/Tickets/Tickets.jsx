@@ -11,9 +11,12 @@ export default function Tickets({
     auth,
     mustVerifyEmail,
     tickets,
-    ticket,
-    show_data,
     customers,
+    users,
+    remarks,
+    ticket,
+    updated_by_loggedin_user,
+    show_data,
     apitoken,
     errors
 }) {
@@ -107,12 +110,12 @@ export default function Tickets({
 
                             {
                                 search_val.length > 1 ?
-                                    <PaginatedLinks itemsPerPage={filterObj.RowCount} items={filter_res} tableName="ticket"
+                                    <PaginatedLinks itemsPerPage={filterObj.RowCount} items={filter_res} users={users} remarks={remarks} tableName="ticket"
                                         setFilterObj={setFilterObj}
                                         filterObj={filterObj} />
                                     :
                                     tickets.length > 0 &&
-                                    <PaginatedLinks itemsPerPage={filterObj.RowCount} items={tickets} tableName="ticket" setFilterObj={setFilterObj}
+                                    <PaginatedLinks itemsPerPage={filterObj.RowCount} items={tickets} users={users} remarks={remarks} tableName="ticket" setFilterObj={setFilterObj}
                                         filterObj={filterObj} />
                             }
                         </div>
@@ -137,6 +140,7 @@ export default function Tickets({
                                 className="p-4"
                                 customers={customers}
                                 ticket={ticket}
+                                updated_by_loggedin_user={updated_by_loggedin_user}
                             />
                         </div>
                     }

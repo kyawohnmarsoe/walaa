@@ -9,7 +9,6 @@ import Textarea from '@/Components/Textarea';
 import SelectOption from '@/Components/SelectOption';
 import InputError from '@/Components/InputError';
 import Select, { components } from "react-select";
-import NavLink from '@/Components/NavLink';
 
 export default function AddForm({ className = '', customers, apitoken, errors }) {
 
@@ -154,12 +153,14 @@ export default function AddForm({ className = '', customers, apitoken, errors })
     return (
         <section className={className}>
             <div className='flex items-center justify-end gap-4 p-2'>
-                <NavLink className='border-b-2 border-sky-700 text-gray-900 focus:border-sky-700' href={route('tickets')}>
+                <a
+                    className='inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium border-sky-300 text-sky-600 focus:border-sky-700 cursor-pointer'
+                    href={route('tickets')}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
                     </svg>
                     Ticket List
-                </NavLink>
+                </a>
             </div>
             <header>
                 <h2 className="text-lg font-medium text-sky-600">Add Ticket</h2>

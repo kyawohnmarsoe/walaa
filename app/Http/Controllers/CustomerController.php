@@ -243,9 +243,12 @@ class CustomerController extends Controller
                         if ($aff['affiliate_name'] == $dt['affiliateName']) {
                             $affiliate_index = $aff['affiliate_index'];
                         }
-                    }            
+                    }
+                    $sub_account_id = 0;
+                              
                     Customer::insert([
                         'account_index'     => $dt['accountIndex'],
+                        'sub_account_id'     => $sub_account_id,
                         'affiliate_index'   => $affiliate_index,
                         'first_name'        => '',
                         'last_name'         => '',
