@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import AllUsersTableRow from './AllUsersTableRow'
 
-export default function AllUsersTable ({ users, tableRef })
+export default function AllUsersTable ({ users, tableRef, accountTypes, apitoken })
 {
 
   return (
@@ -26,7 +26,7 @@ export default function AllUsersTable ({ users, tableRef })
         <tbody>
 
           {
-            !!users?.length ? users.map(user => <AllUsersTableRow user={ user } key={ user.userIndex } />)
+            !!users?.length ? users.map(user => <AllUsersTableRow user={ user } key={ user.userIndex } accountTypes={ accountTypes } apitoken={ apitoken } />)
               : <tr><td className='text-error'>No User Found!</td></tr>
           }
 

@@ -14,6 +14,7 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\EarthlinkProfileController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\PaymentController;
 
 Route::get('/test', [DashboardController::class, 'test'])->name('test');
 
@@ -75,7 +76,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/account/stats', [ReportController::class, 'getAccountStats'])->name('account.stats');
     Route::get('/affiliate/stats', [ReportController::class, 'getAffiliateStats'])->name('affiliate.stats');
     
-
+     Route::get('/payments', [PaymentController::class, 'index'])->name('payments');
+     Route::get('/payments/create', [PaymentController::class, 'create'])->name('payments.create');
+     Route::post('/payments/store', [PaymentController::class, 'store'])->name('payments.store');
+    
 });
 
 Route::middleware('auth')->group(function () {

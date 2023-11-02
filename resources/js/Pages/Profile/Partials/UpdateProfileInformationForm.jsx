@@ -31,7 +31,7 @@ export default function UpdateProfileInformation ({ mustVerifyEmail, status, cla
                 </p>
             </header>
 
-            <form onSubmit={ submit } className="mt-6 space-y-6">
+            <form onSubmit={ submit } className="mt-6 space-y-6" autoComplete="off">
                 <div>
                     <InputLabel htmlFor="name" value="Name" />
 

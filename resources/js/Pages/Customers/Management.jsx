@@ -110,7 +110,7 @@ export default function Management ({ auth, apitoken, affiliates, accountTypes }
                     filterObj={ filterObj }
                   >
 
-                    <AllUsersTable users={ users } tableRef={ tableRef } />
+                    <AllUsersTable users={ users } tableRef={ tableRef } accountTypes={ accountTypes } apitoken={ apitoken } />
 
                   </PaginatedItems>
                 </>

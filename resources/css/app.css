@@ -21,4 +21,8 @@
 .cursor-pointer:hover{
     color:indigo;
 }
+.scroll-form{
+    max-height: 500px;
+    overflow: scroll;
+}
 /* NavBar */
