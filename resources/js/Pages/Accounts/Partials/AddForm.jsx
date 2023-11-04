@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useForm, router } from '@inertiajs/react';
+import { useForm, router, usePage } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
+import InputError from '@/Components/InputError';
 
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
@@ -11,6 +12,8 @@ import SelectOption from '@/Components/SelectOption';
 export default function AddForm({ className = '', accounts }) {
 
     const { processing, recentlySuccessful } = useForm();
+
+    const { errors } = usePage().props
 
     const [values, setValues] = useState({
         account_index: '',
@@ -111,6 +114,7 @@ export default function AddForm({ className = '', accounts }) {
                             className="mt-1 block w-full"
                             autoComplete="off"
                         />
+                        <InputError message={errors.account_name} className="mt-2" />
                     </div>
 
                     <div>
@@ -137,6 +141,7 @@ export default function AddForm({ className = '', accounts }) {
                             className="mt-1 block w-full"
                             autoComplete="off"
                         />
+                        <InputError message={errors.end_user_account_price} className="mt-2" />
                     </div>
 
                     <div className='col-span-2'>
