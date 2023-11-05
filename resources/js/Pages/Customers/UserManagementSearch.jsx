@@ -241,8 +241,8 @@ export default function UserManagementSearch ({ className = '', affiliates, acco
 
 
                             <div className="flex items-center gap-4">
-                                <PrimaryButton disabled={ processing }>Search</PrimaryButton>
-                                <PrimaryButton disabled={ processing } onClick={ () => reset() } className="resetBtn">Reset</PrimaryButton>
+                                <PrimaryButton>Search</PrimaryButton>
+                                <PrimaryButton onClick={ () => reset() } className="resetBtn">Reset</PrimaryButton>
 
                                 {/* <Transition
                                 show={recentlySuccessful}

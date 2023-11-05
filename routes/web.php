@@ -17,6 +17,11 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\PaymentController;
 
 Route::get('/test', [DashboardController::class, 'test'])->name('test');
+Route::post('/test', [PaymentController::class, 'store'])->name('payments.store');
+
+// Route::post('/test', function () {    
+//     return 'ok';
+// });
 
 Route::get('/earthlink/profile', function () {    
     return Inertia::render('Profile/Earthlink/Edit');
@@ -77,6 +82,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/affiliate/stats', [ReportController::class, 'getAffiliateStats'])->name('affiliate.stats');
     
      Route::get('/payments', [PaymentController::class, 'index'])->name('payments');
+     Route::get('/payments/{id}', [PaymentController::class, 'show'])->name('show');
      Route::get('/payments/create', [PaymentController::class, 'create'])->name('payments.create');
      Route::post('/payments/store', [PaymentController::class, 'store'])->name('payments.store');
     

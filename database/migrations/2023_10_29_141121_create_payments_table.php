@@ -15,18 +15,27 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
+            $table->string('invoinceID');
             $table->string('userIndex');
-            $table->string('accountType');
-            $table->string('price');
-            $table->string('startDate');
-            $table->string('endDate');
-            $table->string('invoiceDate');
-            $table->string('paymentDate');
+            $table->string('displayName');
+            $table->string('affiliateName');
             $table->string('invoiceType');
-            $table->string('description');
-            $table->string('notes');
-            $table->string('status');
-            $table->string('paidAmount');
+            $table->string('invoiceDescription')->nullable();
+            $table->string('invoiceDuration');
+            $table->string('salePrice')->nullable();
+            $table->string('retailPriceCurrency')->nullable();
+            $table->string('retailPrice');
+            $table->string('referenceRecord')->nullable();
+            $table->string('recordDate');
+            $table->string('invoiceStatus');
+            $table->string('lastStatusChanged')->nullable();
+            $table->string('accountName');
+            $table->string('notes')->nullable();
+            $table->string('userID');
+            $table->string('paidPrice')->nullable();
+            $table->string('discountedPrice')->nullable();
+            $table->string('paymentDueDate')->nullable();
+            $table->string('paymentDueDateTime')->nullable();
             $table->timestamps();
         });
     }

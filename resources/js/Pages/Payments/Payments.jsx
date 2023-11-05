@@ -6,35 +6,8 @@ import Loading from "@/Components/DaisyUI/Loading";
 import Alert from "@/Components/DaisyUI/Alert";
 import PaymentTable from "./PaymentTable";
 
-export default function Payments ({ auth, apitoken, affiliates })
+export default function Payments ({ auth, apitoken, affiliates, payments })
 {
-    const [data, setData] = useState({ items: [], total: 0, errMessage: '', loading: true })
-    const { items, total, errMessage, loading } = data
-    const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10 })
-
-    // console.log(filterObj)
-
-    const instance = axios.create({
-        baseURL: 'https://rapi.earthlink.iq/api/reseller',
-        headers: { 'Authorization': `Bearer ${ apitoken }` }
-    });
-
-    useEffect(() =>
-    {
-        instance.post('/userpayment/usersInvoice', filterObj)
-            .then(res =>
-            {
-                setData({ items: res?.data?.value?.itemsList, total: res?.data?.value?.totalCount, errMessage: '', loading: false })
-                // setData({ users: [], errMessage: '', loading: false })
-                console.log(res?.data?.value?.itemsList)
-            })
-            .catch(err =>
-            {
-                setData({ items: [], total: 0, errMessage: err?.message, loading: false })
-                console.log(err)
-            })
-    }, [])
-
     return (
         <AuthenticatedLayout
             user={ auth.user }
@@ -42,8 +15,8 @@ export default function Payments ({ auth, apitoken, affiliates })
         >
             <Head title="Payment" />
 
-            { loading && <Loading className="mt-12 " /> }
-            { errMessage && <Alert className="mt-12" msg={ errMessage } /> }
+            {/* { loading && <Loading className="mt-12 " /> }
+            { errMessage && <Alert className="mt-12" msg={ errMessage } /> } */}
 
             {/* { !errMessage && !loading &&
                 <ErrorLogSearch
@@ -73,7 +46,7 @@ export default function Payments ({ auth, apitoken, affiliates })
 
                             } */}
 
-                            <PaymentTable items={ items } />
+                            <PaymentTable items={ payments } />
                         </div>
                     </div>
                 </div>

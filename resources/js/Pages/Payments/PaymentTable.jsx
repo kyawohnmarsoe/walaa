@@ -12,7 +12,7 @@ export default function PaymentTable ({ items })
                 {/* head */ }
                 <thead>
                     <tr className='bg-emerald-300'>
-                        <th>#invoinceID</th>
+                        <th>#InvoinceID</th>
                         <th>AffiliateName</th>
                         <th>UserID</th>
                         <th>Invoice Type</th>
@@ -23,9 +23,8 @@ export default function PaymentTable ({ items })
                         <th>Notes</th>
                         <th>Due Date</th>
                         <th>Record Date</th>
-                        <th>Payment Date</th>
+                        {/* <th>Payment Date</th> */ }
                         <th>Action</th>
-
 
                     </tr>
                 </thead>

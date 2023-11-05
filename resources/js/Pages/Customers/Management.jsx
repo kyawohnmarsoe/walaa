@@ -4,18 +4,19 @@ import { Head } from '@inertiajs/react';
 import ReactPaginate from 'react-paginate';
 import Alert from '../../Components/DaisyUI/Alert'
 import React, { useState, useEffect, useRef } from 'react'
-import '../../../css/paginate.css'
+// import '../../../css/paginate.css'
 import Loading from '@/Components/DaisyUI/Loading';
 import UserManagementSearch from './UserManagementSearch';
 import PaginatedItems from '@/Components/DaisyUI/PaginatedItems';
 import SecondaryButton from '@/Components/SecondaryButton';
 import PrimaryButton from '@/Components/PrimaryButton';
 import { DownloadTableExcel } from 'react-export-table-to-excel';
-
+import { Link, useForm, usePage, router } from '@inertiajs/react';
 
 
 export default function Management ({ auth, apitoken, affiliates, accountTypes })
 {
+  // const { flash } = usePage().props
   const tableRef = useRef(null);
   const [onlineUsersData, setOnlineUsersData] = useState({ users: [], total: 0, errMessage: '', loading: true })
   const { users, total, errMessage, loading } = onlineUsersData
@@ -37,7 +38,7 @@ export default function Management ({ auth, apitoken, affiliates, accountTypes }
       {
         setOnlineUsersData({ users: res?.data?.value?.itemsList, total: res?.data?.value?.totalCount, errMessage: '', loading: false })
         // setOnlineUsersData({ users: [], errMessage: '', loading: false })
-        console.log(res?.data?.value?.itemsList)
+        // console.log(res?.data?.value?.itemsList)
       })
       .catch(err =>
       {

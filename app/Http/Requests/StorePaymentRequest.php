@@ -22,18 +22,27 @@ class StorePaymentRequest extends FormRequest
     public function rules(): array
     {
          return [           
-        'userIndex'=> 'required',
-        'accountType'=> 'required',
-        'price'=> 'required',
-        'startDate'=> 'required',
-        'endDate'=> 'required',
-        'invoiceDate'=> 'required',
-        'paymentDate'=> 'required',
-        'invoiceType'=> 'required',
-        'description'=> 'required',
-        'notes'=> 'required',
-        'status'=> 'required',
-        'paidAmount'=> 'required',
+        'invoinceID' => 'required',
+           'userIndex' => 'required',
+           'displayName' => 'required',
+           'affiliateName' => 'required',
+           'invoiceType' => 'required',
+           'invoiceDescription' => 'required',
+           'invoiceDuration' => 'required',
+           'salePrice' => 'required',
+           'retailPriceCurrency' => 'required',
+           'retailPrice' => 'required',
+           'referenceRecord' => 'required',
+           'recordDate' => 'required',
+           'invoiceStatus' => 'required',
+           'lastStatusChanged' => 'required',
+           'accountName' => 'required',
+           'notes' => 'required',
+           'userID' => 'required',
+           'paidPrice' => 'required',
+           'discountedPrice' => 'required',
+           'paymentDueDate' => 'required',
+           'paymentDueDateTime' => 'required'
         ];
     }
 }

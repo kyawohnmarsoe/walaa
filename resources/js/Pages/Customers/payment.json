@@ -1,0 +1,75 @@
+{
+    "value": {
+        "itemsList": [
+            {
+                "userObject": {
+                    "userIndex": 30389056,
+                    "userId": "testuser@gmail.com",
+                    "displayName": "TU",
+                    "status": null,
+                    "avatar": null,
+                    "initials": "TU",
+                    "color": "#D6B2A4"
+                },
+                "invoinceID": 117396489,
+                "userIndex": 30389056,
+                "displayName": "TU",
+                "affiliateName": "walaalink",
+                "invoiceType": "Refill_Deposit",
+                "invoiceDescription": "Plus for period [2023/11/08 - 2023/12/08] with serial 203924191",
+                "invoiceDuration": "2023/11/08 - 2023/12/08",
+                "salePrice": 35000.0,
+                "retailPriceCurrency": "IQD",
+                "retailPrice": 35000.0,
+                "referenceRecord": "203924191",
+                "recordDate": "02/11/2023 07:39 AM",
+                "invoiceStatus": "NotPaid",
+                "lastStatusChanged": "",
+                "accountName": "Plus",
+                "notes": null,
+                "userID": "testuser@gmail.com",
+                "paidPrice": 0.0,
+                "discountedPrice": 0.0,
+                "paymentDueDate": "",
+                "paymentDueDateTime": null
+            },
+            {
+                "userObject": {
+                    "userIndex": 30389056,
+                    "userId": "testuser@gmail.com",
+                    "displayName": "TU",
+                    "status": null,
+                    "avatar": null,
+                    "initials": "TU",
+                    "color": "#D6B2A4"
+                },
+                "invoinceID": 115670365,
+                "userIndex": 30389056,
+                "displayName": "TU",
+                "affiliateName": "walaalink",
+                "invoiceType": "Create_Deposit",
+                "invoiceDescription": "Plus for period [2023/10/08 - 2023/11/08] with serial 202664616",
+                "invoiceDuration": "2023/10/08 - 2023/11/08",
+                "salePrice": 35000.0,
+                "retailPriceCurrency": "IQD",
+                "retailPrice": 35000.0,
+                "referenceRecord": "202664616",
+                "recordDate": "09/10/2023 04:26 AM",
+                "invoiceStatus": "NotPaid",
+                "lastStatusChanged": "",
+                "accountName": "Plus",
+                "notes": null,
+                "userID": "testuser@gmail.com",
+                "paidPrice": 0.0,
+                "discountedPrice": 0.0,
+                "paymentDueDate": "",
+                "paymentDueDateTime": null
+            }
+        ],
+        "totalCount": 2
+    },
+    "responseMessage": null,
+    "error": null,
+    "statusCode": null,
+    "isSuccessful": true
+}
