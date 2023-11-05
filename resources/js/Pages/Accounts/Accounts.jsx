@@ -6,7 +6,6 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import AddForm from './Partials/AddForm';
 import EditForm from './Partials/EditForm';
 import TextInput from '@/Components/TextInput';
-import NavLink from '@/Components/NavLink';
 
 export default function Accounts({ auth, mustVerifyEmail, accounts, show_data, account }) {
     const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10 })
@@ -90,16 +89,20 @@ export default function Accounts({ auth, mustVerifyEmail, accounts, show_data, a
 
                                 {
                                     show_data == 'list' &&
-                                    <NavLink className='ml-12 border-b-2 border-sky-700 text-gray-900 focus:border-sky-700' href={route('accounts.apilist')}>
+                                    <a
+                                        className='ml-12 border-b-2 text-sm font-medium border-sky-300 text-sky-600 focus:border-sky-700 cursor-pointer'
+                                        href={route('accounts.apilist')}>
                                         API Account List
-                                    </NavLink>
+                                    </a>
                                 }
 
                                 {
                                     show_data == 'apilist' &&
-                                    <NavLink className='ml-12 border-b-2 border-sky-700 text-gray-900 focus:border-sky-700' href={route('accounts')}>
+                                    <a
+                                        className='ml-12 border-b-2 text-sm font-medium border-sky-300 text-sky-600 focus:border-sky-700 cursor-pointer'
+                                        href={route('accounts')}>
                                         Local Account List
-                                    </NavLink>
+                                    </a>
                                 }
 
                             </div>

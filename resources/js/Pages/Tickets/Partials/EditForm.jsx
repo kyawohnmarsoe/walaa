@@ -8,9 +8,8 @@ import TextInput from '@/Components/TextInput';
 import Textarea from '@/Components/Textarea';
 import SelectOption from '@/Components/SelectOption';
 import Select, { components } from "react-select";
-import NavLink from '@/Components/NavLink';
 
-export default function EditForm({ className = '', ticket, customers }) {
+export default function EditForm({ className = '', ticket, customers, updated_by_loggedin_user }) {
 
     const { processing, recentlySuccessful } = useForm();
 
@@ -21,7 +20,8 @@ export default function EditForm({ className = '', ticket, customers }) {
         ticket_address: ticket.ticket_address,
         level_of_importance: ticket.level_of_importance,
         ticket_number: ticket.ticket_number,
-        ticket_status: ticket.ticket_status
+        ticket_status: ticket.ticket_status,
+        updated_by_loggedin_user: updated_by_loggedin_user
     });
 
     const [optionsCustomers, setoptionsCustomers] = useState([])
@@ -182,12 +182,14 @@ export default function EditForm({ className = '', ticket, customers }) {
     return (
         <section className={className}>
             <div className='flex items-center justify-end gap-4 p-2'>
-                <NavLink className='border-b-2 border-sky-700 text-gray-900 focus:border-sky-700' href={route('tickets')}>
+                <a
+                    className='inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium border-sky-300 text-sky-600 focus:border-sky-700 cursor-pointer'
+                    href={route('tickets')}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
                     </svg>
                     Ticket List
-                </NavLink>
+                </a>
             </div>
             <header>
                 <h2 className="text-lg font-medium text-sky-600">Edit Ticket</h2>
@@ -290,6 +292,15 @@ export default function EditForm({ className = '', ticket, customers }) {
                             value={values.ticket_status}
                         />
                     </div>
+
+                    <TextInput
+                        id="updated_by_loggedin_user"
+                        name="updated_by_loggedin_user"
+                        value={values.updated_by_loggedin_user}
+                        type="hidden"
+                        className="mt-1 block w-full"
+                        autoComplete="off"
+                    />
                 </div>
 
                 <div className="flex items-center gap-4">

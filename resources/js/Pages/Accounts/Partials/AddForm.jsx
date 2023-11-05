@@ -1,18 +1,20 @@
 import { useState, useEffect } from 'react';
-import { useForm, router } from '@inertiajs/react';
+import { useForm, router, usePage } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
+import InputError from '@/Components/InputError';
 
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import Textarea from '@/Components/Textarea';
 import SelectOption from '@/Components/SelectOption';
-import NavLink from '@/Components/NavLink';
 
 export default function AddForm ({ className = '', accounts })
 {
 
     const { processing, recentlySuccessful } = useForm();
+
+    const { errors } = usePage().props
 
     const [values, setValues] = useState({
         account_index: '',
@@ -78,12 +80,19 @@ export default function AddForm ({ className = '', accounts })
     return (
         <section className={ className }>
             <div className='flex items-center justify-end gap-4 p-2'>
+<<<<<<< HEAD
                 <NavLink className='border-b-2 border-sky-700 text-gray-900 focus:border-sky-700' href={ route('accounts') }>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={ 1.5 } stroke="currentColor" className="w-4 h-6">
+=======
+                <a
+                    className='inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium border-sky-300 text-sky-600 focus:border-sky-700 cursor-pointer'
+                    href={route('accounts')}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-6">
+>>>>>>> 876bdbea5a6c9283bd25436baa4de9c0d98c21d3
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
                     </svg>
                     Local Account List
-                </NavLink>
+                </a>
             </div>
             <header>
                 <h2 className="text-lg font-medium text-sky-600">Add Additional Account</h2>
@@ -118,6 +127,7 @@ export default function AddForm ({ className = '', accounts })
                             className="mt-1 block w-full"
                             autoComplete="off"
                         />
+                        <InputError message={errors.account_name} className="mt-2" />
                     </div>
 
                     <div>
@@ -144,6 +154,7 @@ export default function AddForm ({ className = '', accounts })
                             className="mt-1 block w-full"
                             autoComplete="off"
                         />
+                        <InputError message={errors.end_user_account_price} className="mt-2" />
                     </div>
 
                     <div className='col-span-2'>

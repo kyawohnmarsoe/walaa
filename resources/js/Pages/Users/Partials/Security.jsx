@@ -9,8 +9,7 @@ import { Transition } from '@headlessui/react';
 import Modal from '@/Components/Modal';
 import { useEffect, useState } from 'react';
 
-export default function UserStatus ({ user, className = '', apitoken })
-{
+export default function UserStatus({ user, className = '', apitoken }) {
     const [passwordShow, setPasswordShow] = useState({
         userindex: user?.userIndex,
         userid: user?.userObject?.userId,
@@ -26,22 +25,19 @@ export default function UserStatus ({ user, className = '', apitoken })
 
     const instance = axios.create({
         baseURL: 'https://rapi.earthlink.iq/api/reseller',
-        headers: { 'Authorization': `Bearer ${ apitoken }` }
+        headers: { 'Authorization': `Bearer ${apitoken}` }
     });
 
-    useEffect(() =>
-    {
+    useEffect(() => {
         instance.post('/user/showpassword', { ...passwordShow })
-            .then(res =>
-            {
+            .then(res => {
                 // console.log(res.data.value)
                 setPasswordShow({ ...passwordShow, pass: res.data.value })
             })
             .catch(res => { console.log(err.message) })
     }, [passwordShow.pass])
 
-    const submit = (e) =>
-    {
+    const submit = (e) => {
         e.preventDefault();
         alert('submit')
         // patch(route('profile.update'));
@@ -50,14 +46,12 @@ export default function UserStatus ({ user, className = '', apitoken })
     const [updateInfo, setUpdateInfo] = useState({ value: '', errMessage: '' })
     const { value, errMessage } = updateInfo
 
-    const changePassword = (e) =>
-    {
+    const changePassword = (e) => {
         e.preventDefault();
         // alert('changePassword')
 
         instance.post('/user/changepassword', { ...passwordChange })
-            .then(res =>
-            {
+            .then(res => {
                 console.log(res.data.value)
 
                 res.data.value ? setUpdateInfo({ errMessage: '', value: res.data.value }) :
@@ -65,8 +59,7 @@ export default function UserStatus ({ user, className = '', apitoken })
 
 
             })
-            .catch(err =>
-            {
+            .catch(err => {
                 setUpdateInfo({ errMessage: err.message, value: '' })
             })
 
@@ -80,8 +73,7 @@ export default function UserStatus ({ user, className = '', apitoken })
         accPasswordChange: false,
     })
 
-    const closeModal = () =>
-    {
+    const closeModal = () => {
         setModals({
             passwordShow: false,
             passwordChange: false,
@@ -102,13 +94,13 @@ export default function UserStatus ({ user, className = '', apitoken })
     return (
         <div className="max-w-8xl mx-auto sm:px-6 lg:px-4">
             <div className="bg-white overflow-hidden sm:rounded-lg">
-                <section className={ className }>
+                <section className={className}>
                     <header>
                         <h2 className="text-lg font-medium text-primary">Security</h2>
                     </header>
 
-                    <Modal show={ modals.passwordShow } onClose={ closeModal } maxWidth={ 'xl' }>
-                        <form onSubmit={ submit } className="p-6" >
+                    <Modal show={modals.passwordShow} onClose={closeModal} maxWidth={'xl'}>
+                        <form onSubmit={submit} className="p-6" >
                             <h2 className="text-lg font-medium text-gray-900">
                                 Password Viewer
                             </h2>
@@ -123,12 +115,12 @@ export default function UserStatus ({ user, className = '', apitoken })
                                 <TextInput
                                     id="userName"
                                     className="mt-1 block w-full  bg-gray-100"
-                                    value={ user?.userObject?.userId }
-                                    readOnly={ true }
+                                    value={user?.userObject?.userId}
+                                    readOnly={true}
 
                                 />
 
-                                {/* <InputError message={ errors.DepositPassword } className="mt-2" /> */ }
+                                {/* <InputError message={ errors.DepositPassword } className="mt-2" /> */}
                             </div>
 
                             <div className="mt-6">
@@ -137,8 +129,8 @@ export default function UserStatus ({ user, className = '', apitoken })
                                 <TextInput
                                     id="password"
                                     className="mt-1 block w-full  bg-gray-100"
-                                    value={ passwordShow.pass }
-                                    readOnly={ true }
+                                    value={passwordShow.pass}
+                                    readOnly={true}
                                 />
 
                             </div>
@@ -146,8 +138,8 @@ export default function UserStatus ({ user, className = '', apitoken })
                         </form>
                     </Modal>
 
-                    <Modal show={ modals.passwordChange } onClose={ closeModal } maxWidth={ 'xl' }>
-                        <form onSubmit={ (e) => changePassword(e) } className="p-6" >
+                    <Modal show={modals.passwordChange} onClose={closeModal} maxWidth={'xl'}>
+                        <form onSubmit={(e) => changePassword(e)} className="p-6" >
                             <h2 className="text-lg font-medium text-gray-900">
                                 Change Password
                             </h2>
@@ -162,14 +154,14 @@ export default function UserStatus ({ user, className = '', apitoken })
                                 <TextInput
                                     id="NewPassword"
                                     className="mt-1 block w-full "
-                                    value={ passwordChange.NewPassword }
+                                    value={passwordChange.NewPassword}
                                     required
                                     isFocused
                                     autoComplete="NewPassword"
-                                    onChange={ (e) => setPasswordChange({ ...passwordChange, NewPassword: e.target.value }) }
+                                    onChange={(e) => setPasswordChange({ ...passwordChange, NewPassword: e.target.value })}
                                 />
 
-                                {/* <InputError message={ errors.DepositPassword } className="mt-2" /> */ }
+                                {/* <InputError message={ errors.DepositPassword } className="mt-2" /> */}
                             </div>
 
                             <div className="mt-6">
@@ -178,21 +170,21 @@ export default function UserStatus ({ user, className = '', apitoken })
                                 <TextInput
                                     id="confirmNewPassword"
                                     className="mt-1 block w-full "
-                                    value={ passwordChange.confirmNewPassword }
+                                    value={passwordChange.confirmNewPassword}
                                     required
                                     isFocused
                                     autoComplete="confirmNewPassword"
-                                    onChange={ (e) => setPasswordChange({ ...passwordChange, confirmNewPassword: e.target.value }) }
+                                    onChange={(e) => setPasswordChange({ ...passwordChange, confirmNewPassword: e.target.value })}
                                 />
 
                             </div>
 
                             <div className="mt-6 flex justify-end gap-4">
-                                { value && <span className='text-success'> Update Success </span> }
+                                {value && <span className='text-success'> Update Success </span>}
 
-                                { errMessage && <span className='text-red-500'> { errMessage } </span> }
+                                {errMessage && <span className='text-red-500'> {errMessage} </span>}
 
-                                <SecondaryButton onClick={ closeModal }>Cancel</SecondaryButton>
+                                <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
 
                                 <PrimaryButton className="ml-3">
                                     Submit
@@ -210,7 +202,7 @@ export default function UserStatus ({ user, className = '', apitoken })
                                 The password used on the router
                             </p>
 
-                            <span className='cursor-pointer text-primary' onClick={ () => setModals({ ...modals, passwordShow: true }) }>Show</span> |  <span className='cursor-pointer text-primary' onClick={ () => setModals({ ...modals, passwordChange: true }) }>Change</span>
+                            <span className='cursor-pointer text-primary' onClick={() => setModals({ ...modals, passwordShow: true })}>Show</span> |  <span className='cursor-pointer text-primary' onClick={() => setModals({ ...modals, passwordChange: true })}>Change</span>
 
                         </div>
 
@@ -221,7 +213,7 @@ export default function UserStatus ({ user, className = '', apitoken })
                                 The account password is used to prevent the user from changing the subscription password from the subscriber information page until he enters it.
                             </p>
 
-                            <span className='cursor-pointer text-primary' onClick={ () => setModals({ ...modals, accPasswordShow: true }) }>Show</span> |  <span className='cursor-pointer text-primary' onClick={ () => setModals({ ...modals, accPasswordShow: true }) }>Change</span>
+                            <span className='cursor-pointer text-primary' onClick={() => setModals({ ...modals, accPasswordShow: true })}>Show</span> |  <span className='cursor-pointer text-primary' onClick={() => setModals({ ...modals, accPasswordShow: true })}>Change</span>
 
                         </div>
 

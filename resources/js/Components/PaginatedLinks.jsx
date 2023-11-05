@@ -10,8 +10,17 @@ import TotalItemsCount from '@/Components/DaisyUI/TotalItemsCount'
 import PageSize from '@/Components/DaisyUI/PageSize'
 
 
-export default function PaginatedLinks ({ itemsPerPage, items, tableName, apitoken, listname, sub_accounts, filterObj, setFilterObj })
-{
+export default function PaginatedLinks({
+    itemsPerPage,
+    items,
+    sub_accounts,
+    users,
+    remarks,
+    tableName,
+    apitoken,
+    listname,
+    filterObj,
+    setFilterObj }) {
     const [itemOffset, setItemOffset] = useState(0);
 
     let pageSize = +itemsPerPage
@@ -20,8 +29,7 @@ export default function PaginatedLinks ({ itemsPerPage, items, tableName, apitok
     const currentItems = items.slice(itemOffset, endOffset);
     const pageCount = Math.ceil(items.length / pageSize);
 
-    const handlePageClick = (event) =>
-    {
+    const handlePageClick = (event) => {
         const newOffset = (event.selected * pageSize) % items.length;
 
         setItemOffset(newOffset);
@@ -34,45 +42,45 @@ export default function PaginatedLinks ({ itemsPerPage, items, tableName, apitok
             {
                 // pageCount > 1 &&
                 <div className='pagination-wrapper'>
-                    <TotalItemsCount total={ items.length } />
+                    <TotalItemsCount total={items.length} />
 
                     <ReactPaginate
                         breakLabel="..."
                         nextLabel=" >>"
-                        onPageChange={ handlePageClick }
-                        pageRangeDisplayed={ 3 }
-                        pageCount={ pageCount }
+                        onPageChange={handlePageClick}
+                        pageRangeDisplayed={3}
+                        pageCount={pageCount}
                         previousLabel="<<"
-                        renderOnZeroPageCount={ null }
+                        renderOnZeroPageCount={null}
                         className="pagination"
                     />
 
                     <PageSize
                         className="pagination"
-                        setFilterObj={ setFilterObj }
-                        filterObj={ filterObj }
+                        setFilterObj={setFilterObj}
+                        filterObj={filterObj}
                     />
                 </div>
             }
 
             {
-                tableName == 'account' && <AccountsTable accounts={ currentItems } listname={ listname } />
+                tableName == 'account' && <AccountsTable accounts={currentItems} listname={listname} />
             }
 
             {
-                tableName == 'customer' && <CustomerTable customers={ currentItems } sub_accounts={ sub_accounts } />
+                tableName == 'customer' && <CustomerTable customers={currentItems} sub_accounts={sub_accounts} />
             }
 
             {
-                tableName == 'affiliate' && <AffiliatesTable affiliates={ currentItems } apitoken={ apitoken } />
+                tableName == 'affiliate' && <AffiliatesTable affiliates={currentItems} apitoken={apitoken} />
             }
 
             {
-                tableName == 'ticket' && <TicketTable tickets={ currentItems } />
+                tableName == 'ticket' && <TicketTable tickets={currentItems} users={users} remarks={remarks} />
             }
 
             {
-                tableName == 'testUsage' && <TestUsageTable items={ currentItems } />
+                tableName == 'testUsage' && <TestUsageTable items={currentItems} />
             }
         </>
     );
