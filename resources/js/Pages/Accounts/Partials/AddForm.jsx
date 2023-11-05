@@ -67,7 +67,6 @@ export default function AddForm ({ className = '', accounts })
         setValues(values => ({
             ...values,
             [key]: value,
-
         }))
     }
 
@@ -80,15 +79,10 @@ export default function AddForm ({ className = '', accounts })
     return (
         <section className={ className }>
             <div className='flex items-center justify-end gap-4 p-2'>
-<<<<<<< HEAD
-                <NavLink className='border-b-2 border-sky-700 text-gray-900 focus:border-sky-700' href={ route('accounts') }>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={ 1.5 } stroke="currentColor" className="w-4 h-6">
-=======
                 <a
                     className='inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium border-sky-300 text-sky-600 focus:border-sky-700 cursor-pointer'
-                    href={route('accounts')}>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-6">
->>>>>>> 876bdbea5a6c9283bd25436baa4de9c0d98c21d3
+                    href={ route('accounts') }>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={ 1.5 } stroke="currentColor" className="w-4 h-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
                     </svg>
                     Local Account List
@@ -127,7 +121,7 @@ export default function AddForm ({ className = '', accounts })
                             className="mt-1 block w-full"
                             autoComplete="off"
                         />
-                        <InputError message={errors.account_name} className="mt-2" />
+                        <InputError message={ errors.account_name } className="mt-2" />
                     </div>
 
                     <div>
@@ -154,7 +148,7 @@ export default function AddForm ({ className = '', accounts })
                             className="mt-1 block w-full"
                             autoComplete="off"
                         />
-                        <InputError message={errors.end_user_account_price} className="mt-2" />
+                        <InputError message={ errors.end_user_account_price } className="mt-2" />
                     </div>
 
                     <div className='col-span-2'>
