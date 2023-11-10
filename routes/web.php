@@ -56,12 +56,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/customers', [CustomerController::class, 'index'])->name('customers');
     Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create');
     Route::post('/customers/store', [CustomerController::class, 'store'])->name('customers.store');
+    Route::post('/customers', [CustomerController::class, 'index'])->name('customers.filter');
     Route::get('/customers/store/api/{totalCount}', [CustomerController::class, 'store_api'])->name('customers.store.api');
     Route::get('/users/management', [UserController::class, 'showAllUsers'])->name('users.management');
 
     Route::get('/tickets', [TicketController::class, 'index'])->name('tickets');
     Route::get('/tickets/create', [TicketController::class, 'create'])->name('tickets.create');
     Route::post('/tickets/store', [TicketController::class, 'store'])->name('tickets.store');
+    Route::post('/tickets', [TicketController::class, 'index'])->name('tickets.filter');
     Route::get('/tickets/{id}', [TicketController::class, 'edit'])->name('tickets.edit');
     Route::post('/tickets/{id}', [TicketController::class, 'update'])->name('tickets.update'); 
     Route::post('/tickets/store/remark', [TicketController::class, 'store_remark'])->name('tickets.store.remark');  

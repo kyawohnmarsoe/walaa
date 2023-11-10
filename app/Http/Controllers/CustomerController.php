@@ -13,21 +13,48 @@ use App\Http\Requests\StoreCustomerRequest;
 
 class CustomerController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // select cus.*, aff.affiliate_name, acc.account_name from customers cus
-        // inner join affiliates aff on aff.affiliate_index=cus.affiliate_index
-        // inner join accounts acc on acc.account_index=cus.account_index;
-        $token = $this->getSessionToken();
-        $customers = Customer::join('affiliates', 'affiliates.affiliate_index', '=', 'customers.affiliate_index')
-              ->join('accounts', 'accounts.account_index', '=', 'customers.account_index')
-              ->get(['customers.*', 'affiliates.affiliate_name', 'accounts.account_name']);
+        $token = $this->getSessionToken();       
+
+        if ($request->hasAny(['account_index', 'sub_account_id', 'affiliate_index', 'customer_user_id', 'status'])) {
+            // $data = $request->all();  
+            // return response(compact('data')); 
+            
+            $customers = Customer::join('affiliates', 'affiliates.affiliate_index', '=', 'customers.affiliate_index')
+                ->join('accounts', 'accounts.account_index', '=', 'customers.account_index')
+                ->when(request('account_index') != '', function ($q) {
+                    return $q->where('customers.account_index', request('account_index'));
+                })->when(request('sub_account_id') != '', function ($q) {
+                    return $q->where('customers.sub_account_id', request('sub_account_id'));
+                })->when(request('affiliate_index') != '', function ($q) {
+                    return $q->where('customers.affiliate_index', request('affiliate_index'));
+                })->when(request('customer_user_id') != '', function ($q) {
+                    return $q->where('customers.customer_user_id', 'LIKE', '%'.request('customer_user_id').'%');
+                })->when(request('status') != '', function ($q) {
+                    return $q->where('customers.status', 'LIKE', '%'.request('status').'%');
+                })->get(['customers.*', 'affiliates.affiliate_name', 'accounts.account_name']);           
+
+            $show_data = 'filter_list';
+        } else {
+            // select cus.*, aff.affiliate_name, acc.account_name from customers cus
+            // inner join affiliates aff on aff.affiliate_index=cus.affiliate_index
+            // inner join accounts acc on acc.account_index=cus.account_index;
+            
+            $customers = Customer::join('affiliates', 'affiliates.affiliate_index', '=', 'customers.affiliate_index')
+                ->join('accounts', 'accounts.account_index', '=', 'customers.account_index')
+                ->get(['customers.*', 'affiliates.affiliate_name', 'accounts.account_name']);
+
+            $show_data = 'list';
+        } 
 
         return Inertia::render('Customers/Customers', [
             'customers' => $customers,
-            'sub_accounts' => Sub_account::all(),
-            'show_data' => 'list',
-            'apitoken' => $token,            
+            'sub_accounts' => Sub_account::all(),              
+            'accounts' => Account::all(),
+            'affiliates' => Affiliate::all(),  
+            'show_data' => $show_data,
+            'apitoken' => $token,        
         ]);
     } // index
 
@@ -129,91 +156,7 @@ class CustomerController extends Controller
         
         return redirect()->route('customers')->with('status', 422);
        
-    } // store
-
-    // not use because [maximum execution time]
-    // public function store_api() {
-    //     $token   = $this->getSessionToken();
-    //     $apiURL  = 'https://rapi.earthlink.iq/api/reseller/user/all' ;  
-    //     $headers = [
-    //         'Authorization'=>'Bearer '.$token, 
-    //         'Accept' => 'application/json'
-    //     ];
-    //     $post_data_toget_total_count = [           
-    //         "OrderBy"    => 'Account Name',            
-    //     ]; 
-    //     $total_count_users_api = Http::withHeaders($headers)->post($apiURL, $post_data_toget_total_count);
-    //     $total_count_users_response  = json_decode($total_count_users_api->getBody(), true);
-    //     // return response(compact('total_count_users_response'));
-
-    //     if ($total_count_users_response) {
-    //         if($total_count_users_response['isSuccessful'] === true) {   
-    //             $total_count = $total_count_users_response['value']['totalCount'];
-    //             $page_count = ceil($total_count/50);
-
-    //             for ($i=0; $i <= $page_count ; $i++) { 
-    //                 $start_index = ($i * 50) % $total_count;
-    //                 $post_data = [
-    //                     "Startindex"  => $start_index,
-    //                     "Rowcount"   => 50,
-    //                     "OrderBy"    => 'Account Name',            
-    //                 ]; 
-    //                 $all_users_api = Http::withHeaders($headers)->post($apiURL, $post_data);
-    //                 $all_users_response  = json_decode($all_users_api->getBody(), true);
-
-    //                 if ($all_users_response) {
-    //                     if($all_users_response['isSuccessful'] === true) {                 
-    //                         $affiliates = Affiliate::all();
-            
-    //                         foreach ($all_users_response['value']['itemsList'] as $dt) {  
-    //                             $affiliate_index = 0;
-    //                             foreach ($affiliates as $aff) {                        
-    //                                 $db_affiliate_name  = str_replace(' ', '', $aff['affiliate_name']);
-    //                                 $api_affiliate_name = str_replace(' ', '', $dt['affiliateName']);
-            
-    //                                 if ($db_affiliate_name ==  $api_affiliate_name) {
-    //                                     $affiliate_index = $aff['affiliate_index'];
-    //                                 }
-    //                             }            
-    //                             Customer::insert([
-    //                                 'account_index'     => $dt['accountIndex'],
-    //                                 'affiliate_index'   => $affiliate_index, 
-    //                                 'first_name'        => '',
-    //                                 'last_name'         => '',
-    //                                 'customer_user_id'  => $dt['userID'],
-    //                                 'customer_user_index'   => $dt['userIndex'],
-    //                                 'mobile_number'         => $dt['mobileNumber'],
-    //                                 'mobile_number2'        => $dt['mobileNumber2'],
-    //                                 'address'               => '',
-    //                                 'email'                 => $dt['userID'] ,
-    //                                 'city'                  => '',
-    //                                 'user_active_manage'    => '',
-    //                                 'company'               => '',
-    //                                 'state'                => '',
-    //                                 'display_name'         => $dt['displayName'],
-    //                                 'caller_id'            => $dt['callerID'],
-    //                                 'customer_user_notes'  => $dt['userNotes'],
-    //                                 'status'               => $dt['onlineStatus'],
-    //                                 'account_status'       => $dt['accountStatus'],
-    //                                 'account_package_type' =>  $dt['accountPackageType']                 
-    //                             ]);   
-    //                         }  // end foreach                               
-                            
-    //                     } else {
-    //                         return redirect()->route('customers')->with(
-    //                             'message', $all_users_response['responseMessage']
-    //                         );
-    //                     }           
-    //                 }
-                    
-    //             } // end for loop
-    //             return redirect()->route('customers')->with('status', 201);
-    //         }
-    //     }             
-
-    //     return redirect()->route('customers')->with('status', 422);
-       
-    // } // store_api
+    } // store   
 
     public function store_api(Request $request) {
         $row_count = $request->totalCount;

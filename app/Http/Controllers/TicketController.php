@@ -15,17 +15,38 @@ use Config;
 
 class TicketController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // $tickets = Ticket::All();
-        $tickets = Ticket::join('customers', 'customers.id', '=', 'tickets.user_id')
+        if ($request->hasAny(['customer_user_id', 'ticket_source', 'topic', 'ticket_status', 'level_of_importance', 'ticket_number'])) {
+            $data = $request->all();      
+            $tickets = Ticket::join('customers', 'customers.id', '=', 'tickets.user_id')                 
+                    ->when(request('user_id') != '', function ($q) {
+                        return $q->where('tickets.user_id', request('user_id'));
+                    })->when(request('ticket_source') != '', function ($q) {
+                        return $q->where('tickets.ticket_source', request('ticket_source'));
+                    })->when(request('topic') != '', function ($q) {
+                        return $q->where('tickets.topic', request('topic'));
+                    })->when(request('ticket_status') != '', function ($q) {
+                        return $q->where('tickets.ticket_status', request('ticket_status'));
+                    })->when(request('level_of_importance') != '', function ($q) {
+                        return $q->where('tickets.level_of_importance', request('level_of_importance'));
+                    })->when(request('ticket_number') != '', function ($q) {
+                        return $q->where('tickets.ticket_number', request('ticket_number'));
+                    })->get(['tickets.*', 'customers.customer_user_id']);
+
+            $show_data = 'filter_list';
+        } else {
+            $tickets = Ticket::join('customers', 'customers.id', '=', 'tickets.user_id')
               ->get(['tickets.*', 'customers.customer_user_id']);
+            $show_data = 'list';
+        }    
 
         return Inertia::render('Tickets/Tickets', [
             'tickets' =>  $tickets, 
             'users'   => User::all(),
+            'customers' => Customer::all(),
             'remarks' => Ticket_remark::all(),
-            'show_data' => 'list'
+            'show_data' => $show_data
         ])->with([
             'ticket_source'        => Config::get('constants.ticket_source'),
             'topic'                => Config::get('constants.topic'),
@@ -94,6 +115,6 @@ class TicketController extends Controller
     {
         Ticket_remark::findOrFail($id)->delete();
         return redirect()->route('tickets')->with('status', 204); 
-    } // destroy_remark
+    } // destroy_remark   
 
 }

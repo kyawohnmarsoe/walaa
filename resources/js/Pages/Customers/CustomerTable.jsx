@@ -53,7 +53,14 @@ export default function CustomerTable({ customers, sub_accounts }) {
                                 <td>{cus.first_name} {cus.last_name}</td>
                                 <td>{cus.display_name}</td>
                                 <td>{cus.email}</td>
-                                <td>{cus.status}</td>
+                                <td>
+                                    {
+                                        cus.status == 'Offline' ?
+                                            <span className="text-red-600">{cus.status}</span>
+                                            :
+                                            <span className="text-lime-600">{cus.status}</span>
+                                    }
+                                </td>
                                 <td>{cus.affiliate_name}</td>
                                 <td>{cus.account_name}</td>
                                 <td>{cus.account_status}</td>
