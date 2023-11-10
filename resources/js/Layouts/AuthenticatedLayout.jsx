@@ -102,7 +102,7 @@ export default function Authenticated ({ user, header, children })
                                                 <Dropdown.Link href={ route('prepaid.needed') }>Prepaid Needed</Dropdown.Link >
                                                 {/* <Dropdown.Link href={ route('deposit.statement') }>Account Statement</Dropdown.Link > */ }
                                                 <Dropdown.Link href={ route('deposit.transfer') }>Balance Transfer</Dropdown.Link >
-                                                <Dropdown.Link href={ route('payments.create') }>Payment</Dropdown.Link >
+                                                <Dropdown.Link href={ route('payments') }>Payment</Dropdown.Link >
                                             </Dropdown.Content>
                                         </Dropdown>
                                     </div>

@@ -7,67 +7,42 @@ import PrimaryBtn from '@/Components/PrimaryBtn';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 
-export default function Create ({ auth })
+export default function Edit ({ auth, payment })
 {
+    console.log(payment)
     let { flash } = usePage().props
 
     const { data, setData, post, processing, errors, reset } = useForm({
-        invoinceID: '',
-        userIndex: '',
-        displayName: '',
-        affiliateName: '',
-        invoiceType: '',
-        invoiceDescription: '',
-        invoiceDuration: '',
-        salePrice: '',
-        retailPriceCurrency: '',
-        retailPrice: '',
-        referenceRecord: '',
-        recordDate: '',
-        invoiceStatus: '',
-        lastStatusChanged: '',
-        accountName: '',
-        notes: '',
-        userID: '',
-        paidPrice: '',
-        discountedPrice: '',
+        invoinceID: payment.invoinceID,
+        userIndex: payment.userIndex,
+        displayName: payment.displayName,
+        affiliateName: payment.affiliateName,
+        invoiceType: payment.invoiceType,
+        invoiceDescription: payment.invoiceDescription,
+        invoiceDuration: payment.invoiceDuration,
+        salePrice: payment.salePrice,
+        retailPriceCurrency: payment.retailPriceCurrency,
+        retailPrice: payment.retailPrice,
+        referenceRecord: payment.referenceRecord,
+        recordDate: payment.recordDate,
+        invoiceStatus: payment.invoiceStatus,
+        lastStatusChanged: payment.lastStatusChanged,
+        accountName: payment.accountName,
+        notes: payment.notes,
+        userID: payment.userID,
+        paidPrice: payment.paidPrice,
+        discountedPrice: payment.discountedPrice,
         modifyUser: auth.user.name,
-        paymentDueDate: '',
-        paymentDueDateTime: '',
+        paymentDueDate: payment.paymentDueDate,
+        paymentDueDateTime: payment.paymentDueDateTime
     })
 
     const submit = (e) =>
     {
         e.preventDefault();
-        // router.post('/invoice/store', {
-        //     payment: {
-        //         "invoinceID": 117152101,
-        //         "userIndex": 25241271,
-        //         "displayName": "حسين يحيى خليف",
-        //         "affiliateName": "walaalink5",
-        //         "invoiceType": "Refill_Deposit",
-        //         "invoiceDescription": "Economy for period [2023/10/29 - 2023/11/29]",
-        //         "invoiceDuration": "2023/10/29 - 2023/11/29",
-        //         "salePrice": 40000.0,
-        //         "retailPriceCurrency": "IQD",
-        //         "retailPrice": 40000.0,
-        //         "referenceRecord": "0",
-        //         "recordDate": "29/10/2023 11:25 AM",
-        //         "invoiceStatus": "NotPaid",
-        //         "lastStatusChanged": "",
-        //         "accountName": "Economy",
-        //         "notes": null,
-        //         "userID": "husseinyahya@walaa",
-        //         "paidPrice": 0.0,
-        //         "discountedPrice": 0.0,
-        //         "modifyUser": 'auth.user.name',
-        //         "paymentDueDate": "",
-        //         "paymentDueDateTime": null
-        //     }
-        // })
-        console.log(data)
-
-        router.post('/invoice/store', { payment: data });
+        router.post(`/invoice/update/${ payment.id }`, { payment: data })
+        console.log('submit')
+        // patch(route('payments.store', { payment: data }));
     };
 
     useEffect(() =>
@@ -79,15 +54,15 @@ export default function Create ({ auth })
     return (
         <AuthenticatedLayout
             user={ auth.user }
-            header={ <h2 className="font-semibold text-xl text-gray-800 leading-tight">Create Invoice</h2> }
+            header={ <h2 className="font-semibold text-xl text-gray-800 leading-tight">Edit Invoice</h2> }
         >
-            <Head title="Create Invoice" />
+            <Head title="Edit Invoice" />
             <div className="pt-12 ">
                 <div className="max-w-8xl mx-auto sm:px-6 lg:px-4">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <section className="p-4">
                             <header>
-                                <h2 className="text-lg font-medium text-sky-600">Create Invoice</h2>
+                                <h2 className="text-lg font-medium text-sky-600">Edit Invoice</h2>
 
                                 {/* <p className="mt-1 text-sm text-gray-600">
                             Update your account's profile information and email address.
@@ -265,7 +240,7 @@ export default function Create ({ auth })
 
 
                                 <div className="flex items-center gap-4">
-                                    <PrimaryButton disabled={ processing } >Create</PrimaryButton>
+                                    <PrimaryButton disabled={ processing } >Submit</PrimaryButton>
                                     <PrimaryBtn disabled={ processing } onClick={ () => reset() } className="resetBtn">Reset</PrimaryBtn>
                                     { flash.status == 201 &&
                                         <span className='text-success pr-4'> Successfully Created </span>

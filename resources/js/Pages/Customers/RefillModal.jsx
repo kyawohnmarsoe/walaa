@@ -41,7 +41,7 @@ export default function RefillModal ({ modals, setModals, user, apitoken, accoun
 
                 console.log('getUserInfo runing ...')
                 // console.log(res.data.value)
-                res.data.value.itemsList.length && post(route('payments.store', { payment: res.data.value.itemsList[0] }));
+                res.data.value.itemsList.length && post(route('invoice.store', { payment: res.data.value.itemsList[0] }));
                 console.log(' store data')
             })
             .catch(err =>

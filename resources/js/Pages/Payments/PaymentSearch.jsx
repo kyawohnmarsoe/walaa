@@ -1,28 +1,30 @@
 import React from "react";
-import { useForm } from '@inertiajs/react';
+import { useForm, router } from '@inertiajs/react';
 import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
 import PrimaryButton from '@/Components/PrimaryButton';
+import PrimaryBtn from "@/Components/PrimaryBtn";
 
 export default function PaymentSearch ({ className = '', affiliates, setFilterObj, filterObj })
 {
-    const errorMsg = ['Wrong Password', 'User is Online', 'Access-Reject-User-Status is Inactive'];
-
     const { data, setData, post, processing, errors, reset } = useForm({
-        UserID: '',
-        SelectedAffiliateIndex: '',
-        ErrorMessage: ''
+        userID: '',
+        affiliateName: '',
+        invoiceStatus: ''
     });
 
     const submit = (e) =>
     {
         e.preventDefault();
-
-        // post(route('user.update'));
-
-        setFilterObj({ ...filterObj, ...data })
-        console.log(filterObj)
+        // setFilterObj({ ...filterObj, ...data })
+        // console.log(filterObj)
+        router.post('/payments/search', data)
     };
+
+    const pageReset = (e) =>
+    {
+        router.get('/payments')
+    }
 
     return (
         <div className="pt-12 ">
@@ -30,7 +32,7 @@ export default function PaymentSearch ({ className = '', affiliates, setFilterOb
                 <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <section className={ className }>
                         <header>
-                            <h2 className="text-lg font-medium text-sky-600">User Error Log</h2>
+                            <h2 className="text-lg font-medium text-sky-600">Payment</h2>
 
                             {/* <p className="mt-1 text-sm text-gray-600">
                             Update your account's profile information and email address.
@@ -41,15 +43,15 @@ export default function PaymentSearch ({ className = '', affiliates, setFilterOb
                             <div className='grid grid-cols-3 gap-4'>
 
                                 <div>
-                                    <InputLabel htmlFor="UserID" value="UserID" />
+                                    <InputLabel htmlFor="userID" value="UserID" />
 
                                     <TextInput
-                                        id="UserID"
+                                        id="userID"
                                         className="mt-1 block w-full "
-                                        value={ data.UserID }
+                                        value={ data.userID }
                                         isFocused
-                                        autoComplete="UserID"
-                                        onChange={ (e) => setData('UserID', e.target.value) }
+                                        autoComplete="userID"
+                                        onChange={ (e) => setData('userID', e.target.value) }
                                     />
 
                                     {/* <InputError className="mt-2" message={errors.name} /> */ }
@@ -57,18 +59,18 @@ export default function PaymentSearch ({ className = '', affiliates, setFilterOb
 
 
                                 <div>
-                                    <InputLabel htmlFor="SelectedAffiliateIndex" value="Affiliate" />
+                                    <InputLabel htmlFor="affiliateName" value="Affiliate" />
 
                                     <select
-                                        name="SelectedAffiliateIndex"
-                                        id="SelectedAffiliateIndex"
+                                        name="affiliateName"
+                                        id="affiliateName"
                                         className='mt-1 block w-full border-gray-300 focus:border-sky-500 focus:ring-sky-500 rounded-md shadow-sm '
-                                        value={ data?.SelectedAffiliateIndex }
-                                        onChange={ (e) => setData('SelectedAffiliateIndex', e.target.value) }
+                                        value={ data?.affiliateName }
+                                        onChange={ (e) => setData('affiliateName', e.target.value) }
                                     >
                                         <option value=''>All</option>
                                         {
-                                            affiliates?.map(a => <option value={ a.affiliate_index } key={ a.affiliate_index }>
+                                            affiliates?.map(a => <option value={ a.affiliate_name } key={ a.affiliate_index }>
                                                 { a.affiliate_name }
                                             </option>)
                                         }
@@ -80,21 +82,18 @@ export default function PaymentSearch ({ className = '', affiliates, setFilterOb
 
 
                                 <div>
-                                    <InputLabel htmlFor="ErrorMessage" value="Error Message" />
+                                    <InputLabel htmlFor="invoiceStatus" value="Invoice Status" />
 
                                     <select
-                                        name="ErrorMessage"
-                                        id="ErrorMessage"
+                                        name="invoiceStatus"
+                                        id="invoiceStatus"
                                         className='mt-1 block w-full border-gray-300 focus:border-sky-500 focus:ring-sky-500 rounded-md shadow-sm '
-                                        value={ data?.ErrorMessage }
-                                        onChange={ (e) => setData('ErrorMessage', e.target.value) }
+                                        value={ data?.invoiceStatus }
+                                        onChange={ (e) => setData('invoiceStatus', e.target.value) }
                                     >
-                                        <option value=''>Any</option>
-                                        {
-                                            errorMsg?.map((a, index) => <option value={ a } key={ index }>
-                                                { a }
-                                            </option>)
-                                        }
+                                        <option value='All'>All</option>
+                                        <option value='NotPaid'>NotPaid</option>
+                                        <option value='Paid'>Paid</option>
 
                                     </select>
 
@@ -107,7 +106,7 @@ export default function PaymentSearch ({ className = '', affiliates, setFilterOb
 
                             <div className="flex items-center gap-4">
                                 <PrimaryButton disabled={ processing }>Search</PrimaryButton>
-                                <PrimaryButton disabled={ processing } onClick={ () => reset() } className="resetBtn">Reset</PrimaryButton>
+                                <PrimaryBtn disabled={ processing } onClick={ pageReset } className="resetBtn">Reset</PrimaryBtn>
 
                                 {/* <Transition
                                 show={recentlySuccessful}

@@ -1,16 +1,43 @@
-import Navbar from "@/Components/Navbar";
-import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
 
-const Test = ({ validated }) =>
+import React, { useState } from "react";
+import Pdf from "@mikecousins/react-pdf";
+
+export default function Test ()
 {
-  console.log(validated)
+  const [page, setPage] = useState(1);
 
   return (
-    <div style={ { margin: 'auto', width: '500px' } }>
-      Test
-    </div>
+    <Pdf file="./sample.pdf" page={ page }>
+      { ({ pdfDocument, pdfPage, canvas }) => (
+        <>
+          { !pdfDocument && <span>Loading...</span> }
+          { canvas }
+          { Boolean(pdfDocument && pdfDocument.numPages) && (
+            <nav>
+              <ul className="pager">
+                <li className="previous">
+                  <button
+                    disabled={ page === 1 }
+                    onClick={ () => setPage(page - 1) }
+                  >
+                    Previous
+                  </button>
+                </li>
+                <li className="next">
+                  <button
+                    disabled={ page === pdfDocument.numPages }
+                    onClick={ () => setPage(page + 1) }
+                  >
+                    Next
+                  </button>
+                </li>
+              </ul>
+            </nav>
+          ) }
+        </>
+      ) }
+    </Pdf>
   );
-}
+};
 
-
-export default Test

@@ -5,9 +5,19 @@ import { Head } from '@inertiajs/react';
 import Loading from "@/Components/DaisyUI/Loading";
 import Alert from "@/Components/DaisyUI/Alert";
 import PaymentTable from "./PaymentTable";
+import PaymentSearch from './PaymentSearch'
+import PaginatedLinks from '@/Components/PaginatedLinks';
+
 
 export default function Payments ({ auth, apitoken, affiliates, payments })
 {
+    console.log(payments)
+    const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10 })
+    useEffect(() =>
+    {
+
+    }, [filterObj])
+
     return (
         <AuthenticatedLayout
             user={ auth.user }
@@ -26,6 +36,12 @@ export default function Payments ({ auth, apitoken, affiliates, payments })
                     filterObj={ filterObj }
 
                 /> } */}
+
+            <PaymentSearch
+                className='p-4'
+                setFilterObj={ setFilterObj }
+                filterObj={ filterObj }
+            />
 
             <div className="py-12 ">
                 <div className="max-w-8xl mx-auto sm:px-6 lg:px-4">
@@ -46,7 +62,20 @@ export default function Payments ({ auth, apitoken, affiliates, payments })
 
                             } */}
 
-                            <PaymentTable items={ payments } />
+                            <PaginatedLinks
+                                itemsPerPage={ filterObj.RowCount }
+                                items={ payments }
+                                total={ payments.length }
+                                setFilterObj={ setFilterObj }
+                                filterObj={ filterObj }
+                                tableName="payments"
+                            >
+
+                                {/* <PaymentTable items={ payments } /> */ }
+
+                            </PaginatedLinks>
+
+
                         </div>
                     </div>
                 </div>

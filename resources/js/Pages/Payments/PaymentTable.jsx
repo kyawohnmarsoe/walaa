@@ -18,10 +18,10 @@ export default function PaymentTable ({ items })
                         <th>Invoice Type</th>
                         <th>Description</th>
                         <th>Price</th>
-                        <th>Paid Amount</th>
+                        {/* <th>Paid Amount</th> */ }
                         <th>Status</th>
-                        <th>Notes</th>
-                        <th>Due Date</th>
+                        {/* <th>Notes</th>
+                        <th>Due Date</th> */}
                         <th>Record Date</th>
                         {/* <th>Payment Date</th> */ }
                         <th>Action</th>

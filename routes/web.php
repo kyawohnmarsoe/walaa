@@ -17,11 +17,6 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\PaymentController;
 
 Route::get('/test', [DashboardController::class, 'test'])->name('test');
-Route::post('/test', [PaymentController::class, 'store'])->name('payments.store');
-
-// Route::post('/test', function () {    
-//     return 'ok';
-// });
 
 Route::get('/earthlink/profile', function () {    
     return Inertia::render('Profile/Earthlink/Edit');
@@ -37,6 +32,8 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
+
+   
 
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     
@@ -83,10 +80,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/account/stats', [ReportController::class, 'getAccountStats'])->name('account.stats');
     Route::get('/affiliate/stats', [ReportController::class, 'getAffiliateStats'])->name('affiliate.stats');
     
-     Route::get('/payments', [PaymentController::class, 'index'])->name('payments');
-     Route::get('/payments/{id}', [PaymentController::class, 'show'])->name('show');
-     Route::get('/payments/create', [PaymentController::class, 'create'])->name('payments.create');
-     Route::post('/payments/store', [PaymentController::class, 'store'])->name('payments.store');
+    Route::get('/payments', [PaymentController::class, 'index'])->name('payments');
+    Route::post('/payments/search', [PaymentController::class, 'search'])->name('payments.search');
+     Route::get('/invoice/create', [PaymentController::class, 'create'])->name('invoice.create');
+    Route::post('/invoice/store', [PaymentController::class, 'store'])->name('invoice.store');
+     Route::get('/invoice/{id}', [PaymentController::class, 'show'])->name('invoice.show');
+     Route::get('/invoice/edit/{id}', [PaymentController::class, 'edit'])->name('invoice.edit');
+     Route::post('/invoice/update/{id}', [PaymentController::class, 'update'])->name('invoice.update');
     
 });
 
