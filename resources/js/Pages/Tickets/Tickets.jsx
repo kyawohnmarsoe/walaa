@@ -23,6 +23,7 @@ export default function Tickets({
     const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10 })
 
     const { flash } = usePage().props
+    const { roles, permissions } = usePage().props.user
 
     const addTicketClick = () => {
         router.get('/tickets/create')
@@ -39,6 +40,9 @@ export default function Tickets({
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+
+                    {/* {roles}
+                    {permissions} */}
 
                     {flash.status == 422 &&
                         <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
