@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class LogController extends Controller
 {
     public function getErrorLog(){
-        $token = $this->getSessionToken();  
+        $token = $this->getSavedToken();  
         return Inertia::render('Logs/Error',[
             'apitoken' => $token,
             'affiliates' => Affiliate::all()

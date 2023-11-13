@@ -13,7 +13,7 @@ use Illuminate\Validation\ValidationException;
 class PaymentController extends Controller
 {
       public function index(){
-        $token = $this->getSessionToken();  
+        $token = $this->getSavedToken();  
         return Inertia::render('Payments/Payments',[
             'apitoken' => $token,
             'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get(),
@@ -22,12 +22,12 @@ class PaymentController extends Controller
     }
 
          public function create() 
-     {   $token = $this->getSessionToken();  
+     {   $token = $this->getSavedToken();  
         return Inertia::render('Payments/Create',['apitoken' => $token]);
     }
 
      public function show($id){
-        $token = $this->getSessionToken();  
+        $token = $this->getSavedToken();  
         return Inertia::render('Payments/Invoice',[
             'apitoken' => $token,
             'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get(),
@@ -36,7 +36,7 @@ class PaymentController extends Controller
     }
 
      public function edit($id) 
-     {   $token = $this->getSessionToken();  
+     {   $token = $this->getSavedToken();  
         return Inertia::render('Payments/Edit',[
           'apitoken' => $token,
           'payment' => Payment::findOrFail($id)
@@ -110,7 +110,7 @@ class PaymentController extends Controller
            
         }
      
-       $token = $this->getSessionToken();  
+       $token = $this->getSavedToken();  
      
       return Inertia::render('Payments/Payments',[
             'apitoken' => $token,

@@ -8,6 +8,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Http;
 // use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Apitoken;
 
 class Controller extends BaseController
 {
@@ -24,17 +25,15 @@ class Controller extends BaseController
         ]; 
         $api_response       = Http::asForm()->post($apiURL, $data);
         $api_response_token = json_decode($api_response->getBody(), true); 
-        $api_token = $api_response_token ? $api_response_token['access_token'] : null;
-
-        // $api_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6IndhbGFhaW0iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJSZXNlbGxlciIsIkFmZmlsaWF0ZUluZGV4IjoiNjMwMzEiLCJBZmZpbGlhdGVOYW1lIjoid2FsYWFsaW5rMSIsIkFwcGxpY2F0aW9uTmFtZSI6IlJlc2VsbGVyIiwibmJmIjoxNjk2MjM5ODA0LCJleHAiOjE2OTYyNDM0MDQsImlzcyI6ImJpbGxpbmdhcGkiLCJhdWQiOiJkMjZkMTFkZTUxYmE0YmE2YWQ0ZGVhZTc5ODY1Mzk4YiJ9.Iw4oR_Yh0XRoPTZ7G9RZwN_A1QrmN7if09WTxr5BhEM';
-        
+        $api_token = $api_response_token ? $api_response_token['access_token'] : null;        
         return $api_token;
-
+        
         // $output = array(
         //     'api_token' => $api_response_token['access_token'],
         //     'expires_in' => $api_response_token['expires_in']
         //   );
         // return response($output);
+        
     } // GetApiToken
 
     public function getSessionToken() {
@@ -57,6 +56,35 @@ class Controller extends BaseController
         // $current_time = time();
         return $session_api_token;
         // return response(compact('session_api_token', 'session_current_time', 'current_time', 'maxIdleTime'));
+    }
+
+    public function getSavedToken() {
+        $apiData = Apitoken::all(); 
+        
+        if($apiData->count() == 0)   {            
+            $api_token = $this->GetApiToken();
+            Apitoken::insert([
+                'apitoken' => $api_token,
+                'current_time'  => time(),               
+            ]); 
+        }  else {
+            $current_time = $apiData[0]['current_time'];
+            $maxIdleTime = 3600;
+            if (time() - $current_time > $maxIdleTime) {  
+                $new_api_token = $this->GetApiToken();            
+                $new_data = [
+                    'apitoken' => $new_api_token, 
+                    'current_time' => time()
+                ];  
+                $update_apiData = Apitoken::findOrFail(1);
+                $update_apiData->update($new_data);                
+            }	
+        }
+        
+        $new_apiData = Apitoken::findOrFail(1);
+        $api_token = $apiData[0]['apitoken'];
+      
+        return $api_token;
     }
     
 }

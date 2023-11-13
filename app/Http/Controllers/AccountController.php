@@ -31,7 +31,7 @@ class AccountController extends Controller
     } // api_list
 
     public function create() {
-        $token = $this->getSessionToken();
+        $token = $this->getSavedToken();
         
         return Inertia::render('Accounts/Accounts', [
             'show_data'  => 'add_form',
@@ -40,14 +40,14 @@ class AccountController extends Controller
     } // create    
 
     public function insert(StoreSubAccountRequest $request) { 
-        $token = $this->getSessionToken();       
+        $token = $this->getSavedToken();       
         $data = $request->validated();        
         $sub_account = Sub_account::create($data);
         return redirect()->route('accounts')->with('status', 201);   
     } // insert
 
     public function edit($id) {
-        $token = $this->getSessionToken();       
+        $token = $this->getSavedToken();       
        
         return Inertia::render('Accounts/Accounts', [
             'show_data'  => 'edit_form',
@@ -72,7 +72,7 @@ class AccountController extends Controller
     } // destroy
 
     public function store_api() { // insert API data to db
-        $token = $this->getSessionToken();
+        $token = $this->getSavedToken();
         
         $headers = [
             'Authorization'=>'Bearer '.$token, 
