@@ -180,13 +180,20 @@ class CustomerController extends Controller
             if($all_users_response['isSuccessful'] === true) {                 
                 $affiliates = Affiliate::all();
 
-                $seen_ids = [];
+                // $existed_userIndex = [];
+                $existed_cusData = Customer::select('customer_user_index')->get(); 
+                $existed_userIndex = [];
+                foreach ($existed_cusData as $value) {
+                    $existed_userIndex[] = $value['customer_user_index'];
+                }            
+                // return response(compact('existed_userIndex'));
+
                 foreach ($all_users_response['value']['itemsList'] as $dt) {
                     
-                    if (in_array($dt['userIndex'], $seen_ids)) {
+                    if (in_array($dt['userIndex'], $existed_userIndex)) {
                         continue;
                     }
-                    $seen_ids[] = $dt['userIndex'];
+                    $existed_userIndex[] = $dt['userIndex'];                   	
 
                     $affiliate_index = 0;
                     foreach ($affiliates as $aff) {                        
