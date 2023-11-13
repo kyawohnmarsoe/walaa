@@ -82,7 +82,7 @@ class Controller extends BaseController
         }
         
         $new_apiData = Apitoken::findOrFail(1);
-        $api_token = $apiData[0]['apitoken'];
+        $api_token = $new_apiData[0]['apitoken'];
       
         return $api_token;
     }
