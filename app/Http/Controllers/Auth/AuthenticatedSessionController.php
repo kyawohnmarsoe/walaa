@@ -34,11 +34,11 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        $apitoken = $this->GetApiToken(); 
-        session([
-            'apitoken' => $apitoken, 
-            'current_time' => time()
-        ]);
+        // $api_token = $this->GetApiToken();
+        // session([
+        //     'apitoken' => $api_token, 
+        //     'current_time' => time()
+        // ]);        
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }
@@ -54,7 +54,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        session()->forget(['apitoken', 'current_time']);
+        // session()->forget(['apitoken', 'current_time']);
 
         return redirect('/');
     }

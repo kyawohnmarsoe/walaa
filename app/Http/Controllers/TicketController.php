@@ -56,7 +56,7 @@ class TicketController extends Controller
     } // index
 
     public function create() {
-        $token = $this->getSessionToken();
+        $token = $this->getSavedToken();
         
         return Inertia::render('Tickets/Tickets', [
             'show_data'  => 'add_form',
@@ -66,7 +66,7 @@ class TicketController extends Controller
     } // create
 
     public function store(StoreTicketRequest $request) { 
-        $token = $this->getSessionToken();       
+        $token = $this->getSavedToken();       
         $data = $request->validated();        
         // return response(compact('data')); 
         $ticket = Ticket::create($data);
@@ -74,7 +74,7 @@ class TicketController extends Controller
     } // store
 
     public function edit($id) {
-        $token = $this->getSessionToken(); 
+        $token = $this->getSavedToken(); 
         
         return Inertia::render('Tickets/Tickets', [
             'show_data'  => 'edit_form',

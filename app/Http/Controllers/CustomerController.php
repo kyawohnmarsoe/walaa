@@ -15,14 +15,14 @@ class CustomerController extends Controller
 {
     public function index(Request $request)
     {
-        $token = $this->getSessionToken();       
+        $token = $this->getSavedToken();       
 
         if ($request->hasAny(['account_index', 'sub_account_id', 'affiliate_index', 'customer_user_id', 'status'])) {
             // $data = $request->all();  
             // return response(compact('data')); 
             
-            $customers = Customer::join('affiliates', 'affiliates.affiliate_index', '=', 'customers.affiliate_index')
-                ->join('accounts', 'accounts.account_index', '=', 'customers.account_index')
+            $customers = Customer::leftJoin('affiliates', 'affiliates.affiliate_index', '=', 'customers.affiliate_index')
+                ->leftJoin('accounts', 'accounts.account_index', '=', 'customers.account_index')
                 ->when(request('account_index') != '', function ($q) {
                     return $q->where('customers.account_index', request('account_index'));
                 })->when(request('sub_account_id') != '', function ($q) {
@@ -38,11 +38,11 @@ class CustomerController extends Controller
             $show_data = 'filter_list';
         } else {
             // select cus.*, aff.affiliate_name, acc.account_name from customers cus
-            // inner join affiliates aff on aff.affiliate_index=cus.affiliate_index
-            // inner join accounts acc on acc.account_index=cus.account_index;
+            // left join affiliates aff on aff.affiliate_index=cus.affiliate_index
+            // left join accounts acc on acc.account_index=cus.account_index;
             
-            $customers = Customer::join('affiliates', 'affiliates.affiliate_index', '=', 'customers.affiliate_index')
-                ->join('accounts', 'accounts.account_index', '=', 'customers.account_index')
+            $customers = Customer::leftJoin('affiliates', 'affiliates.affiliate_index', '=', 'customers.affiliate_index')
+                ->leftJoin('accounts', 'accounts.account_index', '=', 'customers.account_index')
                 ->get(['customers.*', 'affiliates.affiliate_name', 'accounts.account_name']);
 
             $show_data = 'list';
@@ -59,7 +59,7 @@ class CustomerController extends Controller
     } // index
 
     public function create() {
-        $token = $this->getSessionToken();
+        $token = $this->getSavedToken();
         // $session_data = json_encode($token, true);      
         
         return Inertia::render('Customers/Customers', [
@@ -73,7 +73,7 @@ class CustomerController extends Controller
     } // create
     
     public function store(StoreCustomerRequest $request) {
-        $token   = $this->getSessionToken();
+        $token   = $this->getSavedToken();
         $apiURL  = 'https://rapi.earthlink.iq/api/reseller/user/newuserdeposit' ;  
         $headers = [
             'Authorization'=>'Bearer '.$token, 
@@ -160,7 +160,7 @@ class CustomerController extends Controller
 
     public function store_api(Request $request) {
         $row_count = $request->totalCount;
-        $token   = $this->getSessionToken();
+        $token   = $this->getSavedToken();
         $apiURL  = 'https://rapi.earthlink.iq/api/reseller/user/all' ;  
         $headers = [
             'Authorization'=>'Bearer '.$token, 
@@ -180,7 +180,20 @@ class CustomerController extends Controller
             if($all_users_response['isSuccessful'] === true) {                 
                 $affiliates = Affiliate::all();
 
-                foreach ($all_users_response['value']['itemsList'] as $dt) {  
+                $existed_cusData = Customer::select('customer_user_index')->get(); 
+                $existed_userIndex = [];
+                foreach ($existed_cusData as $value) {
+                    $existed_userIndex[] = $value['customer_user_index'];
+                }            
+                // return response(compact('existed_userIndex'));
+
+                foreach ($all_users_response['value']['itemsList'] as $dt) {
+                    
+                    if (in_array($dt['userIndex'], $existed_userIndex)) {
+                        continue;
+                    }
+                    $existed_userIndex[] = $dt['userIndex'];                   	
+
                     $affiliate_index = 0;
                     foreach ($affiliates as $aff) {                        
                         if ($aff['affiliate_name'] == $dt['affiliateName']) {

@@ -11,7 +11,7 @@ class AffiliateController extends Controller
 {
     public function index()
     {
-        $token = $this->getSessionToken();
+        $token = $this->getSavedToken();
         return Inertia::render('Affiliates/Affiliates', [
             'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get(),
             'apitoken' => $token
@@ -19,7 +19,7 @@ class AffiliateController extends Controller
     } // index    
 
     public function store() { // insert API data to db
-        $token = $this->getSessionToken();
+        $token = $this->getSavedToken();
         
         $headers = [
             'Authorization'=>'Bearer '.$token, 

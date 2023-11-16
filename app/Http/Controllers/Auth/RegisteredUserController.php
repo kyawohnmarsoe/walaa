@@ -43,15 +43,17 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        $user->assignRole('staff'); // default assign role "staff"
+
         event(new Registered($user));
 
         Auth::login($user);
 
-        $apitoken = $this->GetApiToken(); 
-        session([
-            'apitoken' => $apitoken, 
-            'current_time' => time()
-        ]);
+        // $apitoken = $this->GetApiToken(); 
+        // session([
+        //     'apitoken' => $apitoken, 
+        //     'current_time' => time()
+        // ]);
 
         return redirect(RouteServiceProvider::HOME);
     }

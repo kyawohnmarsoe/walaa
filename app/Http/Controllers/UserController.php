@@ -20,7 +20,7 @@ class UserController extends Controller
         // return Inertia::render('Users/Details', [
         //     'user' => User::findOrFail($id)
         // ]);
-         $token = $this->getSessionToken();  
+         $token = $this->getSavedToken();  
         return Inertia::render('Users/Details',['apitoken' => $token,'id' => $id]);
     }
 
@@ -32,7 +32,7 @@ class UserController extends Controller
 
      public function showOnlineUsers(): Response
     {
-        $token = $this->getSessionToken();      
+        $token = $this->getSavedToken();      
         return Inertia::render('Users/OnlineUsers',[
             'apitoken' => $token, 
             'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get()
@@ -41,7 +41,7 @@ class UserController extends Controller
 
      public function showAllUsers(): Response
     {
-        $token = $this->getSessionToken();      
+        $token = $this->getSavedToken();      
         return Inertia::render('Customers/Management',[
             'apitoken' => $token, 
             'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get(),

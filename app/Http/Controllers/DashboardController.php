@@ -10,7 +10,7 @@ class DashboardController extends Controller
 {
     public function dashboard()
     {
-        $token = $this->getSessionToken();     
+        $token = $this->getSavedToken();    
         
         return Inertia::render('Dashboard', [
             'apitoken' => $token
@@ -19,7 +19,7 @@ class DashboardController extends Controller
 
      public function test()
     {
-        $token = $this->getSessionToken();     
+        $token = $this->getSavedToken();     
         
         return Inertia::render('Test', [
             'apitoken' => $token
