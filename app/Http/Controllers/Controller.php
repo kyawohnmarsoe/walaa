@@ -65,8 +65,9 @@ class Controller extends BaseController
     }
 
     public function getSavedToken() {
-        $apiData = Apitoken::all(); 
         
+        $apiData = Apitoken::all(); 
+        //  dd($api_token);
         if($apiData->count() == 0)   {            
             $api_token = $this->GetApiToken();
             Apitoken::insert([
@@ -82,14 +83,19 @@ class Controller extends BaseController
                     'apitoken' => $new_api_token, 
                     'current_time' => time()
                 ];  
-                $update_apiData = Apitoken::findOrFail(1);
+
+                $all = Apitoken::all();
+                $id = $all[0]['id'];
+                $update_apiData = Apitoken::findOrFail($id);
                 $update_apiData->update($new_data);                
             }	
         }
         
-        $new_apiData = Apitoken::findOrFail(1);
+        // $new_apiData = Apitoken::findOrFail(1);
+        $new_apiData = Apitoken::all();
+       
         $api_token = $new_apiData[0]['apitoken'];
-      
+       
         return $api_token;
     }
     
