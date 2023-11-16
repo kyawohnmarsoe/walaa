@@ -22,7 +22,13 @@ class Controller extends BaseController
             "loginType"  => "1",
             "grant_type" => "password"
         ]; 
+        
         $api_response       = Http::asForm()->post($apiURL, $data);
+
+         if (!$api_response){
+            return "can not get token";
+         }
+
         $api_response_token = json_decode($api_response->getBody(), true); 
         $api_token = $api_response_token ? $api_response_token['access_token'] : null;
 
@@ -39,7 +45,7 @@ class Controller extends BaseController
 
     public function getSessionToken() {
         $session_api_token = session('apitoken'); 
-
+       
         // $maxIdleTime = config('session.lifetime') * 60;
         $maxIdleTime = 720;
         if (time() - session('current_time') > $maxIdleTime) {
@@ -58,5 +64,16 @@ class Controller extends BaseController
         return $session_api_token;
         // return response(compact('session_api_token', 'session_current_time', 'current_time', 'maxIdleTime'));
     }
+
+     public function getSessionTokenTest() {
+         $session_api_token = session('apitoken'); 
+
+         if (!$session_api_token){
+            return "can not get token";
+         }else{
+            return $session_api_token;
+         }
+         
+     }
     
 }
