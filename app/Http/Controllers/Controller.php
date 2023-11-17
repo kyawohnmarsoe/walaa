@@ -23,7 +23,13 @@ class Controller extends BaseController
             "loginType"  => "1",
             "grant_type" => "password"
         ]; 
+        
         $api_response       = Http::asForm()->post($apiURL, $data);
+
+         if (!$api_response){
+            return "can not get token";
+         }
+
         $api_response_token = json_decode($api_response->getBody(), true); 
         $api_token = $api_response_token ? $api_response_token['access_token'] : null;        
         return $api_token;
@@ -38,7 +44,7 @@ class Controller extends BaseController
 
     public function getSessionToken() {
         $session_api_token = session('apitoken'); 
-
+       
         // $maxIdleTime = config('session.lifetime') * 60;
         $maxIdleTime = 720;
         if (time() - session('current_time') > $maxIdleTime) {
@@ -59,8 +65,9 @@ class Controller extends BaseController
     }
 
     public function getSavedToken() {
-        $apiData = Apitoken::all(); 
         
+        $apiData = Apitoken::all(); 
+        //  dd($api_token);
         if($apiData->count() == 0)   {            
             $api_token = $this->GetApiToken();
             Apitoken::insert([
@@ -76,14 +83,19 @@ class Controller extends BaseController
                     'apitoken' => $new_api_token, 
                     'current_time' => time()
                 ];  
-                $update_apiData = Apitoken::findOrFail(1);
+
+                $all = Apitoken::all();
+                $id = $all[0]['id'];
+                $update_apiData = Apitoken::findOrFail($id);
                 $update_apiData->update($new_data);                
             }	
         }
         
-        $new_apiData = Apitoken::get()->first();
-        $api_token = $new_apiData['apitoken'];
-      
+        // $new_apiData = Apitoken::findOrFail(1);
+        $new_apiData = Apitoken::all();
+       
+        $api_token = $new_apiData[0]['apitoken'];
+       
         return $api_token;
     }
     
