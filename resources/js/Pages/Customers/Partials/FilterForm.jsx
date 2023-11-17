@@ -22,6 +22,19 @@ export default function FilterForm({ className = '', accounts, sub_accounts, aff
     const [optionsSubAccounts, setOptionsSubAccounts] = useState([])
     const [optionsAffiliates, setOptionsAffiliates] = useState([])
 
+    // , ExpiringSoon, , SuspendedByAgent
+
+    // "all": "0",
+    // "active": "1", Active
+    // "inactive": "2", Suspended [activeDaysLeft"0"]
+    // "online": "3", Active
+    // "offline": "4", Active 
+    // "will be disabled": "5",  Active
+    // "disabled": "6",Suspended [activeDaysLeft"0"]
+    // "activated": "7",
+    // "paid": "9",
+    // "didnt pay": "8"
+
     const optionsStatus = [
         {
             "index": "Offline",
@@ -30,6 +43,10 @@ export default function FilterForm({ className = '', accounts, sub_accounts, aff
         {
             "index": "Online",
             "name": "Online"
+        },
+        {
+            "index": "OnlineNoNet",
+            "name": "OnlineNoNet"
         }
     ];
 

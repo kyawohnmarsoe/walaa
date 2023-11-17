@@ -174,7 +174,15 @@ class CustomerController extends Controller
         $all_users_api = Http::withHeaders($headers)->post($apiURL, $post_data);
         $all_users_response  = json_decode($all_users_api->getBody(), true);
 
-        // return response(compact('all_users_response', 'row_count'));
+        $active_postData = [
+            "OrderDescending" => '',
+            "Query" => '',
+            "Rowcount"   => $row_count,
+        ];
+        $active_apiURL = 'https://rapi.earthlink.iq/api/reseller/activesessions';
+        $active_users_api = Http::withHeaders($headers)->post($active_apiURL, $active_postData);
+        $active_users_response  = json_decode($active_users_api->getBody(), true);
+        // return response(compact('active_users_response'));
 
         if ($all_users_response) {
             if($all_users_response['isSuccessful'] === true) {                 
@@ -200,7 +208,26 @@ class CustomerController extends Controller
                             $affiliate_index = $aff['affiliate_index'];
                         }
                     }
-                    $sub_account_id = 0;
+                    $sub_account_id = 0; $session_type = '';
+                    if($dt['onlineStatus'] == 'OnlineNoNet'){
+                        $session_type = 2;
+                    } else if ($dt['onlineStatus'] == 'Online') {
+                        $session_type = 1;
+                    }                     
+
+                    $online_time = ''; $online_since = '';
+                    $mac_addresss = ''; $user_ip = ''; $login_from = '';
+                    if($active_users_response){
+                        foreach ($active_users_response['value']['itemsList'] as $user) {
+                            if ($user['userIndex'] == $dt['userIndex']) {                                
+                                $online_time   = $user['onlineTime'];
+                                $online_since   = $user['onlineSince'];
+                                $mac_addresss   = $user['callerMAC'];
+                                $user_ip   = $user['userIP'];
+                                $login_from   = $user['loginFrom'];
+                            }
+                        }
+                    }
                               
                     Customer::insert([
                         'account_index'     => $dt['accountIndex'],
@@ -223,7 +250,30 @@ class CustomerController extends Controller
                         'customer_user_notes'  => $dt['userNotes'],
                         'status'               => $dt['onlineStatus'],
                         'account_status'       => $dt['accountStatus'],
-                        'account_package_type' =>  $dt['accountPackageType']                 
+                        'account_status_id'       => '',
+                        'account_package_type' =>  $dt['accountPackageType'],
+                        
+                        'online_since' => $online_since,
+                        'online_time'  => $online_time,
+                        'mac_addresss' => $mac_addresss,
+                        'manual_expiration_date' => $dt['manualExpirationDate'],
+                        'user_ip'                => $user_ip,
+                        'login_from'             => $login_from,
+                        'can_refill'             => $dt['canRefill'],
+                        'can_delete'             => $dt['canDelete'],
+                        'is_free_account'    => $dt['isFreeAccount'],
+                        'is_max_user'        => $dt['isMAXUser'],
+                        'is_blocked'         => $dt['isBlocked'],
+                        'can_change_account' => $dt['canChangeAccount'],
+                        'can_extend_user'    => $dt['canExtendUser'],
+                        'last_refill'        => $dt['lastRefill'],
+                        'unpaid_invoices'    => $dt['unPaidInvoices'],
+                        'service_status_color_hex' => $dt['serviceStatusColorHex'],
+                        'lock_mac' => '',
+                        'router' => '',
+                        'session_type' => $session_type,   
+                        'active_days_left' => $dt['activeDaysLeft'],   
+                        'online_status_color' => $dt['onlineStatusColor'],    
                     ]);   
                 }     
                 

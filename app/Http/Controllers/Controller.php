@@ -69,7 +69,7 @@ class Controller extends BaseController
             ]); 
         }  else {
             $current_time = $apiData[0]['current_time'];
-            $maxIdleTime = 3600;
+            $maxIdleTime = 3599;
             if (time() - $current_time > $maxIdleTime) {  
                 $new_api_token = $this->GetApiToken();            
                 $new_data = [
@@ -81,8 +81,8 @@ class Controller extends BaseController
             }	
         }
         
-        $new_apiData = Apitoken::findOrFail(1);
-        $api_token = $new_apiData[0]['apitoken'];
+        $new_apiData = Apitoken::get()->first();
+        $api_token = $new_apiData['apitoken'];
       
         return $api_token;
     }

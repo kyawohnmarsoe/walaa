@@ -3,26 +3,22 @@ import { Link } from "@inertiajs/react";
 import Modal from '@/Components/DaisyUI/Modal';
 
 
-export default function OnlineUsersTableRow ({ user, index, apitoken })
-{
+export default function OnlineUsersTableRow({ user, index, apitoken }) {
   const [data, setData] = useState({ errMessage: '', loading: true })
 
   const instance = axios.create({
     baseURL: 'https://rapi.earthlink.iq/api/reseller',
-    headers: { 'Authorization': `Bearer ${ apitoken }` }
+    headers: { 'Authorization': `Bearer ${apitoken}` }
   });
 
-  const disconnectUser = () =>
-  {
+  const disconnectUser = () => {
     instance.post('/activesessions/disconnect', { userindex: user.userIndex, userid: user.userID })
-      .then(res =>
-      {
+      .then(res => {
         console.log(res.data.responseMessage)
         setData({ errMessage: '', loading: false })
 
       })
-      .catch(err =>
-      {
+      .catch(err => {
         console.log(err.message)
         setData({ errMessage: err?.message, loading: false })
 
@@ -32,8 +28,7 @@ export default function OnlineUsersTableRow ({ user, index, apitoken })
   }
 
 
-  const disconnectHandler = () =>
-  {
+  const disconnectHandler = () => {
     const result = confirm("Are you sure you want to disconnect this user!")
     result && disconnectUser()
   }
@@ -46,7 +41,7 @@ export default function OnlineUsersTableRow ({ user, index, apitoken })
           </label>
         </th> */}
 
-      <td>{ user?.userIndex }</td>
+      <td>{user?.userIndex}</td>
 
 
       <td>
@@ -57,25 +52,25 @@ export default function OnlineUsersTableRow ({ user, index, apitoken })
               </div>
             </div> */}
           <div>
-            <div className="font-bold text-sky-700"><Link href={ `/user/${ user?.userIndex }` }>{ user?.userID }</Link></div>
+            <div className="font-bold text-sky-700"><Link href={`/user/${user?.userIndex}`}>{user?.userID}</Link></div>
 
-            <div><span className="text-sm opacity-50"> { user?.userObject?.displayName }</span></div>
+            <div><span className="text-sm opacity-50"> {user?.userObject?.displayName}</span></div>
           </div>
         </div>
       </td>
 
       <td>
-        <span className="text-emerald-500">{ user?.onlineStatus }</span>
+        <span className="text-emerald-500">{user?.onlineStatus}</span>
       </td>
 
-      <td>{ user?.onlineTime }</td>
-      <td>{ user?.onlineSince }</td>
-      <td>{ user?.callerMAC }</td>
-      <td>{ user?.expirationDate }</td>
-      <td><a href={ `http://${ user?.userIP }` } className="text-sky-700" target="_blank">{ user?.userIP }</a></td>
-      <td>{ user?.loginFrom }</td>
-      <td>{ user?.affiliateName }</td>
-      <td><span className="text-sky-700" onClick={ disconnectHandler }>Disconnect</span></td>
+      <td>{user?.onlineTime}</td>
+      <td>{user?.onlineSince}</td>
+      <td>{user?.callerMAC}</td>
+      <td>{user?.expirationDate}</td>
+      <td><a href={`http://${user?.userIP}`} className="text-sky-700" target="_blank">{user?.userIP}</a></td>
+      <td>{user?.loginFrom}</td>
+      <td>{user?.affiliateName}</td>
+      <td><span className="text-sky-700" onClick={disconnectHandler}>Disconnect</span></td>
 
     </tr >
   )
