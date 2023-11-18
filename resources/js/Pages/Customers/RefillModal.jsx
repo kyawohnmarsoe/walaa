@@ -7,8 +7,7 @@ import SecondaryButton from '@/Components/SecondaryButton';
 import { Link, useForm, usePage, router } from '@inertiajs/react';
 import InputError from '@/Components/InputError';
 
-export default function RefillModal ({ modals, setModals, user, apitoken, accountTypes })
-{
+export default function RefillModal({ modals, setModals, user, apitoken, accountTypes }) {
     let { flash } = usePage().props
 
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -29,14 +28,12 @@ export default function RefillModal ({ modals, setModals, user, apitoken, accoun
 
     const instance = axios.create({
         baseURL: 'https://rapi.earthlink.iq/api/reseller',
-        headers: { 'Authorization': `Bearer ${ apitoken }` }
+        headers: { 'Authorization': `Bearer ${apitoken}` }
     });
 
-    const getUserInfo = () =>
-    {
+    const getUserInfo = () => {
         instance.post('/userpayment/usersInvoice', { UserID: user?.userID })
-            .then(res =>
-            {
+            .then(res => {
                 // setNewUserData({ newUser: res.data.value })
 
                 console.log('getUserInfo runing ...')
@@ -44,19 +41,16 @@ export default function RefillModal ({ modals, setModals, user, apitoken, accoun
                 res.data.value.itemsList.length && post(route('invoice.store', { payment: res.data.value.itemsList[0] }));
                 console.log(' store data')
             })
-            .catch(err =>
-            {
+            .catch(err => {
                 console.log('error' + err)
             })
     }
 
-    const submit = (e) =>
-    {
+    const submit = (e) => {
         // console.log(data)
         e.preventDefault();
         instance.post('/user/newrefilldeposit', { ...data, DepositPassword: +data?.DepositPassword })
-            .then(res =>
-            {
+            .then(res => {
                 console.log('refill deposit runing ...')
                 res.data.value ? (setUpdateInfo({ errMessage: '', value: res.data.value }), getUserInfo()) :
                     (setUpdateInfo({ errMessage: res.data.error.message, value: '' }))
@@ -64,8 +58,7 @@ export default function RefillModal ({ modals, setModals, user, apitoken, accoun
                 // !res.data.value && console.log('store data')
 
             })
-            .catch(err =>
-            {
+            .catch(err => {
                 // console.log(err)
                 setUpdateInfo({ errMessage: err.message, value: '' })
             })
@@ -73,8 +66,7 @@ export default function RefillModal ({ modals, setModals, user, apitoken, accoun
 
 
     }
-    const closeModal = () =>
-    {
+    const closeModal = () => {
         setModals({
             ...modals,
             reFill: false
@@ -97,8 +89,8 @@ export default function RefillModal ({ modals, setModals, user, apitoken, accoun
 
     };
     return (
-        <Modal show={ modals.reFill } onClose={ closeModal } maxWidth={ 'xl' }>
-            <form onSubmit={ submit } className="p-6 scroll-form" autoComplete="off">
+        <Modal show={modals.reFill} onClose={closeModal} maxWidth={'xl'}>
+            <form onSubmit={submit} className="p-6 scroll-form" autoComplete="off">
                 <h2 className="text-lg font-medium text-gray-900">
                     Refill Deposit
                 </h2>
@@ -113,8 +105,8 @@ export default function RefillModal ({ modals, setModals, user, apitoken, accoun
                     <TextInput
                         id="UserId"
                         className="mt-1 block w-full  bg-gray-100"
-                        value={ data?.UserId }
-                        readOnly={ true }
+                        value={data?.UserId}
+                        readOnly={true}
                         autoComplete="off"
                     />
 
@@ -126,13 +118,13 @@ export default function RefillModal ({ modals, setModals, user, apitoken, accoun
                     <TextInput
                         id="DepositPassword"
                         className="mt-1 block w-full  "
-                        value={ data?.DepositPassword }
+                        value={data?.DepositPassword}
                         // type='number'
-                        onChange={ (e) => setData('DepositPassword', e.target.value) }
+                        onChange={(e) => setData('DepositPassword', e.target.value)}
                         autoComplete="off"
                         required
                     />
-                    <InputError className="mt-2" message={ errors.DepositPassword } />
+                    <InputError className="mt-2" message={errors.DepositPassword} />
 
                 </div>
 
@@ -144,19 +136,19 @@ export default function RefillModal ({ modals, setModals, user, apitoken, accoun
                             name="AccountId"
                             id="AccountId"
                             className='mt-1 block w-full border-gray-300 focus:border-sky-500 focus:ring-sky-500 rounded-md shadow-sm '
-                            value={ data?.AccountId }
+                            value={data?.AccountId}
                             required
-                            onChange={ (e) => setData('AccountId', e.target.value) }
+                            onChange={(e) => setData('AccountId', e.target.value)}
                         >
                             <option value='00'>Select Account Type</option>
                             {
-                                accountTypes?.map((a, index) => !!a && <option value={ a.account_index } key={ index }>
-                                    { a.account_name }
+                                accountTypes?.map((a, index) => !!a && <option value={a.account_index} key={index}>
+                                    {a.account_name}
                                 </option>)
                             }
 
                         </select>
-                        <InputError className="mt-2" message={ errors.AccountId } />
+                        <InputError className="mt-2" message={errors.AccountId} />
 
                     </div>
                 }
@@ -167,14 +159,14 @@ export default function RefillModal ({ modals, setModals, user, apitoken, accoun
                         name="Status"
                         id="Status"
                         className='mt-1 block w-full border-gray-300 focus:border-sky-500 focus:ring-sky-500 rounded-md shadow-sm '
-                        value={ data?.Status }
-                        onChange={ (e) => setData('Status', e.target.value) }
+                        value={data?.Status}
+                        onChange={(e) => setData('Status', e.target.value)}
                     >
                         <option value='NotPaid'>Not Paid</option>
                         <option value='Paid'> Paid</option>
 
                     </select>
-                    <InputError className="mt-2" message={ errors.Status } />
+                    <InputError className="mt-2" message={errors.Status} />
 
                 </div>
 
@@ -184,10 +176,10 @@ export default function RefillModal ({ modals, setModals, user, apitoken, accoun
                     <TextInput
                         id="PaymentDueDate"
                         className="mt-1 block w-full  "
-                        value={ data?.PaymentDueDate }
-                        onChange={ (e) => setData('PaymentDueDate', e.target.value) }
+                        value={data?.PaymentDueDate}
+                        onChange={(e) => setData('PaymentDueDate', e.target.value)}
                     />
-                    <InputError className="mt-2" message={ errors.PaymentDueDate } />
+                    <InputError className="mt-2" message={errors.PaymentDueDate} />
 
                 </div>
 
@@ -197,8 +189,8 @@ export default function RefillModal ({ modals, setModals, user, apitoken, accoun
                     <TextInput
                         id="Notes"
                         className="mt-1 block w-full  "
-                        value={ data?.Notes }
-                        onChange={ (e) => setData('Notes', e.target.value) }
+                        value={data?.Notes}
+                        onChange={(e) => setData('Notes', e.target.value)}
                     />
 
                 </div>
@@ -206,13 +198,13 @@ export default function RefillModal ({ modals, setModals, user, apitoken, accoun
 
 
                 <div className="mt-6 flex justify-end">
-                    {/* { value && <span className='text-success pr-4'> Refill Success </span> } */ }
+                    {/* { value && <span className='text-success pr-4'> Refill Success </span> } */}
 
-                    { errMessage && <span className='text-red-500 pr-4'> { errMessage } </span> }
-                    { flash.status == 201 &&
+                    {errMessage && <span className='text-red-500 pr-4'> {errMessage} </span>}
+                    {flash.status == 201 &&
                         <span className='text-success pr-4'> Refill Success </span>
                     }
-                    <SecondaryButton onClick={ closeModal }>Cancel</SecondaryButton>
+                    <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
 
                     <PrimaryButton className="ml-3" >
                         Submit

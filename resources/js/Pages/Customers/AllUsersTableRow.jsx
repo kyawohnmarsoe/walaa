@@ -3,8 +3,7 @@ import { Link } from '@inertiajs/react';
 import RefillModal from "./RefillModal";
 import ChangeModal from "./ChangeModal";
 
-export default function AllUsersTableRow ({ user, accountTypes, apitoken })
-{
+export default function AllUsersTableRow({ user, accountTypes, apitoken }) {
   const [modals, setModals] = useState({
     reFill: false,
     change: false,
@@ -13,8 +12,8 @@ export default function AllUsersTableRow ({ user, accountTypes, apitoken })
 
   return (
     <>
-      <RefillModal modals={ modals } setModals={ setModals } accountTypes={ accountTypes } apitoken={ apitoken } user={ user } />
-      <ChangeModal modals={ modals } setModals={ setModals } accountTypes={ accountTypes } apitoken={ apitoken } user={ user } />
+      <RefillModal modals={modals} setModals={setModals} accountTypes={accountTypes} apitoken={apitoken} user={user} />
+      <ChangeModal modals={modals} setModals={setModals} accountTypes={accountTypes} apitoken={apitoken} user={user} />
 
       <tr>
         {/* <th>
@@ -23,16 +22,16 @@ export default function AllUsersTableRow ({ user, accountTypes, apitoken })
           </label>
         </th> */}
 
-        <td>{ user?.userIndex }</td>
+        <td>{user?.userIndex}</td>
         <td>
 
-          { user?.canRefill && <><button className="btn btn-xs btn-outline btn-block btn-info mb-1" onClick={ () => setModals({ ...modals, reFill: true }) }>Refill</button><br /></> }
+          {user?.canRefill && <><button className="btn btn-xs btn-outline btn-block btn-info mb-1" onClick={() => setModals({ ...modals, reFill: true })}>Refill</button><br /></>}
 
-          { user?.canChangeAccount && <><button className="btn btn-xs btn-outline btn-block btn-success mb-1" onClick={ () => setModals({ ...modals, change: true }) }>Change</button> <br /> </> }
+          {user?.canChangeAccount && <><button className="btn btn-xs btn-outline btn-block btn-success mb-1" onClick={() => setModals({ ...modals, change: true })}>Change</button> <br /> </>}
 
-          { user?.canExtendUser && <><button className="btn btn-xs btn-outline btn-block btn-warning">Extend</button> </> }
+          {user?.canExtendUser && <><button className="btn btn-xs btn-outline btn-block btn-warning">Extend</button> </>}
 
-          {/* <span className="badge badge-ghost badge-sm">Desktop Support Technician</span> */ }
+          {/* <span className="badge badge-ghost badge-sm">Desktop Support Technician</span> */}
         </td>
 
         <td>
@@ -43,58 +42,62 @@ export default function AllUsersTableRow ({ user, accountTypes, apitoken })
               </div>
             </div> */}
             <div>
-              <div className="font-bold text-sky-700"><Link href={ `/user/${ user?.userIndex }` }>{ user?.userID }</Link></div>
+              <div className="font-bold text-sky-700"><Link href={`/user/${user?.userIndex}`}>{user?.userID}</Link></div>
 
-              <div> <strong>Affiliate </strong><span className="text-sm opacity-50"> : { user?.affiliateName }</span></div>
+              <div> <strong>Affiliate </strong><span className="text-sm opacity-50"> : {user?.affiliateName}</span></div>
             </div>
           </div>
         </td>
 
-        <td> { user?.displayName }</td>
+        <td> {user?.displayName}</td>
 
         <td>
-          <strong>Last Refill</strong> : { user?.lastRefill }
+          <strong>Last Refill</strong> : {user?.lastRefill}
           <br />
-          <strong>Payment</strong> : { !!user?.unPaidInvoices ? <span style={ { color: user?.serviceStatusColorHex } }>{ user?.unPaidInvoices } Unpaid</span> : <span className="text-emerald-700">All Paid</span> }
+          <strong>Payment</strong> : {!!user?.unPaidInvoices ? <span style={{ color: user?.serviceStatusColorHex }}>{user?.unPaidInvoices} Unpaid</span> : <span className="text-emerald-700">All Paid</span>}
           <br />
-          <strong>Notes</strong> : { user?.lastRefill }
+          <strong>Notes</strong> : {user?.lastRefill}
 
-          {/* <span className="badge badge-ghost badge-sm">Desktop Support Technician</span> */ }
+          {/* <span className="badge badge-ghost badge-sm">Desktop Support Technician</span> */}
         </td>
 
         {/* <th>
           <button className="btn btn-ghost btn-xs">details</button>
         </th> */}
 
-        <td>{ user?.manualExpirationDate }</td>
+        <td>{user?.manualExpirationDate}</td>
 
         <td>
-          <strong>Acc Name</strong> : { user?.accountName }
+          <strong>Acc Name</strong> : {user?.accountName}
           <br />
-          <strong>Acc Status</strong> : { user?.accountStatus }
+          <strong>Acc Status</strong> : {user?.accountStatus}
           <br />
-          <strong>Days Left</strong> : { +user?.activeDaysLeft }
+          <strong>Days Left</strong> : {+user?.activeDaysLeft}
         </td>
 
         <td>
-          {/* <strong>Status</strong> : { user?.onlineStatus && <span style={ { color: user?.onlineStatusColor } }>{ user?.onlineStatus }</span> } */ }
-          <strong>Status</strong> : <span style={ { color: user?.onlineStatusColor } }>{ user?.onlineStatus }</span>
+          {/* <strong>Status</strong> : { user?.onlineStatus && <span style={ { color: user?.onlineStatusColor } }>{ user?.onlineStatus }</span> } */}
+          <strong>Status</strong> : <span style={{ color: user?.onlineStatusColor }}>{user?.onlineStatus}</span>
           <br />
-          <strong>MAC</strong> : { user?.callerID }
+          <strong>MAC</strong> : {user?.callerID}
           <br />
+<<<<<<< HEAD
           <strong>IP</strong> : <a href={ `https://${ user?.userIP }` } className="text-sky-700" target="_blank">{ user?.userIP }</a>
+=======
+          <strong>IP</strong> : <a href={`http://${user?.userIP}`} className="text-sky-700" target="_blank">{user?.userIP}</a>
+>>>>>>> e542531d8e45f9801e61d525ed90c25262fa0443
           <br />
-          <strong>Lock MAC</strong> : { +user?.lockMac }
+          <strong>Lock MAC</strong> : {+user?.lockMac}
         </td>
 
         <td>
-          <strong>Mobile</strong> : { user?.mobileNumber }
+          <strong>Mobile</strong> : {user?.mobileNumber}
           <br />
-          <strong>Mobile 2</strong> : { user?.mobileNumber2 }
+          <strong>Mobile 2</strong> : {user?.mobileNumber2}
           <br />
-          <strong>User Notes</strong> : { user?.userNotes }
+          <strong>User Notes</strong> : {user?.userNotes}
           <br />
-          <strong>Router IP</strong> : { user?.router }
+          <strong>Router IP</strong> : {user?.router}
         </td>
 
       </tr>

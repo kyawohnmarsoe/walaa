@@ -32,8 +32,32 @@ return new class extends Migration
             $table->string('caller_id')->nullable();
             $table->text('customer_user_notes')->nullable();
             $table->string('status')->nullable();
+            $table->string('online_status_color')->nullable(); 
             $table->string('account_status')->nullable();
+            $table->string('account_status_id')->nullable();
             $table->string('account_package_type')->nullable();
+
+            $table->string('online_time')->nullable();
+            $table->string('online_since')->nullable();
+            $table->string('mac_addresss')->nullable();
+            $table->string('manual_expiration_date')->nullable();
+            $table->string('user_ip')->nullable();
+            $table->string('login_from')->nullable();
+            $table->string('can_refill')->nullable();
+            $table->string('can_delete')->nullable();
+            $table->string('is_free_account')->nullable();
+            $table->string('is_max_user')->nullable();
+            $table->string('is_blocked')->nullable();
+            $table->string('can_change_account')->nullable();
+            $table->string('can_extend_user')->nullable();
+            $table->string('last_refill')->nullable();
+            $table->string('unpaid_invoices')->nullable();
+            $table->string('service_status_color_hex')->nullable();
+            $table->string('lock_mac')->nullable();
+            $table->string('router')->nullable(); 
+            $table->string('session_type')->nullable();       
+            $table->string('active_days_left')->nullable();    
+                 
             $table->timestamps();
         });
     }

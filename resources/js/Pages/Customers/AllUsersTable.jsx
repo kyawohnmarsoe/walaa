@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import AllUsersTableRow from './AllUsersTableRow'
 
-export default function AllUsersTable ({ users, tableRef, accountTypes, apitoken })
-{
+export default function AllUsersTable({ users, tableRef, accountTypes, apitoken }) {
 
   return (
     <div className="overflow-x-auto">
 
-      <table className="table" ref={ tableRef }>
-        {/* head */ }
+      <table className="table" ref={tableRef}>
+        {/* head */}
         <thead>
           <tr className='bg-emerald-300'>
             <th>#Index</th>
@@ -26,13 +25,13 @@ export default function AllUsersTable ({ users, tableRef, accountTypes, apitoken
         <tbody>
 
           {
-            !!users?.length ? users.map(user => <AllUsersTableRow user={ user } key={ user.userIndex } accountTypes={ accountTypes } apitoken={ apitoken } />)
+            !!users?.length ? users.map(user => <AllUsersTableRow user={user} key={user.userIndex} accountTypes={accountTypes} apitoken={apitoken} />)
               : <tr><td className='text-error'>No User Found!</td></tr>
           }
 
         </tbody>
 
-        {/* foot */ }
+        {/* foot */}
         <tfoot>
           <tr>
             <th>#Index</th>

@@ -76,7 +76,7 @@ class Controller extends BaseController
             ]); 
         }  else {
             $current_time = $apiData[0]['current_time'];
-            $maxIdleTime = 3600;
+            $maxIdleTime = 3599;
             if (time() - $current_time > $maxIdleTime) {  
                 $new_api_token = $this->GetApiToken();            
                 $new_data = [

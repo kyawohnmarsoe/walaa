@@ -141,8 +141,10 @@ export default function Customers({
                                     items={customers}
                                     tableName="customer"
                                     sub_accounts={sub_accounts}
+                                    accounts={accounts}
                                     setFilterObj={setFilterObj}
-                                    filterObj={filterObj} />
+                                    filterObj={filterObj}
+                                    apitoken={apitoken} />
 
                             }
                         </div>

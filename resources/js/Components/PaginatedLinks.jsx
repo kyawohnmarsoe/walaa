@@ -15,6 +15,7 @@ export default function PaginatedLinks({
     itemsPerPage,
     items,
     sub_accounts,
+    accounts,
     users,
     remarks,
     tableName,
@@ -69,7 +70,7 @@ export default function PaginatedLinks({
             }
 
             {
-                tableName == 'customer' && <CustomerTable customers={currentItems} sub_accounts={sub_accounts} />
+                tableName == 'customer' && <CustomerTable customers={currentItems} accounts={accounts} sub_accounts={sub_accounts} apitoken={apitoken} />
             }
 
             {
