@@ -81,11 +81,7 @@ export default function AllUsersTableRow({ user, accountTypes, apitoken }) {
           <br />
           <strong>MAC</strong> : {user?.callerID}
           <br />
-<<<<<<< HEAD
           <strong>IP</strong> : <a href={ `https://${ user?.userIP }` } className="text-sky-700" target="_blank">{ user?.userIP }</a>
-=======
-          <strong>IP</strong> : <a href={`http://${user?.userIP}`} className="text-sky-700" target="_blank">{user?.userIP}</a>
->>>>>>> e542531d8e45f9801e61d525ed90c25262fa0443
           <br />
           <strong>Lock MAC</strong> : {+user?.lockMac}
         </td>

@@ -24,16 +24,11 @@ export default function StatsList({ apitoken }) {
     baseURL: 'https://rapi.earthlink.iq/api/reseller',
     headers: { 'Authorization': `Bearer ${apitoken}` }
   });
-<<<<<<< HEAD
   console.log(apitoken)
   useEffect(() =>
   {
 
 
-=======
-
-  useEffect(() => {
->>>>>>> e542531d8e45f9801e61d525ed90c25262fa0443
     instance.get('/home/Dashboard')
       .then(res => {
         setStatsData({ stats: res.data.value, errMessage: '', loading: false })

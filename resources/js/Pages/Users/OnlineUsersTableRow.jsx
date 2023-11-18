@@ -63,7 +63,6 @@ export default function OnlineUsersTableRow({ user, index, apitoken }) {
         <span className="text-emerald-500">{user?.onlineStatus}</span>
       </td>
 
-<<<<<<< HEAD
       <td>{ user?.onlineTime }</td>
       <td>{ user?.onlineSince }</td>
       <td>{ user?.callerMAC }</td>
@@ -72,16 +71,6 @@ export default function OnlineUsersTableRow({ user, index, apitoken }) {
       <td>{ user?.loginFrom }</td>
       <td>{ user?.affiliateName }</td>
       <td><span className="text-sky-700" onClick={ disconnectHandler }>Disconnect</span></td>
-=======
-      <td>{user?.onlineTime}</td>
-      <td>{user?.onlineSince}</td>
-      <td>{user?.callerMAC}</td>
-      <td>{user?.expirationDate}</td>
-      <td><a href={`http://${user?.userIP}`} className="text-sky-700" target="_blank">{user?.userIP}</a></td>
-      <td>{user?.loginFrom}</td>
-      <td>{user?.affiliateName}</td>
-      <td><span className="text-sky-700" onClick={disconnectHandler}>Disconnect</span></td>
->>>>>>> e542531d8e45f9801e61d525ed90c25262fa0443
 
     </tr >
   )
