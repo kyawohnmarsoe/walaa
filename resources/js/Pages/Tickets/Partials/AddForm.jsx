@@ -10,14 +10,16 @@ import SelectOption from '@/Components/SelectOption';
 import InputError from '@/Components/InputError';
 import Select, { components } from "react-select";
 
-export default function AddForm({ className = '', customers, apitoken, errors }) {
+export default function AddForm ({ className = '', customers, apitoken, errors })
+{
 
     const { processing, recentlySuccessful } = useForm();
 
 
-    const Input = (props) => {
+    const Input = (props) =>
+    {
         const { autoComplete = props.autoComplete } = props.selectProps;
-        return <components.Input {...props} autoComplete={autoComplete} />;
+        return <components.Input { ...props } autoComplete={ autoComplete } />;
     };
 
     const [values, setValues] = useState({
@@ -86,10 +88,12 @@ export default function AddForm({ className = '', customers, apitoken, errors })
         }
     ];
 
-    const getCustomers = () => {
+    const getCustomers = () =>
+    {
         let optionsCustomersArr = [];
         {
-            customers.map((e) => {
+            customers.map((e) =>
+            {
                 optionsCustomersArr.push(
                     {
                         "value": e.id,
@@ -101,12 +105,14 @@ export default function AddForm({ className = '', customers, apitoken, errors })
         setOptionsCustomers(optionsCustomersArr)
     }
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         getCustomers()
 
     }, [])
 
-    function customersHandleChange(e) {
+    function customersHandleChange (e)
+    {
         const value = e.value
         // console.log(value);
         setValues(values => ({
@@ -114,21 +120,24 @@ export default function AddForm({ className = '', customers, apitoken, errors })
             'user_id': value,
         }))
     }
-    function ticketSourceHandleChange(e) {
+    function ticketSourceHandleChange (e)
+    {
         const value = e.target.value
         setValues(values => ({
             ...values,
             'ticket_source': value,
         }))
     }
-    function topicHandleChange(e) {
+    function topicHandleChange (e)
+    {
         const value = e.target.value
         setValues(values => ({
             ...values,
             'topic': value,
         }))
     }
-    function levelImpHandleChange(e) {
+    function levelImpHandleChange (e)
+    {
         const value = e.target.value
         setValues(values => ({
             ...values,
@@ -136,7 +145,8 @@ export default function AddForm({ className = '', customers, apitoken, errors })
         }))
     }
 
-    function handleChange(e) {
+    function handleChange (e)
+    {
         const key = e.target.id;
         const value = e.target.value
         setValues(values => ({
@@ -145,18 +155,19 @@ export default function AddForm({ className = '', customers, apitoken, errors })
         }))
     }
 
-    function handleSubmit(e) {
+    function handleSubmit (e)
+    {
         e.preventDefault()
         router.post('/tickets/store', values)
     }
 
     return (
-        <section className={className}>
+        <section className={ className }>
             <div className='flex items-center justify-end gap-4 p-2'>
                 <a
                     className='inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium border-sky-300 text-sky-600 focus:border-sky-700 cursor-pointer'
-                    href={route('tickets')}>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-6">
+                    href={ route('tickets') }>
+                    <svg xmlns="https://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={ 1.5 } stroke="currentColor" className="w-4 h-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
                     </svg>
                     Ticket List
@@ -166,7 +177,7 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                 <h2 className="text-lg font-medium text-sky-600">Add Ticket</h2>
             </header>
 
-            <form onSubmit={handleSubmit} className="mt-6 space-y-6 ">
+            <form onSubmit={ handleSubmit } className="mt-6 space-y-6 ">
 
                 <span className='font-bold text-emerald-700' id="deposit_msg"></span>
 
@@ -176,13 +187,13 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                         <Select
                             name="user_id"
                             className="autoselect border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
-                            components={{ Input }}
+                            components={ { Input } }
                             autoComplete="user_id"
-                            options={optionsCustomers}
-                            onChange={customersHandleChange}
-                            noOptionsMessage={() => "No Users found..."}
+                            options={ optionsCustomers }
+                            onChange={ customersHandleChange }
+                            noOptionsMessage={ () => "No Users found..." }
                         />
-                        <InputError className="mt-2" message={errors.user_id} />
+                        <InputError className="mt-2" message={ errors.user_id } />
                     </div>
 
                     <div>
@@ -190,13 +201,13 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                         <SelectOption
                             id="ticket_source"
                             className="mt-1 block w-full"
-                            options={optionsTicketSource}
+                            options={ optionsTicketSource }
                             select_text="Ticket Source"
                             name="ticket_source"
-                            onChange={ticketSourceHandleChange}
+                            onChange={ ticketSourceHandleChange }
 
                         />
-                        <InputError className="mt-2" message={errors.ticket_source} />
+                        <InputError className="mt-2" message={ errors.ticket_source } />
                     </div>
 
                     <div>
@@ -204,12 +215,12 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                         <SelectOption
                             id="topic"
                             className="mt-1 block w-full"
-                            options={optionsTopic}
+                            options={ optionsTopic }
                             select_text="Topic"
                             name="topic"
-                            onChange={topicHandleChange}
+                            onChange={ topicHandleChange }
                         />
-                        <InputError className="mt-2" message={errors.topic} />
+                        <InputError className="mt-2" message={ errors.topic } />
                     </div>
 
                     <div>
@@ -218,12 +229,12 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                             id="ticket_address"
                             name="ticket_address"
                             placeholder="Ticket Address..."
-                            value={values.ticket_address}
-                            onChange={handleChange}
+                            value={ values.ticket_address }
+                            onChange={ handleChange }
                             className="mt-1 block w-full"
-                            minRows={5}
+                            minRows={ 5 }
                         />
-                        <InputError className="mt-2" message={errors.ticket_address} />
+                        <InputError className="mt-2" message={ errors.ticket_address } />
                     </div>
 
                     <div>
@@ -231,12 +242,12 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                         <SelectOption
                             id="level_of_importance"
                             className="mt-1 block w-full"
-                            options={optionsLevelImp}
+                            options={ optionsLevelImp }
                             select_text="Level"
                             name="level_of_importance"
-                            onChange={levelImpHandleChange}
+                            onChange={ levelImpHandleChange }
                         />
-                        <InputError className="mt-2" message={errors.level_of_importance} />
+                        <InputError className="mt-2" message={ errors.level_of_importance } />
                     </div>
 
                     <div>
@@ -244,21 +255,21 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                         <TextInput
                             id="ticket_number"
                             name="ticket_number"
-                            value={values.ticket_number}
-                            onChange={handleChange}
+                            value={ values.ticket_number }
+                            onChange={ handleChange }
                             type="text"
                             className="mt-1 block w-full"
                             autoComplete="off"
                         />
-                        <InputError className="mt-2" message={errors.ticket_number} />
+                        <InputError className="mt-2" message={ errors.ticket_number } />
                     </div>
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <PrimaryButton disabled={processing} type="submit">Add</PrimaryButton>
+                    <PrimaryButton disabled={ processing } type="submit">Add</PrimaryButton>
 
                     <Transition
-                        show={recentlySuccessful}
+                        show={ recentlySuccessful }
                         enter="transition ease-in-out"
                         enterFrom="opacity-0"
                         leave="transition ease-in-out"

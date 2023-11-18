@@ -72,7 +72,7 @@ export default function OnlineUsersTableRow ({ user, index, apitoken })
       <td>{ user?.onlineSince }</td>
       <td>{ user?.callerMAC }</td>
       <td>{ user?.expirationDate }</td>
-      <td><a href={ `http://${ user?.userIP }` } className="text-sky-700" target="_blank">{ user?.userIP }</a></td>
+      <td><a href={ `https://${ user?.userIP }` } className="text-sky-700" target="_blank">{ user?.userIP }</a></td>
       <td>{ user?.loginFrom }</td>
       <td>{ user?.affiliateName }</td>
       <td><span className="text-sky-700" onClick={ disconnectHandler }>Disconnect</span></td>

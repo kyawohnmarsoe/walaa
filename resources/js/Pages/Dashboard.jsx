@@ -3,8 +3,12 @@ import { Head } from '@inertiajs/react';
 import StatsList from '../Pages/Stats/StatsList';
 import Alert from '@/Components/DaisyUI/Alert';
 import ServicePhones from './ServicePhones';
+import React, { useState, useEffect } from 'react';
+
 
 export default function Dashboard({ auth, apitoken }) {
+
+ 
 
     return (
         <AuthenticatedLayout
@@ -16,6 +20,8 @@ export default function Dashboard({ auth, apitoken }) {
             }
         >
             <Head title="Dashboard" />
+
+            {/* { apitoken } */}
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-4">

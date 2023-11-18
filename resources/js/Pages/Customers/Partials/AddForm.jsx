@@ -8,7 +8,8 @@ import TextInput from '@/Components/TextInput';
 import Textarea from '@/Components/Textarea';
 import SelectOption from '@/Components/SelectOption';
 
-export default function AddForm({ className = '', accounts, sub_accounts, affiliates, apitoken }) {
+export default function AddForm ({ className = '', accounts, sub_accounts, affiliates, apitoken })
+{
 
     const { processing, recentlySuccessful } = useForm();
 
@@ -45,10 +46,12 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
 
     let span = document.getElementById("deposit_msg");
 
-    const getAffiliates = () => {
+    const getAffiliates = () =>
+    {
         let optionsAffiliatesArr = [];
         {
-            affiliates.map((e) => {
+            affiliates.map((e) =>
+            {
                 optionsAffiliatesArr.push(
                     {
                         "index": e.affiliate_index,
@@ -60,10 +63,12 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
         setOptionsAffiliates(optionsAffiliatesArr)
     }
 
-    const getAccounts = () => {
+    const getAccounts = () =>
+    {
         let optionsAccountsArr = [];
         {
-            accounts.map((e) => {
+            accounts.map((e) =>
+            {
                 optionsAccountsArr.push(
                     {
                         "index": e.account_index,
@@ -75,12 +80,14 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
         setOptionsAccounts(optionsAccountsArr)
     }
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         getAffiliates()
         getAccounts()
     }, [])
 
-    function affiliatesHandleChange(e) {
+    function affiliatesHandleChange (e)
+    {
         const value = e.target.value
         // console.log(value);
         setShowAffiliateValue(false)
@@ -91,14 +98,16 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
         }))
 
         const filteredRes = affiliates.filter(aff => aff.affiliate_index == value);
-        if (filteredRes) {
+        if (filteredRes)
+        {
             setShowAffiliateValue(true)
             setFilteredAffiliate(filteredRes)
             // console.log(filteredRes)
         }
     }
 
-    function accountsHandleChange(e) {
+    function accountsHandleChange (e)
+    {
         const value = e.target.value
         // console.log(value);
         setShowAccountValue(false)
@@ -108,7 +117,8 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
         }))
 
         const filteredRes = accounts.filter(acc => acc.account_index == value);
-        if (filteredRes) {
+        if (filteredRes)
+        {
             setShowAccountValue(true)
             setFilteredAccount(filteredRes)
             // console.log(filteredRes)
@@ -116,7 +126,7 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
             // to get Affiliate deposit
             const instance = axios.create({
                 baseURL: 'https://rapi.earthlink.iq/api/reseller/affiliate/deposit/confirmationmsg',
-                headers: { 'Authorization': `Bearer ${apitoken}` }
+                headers: { 'Authorization': `Bearer ${ apitoken }` }
             });
             let postData = {
                 // UserID: '',
@@ -124,16 +134,20 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
                 AccountID: showAccountValue ? filteredAccount[0]['account_index'] : 56,
                 AffiliateTypeID: 1
             }
-            instance.post('', postData).then(res => {
-                if (res) {
+            instance.post('', postData).then(res =>
+            {
+                if (res)
+                {
                     console.log(res.data.value)
                     res.value == true ??
                         console.log(res.data.responseMessage)
                     span.innerHTML = res.data.responseMessage;
                 }
 
-            }).catch(err => {
-                if (err) {
+            }).catch(err =>
+            {
+                if (err)
+                {
                     console.log(err.message)
                     // router.visit('/customers/create', {
                     //     only: ['customers'],
@@ -144,8 +158,10 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
 
         let optionsSubAccountsArr = [];
         {
-            sub_accounts.filter((subacc) => {
-                if (subacc.account_index == value) {
+            sub_accounts.filter((subacc) =>
+            {
+                if (subacc.account_index == value)
+                {
                     optionsSubAccountsArr.push(
                         {
                             "index": subacc.id,
@@ -158,7 +174,8 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
         setOptionsSubAccounts(optionsSubAccountsArr)
     }
 
-    function subAccountsHandleChange(e) {
+    function subAccountsHandleChange (e)
+    {
         const value = e.target.value
         setValues(values => ({
             ...values,
@@ -166,7 +183,8 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
         }))
     }
 
-    function handleChange(e) {
+    function handleChange (e)
+    {
         const key = e.target.id;
         const value = e.target.value
         setValues(values => ({
@@ -175,7 +193,8 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
         }))
     }
 
-    function handleSubmit(e) {
+    function handleSubmit (e)
+    {
         e.preventDefault()
         router.post('/customers/store', values)
 
@@ -224,7 +243,7 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
             {
                 showAccountValue ?
                     <span className='font-bold text-emerald-700'>
-                        Account Price : {filteredAccount[0]['account_price']}
+                        Account Price : { filteredAccount[0]['account_price'] }
                     </span>
                     : ''
             }
@@ -232,7 +251,7 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
             {
                 showAffiliateValue ?
                     <span className='p-4 font-bold text-emerald-700'>
-                        {/* Affiliate Deposit :  */}
+                        {/* Affiliate Deposit :  */ }
                     </span>
                     : ''
             }
@@ -240,12 +259,12 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
         : '';
 
     return (
-        <section className={className}>
+        <section className={ className }>
             <div className='flex items-center justify-end gap-4 p-2'>
                 <a
                     className='inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium border-sky-300 text-sky-600 focus:border-sky-700 cursor-pointer'
-                    href={route('customers')}>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-6">
+                    href={ route('customers') }>
+                    <svg xmlns="https://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={ 1.5 } stroke="currentColor" className="w-4 h-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
                     </svg>
                     Users List
@@ -255,8 +274,8 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
                 <h2 className="text-lg font-medium text-sky-600">Add User</h2>
             </header>
 
-            <form onSubmit={handleSubmit} className="mt-6 space-y-6 ">
-                {showDiv}
+            <form onSubmit={ handleSubmit } className="mt-6 space-y-6 ">
+                { showDiv }
 
                 <span className='font-bold text-emerald-700' id="deposit_msg"></span>
 
@@ -266,10 +285,10 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
                         <SelectOption
                             id="affiliate_index"
                             className="mt-1 block w-full"
-                            options={optionsAffiliates}
+                            options={ optionsAffiliates }
                             select_text="Affiliates"
                             name="affiliate_index"
-                            onChange={affiliatesHandleChange}
+                            onChange={ affiliatesHandleChange }
                         />
                     </div>
 
@@ -278,10 +297,10 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
                         <SelectOption
                             id="account_index"
                             className="mt-1 block w-full"
-                            options={optionsAccounts}
+                            options={ optionsAccounts }
                             select_text="Main Accounts"
                             name="account_index"
-                            onChange={accountsHandleChange}
+                            onChange={ accountsHandleChange }
                         />
                     </div>
 
@@ -290,10 +309,10 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
                         <SelectOption
                             id="sub_account_id"
                             className="mt-1 block w-full"
-                            options={optionsSubAccounts}
+                            options={ optionsSubAccounts }
                             select_text="Sub Accounts"
                             name="sub_account_id"
-                            onChange={subAccountsHandleChange}
+                            onChange={ subAccountsHandleChange }
                         />
                     </div>
 
@@ -302,8 +321,8 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
                         <TextInput
                             id="deposit_password"
                             name="deposit_password"
-                            value={values.deposit_password}
-                            onChange={handleChange}
+                            value={ values.deposit_password }
+                            onChange={ handleChange }
                             type="password"
                             className="mt-1 block w-full"
                             autoComplete="off"
@@ -315,8 +334,8 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
                         <TextInput
                             id="first_name"
                             name="first_name"
-                            value={values.first_name}
-                            onChange={handleChange}
+                            value={ values.first_name }
+                            onChange={ handleChange }
                             type="text"
                             className="mt-1 block w-full"
                             autoComplete="off"
@@ -328,8 +347,8 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
                         <TextInput
                             id="last_name"
                             name="last_name"
-                            value={values.last_name}
-                            onChange={handleChange}
+                            value={ values.last_name }
+                            onChange={ handleChange }
                             type="text"
                             className="mt-1 block w-full"
                             autoComplete="off"
@@ -341,8 +360,8 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
                         <TextInput
                             id="email"
                             name="email"
-                            value={values.email}
-                            onChange={handleChange}
+                            value={ values.email }
+                            onChange={ handleChange }
                             type="text"
                             className="mt-1 block w-full"
                             autoComplete="off"
@@ -354,8 +373,8 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
                         <TextInput
                             id="mobile_number"
                             name="mobile_number"
-                            value={values.mobile_number}
-                            onChange={handleChange}
+                            value={ values.mobile_number }
+                            onChange={ handleChange }
                             type="text"
                             className="mt-1 block w-full"
                             autoComplete="off"
@@ -367,8 +386,8 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
                         <TextInput
                             id="company"
                             name="company"
-                            value={values.company}
-                            onChange={handleChange}
+                            value={ values.company }
+                            onChange={ handleChange }
                             type="text"
                             className="mt-1 block w-full"
                             autoComplete="off"
@@ -380,8 +399,8 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
                         <TextInput
                             id="display_name"
                             name="display_name"
-                            value={values.display_name}
-                            onChange={handleChange}
+                            value={ values.display_name }
+                            onChange={ handleChange }
                             type="text"
                             className="mt-1 block w-full"
                             autoComplete="off"
@@ -393,8 +412,8 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
                         <TextInput
                             id="address"
                             name="address"
-                            value={values.address}
-                            onChange={handleChange}
+                            value={ values.address }
+                            onChange={ handleChange }
                             type="text"
                             className="mt-1 block w-full"
                             autoComplete="off"
@@ -406,8 +425,8 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
                         <TextInput
                             id="city"
                             name="city"
-                            value={values.city}
-                            onChange={handleChange}
+                            value={ values.city }
+                            onChange={ handleChange }
                             type="text"
                             className="mt-1 block w-full"
                             autoComplete="off"
@@ -419,8 +438,8 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
                         <TextInput
                             id="state"
                             name="state"
-                            value={values.state}
-                            onChange={handleChange}
+                            value={ values.state }
+                            onChange={ handleChange }
                             type="text"
                             className="mt-1 block w-full"
                             autoComplete="off"
@@ -432,8 +451,8 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
                         <TextInput
                             id="customer_user_id"
                             name="customer_user_id"
-                            value={values.customer_user_id}
-                            onChange={handleChange}
+                            value={ values.customer_user_id }
+                            onChange={ handleChange }
                             type="text"
                             className="mt-1 block w-full"
                             autoComplete="off"
@@ -446,18 +465,18 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
                             id="customer_user_notes"
                             name="customer_user_notes"
                             placeholder="Notes..."
-                            value={values.customer_user_notes}
-                            onChange={handleChange}
+                            value={ values.customer_user_notes }
+                            onChange={ handleChange }
                             className="mt-1 block w-full"
-                            minRows={5}
+                            minRows={ 5 }
                         />
                     </div>
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <PrimaryButton disabled={processing} type="submit">Add</PrimaryButton>
+                    <PrimaryButton disabled={ processing } type="submit">Add</PrimaryButton>
                     <Transition
-                        show={recentlySuccessful}
+                        show={ recentlySuccessful }
                         enter="transition ease-in-out"
                         enterFrom="opacity-0"
                         leave="transition ease-in-out"
