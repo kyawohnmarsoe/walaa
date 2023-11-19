@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Stats from './Stats';
 import Alert from '../../Components/DaisyUI/Alert';
 import Loading from '@/Components/DaisyUI/Loading';
+import axios from 'axios';
 
 export default function StatsList({ apitoken }) {
   const [statsData, setStatsData] = useState({ stats: [], errMessage: '', loading: true })
@@ -24,11 +25,10 @@ export default function StatsList({ apitoken }) {
     baseURL: 'https://rapi.earthlink.iq/api/reseller',
     headers: { 'Authorization': `Bearer ${apitoken}` }
   });
+
   console.log(apitoken)
   useEffect(() =>
   {
-
-
     instance.get('/home/Dashboard')
       .then(res => {
         setStatsData({ stats: res.data.value, errMessage: '', loading: false })

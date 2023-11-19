@@ -19,12 +19,21 @@ class DashboardController extends Controller
 
      public function test()
     {
-        $token = $this->getSavedToken();     
+        $token = $this->getSavedToken();
        
         return Inertia::render('Test', [
             'apitoken' => $token
         ]);
     } // dashboard
+
+         public function test2()
+         {
+         $token = $this->getSavedToken();
+
+         return view('test', [
+         'apitoken' => $token
+         ]);
+         } // dashboard
 
    
 }

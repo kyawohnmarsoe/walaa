@@ -8,8 +8,6 @@ import React, { useState, useEffect } from 'react';
 
 export default function Dashboard({ auth, apitoken }) {
 
- 
-
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -32,7 +30,7 @@ export default function Dashboard({ auth, apitoken }) {
                                     : <Alert msg='Session Expired' />
                             }
 
-                            <ServicePhones apitoken={apitoken} />
+                            {/* <ServicePhones apitoken={apitoken} /> */}
                         </div>
                     </div>
                 </div>
