@@ -35,13 +35,9 @@ export default function OnlineUsersTableRow({ user, index, apitoken }) {
 
   return (
     <tr>
-      {/* <th>
-          <label>
-            <input type="checkbox" className="checkbox" />
-          </label>
-        </th> */}
+     
 
-      <td>{user?.userIndex}</td>
+      {/* <td>{user?.userIndex}</td> */}
 
 
       <td>

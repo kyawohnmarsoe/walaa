@@ -30,7 +30,7 @@ export default function Dashboard({ auth, apitoken }) {
                                     : <Alert msg='Session Expired' />
                             }
 
-                            {/* <ServicePhones apitoken={apitoken} /> */}
+                            <ServicePhones apitoken={apitoken} />
                         </div>
                     </div>
                 </div>

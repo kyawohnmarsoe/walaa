@@ -20,6 +20,8 @@ export default function AccessDetails ({ apitoken, user, className = '' })
         userActive: user?.userActive || false
     });
 
+    console.log(user?.userActive)
+
     const instance = axios.create({
         baseURL: 'https://rapi.earthlink.iq/api/reseller',
         headers: { 'Authorization': `Bearer ${ apitoken }` }
@@ -161,7 +163,7 @@ export default function AccessDetails ({ apitoken, user, className = '' })
                                         <Checkbox
                                             name="userActive"
                                             checked={ data?.userActive }
-                                            onChange={ (e) => setData('userActive', e.target.checked) }
+                                            onChange={ (e) => setData('userActive', !data?.userActive) }
                                         />
 
                                         <InputLabel htmlFor="userActive" value="Active" className='ml-2' />

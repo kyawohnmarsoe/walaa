@@ -1,19 +1,37 @@
-import React,{useEffect} from "react";
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
 
-export default function Test ({ apitoken })
-{
+export default function Test () {
+
+    var data = JSON.stringify({
+        'username': 'walaaim',
+        'password': '@walaalink@',
+        'loginType': '1',
+        'grant_type': 'password'
+    });
+
+    var config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'https://rapi.earthlink.iq/api/reseller/Token',
+        headers: { 
+            'Content-Type': 'application/x-www-form-urlencoded' ,
+            'Access-Control-Allow-Origin':'*'
+    },
+        data: data
+    };
+
     useEffect(() =>
     {
-        axios.request({
-            headers: { 'Authorization': `Bearer ${ apitoken }` },
-            method: "GET",
-            url: `https://rapi.earthlink.iq/api/reseller/home/Dashboard`
-        }).then(response =>
-        {
-            console.log(response.data);
-        }).catch(err => console.log(err.message))
+        axios(config)
+            .then(function (response)
+            {
+                console.log(JSON.stringify(response.data));
+            })
+            .catch(function (error)
+            {
+                console.log(error);
+            });
     }, [])
 
-    return <div>{ apitoken }</div>;
+  return <div>Test</div>;
 }
