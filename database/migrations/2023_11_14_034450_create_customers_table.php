@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('mobile_number2')->nullable();
             $table->string('address')->nullable();
             $table->string('email');
+            $table->string('user_password');
             $table->string('city')->nullable();
             // $table->string('user_active_manage')->nullable();
             $table->string('company')->nullable();
@@ -32,7 +33,7 @@ return new class extends Migration
             $table->string('caller_id')->nullable();
             $table->text('customer_user_notes')->nullable();
             $table->string('status')->nullable();
-            $table->string('online_status_color')->nullable(); 
+            $table->integer('active_status')->default(1); 
             $table->string('account_status')->nullable();
             // $table->string('account_status_id')->nullable();
             $table->string('account_package_type')->nullable();

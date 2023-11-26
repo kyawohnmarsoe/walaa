@@ -54,8 +54,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/customers', [CustomerController::class, 'index'])->name('customers');
     Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create');
-    Route::post('/customers/store', [CustomerController::class, 'store'])->name('customers.store');
+    Route::post('/customers/insert', [CustomerController::class, 'insert'])->name('customers.insert');
     Route::post('/customers', [CustomerController::class, 'index'])->name('customers.filter');
+    Route::get('/customers/change_deposit_pass', [CustomerController::class, 'change_deposit_password'])->name('customers.change_deposit_pass');
+    Route::post('/customers/change_deposit_pass/{id}', [CustomerController::class, 'update_deposit_password'])->name('customers.update_deposit_pass');
     Route::get('/customers/store/api/{totalCount}', [CustomerController::class, 'store_api'])->name('customers.store.api');
     Route::get('/customers/{index}', [CustomerController::class, 'edit'])->name('customers.edit');
     Route::post('/customers/{index}', [CustomerController::class, 'update'])->name('customers.update');    
@@ -108,12 +110,12 @@ Route::middleware('auth')->group(function () {
 //     Route::delete('/earthlink/profile', [EarthlinkProfileController::class, 'destroy'])->name('earthlink.destroy');
 // });
 
-Route::get('/clear-cache-all', function() {    
-    Artisan::call('route:cache');
-    Artisan::call('config:cache');
-    Artisan::call('cache:clear');
-    Artisan::call('view:clear');
-    dd("Cache Clear All");
-});
+// Route::get('/clear-cache-all', function() {    
+//     Artisan::call('route:cache');
+//     Artisan::call('config:cache');
+//     Artisan::call('cache:clear');
+//     Artisan::call('view:clear');
+//     dd("Cache Clear All");
+// });
 
 require __DIR__.'/auth.php';

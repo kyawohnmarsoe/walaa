@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useForm, router } from '@inertiajs/react';
-import { Transition } from '@headlessui/react';
 
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
@@ -10,27 +9,24 @@ import SelectOption from '@/Components/SelectOption';
 
 export default function AddForm({ className = '', customer, accounts, sub_accounts, affiliates, apitoken }) {
 
-    const { processing, recentlySuccessful } = useForm();
+    const { processing } = useForm();
 
     const [values, setValues] = useState({
         account_index: customer.account_index,
         sub_account_id: customer.sub_account_id,
         affiliate_index: customer.affiliate_index,
-        // deposit_password: '',
-        first_name: customer.first_name,
-        last_name: customer.last_name,
-        customer_user_id: customer.customer_user_id,
-        mobile_number: customer.mobile_number,
-        mobile_number2: customer.mobile_number2,
-        address: customer.address,
+        first_name: customer.first_name ?? '',
+        last_name: customer.last_name ?? '',
         email: customer.email,
-        city: customer.city,
-        // user_active_manage: '',
-        company: customer.company,
-        state: customer.state,
-        display_name: customer.display_name,
-        caller_id: customer.caller_id,
-        customer_user_notes: customer.customer_user_notes,
+        user_password: customer.user_password ?? '',
+        mobile_number: customer.mobile_number ?? '',
+        mobile_number2: customer.mobile_number2 ?? '',
+        address: customer.address ?? '',
+        city: customer.city ?? '',
+        company: customer.company ?? '',
+        state: customer.state ?? '',
+        display_name: customer.display_name ?? '',
+        customer_user_notes: customer.customer_user_notes ?? '',
     });
 
     const [optionsAffiliates, setOptionsAffiliates] = useState([])
@@ -114,32 +110,32 @@ export default function AddForm({ className = '', customer, accounts, sub_accoun
             // console.log(filteredRes)
 
             // to get Affiliate deposit
-            const instance = axios.create({
-                baseURL: 'https://rapi.earthlink.iq/api/reseller/affiliate/deposit/confirmationmsg',
-                headers: { 'Authorization': `Bearer ${apitoken}` }
-            });
-            let postData = {
-                // UserID: '',
-                TargetAffiliateID: showAffiliateValue ? filteredAffiliate[0]['affiliate_index'] : 4336,
-                AccountID: showAccountValue ? filteredAccount[0]['account_index'] : 56,
-                AffiliateTypeID: 1
-            }
-            instance.post('', postData).then(res => {
-                if (res) {
-                    console.log(res.data.value)
-                    res.value == true ??
-                        console.log(res.data.responseMessage)
-                    span.innerHTML = res.data.responseMessage;
-                }
+            // const instance = axios.create({
+            //     baseURL: 'https://rapi.earthlink.iq/api/reseller/affiliate/deposit/confirmationmsg',
+            //     headers: { 'Authorization': `Bearer ${apitoken}` }
+            // });
+            // let postData = {
+            //     // UserID: '',
+            //     TargetAffiliateID: showAffiliateValue ? filteredAffiliate[0]['affiliate_index'] : 4336,
+            //     AccountID: showAccountValue ? filteredAccount[0]['account_index'] : 56,
+            //     AffiliateTypeID: 1
+            // }
+            // instance.post('', postData).then(res => {
+            //     if (res) {
+            //         console.log(res.data.value)
+            //         res.value == true ??
+            //             console.log(res.data.responseMessage)
+            //         span.innerHTML = res.data.responseMessage;
+            //     }
 
-            }).catch(err => {
-                if (err) {
-                    console.log(err.message)
-                    // router.visit('/customers/create', {
-                    //     only: ['customers'],
-                    // })
-                }
-            })
+            // }).catch(err => {
+            //     if (err) {
+            //         console.log(err.message)
+            //         // router.visit('/customers/create', {
+            //         //     only: ['customers'],
+            //         // })
+            //     }
+            // })
         }
 
         let optionsSubAccountsArr = [];
@@ -177,46 +173,7 @@ export default function AddForm({ className = '', customer, accounts, sub_accoun
 
     function handleSubmit(e) {
         e.preventDefault()
-        router.post('/customers/store', values)
-
-        // testing for result to post new user with deposit
-        // const instance = axios.create({
-        //     baseURL: 'https://rapi.earthlink.iq/api/reseller/user/newuserdeposit',
-        //     headers: { 'Authorization': `Bearer ${apitoken}` }
-        // });
-        // let postData = {
-        //     DepositPassword: "Elink3",
-        //     AgentIndex: 2199,
-        //     AffiliateIndex: 2199,
-        //     AccountIndex: 60,
-        //     UserID: "newtestuser11@hus",
-        //     UserPass: 1,
-        //     EarthMaxMAC: '',
-        //     AffiliateTypeID: '',
-        //     FirstName: values.first_name,
-        //     LastName: values.last_name,
-        //     Company: values.company,
-        //     Address: values.address,
-        //     City: values.city,
-        //     State: values.state,
-        //     Country: '',
-        //     Zip: '',
-        //     Email: values.email,
-        //     MobileNumber: values.mobile_number,
-        //     MobileNumber2: values.mobile_number2,
-        //     DisplayName: values.display_name
-        // }
-        // instance.post('', postData).then(res => {
-        //     if (res) {
-        //         console.log(res.data)
-        //         console.log(postData)
-        //     }
-
-        // }).catch(err => {
-        //     if (err) {
-        //         console.log(err.message)
-        //     }
-        // })
+        router.post(`/customers/${customer.customer_user_index}`, values)
     }
 
     let showDiv = showAccountValue || showAffiliateValue ?
@@ -269,6 +226,7 @@ export default function AddForm({ className = '', customer, accounts, sub_accoun
                             options={optionsAffiliates}
                             select_text="Affiliates"
                             name="affiliate_index"
+                            value={values.affiliate_index}
                             onChange={affiliatesHandleChange}
                         />
                     </div>
@@ -281,32 +239,21 @@ export default function AddForm({ className = '', customer, accounts, sub_accoun
                             options={optionsAccounts}
                             select_text="Main Accounts"
                             name="account_index"
+                            value={values.account_index}
                             onChange={accountsHandleChange}
                         />
                     </div>
 
                     <div>
-                        <InputLabel htmlFor="account_index" value="Sub Accounts" />
+                        <InputLabel htmlFor="sub_account_id" value="Sub Accounts" />
                         <SelectOption
                             id="sub_account_id"
                             className="mt-1 block w-full"
                             options={optionsSubAccounts}
                             select_text="Sub Accounts"
                             name="sub_account_id"
+                            value={values.sub_account_id}
                             onChange={subAccountsHandleChange}
-                        />
-                    </div>
-
-                    <div>
-                        <InputLabel htmlFor="first_name" value="Deposit Password" />
-                        <TextInput
-                            id="deposit_password"
-                            name="deposit_password"
-                            value={values.deposit_password}
-                            onChange={handleChange}
-                            type="password"
-                            className="mt-1 block w-full"
-                            autoComplete="off"
                         />
                     </div>
 
@@ -350,6 +297,33 @@ export default function AddForm({ className = '', customer, accounts, sub_accoun
                     </div>
 
                     <div>
+                        <InputLabel htmlFor="user_password" value="User Password" />
+                        <TextInput
+                            id="user_password"
+                            name="user_password"
+                            value={values.user_password}
+                            onChange={handleChange}
+                            type="text"
+                            className="mt-1 block w-full"
+                            autoComplete="off"
+                        />
+                    </div>
+
+                    <div>
+                        <InputLabel htmlFor="display_name" value="Display Name" />
+                        <TextInput
+                            id="display_name"
+                            name="display_name"
+                            value={values.display_name}
+                            onChange={handleChange}
+                            type="text"
+                            className="mt-1 block w-full"
+                            autoComplete="off"
+                        />
+                    </div>
+
+
+                    <div>
                         <InputLabel htmlFor="mobile_number" value="Mobile Number" />
                         <TextInput
                             id="mobile_number"
@@ -381,19 +355,6 @@ export default function AddForm({ className = '', customer, accounts, sub_accoun
                             id="company"
                             name="company"
                             value={values.company}
-                            onChange={handleChange}
-                            type="text"
-                            className="mt-1 block w-full"
-                            autoComplete="off"
-                        />
-                    </div>
-
-                    <div>
-                        <InputLabel htmlFor="display_name" value="Display Name" />
-                        <TextInput
-                            id="display_name"
-                            name="display_name"
-                            value={values.display_name}
                             onChange={handleChange}
                             type="text"
                             className="mt-1 block w-full"
@@ -441,19 +402,6 @@ export default function AddForm({ className = '', customer, accounts, sub_accoun
                     </div>
 
                     <div>
-                        <InputLabel htmlFor="customer_user_id" value="User Id" />
-                        <TextInput
-                            id="customer_user_id"
-                            name="customer_user_id"
-                            value={values.customer_user_id}
-                            onChange={handleChange}
-                            type="text"
-                            className="mt-1 block w-full"
-                            autoComplete="off"
-                        />
-                    </div>
-
-                    <div>
                         <InputLabel htmlFor="customer_user_notes" value="User Notes" />
                         <Textarea
                             id="customer_user_notes"
@@ -468,16 +416,7 @@ export default function AddForm({ className = '', customer, accounts, sub_accoun
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <PrimaryButton disabled={processing} type="submit">Add</PrimaryButton>
-                    <Transition
-                        show={recentlySuccessful}
-                        enter="transition ease-in-out"
-                        enterFrom="opacity-0"
-                        leave="transition ease-in-out"
-                        leaveTo="opacity-0"
-                    >
-                        <p className="text-sm text-gray-600">Add</p>
-                    </Transition>
+                    <PrimaryButton disabled={processing} type="submit">Update</PrimaryButton>
                 </div>
             </form>
         </section>

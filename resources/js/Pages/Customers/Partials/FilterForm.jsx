@@ -16,24 +16,12 @@ export default function FilterForm({ className = '', accounts, sub_accounts, aff
         affiliate_index: '',
         customer_user_id: '',
         status: '',
+        active_status: '',
     });
 
     const [optionsAccounts, setOptionsAccounts] = useState([])
     const [optionsSubAccounts, setOptionsSubAccounts] = useState([])
     const [optionsAffiliates, setOptionsAffiliates] = useState([])
-
-    // , ExpiringSoon, , SuspendedByAgent
-
-    // "all": "0",
-    // "active": "1", Active
-    // "inactive": "2", Suspended [activeDaysLeft"0"]
-    // "online": "3", Active
-    // "offline": "4", Active 
-    // "will be disabled": "5",  Active
-    // "disabled": "6",Suspended [activeDaysLeft"0"]
-    // "activated": "7",
-    // "paid": "9",
-    // "didnt pay": "8"
 
     const optionsStatus = [
         {
@@ -47,6 +35,16 @@ export default function FilterForm({ className = '', accounts, sub_accounts, aff
         {
             "index": "OnlineNoNet",
             "name": "OnlineNoNet"
+        }
+    ];
+    const optionsActiveStatus = [
+        {
+            "index": 0,
+            "name": "Disable"
+        },
+        {
+            "index": 1,
+            "name": "Active"
         }
     ];
 
@@ -133,6 +131,14 @@ export default function FilterForm({ className = '', accounts, sub_accounts, aff
         }))
     }
 
+    function activeStatusHandleChange(e) {
+        const value = e.target.value
+        setValues(values => ({
+            ...values,
+            'active_status': value,
+        }))
+    }
+
     function handleChange(e) {
         const key = e.target.id;
         const value = e.target.value
@@ -168,7 +174,7 @@ export default function FilterForm({ className = '', accounts, sub_accounts, aff
                     </div>
 
                     <div>
-                        <InputLabel htmlFor="account_index" value="Sub Accounts" />
+                        <InputLabel htmlFor="sub_account_id" value="Sub Accounts" />
                         <SelectOption
                             id="sub_account_id"
                             className="mt-1 block w-full"
@@ -205,7 +211,7 @@ export default function FilterForm({ className = '', accounts, sub_accounts, aff
                     </div>
 
                     <div>
-                        <InputLabel htmlFor="status" value="User Status" />
+                        <InputLabel htmlFor="status" value="API User Status" />
                         <SelectOption
                             id="status"
                             className="mt-1 block w-full"
@@ -213,6 +219,18 @@ export default function FilterForm({ className = '', accounts, sub_accounts, aff
                             select_text="Status"
                             name="status"
                             onChange={statusHandleChange}
+                        />
+                    </div>
+
+                    <div>
+                        <InputLabel htmlFor="active_status" value="Active / Disable Status" />
+                        <SelectOption
+                            id="active_status"
+                            className="mt-1 block w-full"
+                            options={optionsActiveStatus}
+                            select_text="Active / Disable Status"
+                            name="active_status"
+                            onChange={activeStatusHandleChange}
                         />
                     </div>
                 </div>

@@ -66,7 +66,7 @@ export default function AccountsTable({ accounts, listname }) {
                         {/* <th>Image</th> */}
                         {
                             listname == '' &&
-                            <th colspan="2">Actions</th>
+                            <th colSpan="2">Actions</th>
                         }
                     </tr>
                 </thead>
@@ -104,7 +104,7 @@ export default function AccountsTable({ accounts, listname }) {
                                     listname == '' &&
                                     <td>
                                         <PrimaryButton className="bg-sky-800" padding_x='px-2' disabled='' onClick={() => editLocalAccountClick(acc.id)}>
-                                            <svg class="h-4 w-4 text-white mr-1" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z" />  <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />  <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />  <line x1="16" y1="5" x2="19" y2="8" /></svg>
+                                            <svg className="h-4 w-4 text-white mr-1" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">  <path stroke="none" d="M0 0h24v24H0z" />  <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />  <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />  <line x1="16" y1="5" x2="19" y2="8" /></svg>
                                             Edit
                                         </PrimaryButton>
                                     </td>
@@ -113,7 +113,7 @@ export default function AccountsTable({ accounts, listname }) {
                                     listname == '' &&
                                     <td>
                                         <DangerButton padding_x='px-2' disabled='' onClick={() => callModal(acc)} >
-                                            <svg class="h-4 w-4 text-white mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">  <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z" />  <line x1="18" y1="9" x2="12" y2="15" />  <line x1="12" y1="9" x2="18" y2="15" /></svg>
+                                            <svg className="h-4 w-4 text-white mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">  <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z" />  <line x1="18" y1="9" x2="12" y2="15" />  <line x1="12" y1="9" x2="18" y2="15" /></svg>
                                             Delete
                                         </DangerButton>
                                     </td>

@@ -16,22 +16,10 @@ class StoreCustomerRequest extends FormRequest
         return [         
             'account_index' => 'required',
             'sub_account_id' => '',
-            'affiliate_index' => 'required',             
-            'first_name'=> '',
-            'last_name'=> '',
-            'customer_user_id'=> 'required',
-            'customer_user_index'=> '',
-            'mobile_number'=> '',
-            'mobile_number2'=> '',
-            'address'=> '',
+            'affiliate_index' => 'required',            
+            // 'customer_user_index'=> '',            
             'email'=> 'required|email',
-            // 'city'=>'',
-            // 'user_active_manage'=> '',
-            // 'company'=> '',
-            // 'state'=> '',
-            // 'display_name'=> '',
-            // 'caller_id'=> '',
-            // 'customer_user_notes'=> '',  
+            'user_password' => 'required',            
         ];
     }
 }

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useForm, router } from '@inertiajs/react';
-import { Transition } from '@headlessui/react';
 
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
@@ -10,24 +9,23 @@ import SelectOption from '@/Components/SelectOption';
 
 export default function AddForm({ className = '', accounts, sub_accounts, affiliates, apitoken }) {
 
-    const { processing, recentlySuccessful } = useForm();
+    const { processing } = useForm();
 
     const [values, setValues] = useState({
         account_index: '',
         sub_account_id: '',
         affiliate_index: '',
-        deposit_password: '',
         first_name: '',
         last_name: '',
+        email: '',
+        user_password: '',
+        display_name: '',
         mobile_number: '',
         mobile_number2: '',
         address: '',
-        email: '',
         city: '',
         company: '',
         state: '',
-        display_name: '',
-        caller_id: '',
         customer_user_notes: '',
     });
 
@@ -155,6 +153,7 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
 
     function subAccountsHandleChange(e) {
         const value = e.target.value
+        console.log(value);
         setValues(values => ({
             ...values,
             'sub_account_id': value,
@@ -172,7 +171,8 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
 
     function handleSubmit(e) {
         e.preventDefault()
-        router.post('/customers/store', values);
+        console.log(values);
+        router.post('/customers/insert', values)
     }
 
     let showDiv = showAccountValue || showAffiliateValue ?
@@ -198,6 +198,11 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
     return (
         <section className={className}>
             <div className='flex items-center justify-end gap-4 p-2'>
+                <a
+                    className="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 transition ease-in-out duration-150 false "
+                    href={route('customers.change_deposit_pass')}>
+                    Change Deposit Password
+                </a>
                 <a
                     className='inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium border-sky-300 text-sky-600 focus:border-sky-700 cursor-pointer'
                     href={route('customers')}>
@@ -225,6 +230,7 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
                             options={optionsAffiliates}
                             select_text="Affiliates"
                             name="affiliate_index"
+                            value={values.affiliate_index}
                             onChange={affiliatesHandleChange}
                         />
                     </div>
@@ -237,32 +243,21 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
                             options={optionsAccounts}
                             select_text="Main Accounts"
                             name="account_index"
+                            value={values.account_index}
                             onChange={accountsHandleChange}
                         />
                     </div>
 
                     <div>
-                        <InputLabel htmlFor="account_index" value="Sub Accounts" />
+                        <InputLabel htmlFor="sub_account_id" value="Sub Accounts" />
                         <SelectOption
                             id="sub_account_id"
                             className="mt-1 block w-full"
                             options={optionsSubAccounts}
                             select_text="Sub Accounts"
                             name="sub_account_id"
+                            value={values.sub_account_id}
                             onChange={subAccountsHandleChange}
-                        />
-                    </div>
-
-                    <div>
-                        <InputLabel htmlFor="first_name" value="Deposit Password" />
-                        <TextInput
-                            id="deposit_password"
-                            name="deposit_password"
-                            value={values.deposit_password}
-                            onChange={handleChange}
-                            type="password"
-                            className="mt-1 block w-full"
-                            autoComplete="off"
                         />
                     </div>
 
@@ -306,6 +301,33 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
                     </div>
 
                     <div>
+                        <InputLabel htmlFor="user_password" value="User Password" />
+                        <TextInput
+                            id="user_password"
+                            name="user_password"
+                            value={values.user_password}
+                            onChange={handleChange}
+                            type="text"
+                            className="mt-1 block w-full"
+                            autoComplete="off"
+                        />
+                    </div>
+
+                    <div>
+                        <InputLabel htmlFor="display_name" value="Display Name" />
+                        <TextInput
+                            id="display_name"
+                            name="display_name"
+                            value={values.display_name}
+                            onChange={handleChange}
+                            type="text"
+                            className="mt-1 block w-full"
+                            autoComplete="off"
+                        />
+                    </div>
+
+
+                    <div>
                         <InputLabel htmlFor="mobile_number" value="Mobile Number" />
                         <TextInput
                             id="mobile_number"
@@ -337,19 +359,6 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
                             id="company"
                             name="company"
                             value={values.company}
-                            onChange={handleChange}
-                            type="text"
-                            className="mt-1 block w-full"
-                            autoComplete="off"
-                        />
-                    </div>
-
-                    <div>
-                        <InputLabel htmlFor="display_name" value="Display Name" />
-                        <TextInput
-                            id="display_name"
-                            name="display_name"
-                            value={values.display_name}
                             onChange={handleChange}
                             type="text"
                             className="mt-1 block w-full"
@@ -412,15 +421,6 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
 
                 <div className="flex items-center gap-4">
                     <PrimaryButton disabled={processing} type="submit">Add</PrimaryButton>
-                    <Transition
-                        show={recentlySuccessful}
-                        enter="transition ease-in-out"
-                        enterFrom="opacity-0"
-                        leave="transition ease-in-out"
-                        leaveTo="opacity-0"
-                    >
-                        <p className="text-sm text-gray-600">Add</p>
-                    </Transition>
                 </div>
             </form>
         </section>

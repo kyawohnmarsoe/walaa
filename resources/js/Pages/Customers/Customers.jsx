@@ -5,16 +5,21 @@ import AddForm from './Partials/AddForm';
 import PrimaryButton from '@/Components/PrimaryButton';
 import PaginatedLinks from '@/Components/PaginatedLinks';
 import FilterForm from './Partials/FilterForm';
+import DepositForm from './Partials/DepositForm';
+import EditForm from './Partials/EditForm';
 
 export default function Customers({
     auth,
     customers,
+    customer,
     show_data,
     affiliates,
     accounts,
     sub_accounts,
     apitoken,
-    totalCount
+    totalCount,
+    deposit_password,
+    deposit_id
 }) {
 
     const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10 })
@@ -25,32 +30,32 @@ export default function Customers({
         router.get('/customers/create')
     }
     const addApiCustomerClick = () => {
-        // router.get('/customers/store/api')
+        router.get('/customers/store/api/' + totalCount)
 
         // get total count of API users
-        const instance = axios.create({
-            baseURL: 'https://rapi.earthlink.iq/api/reseller/user/all',
-            headers: { 'Authorization': `Bearer ${apitoken}` }
-        });
-        let postData = {
-            Rowcount: 1,
-            OrderBy: 'Account Name',
-        }
-        instance.post('', postData).then(res => {
-            if (res) {
-                // console.log(res.data.isSuccessful)
-                if (res.data.isSuccessful == true) {
-                    // console.log(res.data.value.totalCount)
+        // const instance = axios.create({
+        //     baseURL: 'https://rapi.earthlink.iq/api/reseller/user/all',
+        //     headers: { 'Authorization': `Bearer ${apitoken}` }
+        // });
+        // let postData = {
+        //     Rowcount: 1,
+        //     OrderBy: 'Account Name',
+        // }
+        // instance.post('', postData).then(res => {
+        //     if (res) {
+        //         // console.log(res.data.isSuccessful)
+        //         if (res.data.isSuccessful == true) {
+        //             // console.log(res.data.value.totalCount)
 
-                    let totalCount = res.data.value.totalCount;
-                    router.get('/customers/store/api/' + totalCount)
-                }
-            }
-        }).catch(err => {
-            if (err) {
-                console.log(err.message)
-            }
-        })
+        //             let totalCount = res.data.value.totalCount;
+        //             router.get('/customers/store/api/' + totalCount)
+        //         }
+        //     }
+        // }).catch(err => {
+        //     if (err) {
+        //         console.log(err.message)
+        //     }
+        // })
     }
 
 
@@ -165,6 +170,32 @@ export default function Customers({
                         </div>
                     }
 
+                    {
+                        show_data == 'deposit_form' &&
+                        <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+                            <DepositForm
+                                className="p-4"
+                                accounts={accounts}
+                                apitoken={apitoken}
+                                deposit_password={deposit_password}
+                                deposit_id={deposit_id}
+                            />
+                        </div>
+                    }
+
+                    {
+                        show_data == 'edit_form' &&
+                        <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+                            <EditForm
+                                className="p-4"
+                                customer={customer}
+                                accounts={accounts}
+                                sub_accounts={sub_accounts}
+                                affiliates={affiliates}
+                                apitoken={apitoken}
+                            />
+                        </div>
+                    }
 
                 </div>
             </div>

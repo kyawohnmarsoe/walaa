@@ -7,7 +7,7 @@ import AddForm from './Partials/AddForm';
 import EditForm from './Partials/EditForm';
 import TextInput from '@/Components/TextInput';
 
-export default function Accounts({ auth, mustVerifyEmail, accounts, show_data, account }) {
+export default function Accounts({ auth, accounts, show_data, account }) {
     const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10 })
     const { flash } = usePage().props
     const [search_val, setSearchVal] = useState('')

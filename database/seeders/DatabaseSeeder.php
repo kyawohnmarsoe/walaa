@@ -20,6 +20,10 @@ class DatabaseSeeder extends Seeder
         //     'password' => Hash::make('adminadmin'),
         // ]);
 
+        DB::table('deposit_passes')->insert([
+            'deposit_password' => '6666667',
+        ]);
+
         $this->call([
             RolesSeeder::class,
             UserSeeder::class,
