@@ -8,27 +8,29 @@ import TextInput from '@/Components/TextInput';
 import Textarea from '@/Components/Textarea';
 import SelectOption from '@/Components/SelectOption';
 
-export default function AddForm({ className = '', accounts, sub_accounts, affiliates, apitoken }) {
+export default function AddForm({ className = '', customer, accounts, sub_accounts, affiliates, apitoken }) {
 
     const { processing, recentlySuccessful } = useForm();
 
     const [values, setValues] = useState({
-        account_index: '',
-        sub_account_id: '',
-        affiliate_index: '',
-        deposit_password: '',
-        first_name: '',
-        last_name: '',
-        mobile_number: '',
-        mobile_number2: '',
-        address: '',
-        email: '',
-        city: '',
-        company: '',
-        state: '',
-        display_name: '',
-        caller_id: '',
-        customer_user_notes: '',
+        account_index: customer.account_index,
+        sub_account_id: customer.sub_account_id,
+        affiliate_index: customer.affiliate_index,
+        // deposit_password: '',
+        first_name: customer.first_name,
+        last_name: customer.last_name,
+        customer_user_id: customer.customer_user_id,
+        mobile_number: customer.mobile_number,
+        mobile_number2: customer.mobile_number2,
+        address: customer.address,
+        email: customer.email,
+        city: customer.city,
+        // user_active_manage: '',
+        company: customer.company,
+        state: customer.state,
+        display_name: customer.display_name,
+        caller_id: customer.caller_id,
+        customer_user_notes: customer.customer_user_notes,
     });
 
     const [optionsAffiliates, setOptionsAffiliates] = useState([])
@@ -133,6 +135,9 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
             }).catch(err => {
                 if (err) {
                     console.log(err.message)
+                    // router.visit('/customers/create', {
+                    //     only: ['customers'],
+                    // })
                 }
             })
         }
@@ -172,7 +177,46 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
 
     function handleSubmit(e) {
         e.preventDefault()
-        router.post('/customers/store', values);
+        router.post('/customers/store', values)
+
+        // testing for result to post new user with deposit
+        // const instance = axios.create({
+        //     baseURL: 'https://rapi.earthlink.iq/api/reseller/user/newuserdeposit',
+        //     headers: { 'Authorization': `Bearer ${apitoken}` }
+        // });
+        // let postData = {
+        //     DepositPassword: "Elink3",
+        //     AgentIndex: 2199,
+        //     AffiliateIndex: 2199,
+        //     AccountIndex: 60,
+        //     UserID: "newtestuser11@hus",
+        //     UserPass: 1,
+        //     EarthMaxMAC: '',
+        //     AffiliateTypeID: '',
+        //     FirstName: values.first_name,
+        //     LastName: values.last_name,
+        //     Company: values.company,
+        //     Address: values.address,
+        //     City: values.city,
+        //     State: values.state,
+        //     Country: '',
+        //     Zip: '',
+        //     Email: values.email,
+        //     MobileNumber: values.mobile_number,
+        //     MobileNumber2: values.mobile_number2,
+        //     DisplayName: values.display_name
+        // }
+        // instance.post('', postData).then(res => {
+        //     if (res) {
+        //         console.log(res.data)
+        //         console.log(postData)
+        //     }
+
+        // }).catch(err => {
+        //     if (err) {
+        //         console.log(err.message)
+        //     }
+        // })
     }
 
     let showDiv = showAccountValue || showAffiliateValue ?
@@ -208,7 +252,7 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
                 </a>
             </div>
             <header>
-                <h2 className="text-lg font-medium text-sky-600">Add User</h2>
+                <h2 className="text-lg font-medium text-sky-600">Edit User</h2>
             </header>
 
             <form onSubmit={handleSubmit} className="mt-6 space-y-6 ">
@@ -389,6 +433,19 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
                             id="state"
                             name="state"
                             value={values.state}
+                            onChange={handleChange}
+                            type="text"
+                            className="mt-1 block w-full"
+                            autoComplete="off"
+                        />
+                    </div>
+
+                    <div>
+                        <InputLabel htmlFor="customer_user_id" value="User Id" />
+                        <TextInput
+                            id="customer_user_id"
+                            name="customer_user_id"
+                            value={values.customer_user_id}
                             onChange={handleChange}
                             type="text"
                             className="mt-1 block w-full"

@@ -56,6 +56,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/customers/store', [CustomerController::class, 'store'])->name('customers.store');
     Route::post('/customers', [CustomerController::class, 'index'])->name('customers.filter');
     Route::get('/customers/store/api/{totalCount}', [CustomerController::class, 'store_api'])->name('customers.store.api');
+    Route::get('/customers/{index}', [CustomerController::class, 'edit'])->name('customers.edit');
+    Route::post('/customers/{index}', [CustomerController::class, 'update'])->name('customers.update');    
+    Route::delete('/customers/{index}', [CustomerController::class, 'destroy'])->name('customers.destroy');  
     Route::get('/users/management', [UserController::class, 'showAllUsers'])->name('users.management');
 
     Route::group(['middleware' => ['auth', 'role:admin']], function() {

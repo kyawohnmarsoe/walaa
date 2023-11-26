@@ -20,6 +20,7 @@ export default function PaginatedLinks({
     remarks,
     tableName,
     apitoken,
+    totalCount,
     listname,
     filterObj,
     setFilterObj }) {
@@ -70,7 +71,7 @@ export default function PaginatedLinks({
             }
 
             {
-                tableName == 'customer' && <CustomerTable customers={currentItems} accounts={accounts} sub_accounts={sub_accounts} apitoken={apitoken} />
+                tableName == 'customer' && <CustomerTable customers={currentItems} accounts={accounts} sub_accounts={sub_accounts} apitoken={apitoken} totalCount={totalCount} />
             }
 
             {

@@ -122,7 +122,7 @@ class AccountController extends Controller
                 Account::insert([
                     'account_index' => $acc['accountIndex'],
                     'account_name'  => $acc['accountName'],
-                    'is_max_account'     => $acc['isMAXAccount'],
+                    // 'is_max_account'     => $acc['isMAXAccount'],
                     'account_description' => $acc['accountDescription'],
                     'account_image_path'  => $acc['accountImagePath'],
                     'account_thumbnail'   => $acc['accountThumbnail'],

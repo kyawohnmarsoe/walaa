@@ -15,7 +15,7 @@ export default function EditForm({ className = '', accounts, account }) {
     const [values, setValues] = useState({
         account_index: account.account_index,
         account_name: account.account_name,
-        is_max_account: account.is_max_account,
+        // is_max_account: account.is_max_account,
         account_description: account.account_description,
         end_user_account_price: account.end_user_account_price
 
@@ -113,7 +113,7 @@ export default function EditForm({ className = '', accounts, account }) {
                         />
                     </div>
 
-                    <div>
+                    {/* <div>
                         <InputLabel htmlFor="is_max_account" value="Max Account" />
                         <TextInput
                             id="is_max_account"
@@ -124,7 +124,7 @@ export default function EditForm({ className = '', accounts, account }) {
                             className="mt-1 block w-full"
                             autoComplete="off"
                         />
-                    </div>
+                    </div> */}
 
                     <div>
                         <InputLabel htmlFor="end_user_account_price" value="User Account Price" />

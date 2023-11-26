@@ -16,7 +16,7 @@ return new class extends Migration
             $table->integer('user_id');
             $table->string('ticket_source');
             $table->string('topic');
-            $table->string('ticket_address');
+            $table->string('ticket_address')->nullable();
             $table->string('level_of_importance'); 
             $table->string('ticket_number')->nullable();
             $table->integer('ticket_status')->default(0);

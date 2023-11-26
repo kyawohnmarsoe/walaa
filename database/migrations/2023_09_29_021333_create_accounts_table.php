@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->integer('account_index')->unique();
             $table->string('account_name');
-            $table->string('is_max_account');
-            $table->text('account_description');
+            // $table->string('is_max_account');
+            $table->text('account_description')->nullable();
             $table->string('account_image_path')->nullable();
             $table->string('account_thumbnail')->nullable();
             $table->string('end_user_account_price')->nullable();

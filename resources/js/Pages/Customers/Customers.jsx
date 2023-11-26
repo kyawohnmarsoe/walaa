@@ -14,6 +14,7 @@ export default function Customers({
     accounts,
     sub_accounts,
     apitoken,
+    totalCount
 }) {
 
     const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10 })
@@ -144,7 +145,8 @@ export default function Customers({
                                     accounts={accounts}
                                     setFilterObj={setFilterObj}
                                     filterObj={filterObj}
-                                    apitoken={apitoken} />
+                                    apitoken={apitoken}
+                                    totalCount={totalCount} />
 
                             }
                         </div>
