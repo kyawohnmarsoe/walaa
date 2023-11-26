@@ -10,26 +10,51 @@ export default function AllUsersTableRow({ user, accountTypes, apitoken }) {
     extend: false,
   })
 
+  const instance = axios.create({
+    baseURL: 'https://rapi.earthlink.iq/api/reseller',
+    headers: { 'Authorization': `Bearer ${ apitoken }` }
+  });
+
+  const extendUser = () =>
+  {
+    instance.post(`/user/extend/${ user.userIndex}`)
+      .then(res =>
+      {
+        console.log(res)
+
+      })
+      .catch(err =>
+      {
+        console.log(err)
+      })
+
+    console.log('extendUser running..')
+  }
+
+
+  const extendHandler = () =>
+  {
+    const result = confirm("Are you sure you want to extend this user!")
+    result && extendUser()
+  }
+
+
   return (
     <>
       <RefillModal modals={modals} setModals={setModals} accountTypes={accountTypes} apitoken={apitoken} user={user} />
       <ChangeModal modals={modals} setModals={setModals} accountTypes={accountTypes} apitoken={apitoken} user={user} />
 
       <tr>
-        {/* <th>
-          <label>
-            <input type="checkbox" className="checkbox" />
-          </label>
-        </th> */}
+       
 
-        <td>{user?.userIndex}</td>
+        {/* <td>{user?.userIndex}</td> */}
         <td>
 
           {user?.canRefill && <><button className="btn btn-xs btn-outline btn-block btn-info mb-1" onClick={() => setModals({ ...modals, reFill: true })}>Refill</button><br /></>}
 
           {user?.canChangeAccount && <><button className="btn btn-xs btn-outline btn-block btn-success mb-1" onClick={() => setModals({ ...modals, change: true })}>Change</button> <br /> </>}
 
-          {user?.canExtendUser && <><button className="btn btn-xs btn-outline btn-block btn-warning">Extend</button> </>}
+          { user?.canExtendUser && <><button className="btn btn-xs btn-outline btn-block btn-warning" onClick={ extendHandler }>Extend</button> </>}
 
           {/* <span className="badge badge-ghost badge-sm">Desktop Support Technician</span> */}
         </td>
@@ -81,12 +106,12 @@ export default function AllUsersTableRow({ user, accountTypes, apitoken }) {
           <br />
           <strong>MAC</strong> : {user?.callerID}
           <br />
-          <strong>IP</strong> : <a href={`http://${user?.userIP}`} className="text-sky-700" target="_blank">{user?.userIP}</a>
+          <strong>IP</strong> : <a href={ `https://${ user?.userIP }` } className="text-sky-700" target="_blank">{ user?.userIP }</a>
           <br />
           <strong>Lock MAC</strong> : {+user?.lockMac}
         </td>
 
-        <td>
+        {/* <td>
           <strong>Mobile</strong> : {user?.mobileNumber}
           <br />
           <strong>Mobile 2</strong> : {user?.mobileNumber2}
@@ -94,7 +119,7 @@ export default function AllUsersTableRow({ user, accountTypes, apitoken }) {
           <strong>User Notes</strong> : {user?.userNotes}
           <br />
           <strong>Router IP</strong> : {user?.router}
-        </td>
+        </td> */}
 
       </tr>
 

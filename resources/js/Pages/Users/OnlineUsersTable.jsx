@@ -10,8 +10,8 @@ export default function OnlineUsersTable ({ users, apitoken })
         {/* head */ }
         <thead>
           <tr className='bg-emerald-300'>
-            <th>#Index</th>
-            {/* <th>User Index</th> */ }
+            {/* <th>#Index</th> */}
+          
             <th>Username</th>
             <th>Online Status</th>
             <th>Online Time</th>

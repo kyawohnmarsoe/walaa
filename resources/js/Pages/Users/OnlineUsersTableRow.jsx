@@ -35,13 +35,9 @@ export default function OnlineUsersTableRow({ user, index, apitoken }) {
 
   return (
     <tr>
-      {/* <th>
-          <label>
-            <input type="checkbox" className="checkbox" />
-          </label>
-        </th> */}
+     
 
-      <td>{user?.userIndex}</td>
+      {/* <td>{user?.userIndex}</td> */}
 
 
       <td>
@@ -63,14 +59,14 @@ export default function OnlineUsersTableRow({ user, index, apitoken }) {
         <span className="text-emerald-500">{user?.onlineStatus}</span>
       </td>
 
-      <td>{user?.onlineTime}</td>
-      <td>{user?.onlineSince}</td>
-      <td>{user?.callerMAC}</td>
-      <td>{user?.expirationDate}</td>
-      <td><a href={`http://${user?.userIP}`} className="text-sky-700" target="_blank">{user?.userIP}</a></td>
-      <td>{user?.loginFrom}</td>
-      <td>{user?.affiliateName}</td>
-      <td><span className="text-sky-700" onClick={disconnectHandler}>Disconnect</span></td>
+      <td>{ user?.onlineTime }</td>
+      <td>{ user?.onlineSince }</td>
+      <td>{ user?.callerMAC }</td>
+      <td>{ user?.expirationDate }</td>
+      <td><a href={ `https://${ user?.userIP }` } className="text-sky-700" target="_blank">{ user?.userIP }</a></td>
+      <td>{ user?.loginFrom }</td>
+      <td>{ user?.affiliateName }</td>
+      <td><span className="text-sky-700" onClick={ disconnectHandler }>Disconnect</span></td>
 
     </tr >
   )

@@ -39,35 +39,35 @@ export default function Create ({ auth })
     const submit = (e) =>
     {
         e.preventDefault();
-        // router.post('/invoice/store', {
-        //     payment: {
-        //         "invoinceID": 117152101,
-        //         "userIndex": 25241271,
-        //         "displayName": "حسين يحيى خليف",
-        //         "affiliateName": "walaalink5",
-        //         "invoiceType": "Refill_Deposit",
-        //         "invoiceDescription": "Economy for period [2023/10/29 - 2023/11/29]",
-        //         "invoiceDuration": "2023/10/29 - 2023/11/29",
-        //         "salePrice": 40000.0,
-        //         "retailPriceCurrency": "IQD",
-        //         "retailPrice": 40000.0,
-        //         "referenceRecord": "0",
-        //         "recordDate": "29/10/2023 11:25 AM",
-        //         "invoiceStatus": "NotPaid",
-        //         "lastStatusChanged": "",
-        //         "accountName": "Economy",
-        //         "notes": null,
-        //         "userID": "husseinyahya@walaa",
-        //         "paidPrice": 0.0,
-        //         "discountedPrice": 0.0,
-        //         "modifyUser": 'auth.user.name',
-        //         "paymentDueDate": "",
-        //         "paymentDueDateTime": null
-        //     }
-        // })
+        router.post('/invoice/store', {
+            payment: {
+                "invoinceID": 117152101,
+                "userIndex": 25241271,
+                "displayName": "حسين يحيى خليف",
+                "affiliateName": "walaalink5",
+                "invoiceType": "Refill_Deposit",
+                "invoiceDescription": "Economy for period [2023/10/29 - 2023/11/29]",
+                "invoiceDuration": "2023/10/29 - 2023/11/29",
+                "salePrice": 40000.0,
+                "retailPriceCurrency": "IQD",
+                "retailPrice": 40000.0,
+                "referenceRecord": "0",
+                "recordDate": "29/10/2023 11:25 AM",
+                "invoiceStatus": "NotPaid",
+                "lastStatusChanged": "",
+                "accountName": "Economy",
+                "notes": null,
+                "userID": "husseinyahya@walaa",
+                "paidPrice": 0.0,
+                "discountedPrice": 0.0,
+                "modifyUser": 'auth.user.name',
+                "paymentDueDate": "",
+                "paymentDueDateTime": null
+            }
+        })
         console.log(data)
 
-        router.post('/invoice/store', { payment: data });
+        // router.post('/invoice/store', { payment: data });
     };
 
     useEffect(() =>

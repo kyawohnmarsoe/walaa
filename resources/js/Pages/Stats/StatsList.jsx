@@ -3,6 +3,7 @@ import Stats from './Stats';
 import Alert from '../../Components/DaisyUI/Alert';
 import Loading from '@/Components/DaisyUI/Loading';
 
+
 export default function StatsList({ apitoken }) {
   const [statsData, setStatsData] = useState({ stats: [], errMessage: '', loading: true })
   const { stats, errMessage, loading } = statsData
@@ -22,10 +23,19 @@ export default function StatsList({ apitoken }) {
 
   const instance = axios.create({
     baseURL: 'https://rapi.earthlink.iq/api/reseller',
-    headers: { 'Authorization': `Bearer ${apitoken}` }
+    timeout: 60000,
+    // withCredentials: true,
+    xsrfCookieName: "XSRF-TOKEN",
+    xsrfHeaderName: "X-XSRF-TOKEN",
+    headers: { 
+      'Accept':'application/json',
+      'Authorization': `Bearer ${apitoken}`
+     }
   });
 
-  useEffect(() => {
+  console.log(apitoken)
+  useEffect(() =>
+  {
     instance.get('/home/Dashboard')
       .then(res => {
         setStatsData({ stats: res.data.value, errMessage: '', loading: false })

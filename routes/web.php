@@ -17,6 +17,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\PaymentController;
 
 Route::get('/test', [DashboardController::class, 'test'])->name('test');
+Route::get('/test2', [DashboardController::class, 'test2'])->name('test2');
 
 Route::get('/earthlink/profile', function () {    
     return Inertia::render('Profile/Earthlink/Edit');

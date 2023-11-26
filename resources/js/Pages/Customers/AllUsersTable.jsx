@@ -10,7 +10,7 @@ export default function AllUsersTable({ users, tableRef, accountTypes, apitoken 
         {/* head */}
         <thead>
           <tr className='bg-emerald-300'>
-            <th>#Index</th>
+            {/* <th>#Index</th> */}
             <th>Actions</th>
             <th>Username</th>
             <th>Customer Name</th>
@@ -18,7 +18,7 @@ export default function AllUsersTable({ users, tableRef, accountTypes, apitoken 
             <th>Expiration Date</th>
             <th>Account Info</th>
             <th>Online Status</th>
-            <th>Others</th>
+            {/* <th>Others</th> */}
           </tr>
         </thead>
 
@@ -31,20 +31,7 @@ export default function AllUsersTable({ users, tableRef, accountTypes, apitoken 
 
         </tbody>
 
-        {/* foot */}
-        <tfoot>
-          <tr>
-            <th>#Index</th>
-            <th>Actions</th>
-            <th>Username</th>
-            <th>Customer Name</th>
-            <th>Accounting Info</th>
-            <th>Expiration Date</th>
-            <th>Account Info</th>
-            <th>Online Status</th>
-            <th>Others</th>
-          </tr>
-        </tfoot>
+       
 
       </table>
     </div>

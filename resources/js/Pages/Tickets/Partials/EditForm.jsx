@@ -9,7 +9,8 @@ import Textarea from '@/Components/Textarea';
 import SelectOption from '@/Components/SelectOption';
 import Select, { components } from "react-select";
 
-export default function EditForm({ className = '', ticket, customers, updated_by_loggedin_user }) {
+export default function EditForm ({ className = '', ticket, customers, updated_by_loggedin_user })
+{
 
     const { processing, recentlySuccessful } = useForm();
 
@@ -92,15 +93,18 @@ export default function EditForm({ className = '', ticket, customers, updated_by
         }
     ];
 
-    const Input = (props) => {
+    const Input = (props) =>
+    {
         const { autoComplete = props.autoComplete } = props.selectProps;
-        return <components.Input {...props} autoComplete={autoComplete} />;
+        return <components.Input { ...props } autoComplete={ autoComplete } />;
     };
 
-    const getCustomers = () => {
+    const getCustomers = () =>
+    {
         let optionsCustomersArr = [];
         {
-            customers.map((e) => {
+            customers.map((e) =>
+            {
                 optionsCustomersArr.push(
                     {
                         "value": e.id,
@@ -112,7 +116,8 @@ export default function EditForm({ className = '', ticket, customers, updated_by
         setoptionsCustomers(optionsCustomersArr)
     }
 
-    const getSelectedCustomer = (selected_id) => {
+    const getSelectedCustomer = (selected_id) =>
+    {
         {
             let selectedRes = customers.filter(cus => selected_id == cus.id)
             // console.log("selected user ", selectedRes[0]['customer_user_id'])
@@ -120,13 +125,15 @@ export default function EditForm({ className = '', ticket, customers, updated_by
         }
     }
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         getCustomers()
         getSelectedCustomer(ticket.user_id)
         // console.log("old user value ", values.user_id)
     }, [])
 
-    function customersHandleChange(e) {
+    function customersHandleChange (e)
+    {
         const value = e.value
         setValues(values => ({
             ...values,
@@ -136,28 +143,32 @@ export default function EditForm({ className = '', ticket, customers, updated_by
         getSelectedCustomer(value)
     }
 
-    function ticketSourceHandleChange(e) {
+    function ticketSourceHandleChange (e)
+    {
         const value = e.target.value
         setValues(values => ({
             ...values,
             'ticket_source': value,
         }))
     }
-    function topicHandleChange(e) {
+    function topicHandleChange (e)
+    {
         const value = e.target.value
         setValues(values => ({
             ...values,
             'topic': value,
         }))
     }
-    function levelImpHandleChange(e) {
+    function levelImpHandleChange (e)
+    {
         const value = e.target.value
         setValues(values => ({
             ...values,
             'level_of_importance': value,
         }))
     }
-    function statusHandleChange(e) {
+    function statusHandleChange (e)
+    {
         const value = e.target.value
         setValues(values => ({
             ...values,
@@ -165,7 +176,8 @@ export default function EditForm({ className = '', ticket, customers, updated_by
         }))
     }
 
-    function handleChange(e) {
+    function handleChange (e)
+    {
         const key = e.target.id;
         const value = e.target.value
         setValues(values => ({
@@ -174,18 +186,19 @@ export default function EditForm({ className = '', ticket, customers, updated_by
         }))
     }
 
-    function handleSubmit(e) {
+    function handleSubmit (e)
+    {
         e.preventDefault()
-        router.post(`/tickets/${ticket.id}`, values)
+        router.post(`/tickets/${ ticket.id }`, values)
     }
 
     return (
-        <section className={className}>
+        <section className={ className }>
             <div className='flex items-center justify-end gap-4 p-2'>
                 <a
                     className='inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium border-sky-300 text-sky-600 focus:border-sky-700 cursor-pointer'
-                    href={route('tickets')}>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-6">
+                    href={ route('tickets') }>
+                    <svg xmlns="https://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={ 1.5 } stroke="currentColor" className="w-4 h-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
                     </svg>
                     Ticket List
@@ -195,7 +208,7 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                 <h2 className="text-lg font-medium text-sky-600">Edit Ticket</h2>
             </header>
 
-            <form onSubmit={handleSubmit} className="mt-6 space-y-6 ">
+            <form onSubmit={ handleSubmit } className="mt-6 space-y-6 ">
 
                 <span className='font-bold text-emerald-700' id="deposit_msg"></span>
 
@@ -206,12 +219,12 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                         <Select
                             name="user_id"
                             className="autoselect border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
-                            components={{ Input }}
+                            components={ { Input } }
                             autoComplete="user_id"
-                            value={{ value: values.user_id, label: selectedOpt }}
-                            options={optionsCustomers}
-                            onChange={(e) => customersHandleChange(e)}
-                            noOptionsMessage={() => "No Users found..."}
+                            value={ { value: values.user_id, label: selectedOpt } }
+                            options={ optionsCustomers }
+                            onChange={ (e) => customersHandleChange(e) }
+                            noOptionsMessage={ () => "No Users found..." }
                         />
                     </div>
 
@@ -220,11 +233,11 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                         <SelectOption
                             id="ticket_source"
                             className="mt-1 block w-full"
-                            options={optionsTicketSource}
+                            options={ optionsTicketSource }
                             select_text="Ticket Source"
                             name="ticket_source"
-                            onChange={ticketSourceHandleChange}
-                            value={values.ticket_source}
+                            onChange={ ticketSourceHandleChange }
+                            value={ values.ticket_source }
                         />
                     </div>
 
@@ -233,11 +246,11 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                         <SelectOption
                             id="topic"
                             className="mt-1 block w-full"
-                            options={optionsTopic}
+                            options={ optionsTopic }
                             select_text="Topic"
                             name="topic"
-                            onChange={topicHandleChange}
-                            value={values.topic}
+                            onChange={ topicHandleChange }
+                            value={ values.topic }
                         />
                     </div>
 
@@ -247,10 +260,10 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                             id="ticket_address"
                             name="ticket_address"
                             placeholder="Ticket Address..."
-                            value={values.ticket_address}
-                            onChange={handleChange}
+                            value={ values.ticket_address }
+                            onChange={ handleChange }
                             className="mt-1 block w-full"
-                            minRows={5}
+                            minRows={ 5 }
                         />
                     </div>
 
@@ -259,11 +272,11 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                         <SelectOption
                             id="level_of_importance"
                             className="mt-1 block w-full"
-                            options={optionsLevelImp}
+                            options={ optionsLevelImp }
                             select_text="Level"
                             name="level_of_importance"
-                            onChange={levelImpHandleChange}
-                            value={values.level_of_importance}
+                            onChange={ levelImpHandleChange }
+                            value={ values.level_of_importance }
                         />
                     </div>
 
@@ -272,8 +285,8 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                         <TextInput
                             id="ticket_number"
                             name="ticket_number"
-                            value={values.ticket_number}
-                            onChange={handleChange}
+                            value={ values.ticket_number }
+                            onChange={ handleChange }
                             type="text"
                             className="mt-1 block w-full"
                             autoComplete="off"
@@ -285,18 +298,18 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                         <SelectOption
                             id="ticket_status"
                             className="mt-1 block w-full"
-                            options={optionsStatus}
+                            options={ optionsStatus }
                             select_text="Status"
                             name="ticket_status"
-                            onChange={statusHandleChange}
-                            value={values.ticket_status}
+                            onChange={ statusHandleChange }
+                            value={ values.ticket_status }
                         />
                     </div>
 
                     <TextInput
                         id="updated_by_loggedin_user"
                         name="updated_by_loggedin_user"
-                        value={values.updated_by_loggedin_user}
+                        value={ values.updated_by_loggedin_user }
                         type="hidden"
                         className="mt-1 block w-full"
                         autoComplete="off"
@@ -304,10 +317,10 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <PrimaryButton disabled={processing} type="submit">Update</PrimaryButton>
+                    <PrimaryButton disabled={ processing } type="submit">Update</PrimaryButton>
 
                     <Transition
-                        show={recentlySuccessful}
+                        show={ recentlySuccessful }
                         enter="transition ease-in-out"
                         enterFrom="opacity-0"
                         leave="transition ease-in-out"

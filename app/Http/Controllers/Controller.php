@@ -26,12 +26,16 @@ class Controller extends BaseController
         
         $api_response       = Http::asForm()->post($apiURL, $data);
 
+        // dd($api_response) ;
+
          if (!$api_response){
             return "can not get token";
          }
 
         $api_response_token = json_decode($api_response->getBody(), true); 
-        $api_token = $api_response_token ? $api_response_token['access_token'] : null;        
+        // dd($api_response_token);
+        $api_token = $api_response_token ? $api_response_token['access_token'] : null;  
+        // dd($api_token);
         return $api_token;
         
         // $output = array(
