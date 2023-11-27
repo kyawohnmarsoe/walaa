@@ -64,7 +64,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/customers/{index}', [CustomerController::class, 'destroy'])->name('customers.destroy');  
     Route::get('/users/management', [UserController::class, 'showAllUsers'])->name('users.management');
 
-    Route::group(['middleware' => ['auth', 'role:admin']], function() {
+    // Route::group(['middleware' => ['auth', 'role:admin']], function() {
         Route::get('/tickets', [TicketController::class, 'index'])->name('tickets');
         Route::get('/tickets/create', [TicketController::class, 'create'])->name('tickets.create');
         Route::post('/tickets/store', [TicketController::class, 'store'])->name('tickets.store');
@@ -74,7 +74,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/tickets/store/remark', [TicketController::class, 'store_remark'])->name('tickets.store.remark');  
         Route::get('/tickets/delete_remark/{id}', [TicketController::class, 'destroy_remark'])->name('tickets.destroy.remark');
         Route::delete('/tickets/{id}', [TicketController::class, 'destroy'])->name('tickets.destroy');
-    });
+    // });
 
     Route::get('/log/error', [LogController::class, 'getErrorLog'])->name('log.error');
     Route::get('/log/audit', [LogController::class, 'getAuditLog'])->name('log.audit');

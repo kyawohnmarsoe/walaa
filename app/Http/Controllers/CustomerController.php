@@ -35,7 +35,6 @@ class CustomerController extends Controller
                 $totalCount = $all_users_response['value']['totalCount'];
             }
         }
-        // return response(compact('totalCount'));
         return $totalCount;     
        
     } // get_totalcount
@@ -62,9 +61,7 @@ class CustomerController extends Controller
         $totalCount = $this->get_totalcount();       
 
         if ($request->hasAny(['account_index', 'sub_account_id', 'affiliate_index', 'customer_user_id', 'status'])) {
-            // $data = $request->all();  
-            // return response(compact('data')); 
-            
+           
             $customers = Customer::leftJoin('affiliates', 'affiliates.affiliate_index', '=', 'customers.affiliate_index')
                 ->leftJoin('accounts', 'accounts.account_index', '=', 'customers.account_index')
                 ->when(request('account_index') != '', function ($q) {
@@ -191,7 +188,7 @@ class CustomerController extends Controller
                     if ($request->sub_account_id != '') {
                         $sub_account_id = $request->sub_account_id;
                     }  
-                    $customer_user_index = 112233;  // $new_user_response['value'];          
+                    $customer_user_index = $new_user_response['value'];        
                     Customer::insert([
                         'account_index'     => $request->account_index,
                         'sub_account_id'     => $sub_account_id,
@@ -206,7 +203,6 @@ class CustomerController extends Controller
                         'email'                 => $request->email,
                         'user_password'         => $request->user_password,
                         'city'                  => $request->city,
-                        // 'user_active_manage'    => '',
                         'company'               => $request->company,
                         'state'                => $request->state,
                         'display_name'         => $request->display_name,
@@ -217,7 +213,6 @@ class CustomerController extends Controller
                         'account_package_type' => 'MonthlyPrepaid'                 
                     ]);
                     return redirect()->route('customers')->with('message', $new_user_response['responseMessage']);
-                    // return redirect()->route('customers')->with('message', 'Success!');
                 } else {
                     return redirect()->route('customers.create')->with(
                         'error_message', $new_user_response['error']
@@ -245,17 +240,7 @@ class CustomerController extends Controller
             
         ]; 
         $all_users_api = Http::withHeaders($headers)->post($apiURL, $post_data);
-        $all_users_response  = json_decode($all_users_api->getBody(), true);
-
-        // $active_postData = [
-        //     "OrderDescending" => '',
-        //     "Query" => '',
-        //     "Rowcount"   => $row_count,
-        // ];
-        // $active_apiURL = 'https://rapi.earthlink.iq/api/reseller/activesessions';
-        // $active_users_api = Http::withHeaders($headers)->post($active_apiURL, $active_postData);
-        // $active_users_response  = json_decode($active_users_api->getBody(), true);
-        // // return response(compact('active_users_response'));
+        $all_users_response  = json_decode($all_users_api->getBody(), true);        
 
         if ($all_users_response) {
             if($all_users_response['isSuccessful'] === true) {                 
@@ -281,28 +266,8 @@ class CustomerController extends Controller
                             $affiliate_index = $aff['affiliate_index'];
                         }
                     }
-                    $sub_account_id = 0; 
-                    // $session_type = '';
-                    // if($dt['onlineStatus'] == 'OnlineNoNet'){
-                    //     $session_type = 2;
-                    // } else if ($dt['onlineStatus'] == 'Online') {
-                    //     $session_type = 1;
-                    // }                     
+                    $sub_account_id = 0;                                 
 
-                    // $online_time = ''; $online_since = '';
-                    // $mac_addresss = ''; $user_ip = ''; $login_from = '';
-                    // if($active_users_response){
-                    //     foreach ($active_users_response['value']['itemsList'] as $user) {
-                    //         if ($user['userIndex'] == $dt['userIndex']) {                                
-                    //             $online_time   = $user['onlineTime'];
-                    //             $online_since   = $user['onlineSince'];
-                    //             $mac_addresss   = $user['callerMAC'];
-                    //             $user_ip   = $user['userIP'];
-                    //             $login_from   = $user['loginFrom'];
-                    //         }
-                    //     }
-                    // }
-                              
                     Customer::insert([
                         'account_index'     => $dt['accountIndex'],
                         'sub_account_id'     => $sub_account_id,
@@ -316,7 +281,6 @@ class CustomerController extends Controller
                         'address'               => '',
                         'email'                 => $dt['userID'] ,
                         'city'                  => '',
-                        // 'user_active_manage'    => '',
                         'company'               => '',
                         'state'                => '',
                         'display_name'         => $dt['displayName'],
@@ -324,30 +288,7 @@ class CustomerController extends Controller
                         'customer_user_notes'  => $dt['userNotes'],
                         'status'               => $dt['onlineStatus'],
                         'account_status'       => $dt['accountStatus'],
-                        // 'account_status_id'       => '',
-                        'account_package_type' =>  $dt['accountPackageType'],
-                        
-                        // 'online_since' => $online_since,
-                        // 'online_time'  => $online_time,
-                        // 'mac_addresss' => $mac_addresss,
-                        // 'manual_expiration_date' => $dt['manualExpirationDate'],
-                        // 'user_ip'                => $user_ip,
-                        // 'login_from'             => $login_from,
-                        // 'can_refill'             => $dt['canRefill'],
-                        // 'can_delete'             => $dt['canDelete'],
-                        // 'is_free_account'    => $dt['isFreeAccount'],
-                        // 'is_max_user'        => $dt['isMAXUser'],
-                        // 'is_blocked'         => $dt['isBlocked'],
-                        // 'can_change_account' => $dt['canChangeAccount'],
-                        // 'can_extend_user'    => $dt['canExtendUser'],
-                        // 'last_refill'        => $dt['lastRefill'],
-                        // 'unpaid_invoices'    => $dt['unPaidInvoices'],
-                        // 'service_status_color_hex' => $dt['serviceStatusColorHex'],
-                        // 'lock_mac' => '',
-                        // 'router' => '',
-                        // 'session_type' => $session_type,   
-                        // 'active_days_left' => $dt['activeDaysLeft'],   
-                        // 'online_status_color' => $dt['onlineStatusColor'],    
+                        'account_package_type' =>  $dt['accountPackageType'],                          
                     ]);   
                 }     
                 
@@ -392,7 +333,5 @@ class CustomerController extends Controller
 		$data = Customer::where('customer_user_index', $index)->firstOrFail();
 		$data->update($input);
         return redirect()->route('customers')->with('message', 'User is successfully disabled!');
-        // Customer::where('customer_user_index', $index)->firstOrFail()>delete();
-        // return redirect()->route('customers')->with('message', Data is successfully deleted!); 
     } // destroy
 }
