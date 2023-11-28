@@ -253,20 +253,28 @@ class CustomerController extends Controller
                 }            
                 // return response(compact('existed_userIndex'));
 
-                foreach ($all_users_response['value']['itemsList'] as $dt) {
-                    
-                    if (in_array($dt['userIndex'], $existed_userIndex)) {
-                        continue;
-                    }
-                    $existed_userIndex[] = $dt['userIndex'];                   	
-
+                foreach ($all_users_response['value']['itemsList'] as $dt) {                   
+                     
                     $affiliate_index = 0;
                     foreach ($affiliates as $aff) {                        
                         if ($aff['affiliate_name'] == $dt['affiliateName']) {
                             $affiliate_index = $aff['affiliate_index'];
                         }
                     }
-                    $sub_account_id = 0;                                 
+                    $sub_account_id = 0; 
+                    
+                    // if existed data, update some fields
+                    if (in_array($dt['userIndex'], $existed_userIndex)) {                        
+                        $update_data = [
+                            'caller_id' => $dt['callerID'],
+                            'status' => $dt['onlineStatus'], 
+                            'account_status' => $dt['accountStatus'], 
+                            'account_package_type' => $dt['accountPackageType'],
+                        ];                     
+                        Customer::where('customer_user_index', $dt['userIndex'])->update($update_data); 
+                        continue; // for skip duplicate index                       
+                    }
+                    $existed_userIndex[] = $dt['userIndex']; 
 
                     Customer::insert([
                         'account_index'     => $dt['accountIndex'],
@@ -280,6 +288,7 @@ class CustomerController extends Controller
                         'mobile_number2'        => $dt['mobileNumber2'],
                         'address'               => '',
                         'email'                 => $dt['userID'] ,
+                        'user_password'         => 1,
                         'city'                  => '',
                         'company'               => '',
                         'state'                => '',

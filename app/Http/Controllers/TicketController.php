@@ -45,7 +45,7 @@ class TicketController extends Controller
             'tickets' =>  $tickets, 
             'users'   => User::all(),
             'customers' => Customer::all(),
-            'remarks' => Ticket_remark::all(),
+            'remarks'   => Ticket_remark::all(),
             'show_data' => $show_data
         ])->with([
             'ticket_source'        => Config::get('constants.ticket_source'),
