@@ -6,7 +6,7 @@ import Loading from "@/Components/DaisyUI/Loading";
 import Alert from "@/Components/DaisyUI/Alert";
 import PaymentTable from "./PaymentTable";
 import PaymentSearch from './PaymentSearch'
-import PaginatedLinks from '@/Components/PaginatedLinks';
+import PaginatedItems from '@/Components/DaisyUI/PaginatedItems';
 
 
 export default function Payments ({ auth, apitoken, affiliates, payments })
@@ -62,18 +62,19 @@ export default function Payments ({ auth, apitoken, affiliates, payments })
 
                             } */}
 
-                            <PaginatedLinks
+                           
+
+                            <PaginatedItems
                                 itemsPerPage={ filterObj.RowCount }
                                 items={ payments }
                                 total={ payments.length }
                                 setFilterObj={ setFilterObj }
                                 filterObj={ filterObj }
-                                tableName="payments"
                             >
 
-                                {/* <PaymentTable items={ payments } /> */ }
+                                <PaymentTable items={ payments } apitoken={ apitoken } auth={ auth }/>
 
-                            </PaginatedLinks>
+                            </PaginatedItems>
 
 
                         </div>

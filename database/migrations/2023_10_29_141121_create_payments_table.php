@@ -34,6 +34,7 @@ return new class extends Migration
             $table->string('userID')->nullable();
             $table->string('paidPrice')->nullable();
             $table->string('discountedPrice')->nullable();
+            $table->string('balance')->nullable();
             $table->string('modifyUser')->nullable();
             $table->string('paymentDueDate')->nullable();
             $table->string('paymentDueDateTime')->nullable();

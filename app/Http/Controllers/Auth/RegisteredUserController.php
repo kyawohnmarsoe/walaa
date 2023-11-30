@@ -55,6 +55,7 @@ class RegisteredUserController extends Controller
         //     'current_time' => time()
         // ]);
 
+
         return redirect(RouteServiceProvider::HOME);
     }
 }

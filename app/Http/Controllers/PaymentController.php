@@ -47,6 +47,7 @@ class PaymentController extends Controller
     public function store(Request $request)
     {
       //  dd($request);
+      $balance=$request->payment['salePrice'];
       $data = [
         'invoinceID' => $request->payment['invoinceID'],
         'userIndex' => $request->payment['userIndex'],
@@ -60,16 +61,18 @@ class PaymentController extends Controller
         'retailPrice' => $request->payment['retailPrice'],
         'referenceRecord' => $request->payment['referenceRecord'],
         'recordDate' => $request->payment['recordDate'],
-        'invoiceStatus' => $request->payment['invoiceStatus'],
         'lastStatusChanged' => $request->payment['lastStatusChanged'],
         'accountName' => $request->payment['accountName'],
         'notes' => $request->payment['notes'],
         'userID' => $request->payment['userID'],
-        'paidPrice' => $request->payment['paidPrice'],
-        'modifyUser' => $request->payment['modifyUser'],
         'discountedPrice' => $request->payment['discountedPrice'],
         'paymentDueDate' => $request->payment['paymentDueDate'],
-        'paymentDueDateTime' => $request->payment['paymentDueDateTime']
+        'paymentDueDateTime' => $request->payment['paymentDueDateTime'],
+         'paidPrice' => $request->payment['paidPrice'],
+         'balance' => $balance,
+         'invoiceStatus' => $request->payment['invoiceStatus'],
+         'notes' => $request->payment['notes'],
+         'modifyUser' => $request->payment['modifyUser'],
       ];
 
      
@@ -81,11 +84,48 @@ class PaymentController extends Controller
 
         public function update(Request $request,$id)
     {
-      $data = $request->payment;
-		  $payment = Payment::findOrFail($id);
-      // return $payment;
+      $payment = Payment::findOrFail($id);
+
+
+
+      $paidPrice = $payment['paidPrice'] + $request->payment['currentPayment'];
+      $balance = $payment['salePrice'] - $paidPrice;
+      
+      if($balance == 0){
+        $invoiceStatus = 'Paid';
+      }else{
+        $invoiceStatus = 'NotPaid';
+      };
+
+       $data = [
+       'invoinceID' => $payment['invoinceID'],
+       'userIndex' => $payment['userIndex'],
+       'displayName' => $payment['displayName'],
+       'affiliateName' => $payment['affiliateName'],
+       'invoiceType' => $payment['invoiceType'],
+       'invoiceDescription' => $payment['invoiceDescription'],
+       'invoiceDuration' => $payment['invoiceDuration'],
+       'salePrice' => $payment['salePrice'],
+       'retailPriceCurrency' => $payment['retailPriceCurrency'],
+       'retailPrice' => $payment['retailPrice'],
+       'referenceRecord' => $payment['referenceRecord'],
+       'recordDate' => $payment['recordDate'],
+       'lastStatusChanged' => $payment['lastStatusChanged'],
+       'accountName' => $payment['accountName'],
+       'userID' => $payment['userID'],
+       'discountedPrice' => $payment['discountedPrice'],
+       'paymentDueDate' => $payment['paymentDueDate'],
+       'paymentDueDateTime' => $payment['paymentDueDateTime'],
+        'paidPrice' => $paidPrice,
+        'balance' => $balance,
+         'invoiceStatus' => $invoiceStatus,
+         'notes' => $request->payment['notes'],
+         'modifyUser' => $request->payment['modifyUser'],
+       ];
+
+      // dd($data);
 		  $payment->update($data);
-        return redirect()->route('payments')->with('status', 200); 
+        return redirect()->route('payments')->with('status', 201); 
     }
 
       public function search(Request $request)

@@ -60,6 +60,7 @@ export default function Create ({ auth })
                 "userID": "husseinyahya@walaa",
                 "paidPrice": 0.0,
                 "discountedPrice": 0.0,
+                "balance": 40000.0,
                 "modifyUser": 'auth.user.name',
                 "paymentDueDate": "",
                 "paymentDueDateTime": null
