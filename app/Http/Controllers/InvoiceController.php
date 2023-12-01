@@ -11,25 +11,25 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
 
-class PaymentController extends Controller
+class InvoiceController extends Controller
 {
       public function index(){
         $token = $this->getSavedToken();  
-        return Inertia::render('Payments/Payments',[
+        return Inertia::render('Invoices/Invoices',[
             'apitoken' => $token,
             'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get(),
-            'payments' => Payment::orderBy('id','desc')->get(),
+            'invoices' => Payment::orderBy('id','desc')->get(),
     ]);
     }
 
          public function create() 
      {   $token = $this->getSavedToken();  
-        return Inertia::render('Payments/Create',['apitoken' => $token]);
+        return Inertia::render('Invoices/Create',['apitoken' => $token]);
     }
 
      public function show($id){
         $token = $this->getSavedToken();  
-        return Inertia::render('Payments/Invoice',[
+        return Inertia::render('Invoices/Invoice',[
             'apitoken' => $token,
             'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get(),
             'payment' => Payment::findOrFail($id),
@@ -38,7 +38,7 @@ class PaymentController extends Controller
 
      public function edit($id) 
      {   $token = $this->getSavedToken();  
-        return Inertia::render('Payments/Edit',[
+        return Inertia::render('Invoices/Edit',[
           'apitoken' => $token,
           'payment' => Payment::findOrFail($id)
         ]);
@@ -79,7 +79,7 @@ class PaymentController extends Controller
      
       Payment::create($data);
       // return  redirect()->route('users.management')->with('status', 201);  
-      return  redirect()->route('payments')->with('status', 201);  
+      return redirect()->route('invoices')->with('status', 201);
        
     }
 
@@ -137,7 +137,7 @@ class PaymentController extends Controller
 
       $result = User::where('email', $request->payment['modifyUser'])->update(['balance' => $walletBalance]);
 
-      return redirect()->route('payments')->with('status', 201); 
+      return redirect()->route('invoices')->with('status', 201); 
     }
 
       public function search(Request $request)
@@ -164,10 +164,10 @@ class PaymentController extends Controller
      
        $token = $this->getSavedToken();  
      
-      return Inertia::render('Payments/Payments',[
+      return Inertia::render('Invoices/Invoices',[
             'apitoken' => $token,
             'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get(),
-            'payments' => $results,
+            'invoices' => $results,
     ]);
 
     // return redirect()->route('payments',[

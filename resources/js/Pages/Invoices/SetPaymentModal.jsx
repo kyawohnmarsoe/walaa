@@ -18,7 +18,7 @@ export default function SetPaymentModal ({ modals, setModals, apitoken, item,aut
         balance: item.balance,
         currentPayment:'',
         notes: item.notes,
-        modifyUser: auth.user.name,
+        modifyUser: auth.user.email ,
     })
 
 
@@ -31,7 +31,7 @@ export default function SetPaymentModal ({ modals, setModals, apitoken, item,aut
     const submit = (e) =>
     {
         e.preventDefault();
-        router.post(`/invoice/update/${ item.id }`, { payment: data })
+        router.post(`/invoices/update/${ item.id }`, { payment: data })
        
     }
 
@@ -83,6 +83,7 @@ export default function SetPaymentModal ({ modals, setModals, apitoken, item,aut
                         max={ data?.balance }
                         value={ data?.currentPayment }
                         onChange={ (e) => setData('currentPayment', e.target.value) }
+                        required
                     />
 
                 </div>

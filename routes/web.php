@@ -14,6 +14,7 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\EarthlinkProfileController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
 
 Route::get('/test', [DashboardController::class, 'test'])->name('test');
@@ -88,13 +89,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/account/stats', [ReportController::class, 'getAccountStats'])->name('account.stats');
     Route::get('/affiliate/stats', [ReportController::class, 'getAffiliateStats'])->name('affiliate.stats');
     
-    Route::get('/payments', [PaymentController::class, 'index'])->name('payments');
-    Route::post('/payments/search', [PaymentController::class, 'search'])->name('payments.search');
-     Route::get('/invoice/create', [PaymentController::class, 'create'])->name('invoice.create');
-    Route::post('/invoice/store', [PaymentController::class, 'store'])->name('invoice.store');
-     Route::get('/invoice/{id}', [PaymentController::class, 'show'])->name('invoice.show');
-     Route::get('/invoice/edit/{id}', [PaymentController::class, 'edit'])->name('invoice.edit');
-     Route::post('/invoice/update/{id}', [PaymentController::class, 'update'])->name('invoice.update');
+    Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices');
+    Route::post('/invoices/search', [InvoiceController::class, 'search'])->name('invoices.search');
+     Route::get('/invoices/create', [InvoiceController::class, 'create'])->name('invoices.create');
+    Route::post('/invoices/store', [InvoiceController::class, 'store'])->name('invoices.store');
+     Route::get('/invoices/{id}', [InvoiceController::class, 'show'])->name('invoices.show');
+     Route::get('/invoices/edit/{id}', [InvoiceController::class, 'edit'])->name('invoices.edit');
+     Route::post('/invoices/update/{id}', [InvoiceController::class, 'update'])->name('invoices.update');
     
 });
 

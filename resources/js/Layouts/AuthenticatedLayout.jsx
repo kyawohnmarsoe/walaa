@@ -104,7 +104,8 @@ export default function Authenticated ({ user, header, children })
                                                 <Dropdown.Link href={ route('prepaid.needed') }>Prepaid Needed</Dropdown.Link >
                                                 {/* <Dropdown.Link href={ route('deposit.statement') }>Account Statement</Dropdown.Link > */ }
                                                 <Dropdown.Link href={ route('deposit.transfer') }>Balance Transfer</Dropdown.Link >
-                                                <Dropdown.Link href={ route('payments') }>Payment</Dropdown.Link >
+                                                <Dropdown.Link href={ route('invoices') }>Invoices</Dropdown.Link >
+                                                <Dropdown.Link href={ route('invoices') }>Expenses</Dropdown.Link >
                                             </Dropdown.Content>
                                         </Dropdown>
                                     </div>
@@ -183,6 +184,7 @@ export default function Authenticated ({ user, header, children })
                                                 className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
                                             >
                                                 { user.name }
+                                                
 
                                                 <svg
                                                     className="ml-2 -mr-0.5 h-4 w-4"
@@ -198,9 +200,11 @@ export default function Authenticated ({ user, header, children })
                                                 </svg>
                                             </button>
                                         </span>
+                                       
                                     </Dropdown.Trigger>
 
                                     <Dropdown.Content>
+                                        <Dropdown.Link href={ route('profile.edit') }> Wallet : <span className="text-emerald-700">{ user.balance.toLocaleString() } IQD </span></Dropdown.Link>
                                         <Dropdown.Link href={ route('profile.edit') }> Profile</Dropdown.Link>
                                         {/* <Dropdown.Link href={ route('earthlink.edit') }>EarthLink Profile</Dropdown.Link> */ }
                                         <Dropdown.Link href={ route('logout') } method="post" as="button">
