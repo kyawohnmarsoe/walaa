@@ -56,9 +56,10 @@ class AccountController extends Controller
         ]);
     } // edit
 
-    public function update(Request $request, $id) 
+    public function update(StoreSubAccountRequest $request, $id) 
     {
 		$input = $request->all();
+        $data = $request->validated();   
 		$data = Sub_account::findOrFail($id);
         // return response(compact('input'));  
 		$data->update($input);

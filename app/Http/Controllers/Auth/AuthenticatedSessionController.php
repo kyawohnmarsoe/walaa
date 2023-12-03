@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Models\User;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -30,17 +31,16 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
-
-        $request->session()->regenerate();
-
-        // $api_token = $this->GetApiToken();
-        // session([
-        //     'apitoken' => $api_token, 
-        //     'current_time' => time()
-        // ]);        
-
-        return redirect()->intended(RouteServiceProvider::HOME);
+        // dd($request->all());        
+        $data = User::where('email',$request->email)->first();
+        // dd($data->active_status);   
+        if($data->active_status == 1) {
+            $request->authenticate();                   
+            $request->session()->regenerate(); 
+            return redirect()->intended(RouteServiceProvider::HOME);
+        } else {
+            return redirect('/login')->with('error_message', 'You can\'t login. Your account has been disabled.');
+        }        
     }
 
     /**

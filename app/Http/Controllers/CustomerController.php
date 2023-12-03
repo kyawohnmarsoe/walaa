@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Role;
 use Inertia\Inertia;
 use App\Models\Customer;
 use App\Models\Affiliate;
@@ -11,6 +13,8 @@ use App\Models\Account;
 use App\Models\Sub_account;
 use App\Models\Deposit_pass;
 use App\Http\Requests\StoreCustomerRequest;
+use App\Models\User_group;
+use App\Models\User_has_group;
 
 class CustomerController extends Controller
 {
@@ -56,13 +60,27 @@ class CustomerController extends Controller
    
     public function index(Request $request)
     {
+        $user = Auth::user();    
+        $roles = Role::pluck('name','name')->all();
+        $userRole = $user->roles->pluck('name')->all();
+        // return response(compact('userRole'));
+
+        // if($userRole[0] == 'admin') {
+            // $user_has_groups_idArr = null;
+        // } else {
+            $loggedin_user_id = $user->id;
+            $user_has_groups_idArr = User_has_group::where('user_id',$loggedin_user_id)->get('group_id');
+        // } 
+        
+        // return response(compact('user_has_groups_idArr'));
+        
         $token = $this->getSavedToken();  
         
-        $totalCount = $this->get_totalcount();       
-
+        $totalCount = $this->get_totalcount(); 
+        
         if ($request->hasAny(['account_index', 'sub_account_id', 'affiliate_index', 'customer_user_id', 'status'])) {
            
-            $customers = Customer::leftJoin('affiliates', 'affiliates.affiliate_index', '=', 'customers.affiliate_index')
+            $customers_query = Customer::leftJoin('affiliates', 'affiliates.affiliate_index', '=', 'customers.affiliate_index')
                 ->leftJoin('accounts', 'accounts.account_index', '=', 'customers.account_index')
                 ->when(request('account_index') != '', function ($q) {
                     return $q->where('customers.account_index', request('account_index'));
@@ -74,26 +92,37 @@ class CustomerController extends Controller
                     return $q->where('customers.customer_user_id', 'LIKE', '%'.request('customer_user_id').'%');
                 })->when(request('active_status') != '', function ($q) {
                     return $q->where('customers.active_status', '=', request('active_status'));
-                })->get(['customers.*', 'affiliates.affiliate_name', 'accounts.account_name']);           
+                })->whereNull('customers.user_group_id');                 
 
             $show_data = 'filter_list';
         } else {
             // select cus.*, aff.affiliate_name, acc.account_name from customers cus
             // left join affiliates aff on aff.affiliate_index=cus.affiliate_index
-            // left join accounts acc on acc.account_index=cus.account_index;
+            // left join accounts acc on acc.account_index=cus.account_index
+            // where cus.user_group_id in('1') OR cus.user_group_id IS NULL;
             
-            $customers = Customer::leftJoin('affiliates', 'affiliates.affiliate_index', '=', 'customers.affiliate_index')
+            $customers_query = Customer::leftJoin('affiliates', 'affiliates.affiliate_index', '=', 'customers.affiliate_index')
                 ->leftJoin('accounts', 'accounts.account_index', '=', 'customers.account_index')
-                ->get(['customers.*', 'affiliates.affiliate_name', 'accounts.account_name']);
+                ->whereNull('customers.user_group_id');
 
             $show_data = 'list';
         } 
+
+        if($user_has_groups_idArr == null){
+            $customers = $customers_query->get(['customers.*', 'affiliates.affiliate_name', 'accounts.account_name']);            
+        } else {
+            $customers = $customers_query->orWhereIn('customers.user_group_id', $user_has_groups_idArr)
+            ->get(['customers.*', 'affiliates.affiliate_name', 'accounts.account_name']);
+        }
+
+        // return response(compact('customers'));
 
         return Inertia::render('Customers/Customers', [
             'customers' => $customers,
             'sub_accounts' => Sub_account::all(),              
             'accounts' => Account::all(),
             'affiliates' => Affiliate::all(),  
+            'user_groups' => User_group::all(),
             'show_data' => $show_data,
             'apitoken' => $token, 
             'totalCount' => $totalCount,                 
@@ -108,6 +137,7 @@ class CustomerController extends Controller
             'accounts' => Account::all(),
             'sub_accounts' => Sub_account::all(),
             'affiliates' => Affiliate::all(),
+            'user_groups' => User_group::all(),
             'apitoken' => $token,
         ]);
         
@@ -136,9 +166,11 @@ class CustomerController extends Controller
         return redirect()->route('customers')->with('message', 'Deposit password is successfully updated!');      
     }
     
-    public function insert(Request $request) {
+    public function insert(StoreCustomerRequest $request) {
         $token   = $this->getSavedToken();
         
+        $data = $request->validated();  
+
         $deposit_data = $this->get_deposit_password();
 
         $apiURL  = 'https://rapi.earthlink.iq/api/reseller/user/newuserdeposit' ;  
@@ -208,6 +240,7 @@ class CustomerController extends Controller
                         'display_name'         => $request->display_name,
                         'caller_id'            => '',
                         'customer_user_notes'  => $request->customer_user_notes,
+                        'user_group_id'        => $request->user_group_id,
                         'status'               => 'Offline',
                         'account_status'       => 'Active',
                         'account_package_type' => 'MonthlyPrepaid'                 
@@ -223,8 +256,7 @@ class CustomerController extends Controller
         
         return redirect()->route('customers')->with('status', 422);
        
-    } // insert   
-    
+    } // insert       
 
     public function store_api(Request $request) {
         $row_count = $request->totalCount;
@@ -322,13 +354,15 @@ class CustomerController extends Controller
             'accounts'     => Account::all(),
             'sub_accounts' => Sub_account::all(),
             'affiliates'   => Affiliate::all(),
+            'user_groups'  => User_group::all(),
             'apitoken'     => $token,
         ]);
     } // edit
 
-    public function update(Request $request, $index) 
+    public function update(StoreCustomerRequest $request, $index) 
     {
 		$input = $request->all();
+        $data = $request->validated(); 
 		$data = Customer::where('customer_user_index', $index)->firstOrFail();
 		$data->update($input);
         return redirect()->route('customers')->with('message', 'Data is successfully updated!'); 

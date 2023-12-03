@@ -29,4 +29,8 @@
 tr:hover{
     background-color: rgba(232, 230, 230, 0.424);
 }
-/* NavBar */
+/* form label required */
+.required:after {
+    content:" *";
+    color: crimson;
+  }

@@ -16,6 +16,7 @@ export default function Customers({
     affiliates,
     accounts,
     sub_accounts,
+    user_groups,
     apitoken,
     totalCount,
     deposit_password,
@@ -148,6 +149,7 @@ export default function Customers({
                                     tableName="customer"
                                     sub_accounts={sub_accounts}
                                     accounts={accounts}
+                                    user_groups={user_groups}
                                     setFilterObj={setFilterObj}
                                     filterObj={filterObj}
                                     apitoken={apitoken}
@@ -165,6 +167,7 @@ export default function Customers({
                                 accounts={accounts}
                                 sub_accounts={sub_accounts}
                                 affiliates={affiliates}
+                                user_groups={user_groups}
                                 apitoken={apitoken}
                             />
                         </div>
@@ -192,6 +195,7 @@ export default function Customers({
                                 accounts={accounts}
                                 sub_accounts={sub_accounts}
                                 affiliates={affiliates}
+                                user_groups={user_groups}
                                 apitoken={apitoken}
                             />
                         </div>

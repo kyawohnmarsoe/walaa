@@ -33,16 +33,8 @@ class Controller extends BaseController
          }
 
         $api_response_token = json_decode($api_response->getBody(), true); 
-        // dd($api_response_token);
         $api_token = $api_response_token ? $api_response_token['access_token'] : null;  
-        // dd($api_token);
-        return $api_token;
-        
-        // $output = array(
-        //     'api_token' => $api_response_token['access_token'],
-        //     'expires_in' => $api_response_token['expires_in']
-        //   );
-        // return response($output);
+        return $api_token;       
         
     } // GetApiToken
 

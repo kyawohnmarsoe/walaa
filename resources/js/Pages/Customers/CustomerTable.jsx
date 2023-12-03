@@ -6,7 +6,7 @@ import DangerButton from "@/Components/DangerButton";
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from '@/Components/TextInput';
 
-export default function CustomerTable({ customers, accounts, sub_accounts, apitoken }) {
+export default function CustomerTable({ customers, accounts, sub_accounts, user_groups, apitoken }) {
     const [loading, setLoading] = useState(false);
 
     function editLocalCusClick(index) {
@@ -39,11 +39,11 @@ export default function CustomerTable({ customers, accounts, sub_accounts, apito
     return (
         <div className="overflow-x-auto mt-3">
 
-            <Modal id="deleteModal" title="Confirmation" closeModal={onCloseModal}>
+            <Modal id="deleteModal" title="Disable Customer Confirmation" closeModal={onCloseModal}>
                 <form onSubmit={disableCustomer} className="space-y-6 ">
                     <div className='grid grid-cols-1 gap-4'>
                         <div className="pt-4">
-                            Are you sure to disable -
+                            Are you sure disable -
                             <span className="font-bold text-sky-700" id="email"></span>?
                         </div>
                     </div>
@@ -64,6 +64,7 @@ export default function CustomerTable({ customers, accounts, sub_accounts, apito
                         <th>Affiliate Name</th>
                         <th>Main Account Info</th>
                         <th>Sub Account Type</th>
+                        <th>User Group</th>
                         <th>Active/Disable</th>
                         <th colSpan="2">Actions</th>
                     </tr>
@@ -102,6 +103,14 @@ export default function CustomerTable({ customers, accounts, sub_accounts, apito
                                         sub_accounts.filter(subacc => subacc.id == cus.sub_account_id)
                                             .map(filteredRes => (
                                                 filteredRes.account_name
+                                            ))
+                                    }
+                                </td>
+                                <td>
+                                    {
+                                        user_groups.filter(user_gp => user_gp.id == cus.user_group_id)
+                                            .map(filteredRes => (
+                                                filteredRes.group_name
                                             ))
                                     }
                                 </td>

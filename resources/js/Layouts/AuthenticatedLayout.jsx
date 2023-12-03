@@ -6,8 +6,7 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
 import '../../css/paginate.css'
 
-export default function Authenticated ({ user, header, children })
-{
+export default function Authenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     const { url } = usePage()
@@ -18,7 +17,7 @@ export default function Authenticated ({ user, header, children })
         <div className="min-h-screen bg-gray-100">
             <nav className="bg-white border-b border-gray-100">
                 <div className=" mx-auto px-1 ">
-                    {/* max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 */ }
+                    {/* max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 */}
                     <div className="flex justify-between h-16">
                         <div className="flex">
                             <div className="shrink-0 flex items-center">
@@ -28,11 +27,11 @@ export default function Authenticated ({ user, header, children })
                             </div>
 
                             <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <NavLink href={ route('dashboard') } active={ route().current('dashboard') }>
+                                <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                                     Dashboard
                                 </NavLink>
 
-                                {/* Users  */ }
+                                {/* Users  */}
                                 <div className="sm:flex sm:items-center">
                                     <div className="relative">
                                         <Dropdown>
@@ -61,16 +60,16 @@ export default function Authenticated ({ user, header, children })
                                                 </span>
                                             </Dropdown.Trigger>
 
-                                            <Dropdown.Content align={ 'left' }>
-                                                <Dropdown.Link href={ route('users.online') }>Online Users</Dropdown.Link>
-                                                <Dropdown.Link href={ route('users.management') }> Manage Users</Dropdown.Link >
-                                                <Dropdown.Link href={ route('customers.create') }> Create New User</Dropdown.Link >
+                                            <Dropdown.Content align={'left'}>
+                                                <Dropdown.Link href={route('users.online')}>Online Users</Dropdown.Link>
+                                                <Dropdown.Link href={route('users.management')}> Manage Users</Dropdown.Link >
+                                                <Dropdown.Link href={route('customers.create')}> Create New User</Dropdown.Link >
                                             </Dropdown.Content>
                                         </Dropdown>
                                     </div>
                                 </div>
 
-                                {/* Reports  */ }
+                                {/* Reports  */}
                                 <div className="sm:flex sm:items-center">
                                     <div className="relative">
                                         <Dropdown>
@@ -99,18 +98,18 @@ export default function Authenticated ({ user, header, children })
                                                 </span>
                                             </Dropdown.Trigger>
 
-                                            <Dropdown.Content align={ 'left' }>
-                                                <Dropdown.Link href={ route('usersessions') }>User Sessions</Dropdown.Link>
-                                                <Dropdown.Link href={ route('prepaid.needed') }>Prepaid Needed</Dropdown.Link >
-                                                {/* <Dropdown.Link href={ route('deposit.statement') }>Account Statement</Dropdown.Link > */ }
-                                                <Dropdown.Link href={ route('deposit.transfer') }>Balance Transfer</Dropdown.Link >
-                                                <Dropdown.Link href={ route('payments') }>Payment</Dropdown.Link >
+                                            <Dropdown.Content align={'left'}>
+                                                <Dropdown.Link href={route('usersessions')}>User Sessions</Dropdown.Link>
+                                                <Dropdown.Link href={route('prepaid.needed')}>Prepaid Needed</Dropdown.Link >
+                                                {/* <Dropdown.Link href={ route('deposit.statement') }>Account Statement</Dropdown.Link > */}
+                                                <Dropdown.Link href={route('deposit.transfer')}>Balance Transfer</Dropdown.Link >
+                                                <Dropdown.Link href={route('payments')}>Payment</Dropdown.Link >
                                             </Dropdown.Content>
                                         </Dropdown>
                                     </div>
                                 </div>
 
-                                {/* Statistics  */ }
+                                {/* Statistics  */}
                                 <div className="sm:flex sm:items-center">
                                     <div className="relative">
                                         <Dropdown>
@@ -139,12 +138,12 @@ export default function Authenticated ({ user, header, children })
                                                 </span>
                                             </Dropdown.Trigger>
 
-                                            <Dropdown.Content align={ 'left' }>
-                                                <Dropdown.Link href={ route('affiliate.group') }>Affiliate Group Report</Dropdown.Link>
-                                                <Dropdown.Link href={ route('test.usage') }>Test Usage Report</Dropdown.Link >
-                                                <Dropdown.Link href={ route('account.stats') }>User Account Type Stats</Dropdown.Link >
-                                                <Dropdown.Link href={ route('affiliate.stats') }>Affiliate Subscriptions Stats</Dropdown.Link >
-                                                <Dropdown.Link href={ route('log.error') }>Error Log</Dropdown.Link>
+                                            <Dropdown.Content align={'left'}>
+                                                <Dropdown.Link href={route('affiliate.group')}>Affiliate Group Report</Dropdown.Link>
+                                                <Dropdown.Link href={route('test.usage')}>Test Usage Report</Dropdown.Link >
+                                                <Dropdown.Link href={route('account.stats')}>User Account Type Stats</Dropdown.Link >
+                                                <Dropdown.Link href={route('affiliate.stats')}>Affiliate Subscriptions Stats</Dropdown.Link >
+                                                <Dropdown.Link href={route('log.error')}>Error Log</Dropdown.Link>
 
                                             </Dropdown.Content>
                                         </Dropdown>
@@ -152,27 +151,23 @@ export default function Authenticated ({ user, header, children })
                                 </div>
 
 
-                                <NavLink href={ route('accounts') } active={ url.startsWith('/accounts') }>
+                                <NavLink href={route('accounts')} active={url.startsWith('/accounts')}>
                                     Accounts
                                 </NavLink>
-                                <NavLink href={ route('affiliates') } active={ url.startsWith('/affiliates') }>
+                                <NavLink href={route('affiliates')} active={url.startsWith('/affiliates')}>
                                     Affiliates
                                 </NavLink>
-                                <NavLink href={ route('customers') } active={ url.startsWith('/customers') }>
+                                <NavLink href={route('customers')} active={url.startsWith('/customers')}>
                                     Users
                                 </NavLink>
-
-                                {
-                                    roles == 'admin' &&
-                                    <NavLink href={ route('tickets') } active={ url.startsWith('/tickets') }>
-                                        Tickets
-                                    </NavLink>
-                                }
+                                <NavLink href={route('tickets')} active={url.startsWith('/tickets')}>
+                                    Tickets
+                                </NavLink>
 
                             </div>
                         </div>
 
-                        {/* Auth  */ }
+                        {/* Auth  */}
                         <div className="hidden sm:flex sm:items-center sm:ml-6">
                             <div className="ml-3 relative">
                                 <Dropdown>
@@ -182,7 +177,7 @@ export default function Authenticated ({ user, header, children })
                                                 type="button"
                                                 className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
                                             >
-                                                { user.name }
+                                                {user.name}
 
                                                 <svg
                                                     className="ml-2 -mr-0.5 h-4 w-4"
@@ -201,9 +196,16 @@ export default function Authenticated ({ user, header, children })
                                     </Dropdown.Trigger>
 
                                     <Dropdown.Content>
-                                        <Dropdown.Link href={ route('profile.edit') }> Profile</Dropdown.Link>
-                                        {/* <Dropdown.Link href={ route('earthlink.edit') }>EarthLink Profile</Dropdown.Link> */ }
-                                        <Dropdown.Link href={ route('logout') } method="post" as="button">
+                                        <Dropdown.Link href={route('profile.edit')}> Profile</Dropdown.Link>
+                                        {/* <Dropdown.Link href={ route('earthlink.edit') }>EarthLink Profile</Dropdown.Link> */}
+                                        {
+                                            roles == 'admin' &&
+                                            <>
+                                                <Dropdown.Link href={route('systemuser')} active={url.startsWith('/systemuser')}> System Users Manage</Dropdown.Link>
+                                                <Dropdown.Link href={route('usergroup')} active={url.startsWith('/usergroup')}> Users Group Manage</Dropdown.Link>
+                                            </>
+                                        }
+                                        <Dropdown.Link href={route('logout')} method="post" as="button">
                                             Log Out
                                         </Dropdown.Link>
                                     </Dropdown.Content>
@@ -211,22 +213,22 @@ export default function Authenticated ({ user, header, children })
                             </div>
                         </div>
 
-                        {/* Mobile Menu Humbergur */ }
+                        {/* Mobile Menu Humbergur */}
                         <div className="-mr-2 flex items-center sm:hidden">
                             <button
-                                onClick={ () => setShowingNavigationDropdown((previousState) => !previousState) }
+                                onClick={() => setShowingNavigationDropdown((previousState) => !previousState)}
                                 className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
                             >
                                 <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                                     <path
-                                        className={ !showingNavigationDropdown ? 'inline-flex' : 'hidden' }
+                                        className={!showingNavigationDropdown ? 'inline-flex' : 'hidden'}
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
                                         strokeWidth="2"
                                         d="M4 6h16M4 12h16M4 18h16"
                                     />
                                     <path
-                                        className={ showingNavigationDropdown ? 'inline-flex' : 'hidden' }
+                                        className={showingNavigationDropdown ? 'inline-flex' : 'hidden'}
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
                                         strokeWidth="2"
@@ -239,49 +241,49 @@ export default function Authenticated ({ user, header, children })
                 </div>
 
 
-                {/* Mobile Menu Dropdown */ }
-                <div className={ (showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden' }>
+                {/* Mobile Menu Dropdown */}
+                <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
                     <div className="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink href={ route('dashboard') } active={ route().current('dashboard') }>
+                        <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
                             Dashboard
                         </ResponsiveNavLink>
                     </div>
 
                     <div className="pt-2 pb-3 space-y-1 border-t">
-                        <ResponsiveNavLink href={ route('users.online') } active={ route().current('users.online') }>
+                        <ResponsiveNavLink href={route('users.online')} active={route().current('users.online')}>
                             Online Users
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink href={ route('users.management') } active={ route().current('users.management') }>
+                        <ResponsiveNavLink href={route('users.management')} active={route().current('users.management')}>
                             Manage Users
                         </ResponsiveNavLink>
                     </div>
 
                     <div className="pt-2 pb-3 space-y-1 border-t">
-                        <ResponsiveNavLink href={ route('usersessions') } active={ route().current('usersessions') }>
+                        <ResponsiveNavLink href={route('usersessions')} active={route().current('usersessions')}>
                             User Sessions
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink href={ route('prepaid.needed') } active={ route().current('prepaid.needed') }>
+                        <ResponsiveNavLink href={route('prepaid.needed')} active={route().current('prepaid.needed')}>
                             Prepaid Needed
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink href={ route('deposit.transfer') } active={ route().current('deposit.transfer') }>
+                        <ResponsiveNavLink href={route('deposit.transfer')} active={route().current('deposit.transfer')}>
                             Balance Transfer
                         </ResponsiveNavLink>
 
-                        <ResponsiveNavLink href={ route('affiliate.group') } active={ route().current('affiliate.group') }>
+                        <ResponsiveNavLink href={route('affiliate.group')} active={route().current('affiliate.group')}>
                             Affiliate Group Report
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink href={ route('test.usage') } active={ route().current('test.usage') }>
+                        <ResponsiveNavLink href={route('test.usage')} active={route().current('test.usage')}>
                             Test Usage Report
                         </ResponsiveNavLink>
 
-                        <ResponsiveNavLink href={ route('account.stats') } active={ route().current('account.stats') }>
+                        <ResponsiveNavLink href={route('account.stats')} active={route().current('account.stats')}>
                             User Account Type Stats
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink href={ route('affiliate.stats') } active={ route().current('affiliate.stats') }>
+                        <ResponsiveNavLink href={route('affiliate.stats')} active={route().current('affiliate.stats')}>
                             Affiliate Subscriptions Stats
                         </ResponsiveNavLink>
 
-                        <ResponsiveNavLink href={ route('log.error') } active={ route().current('log.error') }>
+                        <ResponsiveNavLink href={route('log.error')} active={route().current('log.error')}>
                             Error Log
                         </ResponsiveNavLink>
                     </div>
@@ -309,13 +311,13 @@ export default function Authenticated ({ user, header, children })
 
                     <div className="pt-4 pb-1 border-t border-gray-200">
                         <div className="px-4">
-                            <div className="font-medium text-base text-gray-800">{ user.name }</div>
-                            <div className="font-medium text-sm text-gray-500">{ user.email }</div>
+                            <div className="font-medium text-base text-gray-800">{user.name}</div>
+                            <div className="font-medium text-sm text-gray-500">{user.email}</div>
                         </div>
 
                         <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={ route('profile.edit') }>Profile</ResponsiveNavLink>
-                            <ResponsiveNavLink method="post" href={ route('logout') } as="button">
+                            <ResponsiveNavLink href={route('profile.edit')}>Profile</ResponsiveNavLink>
+                            <ResponsiveNavLink method="post" href={route('logout')} as="button">
                                 Log Out
                             </ResponsiveNavLink>
                         </div>
@@ -329,7 +331,7 @@ export default function Authenticated ({ user, header, children })
                 </header>
             )} */}
 
-            <main>{ children }</main>
+            <main>{children}</main>
 
         </div>
     );

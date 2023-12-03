@@ -1,15 +1,18 @@
 import { useState, useEffect } from 'react';
-import { useForm, router } from '@inertiajs/react';
+import { useForm, router, usePage } from '@inertiajs/react';
 
 import InputLabel from '@/Components/InputLabel';
+import InputError from '@/Components/InputError';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import Textarea from '@/Components/Textarea';
 import SelectOption from '@/Components/SelectOption';
 
-export default function AddForm({ className = '', customer, accounts, sub_accounts, affiliates, apitoken }) {
+export default function AddForm({ className = '', customer, accounts, sub_accounts, affiliates, user_groups, apitoken }) {
 
     const { processing } = useForm();
+
+    const { errors } = usePage().props
 
     const [values, setValues] = useState({
         account_index: customer.account_index,
@@ -27,11 +30,13 @@ export default function AddForm({ className = '', customer, accounts, sub_accoun
         state: customer.state ?? '',
         display_name: customer.display_name ?? '',
         customer_user_notes: customer.customer_user_notes ?? '',
+        user_group_id: customer.user_group_id,
     });
 
     const [optionsAffiliates, setOptionsAffiliates] = useState([])
     const [optionsAccounts, setOptionsAccounts] = useState([])
     const [optionsSubAccounts, setOptionsSubAccounts] = useState([])
+    const [optionsUserGroups, setOptionsUserGroups] = useState([])
 
     const [showAffiliateValue, setShowAffiliateValue] = useState(false)
     const [showAccountValue, setShowAccountValue] = useState(false)
@@ -71,9 +76,25 @@ export default function AddForm({ className = '', customer, accounts, sub_accoun
         setOptionsAccounts(optionsAccountsArr)
     }
 
+    const getUserGroups = () => {
+        let optionsUserGroupsArr = [];
+        {
+            user_groups.map((e) => {
+                optionsUserGroupsArr.push(
+                    {
+                        "index": e.id,
+                        "name": e.group_name
+                    }
+                );
+            });
+        }
+        setOptionsUserGroups(optionsUserGroupsArr)
+    }
+
     useEffect(() => {
         getAffiliates()
         getAccounts()
+        getUserGroups()
     }, [])
 
     function affiliatesHandleChange(e) {
@@ -162,6 +183,14 @@ export default function AddForm({ className = '', customer, accounts, sub_accoun
         }))
     }
 
+    function userGroupsHandleChange(e) {
+        const value = e.target.value
+        setValues(values => ({
+            ...values,
+            'user_group_id': value,
+        }))
+    }
+
     function handleChange(e) {
         const key = e.target.id;
         const value = e.target.value
@@ -219,7 +248,7 @@ export default function AddForm({ className = '', customer, accounts, sub_accoun
 
                 <div className='grid grid-cols-3 gap-4'>
                     <div>
-                        <InputLabel htmlFor="affiliate_index" value="Affiliates" />
+                        <InputLabel htmlFor="affiliate_index" value="Affiliates" className='required' />
                         <SelectOption
                             id="affiliate_index"
                             className="mt-1 block w-full"
@@ -229,10 +258,11 @@ export default function AddForm({ className = '', customer, accounts, sub_accoun
                             value={values.affiliate_index}
                             onChange={affiliatesHandleChange}
                         />
+                        <InputError message={errors.affiliate_index} className="mt-2" />
                     </div>
 
                     <div>
-                        <InputLabel htmlFor="account_index" value="Accounts" />
+                        <InputLabel htmlFor="account_index" value="Accounts" className='required' />
                         <SelectOption
                             id="account_index"
                             className="mt-1 block w-full"
@@ -242,6 +272,7 @@ export default function AddForm({ className = '', customer, accounts, sub_accoun
                             value={values.account_index}
                             onChange={accountsHandleChange}
                         />
+                        <InputError message={errors.account_index} className="mt-2" />
                     </div>
 
                     <div>
@@ -284,7 +315,7 @@ export default function AddForm({ className = '', customer, accounts, sub_accoun
                     </div>
 
                     <div>
-                        <InputLabel htmlFor="email" value="Email" />
+                        <InputLabel htmlFor="email" value="Email" className='required' />
                         <TextInput
                             id="email"
                             name="email"
@@ -294,10 +325,11 @@ export default function AddForm({ className = '', customer, accounts, sub_accoun
                             className="mt-1 block w-full"
                             autoComplete="off"
                         />
+                        <InputError message={errors.email} className="mt-2" />
                     </div>
 
                     <div>
-                        <InputLabel htmlFor="user_password" value="User Password" />
+                        <InputLabel htmlFor="user_password" value="User Password" className='required' />
                         <TextInput
                             id="user_password"
                             name="user_password"
@@ -307,6 +339,7 @@ export default function AddForm({ className = '', customer, accounts, sub_accoun
                             className="mt-1 block w-full"
                             autoComplete="off"
                         />
+                        <InputError message={errors.user_password} className="mt-2" />
                     </div>
 
                     <div>
@@ -411,6 +444,19 @@ export default function AddForm({ className = '', customer, accounts, sub_accoun
                             onChange={handleChange}
                             className="mt-1 block w-full"
                             minRows={5}
+                        />
+                    </div>
+
+                    <div>
+                        <InputLabel htmlFor="user_group_id" value="User Groups" />
+                        <SelectOption
+                            id="user_group_id"
+                            className="mt-1 block w-full"
+                            options={optionsUserGroups}
+                            select_text="User Groups"
+                            name="user_group_id"
+                            value={values.user_group_id}
+                            onChange={userGroupsHandleChange}
                         />
                     </div>
                 </div>
