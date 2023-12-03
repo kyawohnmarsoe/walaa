@@ -10,7 +10,7 @@ import UsergroupTable from '@/Pages/Usergroup/UsergroupTable';
 import TestUsageTable from '@/Pages/Reports/Stats/TestUsage/TestUsageTable';
 import TotalItemsCount from '@/Components/DaisyUI/TotalItemsCount'
 import PageSize from '@/Components/DaisyUI/PageSize'
-import PaymentTable from '@/Pages/Payments/PaymentTable';
+// import PaymentTable from '@/Pages/Payments/PaymentTable';
 
 export default function PaginatedLinks({
     itemsPerPage,
@@ -97,9 +97,9 @@ export default function PaginatedLinks({
                 tableName == 'testUsage' && <TestUsageTable items={currentItems} />
             }
 
-            {
+            {/* {
                 tableName == 'payments' && <PaymentTable items={currentItems} />
-            }
+            } */}
 
         </>
     );

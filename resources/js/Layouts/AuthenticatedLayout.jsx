@@ -161,9 +161,13 @@ export default function Authenticated({ user, header, children }) {
                                 <NavLink href={route('customers')} active={url.startsWith('/customers')}>
                                     Users
                                 </NavLink>
-                                <NavLink href={route('tickets')} active={url.startsWith('/tickets')}>
-                                    Tickets
-                                </NavLink>
+
+                                {
+                                    roles == 'admin' &&
+                                    <NavLink href={route('tickets')} active={url.startsWith('/tickets')}>
+                                        Tickets
+                                    </NavLink>
+                                }
 
                             </div>
                         </div>
@@ -179,6 +183,7 @@ export default function Authenticated({ user, header, children }) {
                                                 className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
                                             >
                                                 {user.name}
+
 
                                                 <svg
                                                     className="ml-2 -mr-0.5 h-4 w-4"
@@ -198,8 +203,16 @@ export default function Authenticated({ user, header, children }) {
                                     </Dropdown.Trigger>
 
                                     <Dropdown.Content>
+                                        <Dropdown.Link href={route('profile.edit')}> Wallet : <span className="text-emerald-700">{user.balance.toLocaleString()} IQD </span></Dropdown.Link>
                                         <Dropdown.Link href={route('profile.edit')}> Profile</Dropdown.Link>
                                         {/* <Dropdown.Link href={ route('earthlink.edit') }>EarthLink Profile</Dropdown.Link> */}
+                                        {
+                                            roles == 'admin' &&
+                                            <>
+                                                <Dropdown.Link href={route('systemuser')} active={url.startsWith('/systemuser')}> System Users Manage</Dropdown.Link>
+                                                <Dropdown.Link href={route('usergroup')} active={url.startsWith('/usergroup')}> Users Group Manage</Dropdown.Link>
+                                            </>
+                                        }
                                         <Dropdown.Link href={route('logout')} method="post" as="button">
                                             Log Out
                                         </Dropdown.Link>
