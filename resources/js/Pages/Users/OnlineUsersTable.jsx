@@ -32,22 +32,6 @@ export default function OnlineUsersTable ({ users, apitoken })
           }
         </tbody>
 
-        {/* foot */ }
-        <tfoot>
-          <tr>
-            <th>#Index</th>
-            <th>Username</th>
-            <th>Online Status</th>
-            <th>Online Time</th>
-            <th>Online Since</th>
-            <th>MAC Address</th>
-            <th>Expiration Date</th>
-            <th>UserIP</th>
-            <th>Login From</th>
-            <th>Login Affiliate</th>
-            <th>Action</th>
-          </tr>
-        </tfoot>
 
       </table>
     </div>

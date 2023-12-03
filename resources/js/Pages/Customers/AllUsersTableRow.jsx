@@ -20,6 +20,8 @@ export default function AllUsersTableRow({ user, accountTypes, apitoken }) {
     instance.post(`/user/extend/${ user.userIndex}`)
       .then(res =>
       {
+        res.data.isSuccessful ? (alert(`Extend Success!`), location.reload()) : alert(`Sorry! ${ res.data.error?.message }`);
+
         console.log(res)
 
       })
@@ -79,7 +81,7 @@ export default function AllUsersTableRow({ user, accountTypes, apitoken }) {
         <td>
           <strong>Last Refill</strong> : {user?.lastRefill}
           <br />
-          <strong>Payment</strong> : {!!user?.unPaidInvoices ? <span style={{ color: user?.serviceStatusColorHex }}>{user?.unPaidInvoices} Unpaid</span> : <span className="text-emerald-700">All Paid</span>}
+          <strong>Payment</strong> : {!!user?.unPaidInvoices ? <span style={{ color: user?.serviceStatusColorHex }}>{user?.unPaidInvoices} Unpaid</span> : <span className="text-emerald-500">All Paid</span>}
           <br />
           <strong>Notes</strong> : {user?.lastRefill}
 
@@ -108,7 +110,7 @@ export default function AllUsersTableRow({ user, accountTypes, apitoken }) {
           <br />
           <strong>IP</strong> : <a href={ `https://${ user?.userIP }` } className="text-sky-700" target="_blank">{ user?.userIP }</a>
           <br />
-          <strong>Lock MAC</strong> : {+user?.lockMac}
+          <strong>Lock MAC</strong> : {user?.lockMac}
         </td>
 
         {/* <td>

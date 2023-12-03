@@ -103,7 +103,8 @@ export default function Authenticated({ user, header, children }) {
                                                 <Dropdown.Link href={route('prepaid.needed')}>Prepaid Needed</Dropdown.Link >
                                                 {/* <Dropdown.Link href={ route('deposit.statement') }>Account Statement</Dropdown.Link > */}
                                                 <Dropdown.Link href={route('deposit.transfer')}>Balance Transfer</Dropdown.Link >
-                                                <Dropdown.Link href={route('payments')}>Payment</Dropdown.Link >
+                                                <Dropdown.Link href={route('invoices')}>Invoices</Dropdown.Link >
+                                                <Dropdown.Link href={route('invoices')}>Expenses</Dropdown.Link >
                                             </Dropdown.Content>
                                         </Dropdown>
                                     </div>
@@ -193,18 +194,12 @@ export default function Authenticated({ user, header, children }) {
                                                 </svg>
                                             </button>
                                         </span>
+
                                     </Dropdown.Trigger>
 
                                     <Dropdown.Content>
                                         <Dropdown.Link href={route('profile.edit')}> Profile</Dropdown.Link>
                                         {/* <Dropdown.Link href={ route('earthlink.edit') }>EarthLink Profile</Dropdown.Link> */}
-                                        {
-                                            roles == 'admin' &&
-                                            <>
-                                                <Dropdown.Link href={route('systemuser')} active={url.startsWith('/systemuser')}> System Users Manage</Dropdown.Link>
-                                                <Dropdown.Link href={route('usergroup')} active={url.startsWith('/usergroup')}> Users Group Manage</Dropdown.Link>
-                                            </>
-                                        }
                                         <Dropdown.Link href={route('logout')} method="post" as="button">
                                             Log Out
                                         </Dropdown.Link>
@@ -288,26 +283,26 @@ export default function Authenticated({ user, header, children }) {
                         </ResponsiveNavLink>
                     </div>
 
-                    {/* <div className="pt-2 pb-3 space-y-1 border-t">
-                        <ResponsiveNavLink href={ route('accounts') } active={ url.startsWith('/accounts') }>
+                    <div className="pt-2 pb-3 space-y-1 border-t">
+                        <ResponsiveNavLink href={route('accounts')} active={url.startsWith('/accounts')}>
                             Accounts
                         </ResponsiveNavLink>
-                    </div> 
+                    </div>
                     <div className="pt-2 pb-3 space-y-1 border-t">
-                        <ResponsiveNavLink href={ route('affiliates') } active={ url.startsWith('/affiliates') }>
+                        <ResponsiveNavLink href={route('affiliates')} active={url.startsWith('/affiliates')}>
                             Affiliates
                         </ResponsiveNavLink>
                     </div>
                     <div className="pt-2 pb-3 space-y-1 border-t">
-                        <ResponsiveNavLink href={ route('customers') } active={ url.startsWith('/customers') }>
+                        <ResponsiveNavLink href={route('customers')} active={url.startsWith('/customers')}>
                             Users
                         </ResponsiveNavLink>
                     </div>
                     <div className="pt-2 pb-3 space-y-1 border-t">
-                        <ResponsiveNavLink href={ route('tickets') } active={ url.startsWith('/tickets') }>
+                        <ResponsiveNavLink href={route('tickets')} active={url.startsWith('/tickets')}>
                             Tickets
                         </ResponsiveNavLink>
-                    </div>  */}
+                    </div>
 
                     <div className="pt-4 pb-1 border-t border-gray-200">
                         <div className="px-4">

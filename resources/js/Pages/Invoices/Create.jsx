@@ -39,7 +39,7 @@ export default function Create ({ auth })
     const submit = (e) =>
     {
         e.preventDefault();
-        router.post('/invoice/store', {
+        router.post('/invoices/store', {
             payment: {
                 "invoinceID": 117152101,
                 "userIndex": 25241271,
@@ -60,6 +60,7 @@ export default function Create ({ auth })
                 "userID": "husseinyahya@walaa",
                 "paidPrice": 0.0,
                 "discountedPrice": 0.0,
+                "balance": 40000.0,
                 "modifyUser": 'auth.user.name',
                 "paymentDueDate": "",
                 "paymentDueDateTime": null

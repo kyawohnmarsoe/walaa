@@ -5,7 +5,7 @@ import TextInput from '@/Components/TextInput';
 import PrimaryButton from '@/Components/PrimaryButton';
 import PrimaryBtn from "@/Components/PrimaryBtn";
 
-export default function PaymentSearch ({ className = '', affiliates, setFilterObj, filterObj })
+export default function InvoiceSearch ({ className = '', affiliates, setFilterObj, filterObj })
 {
     const { data, setData, post, processing, errors, reset } = useForm({
         userID: '',
@@ -18,12 +18,12 @@ export default function PaymentSearch ({ className = '', affiliates, setFilterOb
         e.preventDefault();
         // setFilterObj({ ...filterObj, ...data })
         // console.log(filterObj)
-        router.post('/payments/search', data)
+        router.post('/invoices/search', data)
     };
 
     const pageReset = (e) =>
     {
-        router.get('/payments')
+        router.get('/invoices')
     }
 
     return (
@@ -32,7 +32,7 @@ export default function PaymentSearch ({ className = '', affiliates, setFilterOb
                 <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <section className={ className }>
                         <header>
-                            <h2 className="text-lg font-medium text-sky-600">Payment</h2>
+                            <h2 className="text-lg font-medium text-sky-600">Invoices</h2>
 
                             {/* <p className="mt-1 text-sm text-gray-600">
                             Update your account's profile information and email address.

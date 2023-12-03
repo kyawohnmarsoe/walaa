@@ -18,7 +18,7 @@ export default function Management({ auth, apitoken, affiliates, accountTypes })
   const tableRef = useRef(null);
   const [onlineUsersData, setOnlineUsersData] = useState({ users: [], total: 0, errMessage: '', loading: true })
   const { users, total, errMessage, loading } = onlineUsersData
-  const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10, Orderby: 'OnlineTime' })
+  const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10, Orderby: 'UserId' })
 
   const instance = axios.create({
     baseURL: 'https://rapi.earthlink.iq/api/reseller',
@@ -26,11 +26,7 @@ export default function Management({ auth, apitoken, affiliates, accountTypes })
   });
 
   useEffect(() => {
-    instance.post('/user/all', {
-      ...filterObj,
-      // CallerId: '64:D1:54:23:A3:AA',
-      OrderBy: 'Account Name'
-    })
+    instance.post('/user/all', filterObj)
       .then(res => {
         setOnlineUsersData({ users: res?.data?.value?.itemsList, total: res?.data?.value?.totalCount, errMessage: '', loading: false })
         // setOnlineUsersData({ users: [], errMessage: '', loading: false })

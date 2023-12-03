@@ -4,14 +4,14 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import Loading from "@/Components/DaisyUI/Loading";
 import Alert from "@/Components/DaisyUI/Alert";
-import PaymentTable from "./PaymentTable";
-import PaymentSearch from './PaymentSearch'
-import PaginatedLinks from '@/Components/PaginatedLinks';
+import InvoiceTable from "./InvoiceTable";
+import InvoiceSearch from './InvoiceSearch'
+import PaginatedItems from '@/Components/DaisyUI/PaginatedItems';
 
 
-export default function Payments ({ auth, apitoken, affiliates, payments })
+export default function Invoices ({ auth, apitoken, affiliates, invoices })
 {
-    console.log(payments)
+    console.log(invoices)
     const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10 })
     useEffect(() =>
     {
@@ -21,9 +21,9 @@ export default function Payments ({ auth, apitoken, affiliates, payments })
     return (
         <AuthenticatedLayout
             user={ auth.user }
-            header={ <h2 className="font-semibold text-xl text-gray-800 leading-tight">Payment</h2> }
+            header={ <h2 className="font-semibold text-xl text-gray-800 leading-tight">Invoices</h2> }
         >
-            <Head title="Payment" />
+            <Head title="Invoices" />
 
             {/* { loading && <Loading className="mt-12 " /> }
             { errMessage && <Alert className="mt-12" msg={ errMessage } /> } */}
@@ -37,11 +37,13 @@ export default function Payments ({ auth, apitoken, affiliates, payments })
 
                 /> } */}
 
-            <PaymentSearch
+            <InvoiceSearch
                 className='p-4'
                 setFilterObj={ setFilterObj }
                 filterObj={ filterObj }
             />
+
+         
 
             <div className="py-12 ">
                 <div className="max-w-8xl mx-auto sm:px-6 lg:px-4">
@@ -62,18 +64,19 @@ export default function Payments ({ auth, apitoken, affiliates, payments })
 
                             } */}
 
-                            <PaginatedLinks
+                           
+
+                            <PaginatedItems
                                 itemsPerPage={ filterObj.RowCount }
-                                items={ payments }
-                                total={ payments.length }
+                                items={ invoices }
+                                total={ invoices.length }
                                 setFilterObj={ setFilterObj }
                                 filterObj={ filterObj }
-                                tableName="payments"
                             >
 
-                                {/* <PaymentTable items={ payments } /> */ }
+                                <InvoiceTable items={ invoices } apitoken={ apitoken } auth={ auth }/>
 
-                            </PaginatedLinks>
+                            </PaginatedItems>
 
 
                         </div>
