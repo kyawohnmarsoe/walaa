@@ -11,7 +11,7 @@ export default function Authenticated({ user, header, children }) {
 
     const { url } = usePage()
 
-    const { roles, permissions } = usePage().props.user
+    const { roles } = usePage().props.user
 
     return (
         <div className="min-h-screen bg-gray-100">
@@ -162,12 +162,9 @@ export default function Authenticated({ user, header, children }) {
                                     Users
                                 </NavLink>
 
-                                {
-                                    roles == 'admin' &&
-                                    <NavLink href={route('tickets')} active={url.startsWith('/tickets')}>
-                                        Tickets
-                                    </NavLink>
-                                }
+                                <NavLink href={route('tickets')} active={url.startsWith('/tickets')}>
+                                    Tickets
+                                </NavLink>
 
                             </div>
                         </div>

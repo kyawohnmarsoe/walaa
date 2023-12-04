@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Http;
 // use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Apitoken;
+use App\Models\User_group;
+use App\Models\User_has_group;
+use App\Models\Customer;
 
 class Controller extends BaseController
 {
@@ -93,6 +96,30 @@ class Controller extends BaseController
         $api_token = $new_apiData[0]['apitoken'];
        
         return $api_token;
+    }
+
+    public function getLoggedInUserGroup() {
+        $user = Auth::user();
+        $loggedin_user_id = $user->id;
+        $user_has_groups_idArr = User_has_group::where('user_id',$loggedin_user_id)->get('group_id');
+        
+        return $user_has_groups_idArr;
+    }
+
+    public function getUserIndexReqData_byLoggedInGroupSysUserId() {
+        $user = Auth::user();
+        $loggedin_user_id = $user->id;
+        $user_has_groups_idArr = User_has_group::where('user_id',$loggedin_user_id)->get('group_id');
+        
+        $count_user_groups = User_group::count();
+
+        if(count($user_has_groups_idArr) == 0 || $count_user_groups == count($user_has_groups_idArr)){
+            $customers = Customer::get();            
+        } else {
+            $customers = Customer::whereIn('customers.user_group_id', $user_has_groups_idArr)
+                        ->get();
+        }
+        return $customers;
     }
     
 }

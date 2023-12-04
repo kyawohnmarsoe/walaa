@@ -26,6 +26,7 @@ export default function Customers({
     const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10 })
 
     const { flash } = usePage().props
+    const { roles } = usePage().props.user
 
     const addCustomerClick = () => {
         router.get('/customers/create')
@@ -120,9 +121,13 @@ export default function Customers({
                                     Add User
                                 </PrimaryButton>
 
-                                <PrimaryButton disabled='' onClick={ev => addApiCustomerClick()}>
-                                    Get API data
-                                </PrimaryButton>
+                                {
+                                    roles == 'admin' &&
+                                    <PrimaryButton disabled='' onClick={ev => addApiCustomerClick()}>
+                                        Get API data
+                                    </PrimaryButton>
+                                }
+
                             </div>
 
                             <hr />

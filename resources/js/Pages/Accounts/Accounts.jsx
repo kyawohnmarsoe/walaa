@@ -10,6 +10,7 @@ import TextInput from '@/Components/TextInput';
 export default function Accounts({ auth, accounts, show_data, account }) {
     const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10 })
     const { flash } = usePage().props
+    const { roles } = usePage().props.user
     const [search_val, setSearchVal] = useState('')
     const [filter_res, setFilterRes] = useState([])
 
@@ -83,9 +84,12 @@ export default function Accounts({ auth, accounts, show_data, account }) {
                                     Add Local Account
                                 </PrimaryButton>
 
-                                <PrimaryButton className="ml-12" disabled='' onClick={(ev) => addApiClick()}>
-                                    Get API data
-                                </PrimaryButton>
+                                {
+                                    roles == 'admin' &&
+                                    <PrimaryButton className="ml-12" disabled='' onClick={(ev) => addApiClick()}>
+                                        Get API data
+                                    </PrimaryButton>
+                                }
 
                                 {
                                     show_data == 'list' &&

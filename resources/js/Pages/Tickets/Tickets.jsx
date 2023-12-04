@@ -12,6 +12,7 @@ export default function Tickets({
     mustVerifyEmail,
     tickets,
     customers,
+    filter_customers,
     users,
     remarks,
     ticket,
@@ -81,7 +82,7 @@ export default function Tickets({
                         <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                             <FilterForm
                                 className=""
-                                customers={customers}
+                                customers={filter_customers}
                             />
                         </div>
                     }

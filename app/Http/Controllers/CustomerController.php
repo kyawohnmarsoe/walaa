@@ -14,7 +14,6 @@ use App\Models\Sub_account;
 use App\Models\Deposit_pass;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Models\User_group;
-use App\Models\User_has_group;
 
 class CustomerController extends Controller
 {
@@ -60,17 +59,8 @@ class CustomerController extends Controller
    
     public function index(Request $request)
     {
-        $user = Auth::user();    
-        $roles = Role::pluck('name','name')->all();
-        $userRole = $user->roles->pluck('name')->all();
-        // return response(compact('userRole'));
-
-        // if($userRole[0] == 'admin') {
-            // $user_has_groups_idArr = null;
-        // } else {
-            $loggedin_user_id = $user->id;
-            $user_has_groups_idArr = User_has_group::where('user_id',$loggedin_user_id)->get('group_id');
-        // } 
+        $user_has_groups_idArr = $this->getLoggedInUserGroup();
+        $count_user_groups = User_group::count();   
         
         // return response(compact('user_has_groups_idArr'));
         
@@ -92,7 +82,8 @@ class CustomerController extends Controller
                     return $q->where('customers.customer_user_id', 'LIKE', '%'.request('customer_user_id').'%');
                 })->when(request('active_status') != '', function ($q) {
                     return $q->where('customers.active_status', '=', request('active_status'));
-                })->whereNull('customers.user_group_id');                 
+                }); 
+                // ->whereNull('customers.user_group_id')                
 
             $show_data = 'filter_list';
         } else {
@@ -102,16 +93,16 @@ class CustomerController extends Controller
             // where cus.user_group_id in('1') OR cus.user_group_id IS NULL;
             
             $customers_query = Customer::leftJoin('affiliates', 'affiliates.affiliate_index', '=', 'customers.affiliate_index')
-                ->leftJoin('accounts', 'accounts.account_index', '=', 'customers.account_index')
-                ->whereNull('customers.user_group_id');
+                ->leftJoin('accounts', 'accounts.account_index', '=', 'customers.account_index');
+                // ->whereNull('customers.user_group_id')
 
             $show_data = 'list';
         } 
 
-        if($user_has_groups_idArr == null){
+        if(count($user_has_groups_idArr) == 0 || $count_user_groups == count($user_has_groups_idArr)){
             $customers = $customers_query->get(['customers.*', 'affiliates.affiliate_name', 'accounts.account_name']);            
         } else {
-            $customers = $customers_query->orWhereIn('customers.user_group_id', $user_has_groups_idArr)
+            $customers = $customers_query->whereIn('customers.user_group_id', $user_has_groups_idArr)
             ->get(['customers.*', 'affiliates.affiliate_name', 'accounts.account_name']);
         }
 
