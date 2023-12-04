@@ -2,9 +2,9 @@ import React from 'react';
 import { Head } from '@inertiajs/react';
 
 
-function Invoice ({ payment })
+function Invoice ({ invoice })
 {
-    console.log(payment)
+    console.log(invoice)
     return (
         <div className="py-12 ">
             <Head title="Invoice" />
@@ -15,8 +15,8 @@ function Invoice ({ payment })
                     <button onClick={ () => window.print() } style={ { border: '1px solid gray', padding: '0px 5px' } }>Print</button>
                 </div>
                 <div className="text-center">
-                    <h1 className="text-3xl font-bold mb-4">Invoice #{ payment.invoinceID }</h1>
-                    <p className="text-gray-500">Date : { payment.recordDate }</p>
+                    <h1 className="text-3xl font-bold mb-4">Invoice #{ invoice.invoinceID }</h1>
+                    <p className="text-gray-500">Date : { invoice.recordDate }</p>
                 </div>
                 <div className="mt-8 " style={ { display: 'flex', justifyContent: 'space-between' } }>
                     <div className="mb-4">
@@ -32,7 +32,7 @@ function Invoice ({ payment })
                     <div>
                         <div className="text-sm font-semibold text-gray-600">Bill To</div>
                         <address>
-                            { payment.displayName }<br />
+                            { invoice.displayName }<br />
                             456 Client Street<br />
                             City, State, ZIP<br />
                             Phone: (789) 123-4567<br />

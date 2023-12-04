@@ -17,21 +17,16 @@ export default function SetPaymentModal ({ modals, setModals, apitoken, item,aut
         paidPrice: item.paidPrice,
         balance: item.balance,
         currentPayment:'',
-        notes: item.notes,
+        notes: item.notes || '',
         modifyUser: auth.user.email ,
     })
 
 
-    const [updateInfo, setUpdateInfo] = useState({ value: '', errMessage: '' })
-    const { value, errMessage } = updateInfo
-
-    // const [newUserData, setNewUserData] = useState({ newUser: null })
-    // const { newUser } = newUserData
 
     const submit = (e) =>
     {
         e.preventDefault();
-        router.post(`/invoices/update/${ item.id }`, { payment: data })
+        router.post(`/invoices/update/${ item.id }`, { invoice: data })
        
     }
 
@@ -41,15 +36,11 @@ export default function SetPaymentModal ({ modals, setModals, apitoken, item,aut
             setPayment: false
         });
 
-        setUpdateInfo({ errMessage: '', value: '' })
-
         setData({
             ...data,
             currentPayment: '',
             notes: item.notes,
         })
-
-        // flash.status = '';
 
         flash.status == 201 && location.reload()
 
@@ -102,11 +93,7 @@ export default function SetPaymentModal ({ modals, setModals, apitoken, item,aut
                 </div>
 
 
-
                 <div className="mt-6 flex justify-end">
-                    {/* { value && <span className='text-success pr-4'> Refill Success </span> } */ }
-
-                    { errMessage && <span className='text-red-500 pr-4'> { errMessage } </span> }
                     { flash.status == 201 &&
                         <span className='text-success pr-4'> Payment Success </span>
                     }

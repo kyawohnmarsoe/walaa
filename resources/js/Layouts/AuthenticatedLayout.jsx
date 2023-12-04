@@ -105,7 +105,7 @@ export default function Authenticated ({ user, header, children })
                                                 {/* <Dropdown.Link href={ route('deposit.statement') }>Account Statement</Dropdown.Link > */ }
                                                 <Dropdown.Link href={ route('deposit.transfer') }>Balance Transfer</Dropdown.Link >
                                                 <Dropdown.Link href={ route('invoices') }>Invoices</Dropdown.Link >
-                                                <Dropdown.Link href={ route('invoices') }>Expenses</Dropdown.Link >
+                                                <Dropdown.Link href={ route('expenses') }>Expenses</Dropdown.Link >
                                             </Dropdown.Content>
                                         </Dropdown>
                                     </div>

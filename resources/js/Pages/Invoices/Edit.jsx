@@ -7,42 +7,41 @@ import PrimaryBtn from '@/Components/PrimaryBtn';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 
-export default function Edit ({ auth, payment })
+export default function Edit ({ auth, invoice })
 {
-    console.log(payment)
+    console.log(invoice)
     let { flash } = usePage().props
 
     const { data, setData, post, processing, errors, reset } = useForm({
-        invoinceID: payment.invoinceID,
-        userIndex: payment.userIndex,
-        displayName: payment.displayName,
-        affiliateName: payment.affiliateName,
-        invoiceType: payment.invoiceType,
-        invoiceDescription: payment.invoiceDescription,
-        invoiceDuration: payment.invoiceDuration,
-        salePrice: payment.salePrice,
-        retailPriceCurrency: payment.retailPriceCurrency,
-        retailPrice: payment.retailPrice,
-        referenceRecord: payment.referenceRecord,
-        recordDate: payment.recordDate,
-        invoiceStatus: payment.invoiceStatus,
-        lastStatusChanged: payment.lastStatusChanged,
-        accountName: payment.accountName,
-        notes: payment.notes,
-        userID: payment.userID,
-        paidPrice: payment.paidPrice,
-        discountedPrice: payment.discountedPrice,
+        invoinceID: invoice.invoinceID,
+        userIndex: invoice.userIndex,
+        displayName: invoice.displayName,
+        affiliateName: invoice.affiliateName,
+        invoiceType: invoice.invoiceType,
+        invoiceDescription: invoice.invoiceDescription,
+        invoiceDuration: invoice.invoiceDuration,
+        salePrice: invoice.salePrice,
+        retailPriceCurrency: invoice.retailPriceCurrency,
+        retailPrice: invoice.retailPrice,
+        referenceRecord: invoice.referenceRecord,
+        recordDate: invoice.recordDate,
+        invoiceStatus: invoice.invoiceStatus,
+        lastStatusChanged: invoice.lastStatusChanged,
+        accountName: invoice.accountName,
+        notes: invoice.notes,
+        userID: invoice.userID,
+        paidPrice: invoice.paidPrice,
+        discountedPrice: invoice.discountedPrice,
         modifyUser: auth.user.name,
-        paymentDueDate: payment.paymentDueDate,
-        paymentDueDateTime: payment.paymentDueDateTime
+        paymentDueDate: invoice.paymentDueDate,
+        paymentDueDateTime: invoice.paymentDueDateTime
     })
 
     const submit = (e) =>
     {
         e.preventDefault();
-        router.post(`/invoice/update/${ payment.id }`, { payment: data })
+        router.post(`/invoice/update/${ invoice.id }`, { invoice: data })
         console.log('submit')
-        // patch(route('payments.store', { payment: data }));
     };
 
     useEffect(() =>
