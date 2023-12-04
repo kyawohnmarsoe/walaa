@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SystemUserController;
+use App\Http\Controllers\UserGroupController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AffiliateController;
@@ -41,6 +43,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/user/{id}', [UserController::class, 'getUserDetails'])->name('user.details');
     Route::post('/user/update', [UserController::class, 'updateUserDetails'])->name('user.update');
    
+    Route::get('/systemuser', [SystemUserController::class, 'index'])->name('systemuser');
+    Route::get('/systemuser/create', [SystemUserController::class, 'create'])->name('systemuser.create');
+    Route::post('/systemuser/store', [SystemUserController::class, 'store'])->name('systemuser.store');
+    Route::get('/systemuser/{id}', [SystemUserController::class, 'edit'])->name('systemuser.edit');
+    Route::post('/systemuser/{id}', [SystemUserController::class, 'update'])->name('systemuser.update');
+    Route::delete('/systemuser/{id}', [SystemUserController::class, 'destroy'])->name('systemuser.destroy');  
+
+    Route::get('/usergroup', [UserGroupController::class, 'index'])->name('usergroup');
+    Route::get('/usergroup/create', [UserGroupController::class, 'create'])->name('usergroup.create');
+    Route::post('/usergroup/store', [UserGroupController::class, 'store'])->name('usergroup.store');
+    Route::get('/usergroup/{id}', [UserGroupController::class, 'edit'])->name('usergroup.edit');
+    Route::post('/usergroup/{id}', [UserGroupController::class, 'update'])->name('usergroup.update');
+    Route::delete('/usergroup/{id}', [UserGroupController::class, 'destroy'])->name('usergroup.destroy');
+
     Route::get('/accounts', [AccountController::class, 'index'])->name('accounts'); 
     Route::get('/accounts/apilist', [AccountController::class, 'api_list'])->name('accounts.apilist');   
     Route::get('/accounts/create', [AccountController::class, 'create'])->name('accounts.create');

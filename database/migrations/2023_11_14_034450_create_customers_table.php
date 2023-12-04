@@ -37,6 +37,7 @@ return new class extends Migration
             $table->string('account_status')->nullable();
             // $table->string('account_status_id')->nullable();
             $table->string('account_package_type')->nullable();
+            $table->integer('user_group_id')->nullable();
 
             // $table->string('online_time')->nullable();
             // $table->string('online_since')->nullable();

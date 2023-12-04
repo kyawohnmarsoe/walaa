@@ -18,10 +18,10 @@ class RolesSeeder extends Seeder
         $role_admin = Role::create(['name' => 'admin']);
         $role_staff = Role::create(['name' => 'staff']);
 
-        $permission_read = Permission::create(['name' => 'read articles']);
-        $permission_edit = Permission::create(['name' => 'edit articles']);
-        $permission_write = Permission::create(['name' => 'write articles']);
-        $permission_delete = Permission::create(['name' => 'delete articles']);
+        $permission_read = Permission::create(['name' => 'read_tickets']);
+        $permission_edit = Permission::create(['name' => 'edit_tickets']);
+        $permission_write = Permission::create(['name' => 'write_tickets']);
+        $permission_delete = Permission::create(['name' => 'delete_tickets']);
 
         $permissions_admin = [$permission_read, $permission_edit, $permission_write, $permission_delete];
 

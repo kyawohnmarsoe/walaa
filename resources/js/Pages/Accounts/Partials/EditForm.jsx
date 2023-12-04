@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useForm, router } from '@inertiajs/react';
+import { useForm, router, usePage } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
 
 import InputLabel from '@/Components/InputLabel';
@@ -7,10 +7,13 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import Textarea from '@/Components/Textarea';
 import SelectOption from '@/Components/SelectOption';
+import InputError from '@/Components/InputError';
 
 export default function EditForm({ className = '', accounts, account }) {
 
     const { processing, recentlySuccessful } = useForm();
+
+    const { errors } = usePage().props
 
     const [values, setValues] = useState({
         account_index: account.account_index,
@@ -88,7 +91,7 @@ export default function EditForm({ className = '', accounts, account }) {
                 <div className='grid grid-cols-3 gap-4'>
 
                     <div>
-                        <InputLabel htmlFor="account_index" value="Main Accounts" />
+                        <InputLabel htmlFor="account_index" value="Main Accounts" className='required' />
                         <SelectOption
                             id="account_index"
                             className="mt-1 block w-full"
@@ -98,10 +101,11 @@ export default function EditForm({ className = '', accounts, account }) {
                             name="account_index"
                             onChange={accountsHandleChange}
                         />
+                        <InputError message={errors.account_index} className="mt-2" />
                     </div>
 
                     <div>
-                        <InputLabel htmlFor="account_name" value="Account Name" />
+                        <InputLabel htmlFor="account_name" value="Account Name" className='required' />
                         <TextInput
                             id="account_name"
                             name="account_name"
@@ -111,6 +115,7 @@ export default function EditForm({ className = '', accounts, account }) {
                             className="mt-1 block w-full"
                             autoComplete="off"
                         />
+                        <InputError message={errors.account_name} className="mt-2" />
                     </div>
 
                     {/* <div>
@@ -127,7 +132,7 @@ export default function EditForm({ className = '', accounts, account }) {
                     </div> */}
 
                     <div>
-                        <InputLabel htmlFor="end_user_account_price" value="User Account Price" />
+                        <InputLabel htmlFor="end_user_account_price" value="User Account Price" className='required' />
                         <TextInput
                             id="end_user_account_price"
                             name="end_user_account_price"
@@ -137,6 +142,7 @@ export default function EditForm({ className = '', accounts, account }) {
                             className="mt-1 block w-full"
                             autoComplete="off"
                         />
+                        <InputError message={errors.end_user_account_price} className="mt-2" />
                     </div>
 
                     <div className='col-span-2'>

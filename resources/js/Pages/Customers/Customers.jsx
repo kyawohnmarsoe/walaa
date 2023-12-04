@@ -16,6 +16,7 @@ export default function Customers({
     affiliates,
     accounts,
     sub_accounts,
+    user_groups,
     apitoken,
     totalCount,
     deposit_password,
@@ -25,6 +26,7 @@ export default function Customers({
     const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10 })
 
     const { flash } = usePage().props
+    const { roles } = usePage().props.user
 
     const addCustomerClick = () => {
         router.get('/customers/create')
@@ -119,9 +121,13 @@ export default function Customers({
                                     Add User
                                 </PrimaryButton>
 
-                                <PrimaryButton disabled='' onClick={ev => addApiCustomerClick()}>
-                                    Get API data
-                                </PrimaryButton>
+                                {
+                                    roles == 'admin' &&
+                                    <PrimaryButton disabled='' onClick={ev => addApiCustomerClick()}>
+                                        Get API data
+                                    </PrimaryButton>
+                                }
+
                             </div>
 
                             <hr />
@@ -148,6 +154,7 @@ export default function Customers({
                                     tableName="customer"
                                     sub_accounts={sub_accounts}
                                     accounts={accounts}
+                                    user_groups={user_groups}
                                     setFilterObj={setFilterObj}
                                     filterObj={filterObj}
                                     apitoken={apitoken}
@@ -165,6 +172,7 @@ export default function Customers({
                                 accounts={accounts}
                                 sub_accounts={sub_accounts}
                                 affiliates={affiliates}
+                                user_groups={user_groups}
                                 apitoken={apitoken}
                             />
                         </div>
@@ -192,6 +200,7 @@ export default function Customers({
                                 accounts={accounts}
                                 sub_accounts={sub_accounts}
                                 affiliates={affiliates}
+                                user_groups={user_groups}
                                 apitoken={apitoken}
                             />
                         </div>

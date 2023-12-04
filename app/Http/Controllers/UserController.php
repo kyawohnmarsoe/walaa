@@ -9,8 +9,6 @@ use Inertia\Response;
 use Illuminate\Http\Request;
 use App\Models\Affiliate;
 use App\Models\Account;
-
-
  
 class UserController extends Controller
 {

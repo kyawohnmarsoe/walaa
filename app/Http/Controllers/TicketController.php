@@ -5,21 +5,26 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Role;
 use App\Http\Requests\StoreTicketRequest;
 use Inertia\Inertia;
 use App\Models\Ticket;
 use App\Models\Customer;
 use App\Models\User;
 use App\Models\Ticket_remark;
+use App\Models\User_group;
 use Config;
 
 class TicketController extends Controller
 {
     public function index(Request $request)
     {
+        $user_has_groups_idArr = $this->getLoggedInUserGroup();
+        $count_user_groups = User_group::count();
+
         if ($request->hasAny(['customer_user_id', 'ticket_source', 'topic', 'ticket_status', 'level_of_importance', 'ticket_number'])) {
             $data = $request->all();      
-            $tickets = Ticket::join('customers', 'customers.id', '=', 'tickets.user_id')                 
+            $tickets_query = Ticket::join('customers', 'customers.id', '=', 'tickets.user_id')                 
                     ->when(request('user_id') != '', function ($q) {
                         return $q->where('tickets.user_id', request('user_id'));
                     })->when(request('ticket_source') != '', function ($q) {
@@ -32,19 +37,31 @@ class TicketController extends Controller
                         return $q->where('tickets.level_of_importance', request('level_of_importance'));
                     })->when(request('ticket_number') != '', function ($q) {
                         return $q->where('tickets.ticket_number', request('ticket_number'));
-                    })->get(['tickets.*', 'customers.customer_user_id']);
+                    });
+                    // ->whereNull('customers.user_group_id')
 
             $show_data = 'filter_list';
         } else {
-            $tickets = Ticket::join('customers', 'customers.id', '=', 'tickets.user_id')
-              ->get(['tickets.*', 'customers.customer_user_id']);
+            $tickets_query = Ticket::join('customers', 'customers.id', '=', 'tickets.user_id');
+                            // ->whereNull('customers.user_group_id')
             $show_data = 'list';
-        }    
+        }  
+        
+        if(count($user_has_groups_idArr) == 0 || $count_user_groups == count($user_has_groups_idArr)){
+            $tickets = $tickets_query->get(['tickets.*', 'customers.customer_user_id']);            
+            $filter_customers = Customer::all();
+        } else {
+            $tickets = $tickets_query->orWhereIn('customers.user_group_id', $user_has_groups_idArr)
+                        ->get(['tickets.*', 'customers.customer_user_id']);
+            $filter_customers = Customer::whereIn('customers.user_group_id', $user_has_groups_idArr)
+                        ->get();
+        }       
 
         return Inertia::render('Tickets/Tickets', [
             'tickets' =>  $tickets, 
             'users'   => User::all(),
             'customers' => Customer::all(),
+            'filter_customers' => $filter_customers,
             'remarks'   => Ticket_remark::all(),
             'show_data' => $show_data
         ])->with([
@@ -57,10 +74,19 @@ class TicketController extends Controller
 
     public function create() {
         $token = $this->getSavedToken();
+        $user_has_groups_idArr = $this->getLoggedInUserGroup();
+        $count_user_groups = User_group::count();
+
+        if(count($user_has_groups_idArr) == 0 || $count_user_groups == count($user_has_groups_idArr)){
+            $customers = Customer::all();            
+        } else {
+            $customers = Customer::whereIn('customers.user_group_id', $user_has_groups_idArr)
+                        ->get();
+        }
         
         return Inertia::render('Tickets/Tickets', [
             'show_data'  => 'add_form',
-            'customers' => Customer::all(),
+            'customers' => $customers,
             'apitoken' => $token,
         ]);
     } // create
@@ -84,9 +110,10 @@ class TicketController extends Controller
         ]);
     } // edit
 
-    public function update(Request $request, $id) 
+    public function update(StoreTicketRequest $request, $id) 
     {
 		$input = $request->all();
+        $data = $request->validated(); 
 		$data = Ticket::findOrFail($id);
         // return response(compact('input'));  
 		$data->update($input);

@@ -17,7 +17,6 @@ class StoreCustomerRequest extends FormRequest
             'account_index' => 'required',
             'sub_account_id' => '',
             'affiliate_index' => 'required',            
-            // 'customer_user_index'=> '',            
             'email'=> 'required|email',
             'user_password' => 'required',            
         ];

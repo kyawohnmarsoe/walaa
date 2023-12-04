@@ -47,13 +47,7 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        Auth::login($user);
-
-        // $apitoken = $this->GetApiToken(); 
-        // session([
-        //     'apitoken' => $apitoken, 
-        //     'current_time' => time()
-        // ]);
+        Auth::login($user);       
 
 
         return redirect(RouteServiceProvider::HOME);

@@ -5,6 +5,8 @@ import AccountsTable from '@/Pages/Accounts/AccountsTable';
 import CustomerTable from '@/Pages/Customers/CustomerTable';
 import AffiliatesTable from '@/Pages/Affiliates/AffiliatesTable';
 import TicketTable from '@/Pages/Tickets/TicketsTable';
+import SystemusersTable from '@/Pages/Systemusers/SystemusersTable';
+import UsergroupTable from '@/Pages/Usergroup/UsergroupTable';
 import TestUsageTable from '@/Pages/Reports/Stats/TestUsage/TestUsageTable';
 import TotalItemsCount from '@/Components/DaisyUI/TotalItemsCount'
 import PageSize from '@/Components/DaisyUI/PageSize'
@@ -19,6 +21,8 @@ export default function PaginatedLinks({
     accounts,
     users,
     remarks,
+    user_has_groups,
+    user_groups,
     tableName,
     apitoken,
     totalCount,
@@ -77,7 +81,7 @@ export default function PaginatedLinks({
             }
 
             {
-                tableName == 'customer' && <CustomerTable customers={currentItems} accounts={accounts} sub_accounts={sub_accounts} apitoken={apitoken} totalCount={totalCount} />
+                tableName == 'customer' && <CustomerTable customers={currentItems} accounts={accounts} sub_accounts={sub_accounts} user_groups={user_groups} apitoken={apitoken} totalCount={totalCount} />
             }
 
             {
@@ -86,6 +90,14 @@ export default function PaginatedLinks({
 
             {
                 tableName == 'ticket' && <TicketTable tickets={currentItems} users={users} remarks={remarks} />
+            }
+
+            {
+                tableName == 'systemuser' && <SystemusersTable systemusers={currentItems} user_has_groups={user_has_groups} />
+            }
+
+            {
+                tableName == 'usergroup' && <UsergroupTable usergroups={currentItems} />
             }
 
             {

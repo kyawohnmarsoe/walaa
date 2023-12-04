@@ -9,6 +9,7 @@ export default function Affiliates({ auth, mustVerifyEmail, affiliates, apitoken
 
     const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10 })
     const { flash } = usePage().props
+    const { roles } = usePage().props.user
 
     const [search_val, setSearchVal] = useState('')
     const [filter_res, setFilterRes] = useState([])
@@ -58,9 +59,12 @@ export default function Affiliates({ auth, mustVerifyEmail, affiliates, apitoken
                     }
 
                     <div className="sm:p-8 bg-white shadow sm:rounded-lg">
-                        <PrimaryButton disabled='' onClick={ev => addApiClick()}>
-                            Add Api Affiliate Data
-                        </PrimaryButton>
+                        {
+                            roles == 'admin' &&
+                            <PrimaryButton disabled='' onClick={ev => addApiClick()}>
+                                Add Api Affiliate Data
+                            </PrimaryButton>
+                        }
 
                         {
                             affiliates.length > 0 &&
