@@ -17,7 +17,7 @@ use App\Http\Controllers\EarthlinkProfileController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\InvoiceController;
-use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ExpenseController;
 
 Route::get('/test', [DashboardController::class, 'test'])->name('test');
 Route::get('/test2', [DashboardController::class, 'test2'])->name('test2');
@@ -112,6 +112,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
      Route::get('/invoices/{id}', [InvoiceController::class, 'show'])->name('invoices.show');
      Route::get('/invoices/edit/{id}', [InvoiceController::class, 'edit'])->name('invoices.edit');
      Route::post('/invoices/update/{id}', [InvoiceController::class, 'update'])->name('invoices.update');
+
+      Route::get('/expenses', [ExpenseController::class, 'index'])->name('expenses');
+      Route::post('/expenses/search', [ExpenseController::class, 'search'])->name('expenses.search');
+      Route::get('/expenses/create', [ExpenseController::class, 'create'])->name('expenses.create');
+      Route::post('/expenses/store', [ExpenseController::class, 'store'])->name('expenses.store');
+      Route::post('/expenses/update/{id}', [ExpenseController::class, 'update'])->name('expenses.update');
     
 });
 

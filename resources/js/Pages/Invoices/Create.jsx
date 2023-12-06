@@ -40,7 +40,7 @@ export default function Create ({ auth })
     {
         e.preventDefault();
         router.post('/invoices/store', {
-            payment: {
+            invoice: {
                 "invoinceID": 117152101,
                 "userIndex": 25241271,
                 "displayName": "حسين يحيى خليف",
@@ -68,7 +68,7 @@ export default function Create ({ auth })
         })
         console.log(data)
 
-        // router.post('/invoice/store', { payment: data });
+        // router.post('/invoice/store', { invoice: data });
     };
 
     useEffect(() =>

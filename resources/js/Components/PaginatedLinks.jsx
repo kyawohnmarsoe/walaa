@@ -10,9 +10,11 @@ import UsergroupTable from '@/Pages/Usergroup/UsergroupTable';
 import TestUsageTable from '@/Pages/Reports/Stats/TestUsage/TestUsageTable';
 import TotalItemsCount from '@/Components/DaisyUI/TotalItemsCount'
 import PageSize from '@/Components/DaisyUI/PageSize'
-// import PaymentTable from '@/Pages/Payments/PaymentTable';
+import ExpenseTable from '@/Pages/Expenses/ExpenseTable';
+
 
 export default function PaginatedLinks({
+    auth,
     itemsPerPage,
     items,
     sub_accounts,
@@ -43,12 +45,15 @@ export default function PaginatedLinks({
 
     };
 
+
+   
+
     return (
         <>
-            {
-                // pageCount > 1 &&
+            
+               
                 <div className='pagination-wrapper'>
-                    <TotalItemsCount total={items.length} />
+                    <TotalItemsCount total={ items.length } />
 
                     <ReactPaginate
                         breakLabel="..."
@@ -67,7 +72,9 @@ export default function PaginatedLinks({
                         filterObj={filterObj}
                     />
                 </div>
-            }
+
+              
+            
 
             {
                 tableName == 'account' && <AccountsTable accounts={currentItems} listname={listname} />
@@ -97,9 +104,12 @@ export default function PaginatedLinks({
                 tableName == 'testUsage' && <TestUsageTable items={currentItems} />
             }
 
-            {/* {
-                tableName == 'payments' && <PaymentTable items={currentItems} />
-            } */}
+         
+
+            {
+                tableName == 'expenses' && <ExpenseTable items={ currentItems } auth={ auth } users={ users }/>
+
+            }
 
         </>
     );

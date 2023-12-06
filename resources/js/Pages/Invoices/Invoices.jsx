@@ -11,7 +11,7 @@ import PaginatedItems from '@/Components/DaisyUI/PaginatedItems';
 
 export default function Invoices ({ auth, apitoken, affiliates, invoices })
 {
-    console.log(invoices)
+   
     const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10 })
     useEffect(() =>
     {
@@ -49,23 +49,7 @@ export default function Invoices ({ auth, apitoken, affiliates, invoices })
                 <div className="max-w-8xl mx-auto sm:px-6 lg:px-4">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="text-gray-900">
-                            {/* { !errMessage && !loading &&
-                                <PaginatedItems
-                                    itemsPerPage={ filterObj.RowCount }
-                                    items={ logs }
-                                    total={ total }
-                                    setFilterObj={ setFilterObj }
-                                    filterObj={ filterObj }
-                                >
-
-                                    <ErrorLogTable logs={ logs } />
-
-                                </PaginatedItems>
-
-                            } */}
-
                            
-
                             <PaginatedItems
                                 itemsPerPage={ filterObj.RowCount }
                                 items={ invoices }
