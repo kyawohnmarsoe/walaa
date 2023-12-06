@@ -101,6 +101,7 @@ export default function TicketTable({ tickets, users, remarks }) {
         document.getElementById('ticket_deleteModal').close()
         e.preventDefault()
         let ticketId = document.getElementById('ticket_id').value
+        // console.log(ticketId)
         router.delete(`/tickets/${ticketId} `);
     }
 
@@ -126,7 +127,7 @@ export default function TicketTable({ tickets, users, remarks }) {
                             <span className="font-bold text-sky-700 ticket_number" id="ticket_number"></span>?
                         </div>
                     </div>
-                    <TextInput className="ticket_id" id="ticket_id" name="ticket_id" type="hidden" />
+                    <TextInput className="ticket_id" id="ticket_id" name="ticket_id" type="hidden" value={values.ticket_id} />
                     <div className="flex items-center gap-4">
                         {<PrimaryButton disabled="" type="submit" >Delete</PrimaryButton>}
                     </div>
@@ -190,12 +191,13 @@ export default function TicketTable({ tickets, users, remarks }) {
                     <tr className='bg-emerald-300'>
                         <th>Ticket Number</th>
                         <th>User</th>
-                        <th>Ticket Source</th>
                         <th>Topic</th>
-                        <th>Address</th>
                         <th>Level of Importance</th>
-                        <th>Status</th>
+                        <th>Ticket Source</th>
+                        <th>Address</th>
                         <th>Updated By</th>
+                        <th>Image</th>
+                        <th>Attached File</th>
                         <th colSpan="2">Actions</th>
                     </tr>
                 </thead>
@@ -225,19 +227,36 @@ export default function TicketTable({ tickets, users, remarks }) {
                                     >
                                         {dt.ticket_number}
                                     </a>
+                                    <small className="block mt-2">
+                                        {dt.ticket_status == 0 ? <strong>Opened</strong> : 'Closed'}
+                                    </small>
                                 </td>
                                 <td>{dt.customer_user_id}</td>
-                                <td>{ticketSource[0][dt.ticket_source]}</td>
                                 <td>{topicData[0][dt.topic]}</td>
-                                <td>{dt.ticket_address}</td>
                                 <td>{levelData[0][dt.level_of_importance]}</td>
-                                <td>{dt.ticket_status == 0 ? 'Opened' : 'Closed'}</td>
+                                <td>{ticketSource[0][dt.ticket_source]}</td>
+                                <td>{dt.ticket_address}</td>
                                 <td>
                                     {
                                         users.filter(user => user.id == dt.updated_by_loggedin_user).map(filteredUser => (
                                             filteredUser.name
                                         ))
                                     }
+                                </td>
+                                <td>
+                                    {
+                                        dt.image ?
+                                            <img
+                                                src={`uploads/${dt.image}`}
+                                                width={60}
+                                                alt='Image'
+                                            />
+                                            :
+                                            ''
+                                    }
+                                </td>
+                                <td>
+                                    {dt.attach_file ? dt.attach_file : ''}
                                 </td>
                                 <td>
                                     <PrimaryButton className="bg-sky-800" padding_x='px-2' disabled='' onClick={() => editData(dt.id)}>

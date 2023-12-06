@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useForm, router } from '@inertiajs/react';
+import { useForm, usePage, router } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
 
 import InputLabel from '@/Components/InputLabel';
@@ -14,7 +14,6 @@ export default function AddForm({ className = '', customers, apitoken, errors })
 
     const { processing, recentlySuccessful } = useForm();
 
-
     const Input = (props) => {
         const { autoComplete = props.autoComplete } = props.selectProps;
         return <components.Input {...props} autoComplete={autoComplete} />;
@@ -26,8 +25,12 @@ export default function AddForm({ className = '', customers, apitoken, errors })
         topic: '',
         ticket_address: '',
         level_of_importance: '',
-        ticket_number: ''
+        ticket_number: '',
+        image: null,
+        attach_file: null,
     });
+
+    const [urlImage, setUrlImage] = useState('');
 
     const [optionsCustomers, setOptionsCustomers] = useState([])
 
@@ -133,6 +136,23 @@ export default function AddForm({ className = '', customers, apitoken, errors })
         setValues(values => ({
             ...values,
             'level_of_importance': value,
+        }))
+    }
+
+    function imageHandleChange(e) {
+        console.log(e.target.files);
+        setUrlImage(URL.createObjectURL(e.target.files[0]));
+        setValues(values => ({
+            ...values,
+            'image': e.target.files[0],
+        }))
+    }
+
+    function attachFileHandleChange(e) {
+        console.log(e.target.files);
+        setValues(values => ({
+            ...values,
+            'attach_file': e.target.files[0],
         }))
     }
 
@@ -249,6 +269,40 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                             autoComplete="off"
                         />
                         <InputError className="mt-2" message={errors.ticket_number} />
+                    </div>
+
+                    <div>
+                        <InputLabel htmlFor="image" value="Image" />
+                        <TextInput
+                            id="image"
+                            name="image"
+                            onChange={imageHandleChange}
+                            type="file"
+                            className="mt-1 block w-full"
+                        />
+                        <p className="mt-2 text-sm text-gray-500 " id="file_input_help">
+                            svg, png, jpg, jpeg or gif.
+                        </p>
+
+                        <img className="mt-3 h-auto max-w-xs" src={urlImage} />
+                        <InputError className="mt-2" message={errors.image} />
+                    </div>
+
+                    <div>
+                        <InputLabel htmlFor="attach_file" value="File Attachment" />
+                        <TextInput
+                            id="attach_file"
+                            name="attach_file"
+                            onChange={attachFileHandleChange}
+                            type="file"
+                            className="mt-1 block w-full"
+                        />
+                        <p className="mt-2 text-sm text-gray-500 " id="file_input_help">
+                            docx, doc, pdf, csv, xls or xlx.
+                        </p>
+
+                        <img className="mt-3 h-auto max-w-xs" src={urlImage} />
+                        <InputError className="mt-2" message={errors.attach_file} />
                     </div>
                 </div>
 

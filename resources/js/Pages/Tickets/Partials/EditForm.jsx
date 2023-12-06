@@ -24,8 +24,11 @@ export default function EditForm({ className = '', ticket, customers, updated_by
         level_of_importance: ticket.level_of_importance,
         ticket_number: ticket.ticket_number,
         ticket_status: ticket.ticket_status,
-        updated_by_loggedin_user: updated_by_loggedin_user
+        updated_by_loggedin_user: updated_by_loggedin_user,
+        image: ticket.image,
     });
+
+    const [urlImage, setUrlImage] = useState();
 
     const [optionsCustomers, setoptionsCustomers] = useState([])
     const [selectedOpt, setSelectedOpt] = useState('')
@@ -127,6 +130,13 @@ export default function EditForm({ className = '', ticket, customers, updated_by
         getCustomers()
         getSelectedCustomer(ticket.user_id)
         // console.log("old user value ", values.user_id)
+        {
+            ticket.image ?
+                setUrlImage(`/uploads/${ticket.image}`)
+                :
+                setUrlImage('')
+        }
+
     }, [])
 
     function customersHandleChange(e) {
@@ -165,6 +175,15 @@ export default function EditForm({ className = '', ticket, customers, updated_by
         setValues(values => ({
             ...values,
             'ticket_status': value,
+        }))
+    }
+
+    function imageHandleChange(e) {
+        console.log(e.target.files);
+        setUrlImage(URL.createObjectURL(e.target.files[0]));
+        setValues(values => ({
+            ...values,
+            'image': e.target.files[0],
         }))
     }
 
@@ -298,6 +317,24 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                             onChange={statusHandleChange}
                             value={values.ticket_status}
                         />
+                    </div>
+
+                    <div>
+                        <InputLabel htmlFor="image" value="Image" />
+                        <TextInput
+                            id="image"
+                            name="image"
+                            onChange={imageHandleChange}
+                            type="file"
+                            className="mt-1 block w-full"
+                        />
+                        <p className="mt-2 text-sm text-gray-500 " id="file_input_help">
+                            SVG, PNG, JPG, JPEG, SVG or GIF.
+                        </p>
+
+                        <img className="mt-3 h-auto max-w-xs" src={urlImage} />
+
+                        <InputError className="mt-2" message={errors.image} />
                     </div>
 
                     <TextInput
