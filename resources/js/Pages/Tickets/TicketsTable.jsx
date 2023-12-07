@@ -44,7 +44,11 @@ export default function TicketTable({ tickets, users, remarks }) {
             ticket_id: ticket.id,
             ticket_status: ticket.ticket_status
         }))
+
         document.getElementById('show_remarks').innerHTML = ''
+        document.getElementById('image_div').innerHTML = ''
+        document.getElementById('file_link').innerHTML = ''
+
         var ticket_number = document.getElementsByClassName('ticket_number')
         for (var i = 0; i < ticket_number.length; i++) {
             ticket_number[i].innerHTML = ` ${ticket.ticket_number}`
@@ -82,6 +86,11 @@ export default function TicketTable({ tickets, users, remarks }) {
                         </p></div></div></div>`
                 ))
             }
+        } else if (modal_id == 'ticket_imageModal') {
+            document.getElementById('image_div').innerHTML += `<img class="h-auto max-w-md rounded-lg" src='uploads/${ticket.image}' />`
+        } else if (modal_id == 'ticket_fileModal') {
+            document.getElementById('file_link').innerHTML += ` ${ticket.attach_file}`
+            document.getElementById('file_link').href = `/uploads/others/${ticket.attach_file}`
         }
 
     }
@@ -105,8 +114,29 @@ export default function TicketTable({ tickets, users, remarks }) {
         router.delete(`/tickets/${ticketId} `);
     }
 
+    function deleteImageData(e) {
+        document.getElementById('ticket_imageModal').close()
+        e.preventDefault()
+        let ticketId = document.getElementById('ticket_id').value
+        // console.log(ticketId)
+        router.delete(`/tickets/image/${ticketId} `);
+    }
+
+    function deleteFileData(e) {
+        document.getElementById('ticket_fileModal').close()
+        e.preventDefault()
+        let ticketId = document.getElementById('ticket_id').value
+        console.log(ticketId)
+        router.delete(`/tickets/attach_file/${ticketId} `);
+    }
+
+    function clickFileLink(e) {
+        document.getElementById('ticket_fileModal').close()
+        onCloseModal()
+        // console.log(e.target.href)
+    }
+
     function addRemark(e) {
-        document.getElementById('ticket_viewModal').close()
         e.preventDefault()
         onCloseModal()
         router.post(`/tickets/store/remark`, values);
@@ -186,6 +216,32 @@ export default function TicketTable({ tickets, users, remarks }) {
                 </form>
             </Modal>
 
+            <Modal id="ticket_imageModal" title="View Image" closeModal={onCloseModal}>
+                <div className='grid grid-cols-1 gap-4'>
+                    <div className="pt-4" id="image_div"></div>
+                </div>
+                <form onSubmit={deleteImageData} className="space-y-6 ">
+                    <TextInput className="ticket_id" id="ticket_id" name="ticket_id" type="hidden" value={values.ticket_id} />
+                    <div className="flex items-center gap-4">
+                        {<PrimaryButton disabled="" type="submit" >Delete This Image</PrimaryButton>}
+                    </div>
+                </form>
+            </Modal>
+
+            <Modal id="ticket_fileModal" title="View File" closeModal={onCloseModal}>
+                <div className='grid grid-cols-1 gap-4'>
+                    <div className="pt-4">
+                        <a onClick={clickFileLink} id="file_link" className="font-medium text-sky-600 focus:border-sky-700 cursor-pointer underline decoration-sky-300" target="_blank"></a>
+                    </div>
+                </div>
+                <form onSubmit={deleteFileData} className="space-y-6 ">
+                    <TextInput className="ticket_id" id="ticket_id" name="ticket_id" type="hidden" value={values.ticket_id} />
+                    <div className="flex items-center gap-4">
+                        {<PrimaryButton disabled="" type="submit" >Delete This File</PrimaryButton>}
+                    </div>
+                </form>
+            </Modal>
+
             <table className="table" id="ticket_tbl">
                 <thead>
                     <tr className='bg-emerald-300'>
@@ -195,7 +251,6 @@ export default function TicketTable({ tickets, users, remarks }) {
                         <th>Level of Importance</th>
                         <th>Ticket Source</th>
                         <th>Address</th>
-                        <th>Updated By</th>
                         <th>Image</th>
                         <th>Attached File</th>
                         <th colSpan="2">Actions</th>
@@ -221,15 +276,25 @@ export default function TicketTable({ tickets, users, remarks }) {
                             >
                                 <td>
                                     <a
-                                        className='inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium border-sky-300 text-sky-600 focus:border-sky-700 cursor-pointer'
+                                        className='inline-flex items-center px-1 pt-1 underline decoration-sky-300 text-sm font-medium text-sky-600 focus:border-sky-700 cursor-pointer'
                                         onClick={() => callModal(dt, 'ticket_viewModal')}
                                         key={dt.id}
                                     >
                                         {dt.ticket_number}
                                     </a>
                                     <small className="block mt-2">
-                                        {dt.ticket_status == 0 ? <strong>Opened</strong> : 'Closed'}
+                                        Status : {dt.ticket_status == 0 ? 'Opened' : 'Closed'}
                                     </small>
+                                    {
+                                        dt.ticket_status == 1 &&
+                                        <small className="block mt-2">
+                                            Updated by : {
+                                                users.filter(user => user.id == dt.updated_by_loggedin_user).map(filteredUser => (
+                                                    filteredUser.name
+                                                ))
+                                            }
+                                        </small>
+                                    }
                                 </td>
                                 <td>{dt.customer_user_id}</td>
                                 <td>{topicData[0][dt.topic]}</td>
@@ -238,25 +303,31 @@ export default function TicketTable({ tickets, users, remarks }) {
                                 <td>{dt.ticket_address}</td>
                                 <td>
                                     {
-                                        users.filter(user => user.id == dt.updated_by_loggedin_user).map(filteredUser => (
-                                            filteredUser.name
-                                        ))
-                                    }
-                                </td>
-                                <td>
-                                    {
                                         dt.image ?
                                             <img
+                                                className="cursor-pointer"
                                                 src={`uploads/${dt.image}`}
                                                 width={60}
-                                                alt='Image'
+                                                onClick={() => callModal(dt, 'ticket_imageModal')}
                                             />
                                             :
                                             ''
                                     }
                                 </td>
                                 <td>
-                                    {dt.attach_file ? dt.attach_file : ''}
+                                    {
+                                        dt.attach_file ?
+                                            <a
+                                                className='inline-flex items-center px-1 pt-1 underline decoration-sky-300 text-sm font-medium text-sky-600 focus:border-sky-700 cursor-pointer'
+                                                onClick={() => callModal(dt, 'ticket_fileModal')}
+                                                key={dt.id}
+                                            >
+                                                {
+                                                    dt.attach_file.length > 10 ?
+                                                        `${dt.attach_file.substring(0, 10)}...` : dt.attach_file
+                                                }
+                                            </a> : ''
+                                    }
                                 </td>
                                 <td>
                                     <PrimaryButton className="bg-sky-800" padding_x='px-2' disabled='' onClick={() => editData(dt.id)}>

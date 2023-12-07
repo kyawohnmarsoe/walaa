@@ -140,7 +140,7 @@ export default function AddForm({ className = '', customers, apitoken, errors })
     }
 
     function imageHandleChange(e) {
-        console.log(e.target.files);
+        // console.log(e.target.files);
         setUrlImage(URL.createObjectURL(e.target.files[0]));
         setValues(values => ({
             ...values,
@@ -149,7 +149,7 @@ export default function AddForm({ className = '', customers, apitoken, errors })
     }
 
     function attachFileHandleChange(e) {
-        console.log(e.target.files);
+        // console.log(e.target.files);        
         setValues(values => ({
             ...values,
             'attach_file': e.target.files[0],
@@ -283,8 +283,7 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                         <p className="mt-2 text-sm text-gray-500 " id="file_input_help">
                             svg, png, jpg, jpeg or gif.
                         </p>
-
-                        <img className="mt-3 h-auto max-w-xs" src={urlImage} />
+                        <img className="mt-4 h-auto max-w-xs rounded-lg" src={urlImage} />
                         <InputError className="mt-2" message={errors.image} />
                     </div>
 
@@ -298,10 +297,8 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                             className="mt-1 block w-full"
                         />
                         <p className="mt-2 text-sm text-gray-500 " id="file_input_help">
-                            docx, doc, pdf, csv, xls or xlx.
+                            docx, doc, pdf, csv, xls or xlsx.
                         </p>
-
-                        <img className="mt-3 h-auto max-w-xs" src={urlImage} />
                         <InputError className="mt-2" message={errors.attach_file} />
                     </div>
                 </div>
