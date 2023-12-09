@@ -114,7 +114,8 @@ class Controller extends BaseController
         $count_user_groups = User_group::count();
 
         if(count($user_has_groups_idArr) == 0 || $count_user_groups == count($user_has_groups_idArr)){
-            $customers = Customer::get();            
+            // $customers = Customer::get();
+            $customers = 'all';
         } else {
             $customers = Customer::whereIn('customers.user_group_id', $user_has_groups_idArr)
                         ->get();

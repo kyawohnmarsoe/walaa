@@ -17,10 +17,10 @@ export default function AccessDetails ({ apitoken, user, className = '' })
         affiliateName: user?.affiliateName || '',
         userNotes: user?.userNotes || '',
         router: user?.routerIp || '',
-        userActive: user?.userActive || false
+        UserActiveManage: user?.userActiveManage || false
     });
 
-    console.log(user?.userActive)
+
 
     const instance = axios.create({
         baseURL: 'https://rapi.earthlink.iq/api/reseller',
@@ -49,6 +49,11 @@ export default function AccessDetails ({ apitoken, user, className = '' })
 
     };
 
+
+    useEffect(()=>{
+        // console.log(user.userActiveManage)
+    },[])
+
     return (
         <div className="pt-12 ">
             <div className="max-w-8xl mx-auto sm:px-6 lg:px-4">
@@ -69,7 +74,7 @@ export default function AccessDetails ({ apitoken, user, className = '' })
                             <div className='grid grid-cols-3 gap-4'>
 
                                 <div>
-                                    <InputLabel htmlFor="userId" value="Username" />
+                                    <InputLabel htmlFor="userId" value="Username" required={true}/>
 
                                     <TextInput
                                         id="userId"
@@ -85,7 +90,7 @@ export default function AccessDetails ({ apitoken, user, className = '' })
                                 </div>
 
                                 <div>
-                                    <InputLabel htmlFor="displayName" value="Display Name" />
+                                    <InputLabel htmlFor="displayName" value="Display Name" required={ true } />
 
                                     <TextInput
                                         id="displayName"
@@ -161,12 +166,12 @@ export default function AccessDetails ({ apitoken, user, className = '' })
                                 <div >
                                     <label className="flex items-center">
                                         <Checkbox
-                                            name="userActive"
-                                            checked={ data?.userActive }
-                                            onChange={ (e) => setData('userActive', !data?.userActive) }
+                                            name="UserActiveManage"
+                                            checked={ data?.UserActiveManage }
+                                            onChange={ (e) => setData('UserActiveManage', !data?.UserActiveManage) }
                                         />
 
-                                        <InputLabel htmlFor="userActive" value="Active" className='ml-2' />
+                                        <InputLabel htmlFor="UserActiveManage" value="Active" className='ml-2' />
                                     </label>
                                 </div>
                             </div>

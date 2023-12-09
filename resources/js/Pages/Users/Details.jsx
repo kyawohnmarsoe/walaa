@@ -9,7 +9,7 @@ import AccountingInformation from './Partials/AccountingInformation';
 import Alert from '../../Components/DaisyUI/Alert';
 import Loading from '../../Components/DaisyUI/Loading';
 
-export default function Details ({ auth, apitoken, id })
+export default function Details ({ auth, apitoken, id, accountTypes })
 {
     const [userData, setUserData] = useState({ user: null, errMessage: '', loading: true })
     const { user, errMessage, loading } = userData
@@ -58,7 +58,8 @@ export default function Details ({ auth, apitoken, id })
                         <div className="bg-white shadow sm:rounded-lg">
                             <UserStatus
                                 user={ user }
-                                className="p-4" />
+                                className="p-4"
+                                accountTypes={ accountTypes } />
                         </div>
                         <div className="bg-white shadow sm:rounded-lg">
                             <Security

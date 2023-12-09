@@ -9,14 +9,38 @@ import InvoiceSearch from './InvoiceSearch'
 import PaginatedItems from '@/Components/DaisyUI/PaginatedItems';
 
 
-export default function Invoices ({ auth, apitoken, affiliates, invoices })
+export default function Invoices ({ auth, apitoken, affiliates, invoices, customerGroup })
 {
    
     const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10 })
+
+    const [invToDisplay, setInvToDisplay] = useState(invoices)
+
     useEffect(() =>
     {
-
+      
+        customerGroup !== 'all' && setInvToDisplay(getInvoices())
+      
     }, [filterObj])
+
+    const getInvoices = ()=>{
+        console.log('getInvoices')
+
+        let results
+       
+        console.log(customerGroup)
+        console.log(invoices)
+
+        const customerGroupByUser = customerGroup
+        const invicesAll = invoices
+
+        customerGroupByUser.map(c=>{
+            results = invicesAll.filter((i => i.userIndex == c.customer_user_index))
+        })
+        console.log(results)
+
+        return results;
+    }
 
     return (
         <AuthenticatedLayout
@@ -52,13 +76,13 @@ export default function Invoices ({ auth, apitoken, affiliates, invoices })
                            
                             <PaginatedItems
                                 itemsPerPage={ filterObj.RowCount }
-                                items={ invoices }
-                                total={ invoices.length }
+                                items={ invToDisplay }
+                                total={ invToDisplay.length }
                                 setFilterObj={ setFilterObj }
                                 filterObj={ filterObj }
                             >
 
-                                <InvoiceTable items={ invoices } apitoken={ apitoken } auth={ auth }/>
+                                <InvoiceTable items={ invToDisplay } apitoken={ apitoken } auth={ auth }/>
 
                             </PaginatedItems>
 

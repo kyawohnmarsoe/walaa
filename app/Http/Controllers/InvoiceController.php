@@ -13,16 +13,19 @@ use App\Models\User;
 
 class InvoiceController extends Controller
 {
+     
+  
       public function index(){
         $token = $this->getSavedToken();  
 
-        // $cusDataByLoginUserGroupId = $this->getUserIndexReqData_byLoggedInGroupSysUserId();
-        // return response(compact('cusDataByLoginUserGroupId'));
-
+        $cusDataByLoginUserGroupId = $this->getUserIndexReqData_byLoggedInGroupSysUserId();
+        // $customers = response(compact('cusDataByLoginUserGroupId'));
+      
         return Inertia::render('Invoices/Invoices',[
             'apitoken' => $token,
             'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get(),
             'invoices' => Invoice::orderBy('id','desc')->get(),
+            'customerGroup' => $cusDataByLoginUserGroupId,
     ]);
     }
 

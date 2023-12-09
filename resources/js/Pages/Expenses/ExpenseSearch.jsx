@@ -5,26 +5,25 @@ import TextInput from '@/Components/TextInput';
 import PrimaryButton from '@/Components/PrimaryButton';
 import PrimaryBtn from "@/Components/PrimaryBtn";
 
-export default function ExpenseSearch ({ className = '', setFilterObj, filterObj })
+export default function ExpenseSearch ({ className = '', setFilterObj, filterObj, users,auth })
 {
     const { data, setData, post, processing, errors, reset } = useForm({
-        userID: '',
-        affiliateName: '',
-        invoiceStatus: ''
+        type: '',
+        walletUserId: ''
     });
 
     const submit = (e) =>
     {
         e.preventDefault();
         // setFilterObj({ ...filterObj, ...data })
-        // console.log(filterObj)
+        console.log(data)
 
-        // router.post('/expenses/search', data)
+        router.post('/expenses/search', data)
     };
 
     const pageReset = (e) =>
     {
-        router.get('/invoices')
+        router.get('/expenses')
     }
 
     return (
@@ -44,39 +43,47 @@ export default function ExpenseSearch ({ className = '', setFilterObj, filterObj
                             <div className='grid grid-cols-3 gap-4'>
 
                                 <div>
-                                    <InputLabel htmlFor="userID" value="UserID" />
+                                    <InputLabel htmlFor="type" value="Type" />
 
                                     <TextInput
-                                        id="userID"
+                                        id="type"
                                         className="mt-1 block w-full "
-                                        value={ data.userID }
+                                        value={ data.type }
                                         isFocused
-                                        autoComplete="userID"
-                                        onChange={ (e) => setData('userID', e.target.value) }
+                                        autoComplete="type"
+                                        onChange={ (e) => setData('type', e.target.value) }
                                     />
 
                                     {/* <InputError className="mt-2" message={errors.name} /> */ }
                                 </div>
 
-
-                               
-
-
                                 <div>
-                                    <InputLabel htmlFor="invoiceStatus" value="Invoice Status" />
+                                    <InputLabel htmlFor="walletUserId" value="Wallet" />
 
                                     <select
-                                        name="invoiceStatus"
-                                        id="invoiceStatus"
+                                        name="walletUserId"
+                                        id="walletUserId"
                                         className='mt-1 block w-full border-gray-300 focus:border-sky-500 focus:ring-sky-500 rounded-md shadow-sm '
-                                        value={ data?.invoiceStatus }
-                                        onChange={ (e) => setData('invoiceStatus', e.target.value) }
+                                        value={ data?.walletUserId }
+                                        required
+                                        onChange={ (e) => setData('walletUserId', e.target.value) }
                                     >
-                                        <option value='All'>All</option>
-                                        <option value='NotPaid'>NotPaid</option>
-                                        <option value='Paid'>Paid</option>
+                                        <option value='0' key='0' >
+                                           All
+                                        </option>
+                                        {
+                                            !(auth.user.id == 0) ?
 
-                                    </select>
+                                                users?.map(u => <option value={ u.id } key={ u.id } >
+                                                    { u.name } ({ u.balance.toLocaleString() } IQD)
+                                                </option>) : <option value={ auth.user.id } key={ auth.user.id } >
+                                                    { auth.user.name } ({ auth.user.balance.toLocaleString() } IQD)
+                                                </option>
+                                        }
+
+
+
+                                    </select> 
 
                                     {/* <InputError className="mt-2" message={errors.name} /> */ }
                                 </div>

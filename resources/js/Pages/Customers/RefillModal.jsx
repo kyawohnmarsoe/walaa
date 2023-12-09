@@ -89,6 +89,10 @@ export default function RefillModal({ modals, setModals, user, apitoken, account
         flash.status == 201 && location.reload()
 
     };
+
+    useEffect(()=>{
+        console.log('reFillmodal')
+    },[])
     return (
         <Modal show={modals.reFill} onClose={closeModal} maxWidth={'xl'}>
             <form onSubmit={submit} className="p-6 scroll-form" autoComplete="off">

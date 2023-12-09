@@ -19,7 +19,11 @@ class UserController extends Controller
         //     'user' => User::findOrFail($id)
         // ]);
          $token = $this->getSavedToken();  
-        return Inertia::render('Users/Details',['apitoken' => $token,'id' => $id]);
+        return Inertia::render('Users/Details',[
+            'apitoken' => $token,
+            'id' => $id,
+            'accountTypes' => Account::all()
+        ]);
     }
 
     public function updateUserDetails(Request $request): Response

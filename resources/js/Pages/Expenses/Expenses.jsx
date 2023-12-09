@@ -40,6 +40,8 @@ export default function Expenses ({ auth, expenses, users }) {
         className='p-4'
         setFilterObj={ setFilterObj }
         filterObj={ filterObj }
+        auth={ auth }
+        users={ users }
       />
 
 

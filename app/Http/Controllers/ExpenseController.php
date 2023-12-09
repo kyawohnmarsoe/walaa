@@ -6,18 +6,26 @@ use App\Models\Expense;
 use App\Models\User;
 use App\Http\Requests\ExpenseStoreRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class ExpenseController extends Controller
 {
+    public function getExpensesByUser(){
+       $id = Auth::user()->id;
+       if($id == 1){
+       $expenses=Expense::orderBy('id','desc')->get();
+       }else{
+       $expenses=Expense::where('walletUserId', $id)->orderBy('id','desc')->get();
+       }
+       return $expenses;
+    }
+
      public function index(){
      return Inertia::render('Expenses/Expenses',[
      'users' => User::orderBy('id','asc')->get(),
-     'expenses' => Expense::orderBy('id','desc')->get(),
+     'expenses' => $this->getExpensesByUser(),
      ]);
-     }
-
-     public function search(){
-     return Inertia::render('Expenses/Expenses');
      }
 
      public function create(){
@@ -76,6 +84,42 @@ class ExpenseController extends Controller
          
           return redirect()->route('expenses')->with('status', 201);
       }
+
+
+       public function search(Request $request)
+       {
+
+       $type = $request['type'];
+       $walletUserId = $request['walletUserId'];
+
+       $results = Expense::orderBy('id','desc')->get();
+        $id = Auth::user()->id;
+        if($id == 1){
+        $results=Expense::orderBy('id','desc')->get();
+        }else{
+        $results=Expense::where('walletUserId', $id)->orderBy('id','desc')->get();
+        }
+       
+
+       if ($type) {
+       $results = Expense::where('type', 'LIKE', "%$type%")->get();
+
+       }
+       if ($walletUserId){
+       $results = Expense::where('walletUserId', $walletUserId)->get();
+
+       }
+      
+
+
+       return Inertia::render('Expenses/Expenses',[
+       'users' => User::orderBy('id','asc')->get(),
+       'expenses' => $results,
+       ]);
+
+
+
+       }
 
 
 }

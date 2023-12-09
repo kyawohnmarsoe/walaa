@@ -5,10 +5,11 @@ import SecondaryButton from '@/Components/SecondaryButton';
 import TextInput from '@/Components/TextInput';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
-import Modal from '@/Components/Modal';
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import RefillModal from "@/Pages/Customers/RefillModal";
 
-export default function UserStatus ({ user, className = '' })
+
+export default function UserStatus ({ user, className = '', accountTypes, apitoken })
 {
     const [data, setData] = useState({ errMessage: '', loading: true })
     const submit = (e) =>
@@ -59,13 +60,13 @@ export default function UserStatus ({ user, className = '' })
 
 
     const [modals, setModals] = useState({
-        refill: false,
+        reFill: false,
     })
-    console.log(modals)
+
     const closeModal = () =>
     {
         setModals({
-            refill: false,
+            reFill: false
         });
 
 
@@ -78,9 +79,16 @@ export default function UserStatus ({ user, className = '' })
 
     };
 
-    const refill = () => { }
+
+    useEffect(() =>
+    {
+        console.log(modals)
+    }, [])
 
     return (
+        <>
+      <RefillModal modals={modals} setModals={setModals} accountTypes={accountTypes} apitoken={apitoken} user={user} />
+        
         <div className="max-w-8xl mx-auto sm:px-6 lg:px-4">
             <div className="bg-white overflow-hidden sm:rounded-lg">
                 <section className={ className }>
@@ -91,61 +99,6 @@ export default function UserStatus ({ user, className = '' })
                     Update your account's profile information and email address.
                 </p> */}
                     </header>
-
-                    <Modal show={ modals.refill } onClose={ closeModal } maxWidth={ 'xl' }>
-                        <form onSubmit={ (e) => refill(e) } className="p-6" >
-                            <h2 className="text-lg font-medium text-gray-900">
-                                Change Password
-                            </h2>
-
-                            <p className="mt-1 text-sm text-red-600">
-                                { }
-                            </p>
-
-                            <div className="mt-6">
-                                <InputLabel htmlFor="NewPassword" value="New Password:" />
-
-                                <TextInput
-                                    id="NewPassword"
-                                    className="mt-1 block w-full "
-                                    // value={ passwordChange.NewPassword }
-                                    required
-                                    isFocused
-                                    autoComplete="NewPassword"
-                                // onChange={ (e) => setPasswordChange({ ...passwordChange, NewPassword: e.target.value }) }
-                                />
-
-                                {/* <InputError message={ errors.DepositPassword } className="mt-2" /> */ }
-                            </div>
-
-                            <div className="mt-6">
-                                <InputLabel htmlFor="confirmNewPassword" value="Confirm New Password:" />
-
-                                <TextInput
-                                    id="confirmNewPassword"
-                                    className="mt-1 block w-full "
-                                    // value={ passwordChange.confirmNewPassword }
-                                    required
-                                    isFocused
-                                    autoComplete="confirmNewPassword"
-                                // onChange={ (e) => setPasswordChange({ ...passwordChange, confirmNewPassword: e.target.value }) }
-                                />
-
-                            </div>
-
-                            <div className="mt-6 flex justify-end gap-4">
-                                { value && <span className='text-success'> Update Success </span> }
-
-                                { errMessage && <span className='text-red-500'> { errMessage } </span> }
-
-                                <SecondaryButton onClick={ closeModal }>Cancel</SecondaryButton>
-
-                                <PrimaryButton className="ml-3">
-                                    Submit
-                                </PrimaryButton>
-                            </div>
-                        </form>
-                    </Modal>
 
                     <table className="mt-6 space-y-6 ">
                         <tr>
@@ -171,12 +124,15 @@ export default function UserStatus ({ user, className = '' })
                         <tr>
                             <td>Account Type</td>
                             <td>: { user?.accountPackageType }
-                                {/* <span className='cursor-pointer text-primary' onClick={ () => setModals({ ...modals, refill: true }) }>Refill</span> */ }
+
+                                { user?.canRefill && < span className='cursor-pointer text-primary pl-4' onClick={ () => setModals({reFill:true})}>Refill</span> }
+
                             </td>
                         </tr>
                     </table>
 
                 </section> </div>
         </div>
+        </>
     );
 }
