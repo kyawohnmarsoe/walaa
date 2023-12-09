@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use App\Http\Requests\StoreTicketRequest;
+use App\Http\Requests\UpdateTicketRequest;
 use Inertia\Inertia;
 use App\Models\Ticket;
 use App\Models\Customer;
@@ -65,9 +66,9 @@ class TicketController extends Controller
             'remarks'   => Ticket_remark::all(),
             'show_data' => $show_data
         ])->with([
-            'ticket_source'        => Config::get('constants.ticket_source'),
-            'topic'                => Config::get('constants.topic'),
-            'level_of_importance'  => Config::get('constants.level_of_importance')
+            'ticket_source'        => config('constants.ticket_source'), //Config::get('constants.ticket_source'),
+            'topic'                => config('constants.topic'),
+            'level_of_importance'  => config('constants.level_of_importance')
         ]);
         
     } // index
@@ -93,9 +94,37 @@ class TicketController extends Controller
 
     public function store(StoreTicketRequest $request) { 
         $token = $this->getSavedToken();       
-        $data = $request->validated();        
-        // return response(compact('data')); 
-        $ticket = Ticket::create($data);
+        $data = $request->validated();      
+
+        // $request->validate([
+        //     'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        //     'attach_file' => 'nullable|mimes:doc,docx,pdf,csv,xlsx,xls|max:2048',
+        // ]);        
+
+        $imageFileName = '';
+        if($request->hasFile('image')) {
+            $imageFileName = time() . '_'. $request->image->getClientOriginalName(); 
+            $request->image->move(public_path('uploads'), $imageFileName);
+        }
+        
+        $attachFileName = '';
+        if($request->hasFile('attach_file')) {
+            $attachFileName = time() . '_'. $request->attach_file->getClientOriginalName(); 
+            $request->attach_file->move(public_path('uploads/others'), $attachFileName);
+        }        
+
+        // return response(compact('fileName')); 
+
+        Ticket::create([
+            'user_id' => $request->user_id,
+            'ticket_source' => $request->ticket_source,             
+            'topic'=> $request->topic,
+            'ticket_address'=> $request->ticket_address,
+            'level_of_importance'=> $request->level_of_importance,
+            'ticket_number'=> $request->ticket_number,
+            'image' => $imageFileName,
+            'attach_file' => $attachFileName,
+        ]);
         return redirect()->route('tickets')->with('status', 201);   
     } // store
 
@@ -110,21 +139,117 @@ class TicketController extends Controller
         ]);
     } // edit
 
-    public function update(StoreTicketRequest $request, $id) 
+    public function update(UpdateTicketRequest $request, $id) 
     {
 		$input = $request->all();
-        $data = $request->validated(); 
-		$data = Ticket::findOrFail($id);
         // return response(compact('input'));  
-		$data->update($input);
+        $data = $request->validated(); 
+        $ticket = Ticket::findOrFail($id);  
+        
+        if($request->hasFile('image')) {
+            $request->validate([
+                'image' => 'nullable|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            ]); 
+        } 
+
+        if($request->hasFile('attach_file')) {
+            $request->validate([
+                'attach_file' => 'nullable|mimes:doc,docx,pdf,csv,xlsx,xls|max:2048',
+            ]); 
+        } 
+
+        if($request->file('image')){  
+            if($ticket->image) {
+                if(file_exists(public_path('uploads/'.$ticket->image))){                
+                    unlink(public_path('uploads/'.$ticket->image));
+                } 
+            }
+            
+            $image = $request->file('image');
+            $image_name = time() . '_'. $image->getClientOriginalName();
+            $request->image->move(public_path('uploads'), $image_name);            
+        } else {
+            $image_name = $ticket->image;
+        }
+
+        if($request->file('attach_file')){  
+            if($ticket->attach_file){
+                if(file_exists(public_path('uploads/others/'.$ticket->attach_file))){                
+                    unlink(public_path('uploads/others/'.$ticket->attach_file));
+                } 
+            }         
+            
+            $attach_file = $request->file('attach_file');
+            $attach_file_name = time() . '_'. $attach_file->getClientOriginalName();
+            $request->attach_file->move(public_path('uploads/others'), $attach_file_name);            
+        } else {
+            $attach_file_name = $ticket->attach_file;
+        }       
+       
+        $ticket->update([
+            'user_id' => $request->user_id,
+            'ticket_source' => $request->ticket_source,             
+            'topic'=> $request->topic,
+            'ticket_address'=> $request->ticket_address,
+            'level_of_importance'=> $request->level_of_importance,
+            'ticket_number'=> $request->ticket_number,
+            'ticket_status' => $request->ticket_status,
+            'updated_by_loggedin_user' => $request->updated_by_loggedin_user,
+            'image' => $image_name,
+            'attach_file' => $attach_file_name,
+        ]);
+		
         return redirect()->route('tickets')->with('status', 200); 
 	} // update
 
     public function destroy($id)
     {
-        Ticket::findOrFail($id)->delete();
+        $ticket = Ticket::findOrFail($id);
+        if($ticket->image){
+            if(file_exists(public_path('uploads/'.$ticket->image))){                
+                unlink(public_path('uploads/'.$ticket->image));
+            }                     
+        } 
+
+        if($ticket->attach_file){
+            if(file_exists(public_path('uploads/others/'.$ticket->attach_file))){                
+                unlink(public_path('uploads/others/'.$ticket->attach_file));
+            }                     
+        } 
+        // return response(compact('ticket'));
+        $ticket->delete();
         return redirect()->route('tickets')->with('status', 204); 
     } // destroy
+
+    public function destroy_image($id)
+    {
+        $ticket = Ticket::findOrFail($id);
+        if($ticket->image){
+            if(file_exists(public_path('uploads/'.$ticket->image))){                
+                unlink(public_path('uploads/'.$ticket->image));
+            }
+            
+            $ticket->update([               
+                'image' => '',                
+            ]);
+        }        
+        return redirect()->route('tickets')->with('message', 'Image deleted successfully.'); 
+    } // destroy_image
+
+    public function destroy_attachFile($id)
+    {
+        $ticket = Ticket::findOrFail($id);
+        if($ticket->attach_file){
+            if(file_exists(public_path('uploads/others/'.$ticket->attach_file))){                
+                unlink(public_path('uploads/others/'.$ticket->attach_file));
+            }
+            
+            $ticket->update([               
+                'attach_file' => '',                
+            ]);
+        }        
+        return redirect()->route('tickets')->with('message', 'Attached file deleted successfully.'); 
+    } // destroy_attachFile
 
     public function store_remark(Request $request) { 
         $input = $request->all();     

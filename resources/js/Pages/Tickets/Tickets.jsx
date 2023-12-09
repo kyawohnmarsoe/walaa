@@ -71,8 +71,8 @@ export default function Tickets({
                     }
 
                     {flash.message &&
-                        <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
-                            <p className="font-bold">Warning</p>
+                        <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4" role="alert">
+                            {/* <p className="font-bold">Success!</p> */}
                             <p>{flash.message}</p>
                         </div>
                     }

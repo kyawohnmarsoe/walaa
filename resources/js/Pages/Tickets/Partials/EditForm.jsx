@@ -24,8 +24,13 @@ export default function EditForm({ className = '', ticket, customers, updated_by
         level_of_importance: ticket.level_of_importance,
         ticket_number: ticket.ticket_number,
         ticket_status: ticket.ticket_status,
-        updated_by_loggedin_user: updated_by_loggedin_user
+        updated_by_loggedin_user: updated_by_loggedin_user,
+        image: ticket.image,
+        attach_file: ticket.attach_file,
     });
+
+    const [urlImage, setUrlImage] = useState();
+    const [urlAttachFile, setUrlAttachFile] = useState('');
 
     const [optionsCustomers, setoptionsCustomers] = useState([])
     const [selectedOpt, setSelectedOpt] = useState('')
@@ -127,6 +132,19 @@ export default function EditForm({ className = '', ticket, customers, updated_by
         getCustomers()
         getSelectedCustomer(ticket.user_id)
         // console.log("old user value ", values.user_id)
+        {
+            ticket.image ?
+                setUrlImage(`/uploads/${ticket.image}`)
+                :
+                setUrlImage('')
+        }
+        {
+            ticket.attach_file ?
+                setUrlAttachFile(ticket.attach_file)
+                :
+                setUrlAttachFile('')
+        }
+
     }, [])
 
     function customersHandleChange(e) {
@@ -168,6 +186,24 @@ export default function EditForm({ className = '', ticket, customers, updated_by
         }))
     }
 
+    function imageHandleChange(e) {
+        // console.log(e.target.files);
+        setUrlImage(URL.createObjectURL(e.target.files[0]));
+        setValues(values => ({
+            ...values,
+            'image': e.target.files[0],
+        }))
+    }
+
+    function attachFileHandleChange(e) {
+        // console.log(e.target.files);
+        setUrlAttachFile('');
+        setValues(values => ({
+            ...values,
+            'attach_file': e.target.files[0],
+        }))
+    }
+
     function handleChange(e) {
         const key = e.target.id;
         const value = e.target.value
@@ -179,6 +215,7 @@ export default function EditForm({ className = '', ticket, customers, updated_by
 
     function handleSubmit(e) {
         e.preventDefault()
+        // console.log(values.image);
         router.post(`/tickets/${ticket.id}`, values)
     }
 
@@ -298,6 +335,38 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                             onChange={statusHandleChange}
                             value={values.ticket_status}
                         />
+                    </div>
+
+                    <div>
+                        <InputLabel htmlFor="image" value="Image" />
+                        <TextInput
+                            id="image"
+                            name="image"
+                            onChange={imageHandleChange}
+                            type="file"
+                            className="mt-1 block w-full"
+                        />
+                        <p className="mt-2 text-sm text-gray-500 " id="file_input_help">
+                            svg, png, jpg, jpeg or gif.
+                        </p>
+                        <img className="mt-4 h-auto max-w-xs rounded-lg" src={urlImage} />
+                        <InputError className="mt-2" message={errors.image} />
+                    </div>
+
+                    <div>
+                        <InputLabel htmlFor="attach_file" value="File Attachment" />
+                        <TextInput
+                            id="attach_file"
+                            name="attach_file"
+                            onChange={attachFileHandleChange}
+                            type="file"
+                            className="mt-1 block w-full"
+                        />
+                        <p className="mt-2 text-sm text-gray-500 " id="file_input_help">
+                            docx, doc, pdf, csv, xls or xlsx.
+                        </p>
+                        <p className="mt-4 text-sm text-emerald-600">{urlAttachFile}</p>
+                        <InputError className="mt-2" message={errors.attach_file} />
                     </div>
 
                     <TextInput
