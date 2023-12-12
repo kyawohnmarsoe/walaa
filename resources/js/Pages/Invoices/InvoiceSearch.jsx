@@ -9,16 +9,18 @@ export default function InvoiceSearch ({ className = '', affiliates, setFilterOb
 {
     const { data, setData, post, processing, errors, reset } = useForm({
         userID: '',
-        affiliateName: '',
-        invoiceStatus: ''
+        affiliateName: 'All',
+        invoiceStatus: 'All'
     });
 
     const submit = (e) =>
     {
         e.preventDefault();
-        // setFilterObj({ ...filterObj, ...data })
-        // console.log(filterObj)
-        router.post('/invoices/search', data)
+      
+        setFilterObj({ ...filterObj, ...data ,search:true})
+
+        console.log(filterObj)
+        // router.post('/invoices/search', data)
     };
 
     const pageReset = (e) =>
@@ -68,7 +70,7 @@ export default function InvoiceSearch ({ className = '', affiliates, setFilterOb
                                         value={ data?.affiliateName }
                                         onChange={ (e) => setData('affiliateName', e.target.value) }
                                     >
-                                        <option value=''>All</option>
+                                        <option value='All'>All</option>
                                         {
                                             affiliates?.map(a => <option value={ a.affiliate_name } key={ a.affiliate_index }>
                                                 { a.affiliate_name }

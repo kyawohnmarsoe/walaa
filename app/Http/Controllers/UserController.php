@@ -15,14 +15,14 @@ class UserController extends Controller
    
     public function getUserDetails(string $id,Request $request): Response
     {
-        // return Inertia::render('Users/Details', [
-        //     'user' => User::findOrFail($id)
-        // ]);
+         
+
          $token = $this->getSavedToken();  
         return Inertia::render('Users/Details',[
             'apitoken' => $token,
             'id' => $id,
-            'accountTypes' => Account::all()
+            'accountTypes' => Account::all(),
+            
         ]);
     }
 
@@ -35,9 +35,11 @@ class UserController extends Controller
      public function showOnlineUsers(): Response
     {
         $token = $this->getSavedToken();      
+        $cusDataByLoginUserGroupId = $this->getUserIndexReqData_byLoggedInGroupSysUserId();
         return Inertia::render('Users/OnlineUsers',[
             'apitoken' => $token, 
-            'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get()
+            'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get(),
+            'userIndexByGroup' => $cusDataByLoginUserGroupId
         ]);
     }
 

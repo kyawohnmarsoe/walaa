@@ -10,24 +10,73 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Arr;
 
 class InvoiceController extends Controller
 {
-     
+     public function getInvoicesByCustomerGroup($inv){
+      $cusDataByLoginUserGroupId = $this->getUserIndexReqData_byLoggedInGroupSysUserId();
+      // $invoices = Invoice::orderBy('id','desc')->get()->all();
+      $invoices=$inv;
+
+      if ($cusDataByLoginUserGroupId !== 'all'){
+        $filteredInvoices=[];
+
+        foreach ($cusDataByLoginUserGroupId as $c) {
+
+          $results = Arr::where($invoices, function ($value, $key) use($c) {
+         
+          return $value['userIndex'] == $c["customer_user_index"];
+
+          });
+
+          array_push($filteredInvoices,...$results );
+        
+        }
+
+         return $filteredInvoices;
+      }
+
+      return $invoices;
+     }
   
       public function index(){
         $token = $this->getSavedToken();  
 
         $cusDataByLoginUserGroupId = $this->getUserIndexReqData_byLoggedInGroupSysUserId();
         // $customers = response(compact('cusDataByLoginUserGroupId'));
-      
+       
         return Inertia::render('Invoices/Invoices',[
             'apitoken' => $token,
             'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get(),
-            'invoices' => Invoice::orderBy('id','desc')->get(),
-            'customerGroup' => $cusDataByLoginUserGroupId,
+            'invoices'=> Invoice::orderBy('id','desc')->get()->all(),
+            'userIndexByGroup' => $cusDataByLoginUserGroupId,
+            
     ]);
     }
+
+          public function search(Request $request)
+          {
+           
+          $userID = $request['userID'];
+          $affiliateName = $request['affiliateName'];
+          $invoiceStatus = $request['invoiceStatus'];
+
+           $results = Invoice::orderBy('id','desc')->get()->all();
+
+          $token = $this->getSavedToken();
+         $cusDataByLoginUserGroupId = $this->getUserIndexReqData_byLoggedInGroupSysUserId();
+          return Inertia::render('Invoices/Invoices',[
+          'apitoken' => $token,
+          'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get(),
+          'invoices' => $results,
+           'userIndexByGroup' => $cusDataByLoginUserGroupId,
+          ]);
+
+          }
+
+
 
          public function create() 
      {   $token = $this->getSavedToken();  
@@ -147,38 +196,6 @@ class InvoiceController extends Controller
       return redirect()->route('invoices')->with('status', 201); 
     }
 
-      public function search(Request $request)
-    {
-    
-      $userID = $request['userID'];
-      $affiliateName = $request['affiliateName'];
-      $invoiceStatus = $request['invoiceStatus'];
 
-      $results = Invoice::orderBy('id','desc')->get();
-
-      if ($userID) {
-        $results = Invoice::where('userID', 'LIKE', "%$userID%")->get();
-        
-      }
-      if ($affiliateName){
-           $results = Invoice::where('affiliateName', 'LIKE', "%$affiliateName%")->get();
-           
-        }
-        if ($invoiceStatus){
-           $results = Invoice::where('invoiceStatus', "$invoiceStatus")->get();
-           
-        }
-     
-       $token = $this->getSavedToken();  
-     
-      return Inertia::render('Invoices/Invoices',[
-            'apitoken' => $token,
-            'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get(),
-            'invoices' => $results,
-    ]);
-
-
-
-    }
 
 }

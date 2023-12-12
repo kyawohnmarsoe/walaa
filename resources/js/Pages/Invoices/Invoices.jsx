@@ -6,42 +6,53 @@ import Loading from "@/Components/DaisyUI/Loading";
 import Alert from "@/Components/DaisyUI/Alert";
 import InvoiceTable from "./InvoiceTable";
 import InvoiceSearch from './InvoiceSearch'
-import PaginatedItems from '@/Components/DaisyUI/PaginatedItems';
+import PaginatedLinks from '@/Components/PaginatedLinks';
 
 
-export default function Invoices ({ auth, apitoken, affiliates, invoices, customerGroup })
+export default function Invoices ({ auth, apitoken, affiliates, invoices, userIndexByGroup })
 {
    
     const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10 })
-
-    const [invToDisplay, setInvToDisplay] = useState(invoices)
-
-    useEffect(() =>
+    const [filterInvoices, setFilteredInvoices] = useState(invoices)
+   
+    const filterUsersByGroup = (resUsers) =>
     {
-      
-        customerGroup !== 'all' && setInvToDisplay(getInvoices())
-      
-    }, [filterObj])
-
-    const getInvoices = ()=>{
-        console.log('getInvoices')
-
-        let results
-       
-        console.log(customerGroup)
-        console.log(invoices)
-
-        const customerGroupByUser = customerGroup
-        const invicesAll = invoices
-
-        customerGroupByUser.map(c=>{
-            results = invicesAll.filter((i => i.userIndex == c.customer_user_index))
-        })
-        console.log(results)
-
+        const results = resUsers.filter(r => userIndexByGroup.find(u => u.customer_user_index == r.userIndex))
         return results;
     }
 
+    useEffect(() =>
+    {
+        if (userIndexByGroup !=='all'){
+            if (invoices?.length > 0)
+            {
+                const results = filterUsersByGroup(invoices)
+                // console.log(results)
+                setFilteredInvoices(results)
+                console.log(filterObj)
+                filterObj.search && searchUsers()
+            } 
+        }
+      
+    }, [filterObj])
+
+
+    const searchUsers=()=>{
+      
+        let data =  filterUsersByGroup(invoices)
+       
+        data = !!filterObj.userID ? data.filter(d => d.userID == filterObj.userID) : data;
+      
+        data = filterObj.affiliateName !== 'All' ? data.filter(d => d.affiliateName == filterObj.affiliateName) : data;
+        
+        data = filterObj.invoiceStatus !== 'All' ? (data.filter(d => d.invoiceStatus == filterObj.invoiceStatus)):data;
+       
+        setFilteredInvoices(data)
+
+        // setFilterObj({ ...filterObj,search: false })
+    }
+
+   
     return (
         <AuthenticatedLayout
             user={ auth.user }
@@ -73,19 +84,17 @@ export default function Invoices ({ auth, apitoken, affiliates, invoices, custom
                 <div className="max-w-8xl mx-auto sm:px-6 lg:px-4">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="text-gray-900">
-                           
-                            <PaginatedItems
+                         
+
+                            <PaginatedLinks
                                 itemsPerPage={ filterObj.RowCount }
-                                items={ invToDisplay }
-                                total={ invToDisplay.length }
+                                items={ filterInvoices }
+                                tableName="invoices"
                                 setFilterObj={ setFilterObj }
                                 filterObj={ filterObj }
-                            >
-
-                                <InvoiceTable items={ invToDisplay } apitoken={ apitoken } auth={ auth }/>
-
-                            </PaginatedItems>
-
+                                auth={ auth }
+                                apitoken={ apitoken }
+                            />
 
                         </div>
                     </div>

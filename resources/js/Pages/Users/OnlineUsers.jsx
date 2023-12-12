@@ -7,30 +7,46 @@ import OnlineUsersSearch from './OnlineUsersSearch';
 import Loading from '@/Components/DaisyUI/Loading';
 import PaginatedItems from '@/Components/DaisyUI/PaginatedItems';
 
-export default function OnlineUsers({ auth, apitoken, affiliates }) {
+export default function OnlineUsers({ auth, apitoken, affiliates, userIndexByGroup }) {
   const [onlineUsersData, setOnlineUsersData] = useState({ users: [], total: 0, errMessage: '', loading: true })
   const { users, total, errMessage, loading } = onlineUsersData
   const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10, Orderby: 'userId' })
 
-  // console.log(filterObj)
+ 
 
   const instance = axios.create({
     baseURL: 'https://rapi.earthlink.iq/api/reseller',
     headers: { 'Authorization': `Bearer ${apitoken}` }
   });
 
+  const filterUsersByGroup = (resUsers) =>
+  {
+    const results = resUsers.filter(r => userIndexByGroup.find(u => u.customer_user_index == r.userIndex))
+    return results;
+  }
+
+ 
   useEffect(() => {
     instance.post('/activesessions', filterObj)
       .then(res => {
-        setOnlineUsersData({ users: res?.data?.value?.itemsList, total: res?.data?.value?.totalCount, errMessage: '', loading: false })
-        // setOnlineUsersData({ users: [], errMessage: '', loading: false })
-        console.log(res?.data?.value?.itemsList?.length)
+
+        if (res?.data?.value?.itemsList?.length > 0 && userIndexByGroup !== 'all'){
+          const results = filterUsersByGroup(res?.data?.value?.itemsList)
+          // console.log(results)
+          setOnlineUsersData({ users: results, total: results.length, errMessage: '', loading: false })
+
+        }else{
+          setOnlineUsersData({ users: res?.data?.value?.itemsList, total: res?.data?.value?.totalCount, errMessage: '', loading: false })
+
+        }
+       
       })
       .catch(err => {
         setOnlineUsersData({ users: [], total: 0, errMessage: err?.message, loading: false })
         console.log(err)
       })
   }, [filterObj])
+
 
 
   return (

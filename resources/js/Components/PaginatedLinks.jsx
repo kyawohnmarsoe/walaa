@@ -11,6 +11,7 @@ import TestUsageTable from '@/Pages/Reports/Stats/TestUsage/TestUsageTable';
 import TotalItemsCount from '@/Components/DaisyUI/TotalItemsCount'
 import PageSize from '@/Components/DaisyUI/PageSize'
 import ExpenseTable from '@/Pages/Expenses/ExpenseTable';
+import InvoiceTable from '@/Pages/Invoices/InvoiceTable';
 
 
 export default function PaginatedLinks({
@@ -104,7 +105,10 @@ export default function PaginatedLinks({
                 tableName == 'testUsage' && <TestUsageTable items={currentItems} />
             }
 
-         
+            {
+                tableName == 'invoices' && <InvoiceTable items={ currentItems } auth={ auth }  />
+
+            }
 
             {
                 tableName == 'expenses' && <ExpenseTable items={ currentItems } auth={ auth } users={ users }/>
