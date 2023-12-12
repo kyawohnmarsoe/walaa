@@ -38,6 +38,10 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {   
 
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+
+    //========= Start Get Data From API Route =========//
+    Route::get('/dashboard/statslist', [DashboardController::class, 'get_statsList'])->name('dashboard.statslist');
+    Route::get('/dashboard/servicePhones', [DashboardController::class, 'get_servicePhones'])->name('dashboard.servicePhones');
     
     Route::get('/users/online', [UserController::class, 'showOnlineUsers'])->name('users.online');
     Route::get('/user/{id}', [UserController::class, 'getUserDetails'])->name('user.details');

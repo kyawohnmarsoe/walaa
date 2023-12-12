@@ -1,17 +1,15 @@
 import OnlineUsersTableRow from './OnlineUsersTableRow'
 
-export default function OnlineUsersTable ({ users, apitoken })
-{
+export default function OnlineUsersTable({ users, apitoken }) {
 
   return (
     <div className="overflow-x-auto">
-      {/* <Pagination /> */ }
+      {/* <Pagination /> */}
       <table className="table">
-        {/* head */ }
+        {/* head */}
         <thead>
           <tr className='bg-emerald-300'>
             {/* <th>#Index</th> */}
-          
             <th>Username</th>
             <th>Online Status</th>
             <th>Online Time</th>
@@ -27,7 +25,7 @@ export default function OnlineUsersTable ({ users, apitoken })
 
         <tbody>
           {
-            !!users?.length ? users.map((user, index) => <OnlineUsersTableRow apitoken={ apitoken } user={ user } key={ user.userIndex } index={ index } />)
+            !!users?.length ? users.map((user, index) => <OnlineUsersTableRow apitoken={apitoken} user={user} key={user.userIndex} index={index} />)
               : <tr><td className='text-error'>No User Found!</td></tr>
           }
         </tbody>

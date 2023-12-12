@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Stats from './Stats';
 import Alert from '../../Components/DaisyUI/Alert';
 import Loading from '@/Components/DaisyUI/Loading';
-
+import { router } from '@inertiajs/react';
+import axios from 'axios';
 
 export default function StatsList({ apitoken }) {
   const [statsData, setStatsData] = useState({ stats: [], errMessage: '', loading: true })
@@ -21,26 +22,35 @@ export default function StatsList({ apitoken }) {
     "ActivatedThisMonth": ``,
   }
 
-  const instance = axios.create({
-    baseURL: 'https://rapi.earthlink.iq/api/reseller',
-    timeout: 60000,
-    // withCredentials: true,
-    xsrfCookieName: "XSRF-TOKEN",
-    xsrfHeaderName: "X-XSRF-TOKEN",
-    headers: { 
-      'Accept':'application/json',
-      'Authorization': `Bearer ${apitoken}`
-     }
-  });
+  // const instance = axios.create({
+  //   baseURL: 'https://rapi.earthlink.iq/api/reseller',
+  //   timeout: 60000,
+  //   // withCredentials: true,
+  //   xsrfCookieName: "XSRF-TOKEN",
+  //   xsrfHeaderName: "X-XSRF-TOKEN",
+  //   headers: {
+  //     'Accept': 'application/json',
+  //     'Authorization': `Bearer ${apitoken}`
+  //   }
+  // });
 
-  console.log(apitoken)
-  useEffect(() =>
-  {
-    instance.get('/home/Dashboard')
+  // console.log(apitoken)
+  useEffect(() => {
+    // instance.get('/home/Dashboard')
+    //   .then(res => {
+    //     // setStatsData({ stats: res.data.value, errMessage: '', loading: false })
+    //     // setStatsData({ stats: [], errMessage: '', loading: false })
+    //     // console.log(res.data.value)
+    //   })
+    //   .catch(err => {
+    //     setStatsData({ stats: [], errMessage: err.message, loading: false })
+    //     // console.log(err.message)
+    //   })
+
+    axios.get('/dashboard/statslist')
       .then(res => {
         setStatsData({ stats: res.data.value, errMessage: '', loading: false })
-        // setStatsData({ stats: [], errMessage: '', loading: false })
-        console.log(res.data.value)
+        // console.log(res.data.value)
       })
       .catch(err => {
         setStatsData({ stats: [], errMessage: err.message, loading: false })

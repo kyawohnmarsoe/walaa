@@ -6,6 +6,7 @@ import React, { useState, useEffect } from 'react'
 import OnlineUsersSearch from './OnlineUsersSearch';
 import Loading from '@/Components/DaisyUI/Loading';
 import PaginatedItems from '@/Components/DaisyUI/PaginatedItems';
+import axios from 'axios';
 
 export default function OnlineUsers({ auth, apitoken, affiliates }) {
   const [onlineUsersData, setOnlineUsersData] = useState({ users: [], total: 0, errMessage: '', loading: true })
@@ -24,12 +25,13 @@ export default function OnlineUsers({ auth, apitoken, affiliates }) {
       .then(res => {
         setOnlineUsersData({ users: res?.data?.value?.itemsList, total: res?.data?.value?.totalCount, errMessage: '', loading: false })
         // setOnlineUsersData({ users: [], errMessage: '', loading: false })
-        console.log(res?.data?.value?.itemsList?.length)
+        // console.log(res?.data?.value?.itemsList?.length)
       })
       .catch(err => {
         setOnlineUsersData({ users: [], total: 0, errMessage: err?.message, loading: false })
-        console.log(err)
+        // console.log(err)
       })
+
   }, [filterObj])
 
 

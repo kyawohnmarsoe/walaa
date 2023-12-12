@@ -5,7 +5,6 @@ import Alert from '@/Components/DaisyUI/Alert';
 import ServicePhones from './ServicePhones';
 import React, { useState, useEffect } from 'react';
 
-
 export default function Dashboard({ auth, apitoken }) {
 
     return (
@@ -19,7 +18,7 @@ export default function Dashboard({ auth, apitoken }) {
         >
             <Head title="Dashboard" />
 
-            {/* { apitoken } */}
+            {/* {apitoken} */}
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-4">

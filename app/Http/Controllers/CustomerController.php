@@ -68,7 +68,7 @@ class CustomerController extends Controller
         
         $totalCount = $this->get_totalcount(); 
         
-        if ($request->hasAny(['account_index', 'sub_account_id', 'affiliate_index', 'customer_user_id', 'status'])) {
+        if ($request->hasAny(['account_index', 'sub_account_id', 'affiliate_index', 'customer_user_id', 'status', 'user_group_id'])) {
            
             $customers_query = Customer::leftJoin('affiliates', 'affiliates.affiliate_index', '=', 'customers.affiliate_index')
                 ->leftJoin('accounts', 'accounts.account_index', '=', 'customers.account_index')
@@ -82,7 +82,9 @@ class CustomerController extends Controller
                     return $q->where('customers.customer_user_id', 'LIKE', '%'.request('customer_user_id').'%');
                 })->when(request('active_status') != '', function ($q) {
                     return $q->where('customers.active_status', '=', request('active_status'));
-                }); 
+                })->when(request('user_group_id') != '', function ($q) {
+                    return $q->where('customers.user_group_id', request('user_group_id'));
+                });
                 // ->whereNull('customers.user_group_id')                
 
             $show_data = 'filter_list';
@@ -101,21 +103,24 @@ class CustomerController extends Controller
 
         if(count($user_has_groups_idArr) == 0 || $count_user_groups == count($user_has_groups_idArr)){
             $customers = $customers_query->get(['customers.*', 'affiliates.affiliate_name', 'accounts.account_name']);            
+            $filter_user_groups = User_group::all();
         } else {
             $customers = $customers_query->whereIn('customers.user_group_id', $user_has_groups_idArr)
             ->get(['customers.*', 'affiliates.affiliate_name', 'accounts.account_name']);
+            $filter_user_groups = User_group::whereIn('user_groups.id', $user_has_groups_idArr)
+                        ->get();
         }
 
         // return response(compact('customers'));
 
         return Inertia::render('Customers/Customers', [
-            'customers' => $customers,
+            'customers'    => $customers,
             'sub_accounts' => Sub_account::all(),              
-            'accounts' => Account::all(),
-            'affiliates' => Affiliate::all(),  
-            'user_groups' => User_group::all(),
-            'show_data' => $show_data,
-            'apitoken' => $token, 
+            'accounts'    => Account::all(),
+            'affiliates'  => Affiliate::all(),  
+            'user_groups' => $filter_user_groups,// User_group::all(),
+            'show_data'  => $show_data,
+            'apitoken'   => $token, 
             'totalCount' => $totalCount,                 
         ]);
     } // index
@@ -367,5 +372,6 @@ class CustomerController extends Controller
 		$data = Customer::where('customer_user_index', $index)->firstOrFail();
 		$data->update($input);
         return redirect()->route('customers')->with('message', 'User is successfully disabled!');
-    } // destroy
+    } // destroy    
+   
 }

@@ -108,6 +108,7 @@ export default function Customers({
                                 accounts={accounts}
                                 sub_accounts={sub_accounts}
                                 affiliates={affiliates}
+                                user_groups={user_groups}
                             />
                         </div>
                     }

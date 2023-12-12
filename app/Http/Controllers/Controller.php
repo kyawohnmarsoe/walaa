@@ -25,20 +25,15 @@ class Controller extends BaseController
             "password"   => "@walaalink@",
             "loginType"  => "1",
             "grant_type" => "password"
-        ]; 
-        
+        ];         
         $api_response       = Http::asForm()->post($apiURL, $data);
-
         // dd($api_response) ;
-
-         if (!$api_response){
+        if (!$api_response){
             return "can not get token";
-         }
-
+        }
         $api_response_token = json_decode($api_response->getBody(), true); 
         $api_token = $api_response_token ? $api_response_token['access_token'] : null;  
-        return $api_token;       
-        
+        return $api_token;
     } // GetApiToken
 
     public function getSessionToken() {
@@ -77,7 +72,7 @@ class Controller extends BaseController
             $current_time = $apiData[0]['current_time'];
             $maxIdleTime = 3599;
             if (time() - $current_time > $maxIdleTime) {  
-                $new_api_token = $this->GetApiToken();            
+                $new_api_token = $this->GetApiToken();   
                 $new_data = [
                     'apitoken' => $new_api_token, 
                     'current_time' => time()

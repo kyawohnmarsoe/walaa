@@ -9,6 +9,7 @@ use Inertia\Response;
 use Illuminate\Http\Request;
 use App\Models\Affiliate;
 use App\Models\Account;
+use Illuminate\Support\Facades\Http;
  
 class UserController extends Controller
 {
@@ -27,15 +28,14 @@ class UserController extends Controller
         return Inertia::render('Dashboard');
     }
 
-
-     public function showOnlineUsers(): Response
+    public function showOnlineUsers(): Response
     {
         $token = $this->getSavedToken();      
         return Inertia::render('Users/OnlineUsers',[
             'apitoken' => $token, 
             'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get()
         ]);
-    }
+    }    
 
      public function showAllUsers(): Response
     {
