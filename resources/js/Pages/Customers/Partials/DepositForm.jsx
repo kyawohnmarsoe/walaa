@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react';
-import { useForm, router } from '@inertiajs/react';
-import { Transition } from '@headlessui/react';
+import { useForm, router, usePage } from '@inertiajs/react';
 
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
-import Textarea from '@/Components/Textarea';
-import SelectOption from '@/Components/SelectOption';
 
-export default function AddForm({ className = '', accounts, apitoken, deposit_password, deposit_id }) {
+export default function DepositForm({ className = '', accounts, apitoken, deposit_password, deposit_id }) {
 
-    const { processing, recentlySuccessful } = useForm();
+    const { processing } = useForm();
+
+    const { flash } = usePage().props
 
     const [values, setValues] = useState({
         deposit_password: deposit_password,
@@ -36,7 +35,7 @@ export default function AddForm({ className = '', accounts, apitoken, deposit_pa
 
     return (
         <section className={className}>
-            <div className='flex items-center justify-end gap-4 p-2'>
+            {/* <div className='flex items-center justify-end gap-4 p-2'>
                 <a
                     className='inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 transition ease-in-out duration-150 false '
                     href={route('customers.create')}>
@@ -50,12 +49,18 @@ export default function AddForm({ className = '', accounts, apitoken, deposit_pa
                     </svg>
                     Users List
                 </a>
-            </div>
+            </div> */}
             <header>
                 <h2 className="text-lg font-medium text-sky-600">Change Deposit Password</h2>
             </header>
 
             <form onSubmit={handleSubmit} className="mt-6 space-y-6 ">
+
+                {flash.message &&
+                    <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4" role="alert">
+                        <p>{flash.message}</p>
+                    </div>
+                }
 
                 <div className='grid grid-cols-3 gap-4'>
 

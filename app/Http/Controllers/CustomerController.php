@@ -42,20 +42,20 @@ class CustomerController extends Controller
        
     } // get_totalcount
 
-    public function get_deposit_password() {
+    // public function get_deposit_password() {
 
-        $all_data = Deposit_pass::all();
-        if($all_data->count() > 0) {
-            $id = $all_data[0]['id'];
-            $data = Deposit_pass::findOrFail($id);
-            $deposit_password = $data->deposit_password;
-            $deposit_password_id = $data->id;
-            return [
-                'id'=> $deposit_password_id,
-                'deposit_password' => $deposit_password
-            ];
-        }      
-    } // get_deposit_password   
+    //     $all_data = Deposit_pass::all();
+    //     if($all_data->count() > 0) {
+    //         $id = $all_data[0]['id'];
+    //         $data = Deposit_pass::findOrFail($id);
+    //         $deposit_password = $data->deposit_password;
+    //         $deposit_password_id = $data->id;
+    //         return [
+    //             'id'=> $deposit_password_id,
+    //             'deposit_password' => $deposit_password
+    //         ];
+    //     }      
+    // } // get_deposit_password   
    
     public function index(Request $request)
     {
@@ -139,28 +139,28 @@ class CustomerController extends Controller
         
     } // create
     
-    public function change_deposit_password() {
-        $token = $this->getSavedToken();
-        $deposit_data = $this->get_deposit_password();
-        return Inertia::render('Customers/Customers', [
-            'show_data'  => 'deposit_form',
-            'accounts' => Account::all(),
-            'sub_accounts' => Sub_account::all(),
-            'affiliates' => Affiliate::all(),
-            'apitoken' => $token,
-            'deposit_password' => $deposit_data['deposit_password'],  
-            'deposit_id' => $deposit_data['id'],
-        ]);
+    // public function change_deposit_password() {
+    //     $token = $this->getSavedToken();
+    //     $deposit_data = $this->get_deposit_password();
+    //     return Inertia::render('Customers/Customers', [
+    //         'show_data'  => 'deposit_form',
+    //         'accounts' => Account::all(),
+    //         'sub_accounts' => Sub_account::all(),
+    //         'affiliates' => Affiliate::all(),
+    //         'apitoken' => $token,
+    //         'deposit_password' => $deposit_data['deposit_password'],  
+    //         'deposit_id' => $deposit_data['id'],
+    //     ]);
         
-    } // change_deposit_password
+    // } // change_deposit_password
 
-    public function update_deposit_password(Request $request, $id) 
-    {       
-        $input = $request->all();
-		$data = Deposit_pass::findOrFail($id);
-		$data->update($input);
-        return redirect()->route('customers')->with('message', 'Deposit password is successfully updated!');      
-    }
+    // public function update_deposit_password(Request $request, $id) 
+    // {       
+    //     $input = $request->all();
+	// 	$data = Deposit_pass::findOrFail($id);
+	// 	$data->update($input);
+    //     return redirect()->route('customers')->with('message', 'Deposit password is successfully updated!');  
+    // }
     
     public function insert(StoreCustomerRequest $request) {
         $token   = $this->getSavedToken();

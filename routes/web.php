@@ -11,7 +11,8 @@ use App\Http\Controllers\UserGroupController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AffiliateController;
-use App\Http\Controllers\CustomerController; 
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DepositController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\EarthlinkProfileController;
 use App\Http\Controllers\LogController;
@@ -76,14 +77,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/customers', [CustomerController::class, 'index'])->name('customers');
     Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create');
     Route::post('/customers/insert', [CustomerController::class, 'insert'])->name('customers.insert');
-    Route::post('/customers', [CustomerController::class, 'index'])->name('customers.filter');
-    Route::get('/customers/change_deposit_pass', [CustomerController::class, 'change_deposit_password'])->name('customers.change_deposit_pass');
-    Route::post('/customers/change_deposit_pass/{id}', [CustomerController::class, 'update_deposit_password'])->name('customers.update_deposit_pass');
+    Route::post('/customers', [CustomerController::class, 'index'])->name('customers.filter');    
     Route::get('/customers/store/api/{totalCount}', [CustomerController::class, 'store_api'])->name('customers.store.api');
     Route::get('/customers/{index}', [CustomerController::class, 'edit'])->name('customers.edit');
     Route::post('/customers/{index}', [CustomerController::class, 'update'])->name('customers.update');    
-    Route::delete('/customers/{index}', [CustomerController::class, 'destroy'])->name('customers.destroy');  
+    Route::delete('/customers/{index}', [CustomerController::class, 'destroy'])->name('customers.destroy');
+    // Route::get('/customers/change_deposit_pass', [CustomerController::class, 'change_deposit_password'])->name('customers.change_deposit_pass');
+    // Route::post('/customers/change_deposit_pass/{id}', [CustomerController::class, 'update_deposit_password'])->name('customers.update_deposit_pass');  
     Route::get('/users/management', [UserController::class, 'showAllUsers'])->name('users.management');
+
+    Route::get('/deposit', [DepositController::class, 'change_deposit_password'])->name('deposit');
+    Route::post('/deposit/{id}', [DepositController::class, 'update_deposit_password'])->name('deposit.update_deposit_pass'); 
 
     // Route::group(['middleware' => ['auth', 'role:admin']], function() {
         Route::get('/tickets', [TicketController::class, 'index'])->name('tickets');

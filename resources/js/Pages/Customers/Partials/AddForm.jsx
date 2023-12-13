@@ -228,11 +228,11 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
     return (
         <section className={className}>
             <div className='flex items-center justify-end gap-4 p-2'>
-                <a
+                {/* <a
                     className="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 transition ease-in-out duration-150 false "
                     href={route('customers.change_deposit_pass')}>
                     Change Deposit Password
-                </a>
+                </a> */}
                 <a
                     className='inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium border-sky-300 text-sky-600 focus:border-sky-700 cursor-pointer'
                     href={route('customers')}>
