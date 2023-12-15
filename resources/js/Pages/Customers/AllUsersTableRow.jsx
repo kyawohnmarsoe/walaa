@@ -3,7 +3,7 @@ import { Link } from '@inertiajs/react';
 import RefillModal from "./RefillModal";
 import ChangeModal from "./ChangeModal";
 
-export default function AllUsersTableRow({ user, accountTypes, apitoken }) {
+export default function AllUsersTableRow ({ auth, user, accountTypes, apitoken, deposit_password }) {
   const [modals, setModals] = useState({
     reFill: false,
     change: false,
@@ -43,7 +43,7 @@ export default function AllUsersTableRow({ user, accountTypes, apitoken }) {
 
   return (
     <>
-      <RefillModal modals={modals} setModals={setModals} accountTypes={accountTypes} apitoken={apitoken} user={user} />
+      <RefillModal modals={ modals } setModals={ setModals } accountTypes={ accountTypes } apitoken={ apitoken } user={ user } deposit_password={ deposit_password } auth={ auth }/>
       <ChangeModal modals={modals} setModals={setModals} accountTypes={accountTypes} apitoken={apitoken} user={user} />
 
       <tr>

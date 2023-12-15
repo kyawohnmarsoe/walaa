@@ -3,21 +3,28 @@ import React, { useEffect, useState } from "react";
 export default function ServicePhones({ apitoken }) {
     const [phones, setPhones] = useState(null)
 
-    const instance = axios.create({
-        baseURL: 'https://rapi.earthlink.iq/api/reseller',
-        headers: { 'Authorization': `Bearer ${apitoken}` }
-    });
+    // const instance = axios.create({
+    //     baseURL: 'https://rapi.earthlink.iq/api/reseller',
+    //     headers: { 'Authorization': `Bearer ${apitoken}` }
+    // });
 
     useEffect(() => {
-        instance.get('/support/phones')
+        // instance.get('/support/phones')
+        //     .then(res => {
+        //         setPhones(res.data)
+        //         console.log(res.data)
+        //     })
+        //     .catch(err => { console.log(err.message) })
+
+        axios.get('/dashboard/servicePhones')
             .then(res => {
                 setPhones(res.data)
-                console.log(res.data)
+                // console.log(res.data)
             })
             .catch(err => { console.log(err.message) })
     }, [])
 
-    console.log(phones)
+    // console.log(phones)
 
     return (
         <>

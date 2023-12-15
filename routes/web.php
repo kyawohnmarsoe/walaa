@@ -18,6 +18,7 @@ use App\Http\Controllers\LogController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\ApidataController;
 
 Route::get('/test', [DashboardController::class, 'test'])->name('test');
 Route::get('/test2', [DashboardController::class, 'test2'])->name('test2');
@@ -38,6 +39,10 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {   
 
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+
+    //========= Start Get Data From API Route =========//
+    Route::get('/dashboard/statslist', [DashboardController::class, 'get_statsList'])->name('dashboard.statslist');
+    Route::get('/dashboard/servicePhones', [DashboardController::class, 'get_servicePhones'])->name('dashboard.servicePhones');
     
     Route::get('/users/online', [UserController::class, 'showOnlineUsers'])->name('users.online');
     Route::get('/user/{id}', [UserController::class, 'getUserDetails'])->name('user.details');
@@ -48,7 +53,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/systemuser/store', [SystemUserController::class, 'store'])->name('systemuser.store');
     Route::get('/systemuser/{id}', [SystemUserController::class, 'edit'])->name('systemuser.edit');
     Route::post('/systemuser/{id}', [SystemUserController::class, 'update'])->name('systemuser.update');
-    Route::delete('/systemuser/{id}', [SystemUserController::class, 'destroy'])->name('systemuser.destroy');  
+    Route::delete('/systemuser/{id}', [SystemUserController::class, 'destroy'])->name('systemuser.destroy'); 
+    
+    Route::get('/apidata', [ApidataController::class, 'index'])->name('apidata');
 
     Route::get('/usergroup', [UserGroupController::class, 'index'])->name('usergroup');
     Route::get('/usergroup/create', [UserGroupController::class, 'create'])->name('usergroup.create');
@@ -68,6 +75,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/affiliates', [AffiliateController::class, 'index'])->name('affiliates');
     Route::get('/affiliates/store', [AffiliateController::class, 'store'])->name('affiliates.store');
+
+    Route::get('/deposit/password',[CustomerController::class, 'deposit'])->name('deposit.password');
 
     Route::get('/customers', [CustomerController::class, 'index'])->name('customers');
     Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create');

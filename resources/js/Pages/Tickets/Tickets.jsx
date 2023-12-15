@@ -39,8 +39,10 @@ export default function Tickets({
         >
             <Head title="Tickets" />
 
-            <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+            <div className="py-12 ">
+                <div className="max-w-8xl mx-auto sm:px-6 lg:px-4">
+                    <div className="bg-white overflow-hidden shadow-sm ">
+                        <div className="text-gray-900">
 
                     {/* {roles}
                     {permissions} */}
@@ -152,9 +154,10 @@ export default function Tickets({
                         </div>
                     }
 
+                        </div>
+                    </div>
                 </div>
             </div>
-
         </AuthenticatedLayout>
     );
 }

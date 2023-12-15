@@ -6,7 +6,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import SelectOption from '@/Components/SelectOption';
 
-export default function FilterForm({ className = '', accounts, sub_accounts, affiliates }) {
+export default function FilterForm({ className = '', accounts, sub_accounts, affiliates, user_groups }) {
 
     const { processing } = useForm();
 
@@ -17,11 +17,13 @@ export default function FilterForm({ className = '', accounts, sub_accounts, aff
         customer_user_id: '',
         status: '',
         active_status: '',
+        user_group_id: '',
     });
 
     const [optionsAccounts, setOptionsAccounts] = useState([])
     const [optionsSubAccounts, setOptionsSubAccounts] = useState([])
     const [optionsAffiliates, setOptionsAffiliates] = useState([])
+    const [optionsUserGroups, setOptionsUserGroups] = useState([])
 
     const optionsStatus = [
         {
@@ -78,9 +80,25 @@ export default function FilterForm({ className = '', accounts, sub_accounts, aff
         setOptionsAffiliates(optionsAffiliatesArr)
     }
 
+    const getUserGroups = () => {
+        let optionsUserGroupsArr = [];
+        {
+            user_groups.map((e) => {
+                optionsUserGroupsArr.push(
+                    {
+                        "index": e.id,
+                        "name": e.group_name
+                    }
+                );
+            });
+        }
+        setOptionsUserGroups(optionsUserGroupsArr)
+    }
+
     useEffect(() => {
         getAffiliates()
         getAccounts()
+        getUserGroups()
     }, [])
 
     function affiliatesHandleChange(e) {
@@ -136,6 +154,14 @@ export default function FilterForm({ className = '', accounts, sub_accounts, aff
         setValues(values => ({
             ...values,
             'active_status': value,
+        }))
+    }
+
+    function userGroupsHandleChange(e) {
+        const value = e.target.value
+        setValues(values => ({
+            ...values,
+            'user_group_id': value,
         }))
     }
 
@@ -231,6 +257,18 @@ export default function FilterForm({ className = '', accounts, sub_accounts, aff
                             select_text="Active / Disable Status"
                             name="active_status"
                             onChange={activeStatusHandleChange}
+                        />
+                    </div>
+
+                    <div>
+                        <InputLabel htmlFor="user_group_id" value="User Groups" />
+                        <SelectOption
+                            id="user_group_id"
+                            className="mt-1 block w-full"
+                            options={optionsUserGroups}
+                            select_text="User Groups"
+                            name="user_group_id"
+                            onChange={userGroupsHandleChange}
                         />
                     </div>
                 </div>

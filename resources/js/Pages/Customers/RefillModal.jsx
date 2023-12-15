@@ -7,12 +7,12 @@ import SecondaryButton from '@/Components/SecondaryButton';
 import { Link, useForm, usePage, router } from '@inertiajs/react';
 import InputError from '@/Components/InputError';
 
-export default function RefillModal({ modals, setModals, user, apitoken, accountTypes }) {
+export default function RefillModal ({ auth,modals, setModals, user, apitoken, accountTypes, deposit_password }) {
     let { flash } = usePage().props
-
+  
     const { data, setData, post, processing, errors, reset } = useForm({
         UserId: user?.userID,
-        DepositPassword: '',
+        DepositPassword: deposit_password,
         AccountId: '',
         Status: 'NotPaid',
         PaymentDueDate: '',
@@ -32,27 +32,37 @@ export default function RefillModal({ modals, setModals, user, apitoken, account
     });
 
     const getUserInfo = () => {
+        console.log({ UserID: user?.userID })
         instance.post('/userpayment/usersInvoice', { UserID: user?.userID })
             .then(res => {
-                // setNewUserData({ newUser: res.data.value })
+                console.log(res.data.value.itemsList[0])
 
-                console.log('getUserInfo runing ...')
-                // console.log(res.data.value)
-                const payment = res.data.value.itemsList[0];
-                res.data.value.itemsList.length && post(route('invoice.store', { payment: { ...payment, modifyUser: auth.user.name, } }));
-                console.log(' store data')
+                if (res.data.value.itemsList.length){
+                    
+                    const invoice = res.data.value.itemsList[0];
+                    console.log(auth.user.name)
+                    post(route('invoices.store', { invoice: { ...invoice, modifyUser: auth.user.name} }));
+
+                    console.log(' data stored')
+                }else{
+                    console.log('no invoice')
+                }
+               
             })
             .catch(err => {
-                console.log('error' + err)
+                console.log(err)
             })
     }
 
     const submit = (e) => {
-        // console.log(data)
+       
         e.preventDefault();
-        instance.post('/user/newrefilldeposit', { ...data, DepositPassword: +data?.DepositPassword })
+        
+        instance.post('/user/newrefilldeposit', { ...data, DepositPassword: +data?.DepositPassword })//DepositPassword: +data?.DepositPassword
+       
             .then(res => {
                 console.log('refill deposit runing ...')
+
                 res.data.value ? (setUpdateInfo({ errMessage: '', value: res.data.value }), getUserInfo()) :
                     (setUpdateInfo({ errMessage: res.data.error.message, value: '' }))
 
@@ -77,7 +87,7 @@ export default function RefillModal({ modals, setModals, user, apitoken, account
 
         setData({
             ...data,
-            DepositPassword: '',
+            DepositPassword: deposit_password,
             AccountId: '',
             Status: 'NotPaid',
             PaymentDueDate: '',
@@ -90,9 +100,6 @@ export default function RefillModal({ modals, setModals, user, apitoken, account
 
     };
 
-    useEffect(()=>{
-        console.log('reFillmodal')
-    },[])
     return (
         <Modal show={modals.reFill} onClose={closeModal} maxWidth={'xl'}>
             <form onSubmit={submit} className="p-6 scroll-form" autoComplete="off">
@@ -117,21 +124,21 @@ export default function RefillModal({ modals, setModals, user, apitoken, account
 
                 </div>
 
-                <div className="mt-6">
+                {/* <div className="mt-6">
                     <InputLabel htmlFor="DepositPassword" value="Deposit Password :" />
 
                     <TextInput
                         id="DepositPassword"
                         className="mt-1 block w-full  "
                         value={data?.DepositPassword}
-                        // type='number'
+                      
                         onChange={(e) => setData('DepositPassword', e.target.value)}
                         autoComplete="off"
                         required
                     />
                     <InputError className="mt-2" message={errors.DepositPassword} />
 
-                </div>
+                </div> */}
 
                 {
                     // !!+user?.activeDaysLeft &&

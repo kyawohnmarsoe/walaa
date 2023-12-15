@@ -14,7 +14,7 @@ export default function TestUsageTable ({ items })
                 {/* head */ }
                 <thead>
                     <tr className='bg-emerald-300'>
-                        <th>#Index</th>
+                        {/* <th>#Index</th> */}
                         <th>Affiliate Name</th>
                         <th>Test Count</th>
                         <th>Last Date Used</th>

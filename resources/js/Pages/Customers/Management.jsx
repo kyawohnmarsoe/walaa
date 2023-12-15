@@ -13,7 +13,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import { DownloadTableExcel } from 'react-export-table-to-excel';
 import { Link, useForm, usePage, router } from '@inertiajs/react';
 
-export default function Management({ auth, apitoken, affiliates, accountTypes }) {
+export default function Management ({ auth, apitoken, affiliates, accountTypes, deposit_password }) {
   // const { flash } = usePage().props
   const tableRef = useRef(null);
   const [onlineUsersData, setOnlineUsersData] = useState({ users: [], total: 0, errMessage: '', loading: true })
@@ -24,7 +24,7 @@ export default function Management({ auth, apitoken, affiliates, accountTypes })
     baseURL: 'https://rapi.earthlink.iq/api/reseller',
     headers: { 'Authorization': `Bearer ${apitoken}` }
   });
-
+  
   useEffect(() => {
     instance.post('/user/all', filterObj)
       .then(res => {
@@ -102,7 +102,7 @@ export default function Management({ auth, apitoken, affiliates, accountTypes })
                     filterObj={filterObj}
                   >
 
-                    <AllUsersTable users={users} tableRef={tableRef} accountTypes={accountTypes} apitoken={apitoken} />
+                  <AllUsersTable users={ users } tableRef={ tableRef } accountTypes={ accountTypes } apitoken={ apitoken } deposit_password={ deposit_password } auth={ auth }/>
 
                   </PaginatedItems>
                 </>

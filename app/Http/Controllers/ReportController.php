@@ -8,18 +8,25 @@ use Illuminate\Http\Request;
 class ReportController extends Controller
 {
     public function getUserSessions(){
+        $cusDataByLoginUserGroupId = $this->getUserIndexReqData_byLoggedInGroupSysUserId();
+
         $token = $this->getSavedToken();  
         return Inertia::render('Reports/Sessions/UserSessions',[
             'apitoken' => $token,
-            'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get()
+            'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get(),
+            'userIndexByGroup' => $cusDataByLoginUserGroupId
+
     ]);
     }
 
     public function getPrepaidNeeded(){
+       
         $token = $this->getSavedToken();  
         return Inertia::render('Reports/Prepaid/PrepaidNeeded',[
             'apitoken' => $token,
-            'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get()
+            'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get(),
+           
+
     ]);
     }
 
@@ -27,7 +34,9 @@ class ReportController extends Controller
         $token = $this->getSavedToken();  
         return Inertia::render('Reports/Deposit/AccountStatement',[
             'apitoken' => $token,
-            'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get()
+            'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get(),
+           
+
     ]);
     }
 

@@ -12,6 +12,8 @@ use App\Models\Apitoken;
 use App\Models\User_group;
 use App\Models\User_has_group;
 use App\Models\Customer;
+use App\Models\Deposit_pass;
+
 
 class Controller extends BaseController
 {
@@ -25,20 +27,15 @@ class Controller extends BaseController
             "password"   => "@walaalink@",
             "loginType"  => "1",
             "grant_type" => "password"
-        ]; 
-        
+        ];         
         $api_response       = Http::asForm()->post($apiURL, $data);
-
         // dd($api_response) ;
-
-         if (!$api_response){
+        if (!$api_response){
             return "can not get token";
-         }
-
+        }
         $api_response_token = json_decode($api_response->getBody(), true); 
         $api_token = $api_response_token ? $api_response_token['access_token'] : null;  
-        return $api_token;       
-        
+        return $api_token;
     } // GetApiToken
 
     public function getSessionToken() {
@@ -77,7 +74,7 @@ class Controller extends BaseController
             $current_time = $apiData[0]['current_time'];
             $maxIdleTime = 3599;
             if (time() - $current_time > $maxIdleTime) {  
-                $new_api_token = $this->GetApiToken();            
+                $new_api_token = $this->GetApiToken();   
                 $new_data = [
                     'apitoken' => $new_api_token, 
                     'current_time' => time()
@@ -122,5 +119,46 @@ class Controller extends BaseController
         }
         return $customers;
     }
+
+        public function get_deposit_password() {
+
+        $all_data = Deposit_pass::all();
+        if($all_data->count() > 0) {
+        $id = $all_data[0]['id'];
+        $data = Deposit_pass::findOrFail($id);
+        $deposit_password = $data->deposit_password;
+        $deposit_password_id = $data->id;
+        return [
+        'id'=> $deposit_password_id,
+        'deposit_password' => $deposit_password
+        ];
+        }
+        } // get_deposit_password
+
+
+            public function get_totalcount() {
+            $token = $this->getSavedToken();
+            $apiURL = 'https://rapi.earthlink.iq/api/reseller/user/all' ;
+            $headers = [
+            'Authorization'=>'Bearer '.$token,
+            'Accept' => 'application/json'
+            ];
+            $post_data = [
+            "Rowcount" => 1,
+            "OrderBy" => 'Account Name',
+
+            ];
+            $all_users_api = Http::withHeaders($headers)->post($apiURL, $post_data);
+            $all_users_response = json_decode($all_users_api->getBody(), true);
+
+            $totalCount = 0;
+            if ($all_users_response){
+            if($all_users_response['isSuccessful'] === true) {
+            $totalCount = $all_users_response['value']['totalCount'];
+            }
+            }
+            return $totalCount;
+
+            } // get_totalcount
     
 }

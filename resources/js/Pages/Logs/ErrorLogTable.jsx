@@ -11,7 +11,7 @@ export default function ErrorLogTable ({ logs })
                 {/* head */ }
                 <thead>
                     <tr className='bg-emerald-300'>
-                        <th>#</th>
+                        {/* <th>#</th> */}
                         {/* <th>User Index</th> */ }
                         <th>Username</th>
                         <th>Error Message</th>
@@ -29,17 +29,7 @@ export default function ErrorLogTable ({ logs })
                 </tbody>
 
                 {/* foot */ }
-                <tfoot>
-                    <tr>
-                        <th>#</th>
-                        <th>Username</th>
-                        <th>Error Message</th>
-                        <th>Error Time</th>
-                        <th>UserMAC</th>
-
-                    </tr>
-                </tfoot>
-
+               
             </table>
         </div>
     )

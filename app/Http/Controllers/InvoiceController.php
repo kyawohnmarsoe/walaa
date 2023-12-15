@@ -103,7 +103,8 @@ class InvoiceController extends Controller
     
     public function store(Request $request)
     {
-      //  dd($request);
+      
+      // return $request->invoice;
       $balance=$request->invoice['salePrice'];
       $data = [
         'invoinceID' => $request->invoice['invoinceID'],
@@ -120,11 +121,11 @@ class InvoiceController extends Controller
         'recordDate' => $request->invoice['recordDate'],
         'lastStatusChanged' => $request->invoice['lastStatusChanged'],
         'accountName' => $request->invoice['accountName'],
-        'notes' => $request->invoice['notes'],
+        // 'notes' => $request->invoice['notes'],
         'userID' => $request->invoice['userID'],
         'discountedPrice' => $request->invoice['discountedPrice'],
         'paymentDueDate' => $request->invoice['paymentDueDate'],
-        'paymentDueDateTime' => $request->invoice['paymentDueDateTime'],
+        // 'paymentDueDateTime' => $request->invoice['paymentDueDateTime'],
          'paidPrice' => $request->invoice['paidPrice'],
          'balance' => $balance,
          'invoiceStatus' => $request->invoice['invoiceStatus'],

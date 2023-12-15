@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import AllUsersTableRow from './AllUsersTableRow'
 
-export default function AllUsersTable({ users, tableRef, accountTypes, apitoken }) {
-
+export default function AllUsersTable ({ auth,users, tableRef, accountTypes, apitoken, deposit_password }) {
+ 
   return (
     <div className="overflow-x-auto">
 
@@ -25,7 +25,7 @@ export default function AllUsersTable({ users, tableRef, accountTypes, apitoken 
         <tbody>
 
           {
-            !!users?.length ? users.map(user => <AllUsersTableRow user={user} key={user.userIndex} accountTypes={accountTypes} apitoken={apitoken} />)
+            !!users?.length ? users.map(user => <AllUsersTableRow user={ user } key={ user.userIndex } accountTypes={ accountTypes } apitoken={ apitoken } deposit_password={ deposit_password } auth={ auth }/>)
               : <tr><td className='text-error'>No User Found!</td></tr>
           }
 

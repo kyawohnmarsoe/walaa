@@ -42,20 +42,21 @@ class CustomerController extends Controller
        
     } // get_totalcount
 
-    public function get_deposit_password() {
+    // public function get_deposit_password() {
 
-        $all_data = Deposit_pass::all();
-        if($all_data->count() > 0) {
-            $id = $all_data[0]['id'];
-            $data = Deposit_pass::findOrFail($id);
-            $deposit_password = $data->deposit_password;
-            $deposit_password_id = $data->id;
-            return [
-                'id'=> $deposit_password_id,
-                'deposit_password' => $deposit_password
-            ];
-        }      
-    } // get_deposit_password   
+    //     $all_data = Deposit_pass::all();
+    //     if($all_data->count() > 0) {
+    //         $id = $all_data[0]['id'];
+    //         $data = Deposit_pass::findOrFail($id);
+    //         $deposit_password = $data->deposit_password;
+    //         $deposit_password_id = $data->id;
+    //         return [
+    //             'id'=> $deposit_password_id,
+    //             'deposit_password' => $deposit_password
+    //         ];
+    //     }      
+    // } 
+    // get_deposit_password   
    
     public function index(Request $request)
     {
@@ -68,7 +69,7 @@ class CustomerController extends Controller
         
         $totalCount = $this->get_totalcount(); 
         
-        if ($request->hasAny(['account_index', 'sub_account_id', 'affiliate_index', 'customer_user_id', 'status'])) {
+        if ($request->hasAny(['account_index', 'sub_account_id', 'affiliate_index', 'customer_user_id', 'status', 'user_group_id'])) {
            
             $customers_query = Customer::leftJoin('affiliates', 'affiliates.affiliate_index', '=', 'customers.affiliate_index')
                 ->leftJoin('accounts', 'accounts.account_index', '=', 'customers.account_index')
@@ -82,7 +83,9 @@ class CustomerController extends Controller
                     return $q->where('customers.customer_user_id', 'LIKE', '%'.request('customer_user_id').'%');
                 })->when(request('active_status') != '', function ($q) {
                     return $q->where('customers.active_status', '=', request('active_status'));
-                }); 
+                })->when(request('user_group_id') != '', function ($q) {
+                    return $q->where('customers.user_group_id', request('user_group_id'));
+                });
                 // ->whereNull('customers.user_group_id')                
 
             $show_data = 'filter_list';
@@ -101,26 +104,32 @@ class CustomerController extends Controller
 
         if(count($user_has_groups_idArr) == 0 || $count_user_groups == count($user_has_groups_idArr)){
             $customers = $customers_query->get(['customers.*', 'affiliates.affiliate_name', 'accounts.account_name']);            
+            $filter_user_groups = User_group::all();
         } else {
             $customers = $customers_query->whereIn('customers.user_group_id', $user_has_groups_idArr)
             ->get(['customers.*', 'affiliates.affiliate_name', 'accounts.account_name']);
+            $filter_user_groups = User_group::whereIn('user_groups.id', $user_has_groups_idArr)
+                        ->get();
         }
 
         // return response(compact('customers'));
 
         return Inertia::render('Customers/Customers', [
-            'customers' => $customers,
+            'customers'    => $customers,
             'sub_accounts' => Sub_account::all(),              
-            'accounts' => Account::all(),
-            'affiliates' => Affiliate::all(),  
-            'user_groups' => User_group::all(),
-            'show_data' => $show_data,
-            'apitoken' => $token, 
+            'accounts'    => Account::all(),
+            'affiliates'  => Affiliate::all(),  
+            'user_groups' => $filter_user_groups,// User_group::all(),
+            'show_data'  => $show_data,
+            'apitoken'   => $token, 
             'totalCount' => $totalCount,                 
         ]);
     } // index
 
     public function create() {
+
+        // $this->getUserInfo('testuser@gmail.comm');
+
         $token = $this->getSavedToken();
         
         return Inertia::render('Customers/Customers', [
@@ -155,6 +164,56 @@ class CustomerController extends Controller
 		$data = Deposit_pass::findOrFail($id);
 		$data->update($input);
         return redirect()->route('customers')->with('message', 'Deposit password is successfully updated!');      
+    }
+
+    public function getUserInfo($userID){
+        $token = $this->getSavedToken();
+         $apiURL = 'https://rapi.earthlink.iq/api/reseller/userpayment/usersInvoice' ;
+         $headers = [
+         'Authorization'=>'Bearer '.$token,
+         'Accept' => 'application/json'
+         ];
+          $post_data = [
+          "UserID" => $userID, 
+          ];
+
+        $new_user_api = Http::withHeaders($headers)->post($apiURL, $post_data);
+         $new_user_response = json_decode($new_user_api->getBody(), true);
+          $invoice = $new_user_response['value']['itemsList'][0];
+          $balance=$invoice['salePrice'];
+          $modifyUser=Auth::user()->name;
+          $data = [
+          'invoinceID' => $invoice['invoinceID'],
+          'userIndex' => $invoice['userIndex'],
+          'displayName' => $invoice['displayName'],
+          'affiliateName' => $invoice['affiliateName'],
+          'invoiceType' => $invoice['invoiceType'],
+          'invoiceDescription' => $invoice['invoiceDescription'],
+          'invoiceDuration' => $invoice['invoiceDuration'],
+          'salePrice' => $invoice['salePrice'],
+          'retailPriceCurrency' => $invoice['retailPriceCurrency'],
+          'retailPrice' => $invoice['retailPrice'],
+          'referenceRecord' => $invoice['referenceRecord'],
+          'recordDate' => $invoice['recordDate'],
+          'lastStatusChanged' => $invoice['lastStatusChanged'],
+          'accountName' => $invoice['accountName'],
+          // 'notes' => $invoice['notes'],
+          'userID' => $invoice['userID'],
+          'discountedPrice' => $invoice['discountedPrice'],
+          'paymentDueDate' => $invoice['paymentDueDate'],
+          // 'paymentDueDateTime' => $invoice['paymentDueDateTime'],
+          'paidPrice' => $invoice['paidPrice'],
+          'balance' => $balance,
+          'invoiceStatus' => $invoice['invoiceStatus'],
+          'notes' => $invoice['notes'],
+          'modifyUser' => $modifyUser,
+          ];
+
+            // dd($data);
+          Invoice::create($data);
+
+        //   return redirect()->route('invoices')->with('status', 200);
+        
     }
     
     public function insert(StoreCustomerRequest $request) {
@@ -193,7 +252,7 @@ class CustomerController extends Controller
         ]; 
         $new_user_api = Http::withHeaders($headers)->post($apiURL, $post_data);
         $new_user_response  = json_decode($new_user_api->getBody(), true);
-
+ 
         // return response(compact('new_user_response'));        
 
         if ($new_user_response) {
@@ -236,7 +295,14 @@ class CustomerController extends Controller
                         'account_status'       => 'Active',
                         'account_package_type' => 'MonthlyPrepaid'                 
                     ]);
+
+                    $this->getUserInfo($request->email);
+                     //Invoice
+
                     return redirect()->route('customers')->with('message', $new_user_response['responseMessage']);
+
+                   
+
                 } else {
                     return redirect()->route('customers.create')->with(
                         'error_message', $new_user_response['error']
@@ -367,5 +433,12 @@ class CustomerController extends Controller
 		$data = Customer::where('customer_user_index', $index)->firstOrFail();
 		$data->update($input);
         return redirect()->route('customers')->with('message', 'User is successfully disabled!');
-    } // destroy
+    } // destroy  
+    
+     public function deposit(){
+     $deposit_data = $this->get_deposit_password();
+ 
+    //  return back()->with('pass', $deposit_data['deposit_password']);
+     }
+   
 }

@@ -8,7 +8,7 @@ import { Link, useForm, usePage, router } from '@inertiajs/react';
 import InputError from '@/Components/InputError';
 
 
-export default function AllUsersTableRow ({ user, accountTypes, apitoken })
+export default function AllUsersTableRow ({ user, accountTypes, apitoken, })
 {
   let { flash } = usePage().props
   // const [flash, setFlash] = useState(usePage().props)

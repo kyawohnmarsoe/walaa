@@ -5,7 +5,7 @@ export default function ErrorLogTableRow ({ log })
     return (
         <tr>
 
-            <td></td>
+            {/* <td></td> */}
 
             <td>
                 <div className="flex items-center space-x-3">

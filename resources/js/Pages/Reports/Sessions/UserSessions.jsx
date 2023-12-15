@@ -7,7 +7,7 @@ import Alert from "@/Components/DaisyUI/Alert";
 import PaginatedItems from '@/Components/DaisyUI/PaginatedItems';
 import UserSessionsTable from "./UserSessionsTable";
 
-export default function UserSessions ({ apitoken, auth, affiliates })
+export default function UserSessions ({ apitoken, auth, affiliates, userIndexByGroup })
 {
     const [data, setData] = useState({ sess: [], total: 0, errMessage: '', loading: true })
     const { sess, total, errMessage, loading } = data
@@ -20,6 +20,13 @@ export default function UserSessions ({ apitoken, auth, affiliates })
         headers: { 'Authorization': `Bearer ${ apitoken }` }
     });
 
+    const filterUsersByGroup = (resUsers) =>
+    {
+        const results = resUsers.filter(r => userIndexByGroup.find(u => u.customer_user_index == r.userIndex))
+        return results;
+    }
+
+
     useEffect(() =>
     {
         instance.post('/usersession/all', filterObj)
@@ -30,10 +37,20 @@ export default function UserSessions ({ apitoken, auth, affiliates })
                     return setData({ sess: [], total: 0, errMessage: '', loading: false })
 
                 }
-                setData({ sess: res?.data?.value?.itemsList, total: 500, errMessage: '', loading: false })
-                // setData({ users: [], errMessage: '', loading: false })
-                // console.log(res?.data?.value?.itemsList)
-                // console.log(data)
+
+                if (res?.data?.value?.itemsList?.length > 0 && userIndexByGroup !== 'all')
+                {
+                    const results = filterUsersByGroup(res?.data?.value?.itemsList)
+                    // console.log(results)
+                    setData({ sess: results, total: results.length, errMessage: '', loading: false })
+
+                } else
+                {
+                     setData({ sess: res?.data?.value?.itemsList, total: 500, errMessage: '', loading: false })
+
+                }
+
+               
             })
             .catch(err =>
             {

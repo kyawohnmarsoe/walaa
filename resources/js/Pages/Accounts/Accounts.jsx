@@ -46,9 +46,10 @@ export default function Accounts({ auth, accounts, show_data, account }) {
             }
         >
             <Head title="Accounts" />
-
-            <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-4 space-y-6">
+            <div className="py-12 ">
+            <div className="max-w-8xl mx-auto sm:px-6 lg:px-4">
+                <div className="bg-white overflow-hidden shadow-sm ">
+                    <div className="text-gray-900">
 
                     {flash.status == 422 &&
                         <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
@@ -157,6 +158,8 @@ export default function Accounts({ auth, accounts, show_data, account }) {
                     }
 
 
+                </div>
+            </div>
                 </div>
             </div>
 
