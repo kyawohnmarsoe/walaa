@@ -130,12 +130,16 @@ class TicketController extends Controller
 
     public function edit($id) {
         $token = $this->getSavedToken(); 
+
+        // dd(Ticket_remark::where('ticket_id', $id)->get());
         
         return Inertia::render('Tickets/Tickets', [
             'show_data'  => 'edit_form',
             'ticket' => Ticket::findOrFail($id),
             'customers' => Customer::all(),
-            'updated_by_loggedin_user' => Auth::id()
+            'users' => User::all(),
+            'updated_by_loggedin_user' => Auth::id(),
+             'remarks' => Ticket_remark::where('ticket_id', $id)->get()
         ]);
     } // edit
 

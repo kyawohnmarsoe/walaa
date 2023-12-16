@@ -30,6 +30,8 @@ export default function Tickets({
         router.get('/tickets/create')
     }
 
+   
+
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -150,6 +152,8 @@ export default function Tickets({
                                 customers={customers}
                                 ticket={ticket}
                                 updated_by_loggedin_user={updated_by_loggedin_user}
+                                            remarks={ remarks }
+                                            users={ users }
                             />
                         </div>
                     }

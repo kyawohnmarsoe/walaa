@@ -273,32 +273,40 @@ export default function AddForm({ className = '', customers, apitoken, errors })
 
                     <div>
                         <InputLabel htmlFor="image" value="Image" />
-                        <TextInput
-                            id="image"
-                            name="image"
-                            onChange={imageHandleChange}
-                            type="file"
-                            className="mt-1 block w-full"
-                        />
-                        <p className="mt-2 text-sm text-gray-500 " id="file_input_help">
-                            svg, png, jpg, jpeg or gif.
-                        </p>
-                        <img className="mt-4 h-auto max-w-xs rounded-lg" src={urlImage} />
+                        <div className='flex border-none'>
+                            <div>
+                                <TextInput
+                                    id="image"
+                                    name="image"
+                                    onChange={ imageHandleChange }
+                                    type="file"
+                                    className="mt-1 block w-full border-none rounded-none"
+                                /><p className="mt-2 text-sm text-gray-500 " id="file_input_help">
+                                    svg, png, jpg, jpeg or gif.
+                                </p>
+                            </div>
+                            <img className="h-auto max-w-xs rounded-lg" src={ urlImage } width='50' />
+                        </div>
                         <InputError className="mt-2" message={errors.image} />
                     </div>
 
                     <div>
                         <InputLabel htmlFor="attach_file" value="File Attachment" />
-                        <TextInput
-                            id="attach_file"
-                            name="attach_file"
-                            onChange={attachFileHandleChange}
-                            type="file"
-                            className="mt-1 block w-full"
-                        />
-                        <p className="mt-2 text-sm text-gray-500 " id="file_input_help">
-                            docx, doc, pdf, csv, xls or xlsx.
-                        </p>
+                        <div className='flex border-none'>
+                            <div>
+                                <TextInput
+                                    id="attach_file"
+                                    name="attach_file"
+                                    onChange={ attachFileHandleChange }
+                                    type="file"
+                                    className="mt-1 block w-full border-none rounded-none"
+                                />
+                                <p className="mt-2 text-sm text-gray-500 " id="file_input_help">
+                                    docx, doc, pdf, csv, xls or xlsx.
+                                </p>
+                            </div>
+                            {/* <p className="mt-4 text-sm text-emerald-600">{ urlAttachFile }</p> */}
+                        </div>
                         <InputError className="mt-2" message={errors.attach_file} />
                     </div>
                 </div>

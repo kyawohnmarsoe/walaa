@@ -10,8 +10,9 @@ import SelectOption from '@/Components/SelectOption';
 import Select, { components } from "react-select";
 import InputError from '@/Components/InputError';
 
-export default function EditForm({ className = '', ticket, customers, updated_by_loggedin_user }) {
+export default function EditForm ({ className = '', ticket, customers, updated_by_loggedin_user, remarks, users }) {
 
+    // console.log(users)
     const { processing, recentlySuccessful } = useForm();
 
     const { errors } = usePage().props
@@ -129,6 +130,7 @@ export default function EditForm({ className = '', ticket, customers, updated_by
     }
 
     useEffect(() => {
+       
         getCustomers()
         getSelectedCustomer(ticket.user_id)
         // console.log("old user value ", values.user_id)
@@ -219,6 +221,7 @@ export default function EditForm({ className = '', ticket, customers, updated_by
         router.post(`/tickets/${ticket.id}`, values)
     }
 
+   
     return (
         <section className={className}>
             <div className='flex items-center justify-end gap-4 p-2'>
@@ -339,33 +342,47 @@ export default function EditForm({ className = '', ticket, customers, updated_by
 
                     <div>
                         <InputLabel htmlFor="image" value="Image" />
-                        <TextInput
-                            id="image"
-                            name="image"
-                            onChange={imageHandleChange}
-                            type="file"
-                            className="mt-1 block w-full"
-                        />
-                        <p className="mt-2 text-sm text-gray-500 " id="file_input_help">
-                            svg, png, jpg, jpeg or gif.
-                        </p>
-                        <img className="mt-4 h-auto max-w-xs rounded-lg" src={urlImage} />
+                        <div className='flex border-none'>
+                            <div>
+                            <TextInput
+                                id="image"
+                                name="image"
+                                onChange={ imageHandleChange }
+                                type="file"
+                                className="mt-1 block w-full border-none rounded-none"
+                            /><p className="mt-2 text-sm text-gray-500 " id="file_input_help">
+                                svg, png, jpg, jpeg or gif.
+                            </p>
+                            </div>
+                            <img className="h-auto max-w-xs rounded-lg" src={ urlImage } width='50' />
+                        </div>
+                        
+                        
+                       
                         <InputError className="mt-2" message={errors.image} />
                     </div>
 
                     <div>
                         <InputLabel htmlFor="attach_file" value="File Attachment" />
-                        <TextInput
-                            id="attach_file"
-                            name="attach_file"
-                            onChange={attachFileHandleChange}
-                            type="file"
-                            className="mt-1 block w-full"
-                        />
-                        <p className="mt-2 text-sm text-gray-500 " id="file_input_help">
-                            docx, doc, pdf, csv, xls or xlsx.
-                        </p>
-                        <p className="mt-4 text-sm text-emerald-600">{urlAttachFile}</p>
+
+                        <div className='flex border-none'>
+                            <div>
+                                <TextInput
+                                    id="attach_file"
+                                    name="attach_file"
+                                    onChange={ attachFileHandleChange }
+                                    type="file"
+                                    className="mt-1 block w-full border-none rounded-none"
+                                />
+                                <p className="mt-2 text-sm text-gray-500 " id="file_input_help">
+                                    docx, doc, pdf, csv, xls or xlsx.
+                                </p>
+                            </div>
+                            <p className="mt-4 text-sm text-emerald-600">{ urlAttachFile }</p>
+                        </div>
+
+                        
+                        
                         <InputError className="mt-2" message={errors.attach_file} />
                     </div>
 
@@ -378,6 +395,41 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                         autoComplete="off"
                     />
                 </div>
+
+               
+                {
+                  remarks.map(rm => (
+                     
+                      <div className="max-w-xl rounded overflow-hidden shadow-lg px-3 pt-4 mb-4">
+                                <div className="grid grid-cols-3 gap-4">
+                                    <div className="col-span-2">
+                                        {rm.remarks}
+                                        <br/>
+                                    </div>
+                                    <div className="text-right">
+                                  <a href='/tickets/delete_remark/${rm.id}' key={ rm.id } className="text-sm text-red-500 underline remove_rm">Remove</a>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center pb-3">
+                                    <div className="mt-4 mb-2">
+                                        <p className="text-sm text-gray-900 leading-none mb-1">
+                                      { users.filter(user => user.id == rm.remark_by).map(filteredUser => (
+                                                filteredUser.name
+                                            )) }
+                                     
+                                    
+                                        </p><p className="text-xs text-gray-600">
+                                            { rm.created_at}
+                                        </p>
+                                    </div>
+                                </div>
+
+                        </div>
+
+                  ))
+                }
+               
 
                 <div className="flex items-center gap-4">
                     <PrimaryButton disabled={processing} type="submit">Update</PrimaryButton>

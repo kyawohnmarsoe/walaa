@@ -11,7 +11,7 @@ import { format, formatDistance } from 'date-fns';
 
 export default function TicketTable({ tickets, users, remarks }) {
     const [loading] = useState(false);
-
+   
     const { ticket_source, topic, level_of_importance } = usePage().props
     const [ticketSource] = useState([ticket_source])
     const [topicData] = useState([topic])
