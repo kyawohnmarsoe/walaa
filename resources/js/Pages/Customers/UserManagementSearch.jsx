@@ -2,19 +2,18 @@ import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
 import Checkbox from '@/Components/Checkbox';
 import PrimaryButton from '@/Components/PrimaryButton';
-import { useForm } from '@inertiajs/react';
+import { useForm, usePage } from '@inertiajs/react';
 import { useEffect } from 'react';
 
-export default function UserManagementSearch ({ className = '', affiliates, accountTypes, filterObj, setFilterObj })
-{
+export default function UserManagementSearch({ className = '', affiliates, accountTypes, filterObj, setFilterObj }) {
     const status = ['All', 'Active', 'Inactive', 'Online', 'Offline', 'Will Expire', 'Expired', 'Activated', 'Didn\'t Pay', 'Paid', '', 'Manually suspended']
 
     const filterValue = new URLSearchParams(document.location.search).get("filterValue");
 
-    const getAccountStatusID = () =>
-    {
-        switch (filterValue)
-        {
+    const { flash } = usePage().props
+
+    const getAccountStatusID = () => {
+        switch (filterValue) {
             case 'ActiveUsers':
                 return 1;
                 break;
@@ -55,8 +54,7 @@ export default function UserManagementSearch ({ className = '', affiliates, acco
         AccountStatusID: getAccountStatusID()
     });
 
-    useEffect(() =>
-    {
+    useEffect(() => {
 
         // return () => {
         //     reset('password');
@@ -66,8 +64,7 @@ export default function UserManagementSearch ({ className = '', affiliates, acco
 
     }, [filterValue]);
 
-    const submit = (e) =>
-    {
+    const submit = (e) => {
         e.preventDefault();
 
         // post(route('user.update'));
@@ -79,8 +76,15 @@ export default function UserManagementSearch ({ className = '', affiliates, acco
     return (
         <div className="pt-12 ">
             <div className="max-w-8xl mx-auto sm:px-6 lg:px-4">
+
+                {flash.message &&
+                    <div className="bg-green-100 border-l-4 mb-2 border-green-500 text-green-700 p-4" role="alert">
+                        <p>{flash.message}</p>
+                    </div>
+                }
+
                 <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <section className={ className }>
+                    <section className={className}>
                         <header>
                             <h2 className="text-lg font-medium text-sky-600">User Management</h2>
 
@@ -89,7 +93,7 @@ export default function UserManagementSearch ({ className = '', affiliates, acco
                         </p> */}
                         </header>
 
-                        <form onSubmit={ submit } className="mt-6 space-y-6 ">
+                        <form onSubmit={submit} className="mt-6 space-y-6 ">
                             <div className='grid grid-cols-3 gap-4'>
 
                                 <div>
@@ -98,13 +102,13 @@ export default function UserManagementSearch ({ className = '', affiliates, acco
                                     <TextInput
                                         id="userId"
                                         className="mt-1 block w-full "
-                                        value={ data.userId }
+                                        value={data.userId}
                                         isFocused
                                         autoComplete="userId"
-                                        onChange={ (e) => setData('userId', e.target.value) }
+                                        onChange={(e) => setData('userId', e.target.value)}
                                     />
 
-                                    {/* <InputError className="mt-2" message={errors.name} /> */ }
+                                    {/* <InputError className="mt-2" message={errors.name} /> */}
                                 </div>
 
                                 <div>
@@ -113,13 +117,13 @@ export default function UserManagementSearch ({ className = '', affiliates, acco
                                     <TextInput
                                         id="displayName"
                                         className="mt-1 block w-full "
-                                        value={ data?.displayName }
+                                        value={data?.displayName}
                                         isFocused
                                         autoComplete="displayName"
-                                        onChange={ (e) => setData('displayName', e.target.value) }
+                                        onChange={(e) => setData('displayName', e.target.value)}
                                     />
 
-                                    {/* <InputError className="mt-2" message={errors.name} /> */ }
+                                    {/* <InputError className="mt-2" message={errors.name} /> */}
                                 </div>
 
                                 <div>
@@ -129,19 +133,19 @@ export default function UserManagementSearch ({ className = '', affiliates, acco
                                         name="SubAffliateIndex"
                                         id="SubAffliateIndex"
                                         className='mt-1 block w-full border-gray-300 focus:border-sky-500 focus:ring-sky-500 rounded-md shadow-sm '
-                                        value={ data?.SubAffliateIndex }
-                                        onChange={ (e) => setData('SubAffliateIndex', e.target.value) }
+                                        value={data?.SubAffliateIndex}
+                                        onChange={(e) => setData('SubAffliateIndex', e.target.value)}
                                     >
                                         <option value=''>All</option>
                                         {
-                                            affiliates?.map(a => <option value={ a.affiliate_index } key={ a.affiliate_index }>
-                                                { a.affiliate_name }
+                                            affiliates?.map(a => <option value={a.affiliate_index} key={a.affiliate_index}>
+                                                {a.affiliate_name}
                                             </option>)
                                         }
 
                                     </select>
 
-                                    {/* <InputError className="mt-2" message={errors.name} /> */ }
+                                    {/* <InputError className="mt-2" message={errors.name} /> */}
                                 </div>
 
                                 <div>
@@ -150,13 +154,13 @@ export default function UserManagementSearch ({ className = '', affiliates, acco
                                     <TextInput
                                         id="CallerId"
                                         className="mt-1 block w-full"
-                                        value={ data?.CallerId }
+                                        value={data?.CallerId}
                                         isFocused
                                         autoComplete="CallerId"
-                                        onChange={ (e) => setData('CallerId', e.target.value) }
+                                        onChange={(e) => setData('CallerId', e.target.value)}
                                     />
 
-                                    {/* <InputError className="mt-2" message={errors.name} /> */ }
+                                    {/* <InputError className="mt-2" message={errors.name} /> */}
                                 </div>
 
                                 <div>
@@ -165,13 +169,13 @@ export default function UserManagementSearch ({ className = '', affiliates, acco
                                     <TextInput
                                         id="Notes"
                                         className="mt-1 block w-full "
-                                        value={ data?.Notes }
+                                        value={data?.Notes}
                                         isFocused
                                         autoComplete="Notes"
-                                        onChange={ (e) => setData('Notes', e.target.value) }
+                                        onChange={(e) => setData('Notes', e.target.value)}
                                     />
 
-                                    {/* <InputError className="mt-2" message={errors.name} /> */ }
+                                    {/* <InputError className="mt-2" message={errors.name} /> */}
                                 </div>
 
                                 <div>
@@ -180,13 +184,13 @@ export default function UserManagementSearch ({ className = '', affiliates, acco
                                     <TextInput
                                         id="PhoneFax"
                                         className="mt-1 block w-full "
-                                        value={ data?.PhoneFax }
+                                        value={data?.PhoneFax}
                                         isFocused
                                         autoComplete="PhoneFax"
-                                        onChange={ (e) => setData('PhoneFax', e.target.value) }
+                                        onChange={(e) => setData('PhoneFax', e.target.value)}
                                     />
 
-                                    {/* <InputError className="mt-2" message={errors.name} /> */ }
+                                    {/* <InputError className="mt-2" message={errors.name} /> */}
                                 </div>
 
                                 {/* <div>
@@ -219,19 +223,19 @@ export default function UserManagementSearch ({ className = '', affiliates, acco
                                         name="AccountStatusID"
                                         id="AccountStatusID"
                                         className='mt-1 block w-full border-gray-300 focus:border-sky-500 focus:ring-sky-500 rounded-md shadow-sm '
-                                        value={ data?.AccountStatusID }
-                                        onChange={ (e) => setData('AccountStatusID', e.target.value) }
+                                        value={data?.AccountStatusID}
+                                        onChange={(e) => setData('AccountStatusID', e.target.value)}
                                     >
 
                                         {
-                                            status?.map((a, index) => !!a && <option value={ index } key={ index }>
-                                                { a }
+                                            status?.map((a, index) => !!a && <option value={index} key={index}>
+                                                {a}
                                             </option>)
                                         }
 
                                     </select>
 
-                                    {/* <InputError className="mt-2" message={errors.name} /> */ }
+                                    {/* <InputError className="mt-2" message={errors.name} /> */}
                                 </div>
 
 
@@ -242,7 +246,7 @@ export default function UserManagementSearch ({ className = '', affiliates, acco
 
                             <div className="flex items-center gap-4">
                                 <PrimaryButton>Search</PrimaryButton>
-                                <PrimaryButton onClick={ () => reset() } className="resetBtn">Reset</PrimaryButton>
+                                <PrimaryButton onClick={() => reset()} className="resetBtn">Reset</PrimaryButton>
 
                                 {/* <Transition
                                 show={recentlySuccessful}

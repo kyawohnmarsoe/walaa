@@ -3,7 +3,7 @@ import { Link } from '@inertiajs/react';
 import RefillModal from "./RefillModal";
 import ChangeModal from "./ChangeModal";
 
-export default function AllUsersTableRow ({ auth, user, accountTypes, apitoken, deposit_password }) {
+export default function AllUsersTableRow({ auth, user, accountTypes, apitoken, deposit_password }) {
   const [modals, setModals] = useState({
     reFill: false,
     change: false,
@@ -12,21 +12,18 @@ export default function AllUsersTableRow ({ auth, user, accountTypes, apitoken, 
 
   const instance = axios.create({
     baseURL: 'https://rapi.earthlink.iq/api/reseller',
-    headers: { 'Authorization': `Bearer ${ apitoken }` }
+    headers: { 'Authorization': `Bearer ${apitoken}` }
   });
 
-  const extendUser = () =>
-  {
-    instance.post(`/user/extend/${ user.userIndex}`)
-      .then(res =>
-      {
-        res.data.isSuccessful ? (alert(`Extend Success!`), location.reload()) : alert(`Sorry! ${ res.data.error?.message }`);
+  const extendUser = () => {
+    instance.post(`/user/extend/${user.userIndex}`)
+      .then(res => {
+        res.data.isSuccessful ? (alert(`Extend Success!`), location.reload()) : alert(`Sorry! ${res.data.error?.message}`);
 
         console.log(res)
 
       })
-      .catch(err =>
-      {
+      .catch(err => {
         console.log(err)
       })
 
@@ -34,8 +31,7 @@ export default function AllUsersTableRow ({ auth, user, accountTypes, apitoken, 
   }
 
 
-  const extendHandler = () =>
-  {
+  const extendHandler = () => {
     const result = confirm("Are you sure you want to extend this user!")
     result && extendUser()
   }
@@ -43,11 +39,11 @@ export default function AllUsersTableRow ({ auth, user, accountTypes, apitoken, 
 
   return (
     <>
-      <RefillModal modals={ modals } setModals={ setModals } accountTypes={ accountTypes } apitoken={ apitoken } user={ user } deposit_password={ deposit_password } auth={ auth }/>
+      <RefillModal modals={modals} setModals={setModals} accountTypes={accountTypes} apitoken={apitoken} user={user} deposit_password={deposit_password} auth={auth} />
       <ChangeModal modals={modals} setModals={setModals} accountTypes={accountTypes} apitoken={apitoken} user={user} />
 
       <tr>
-       
+
 
         {/* <td>{user?.userIndex}</td> */}
         <td>
@@ -56,7 +52,7 @@ export default function AllUsersTableRow ({ auth, user, accountTypes, apitoken, 
 
           {user?.canChangeAccount && <><button className="btn btn-xs btn-outline btn-block btn-success mb-1" onClick={() => setModals({ ...modals, change: true })}>Change</button> <br /> </>}
 
-          { user?.canExtendUser && <><button className="btn btn-xs btn-outline btn-block btn-warning" onClick={ extendHandler }>Extend</button> </>}
+          {user?.canExtendUser && <><button className="btn btn-xs btn-outline btn-block btn-warning" onClick={extendHandler}>Extend</button> </>}
 
           {/* <span className="badge badge-ghost badge-sm">Desktop Support Technician</span> */}
         </td>
@@ -108,7 +104,7 @@ export default function AllUsersTableRow ({ auth, user, accountTypes, apitoken, 
           <br />
           <strong>MAC</strong> : {user?.callerID}
           <br />
-          <strong>IP</strong> : <a href={ `https://${ user?.userIP }` } className="text-sky-700" target="_blank">{ user?.userIP }</a>
+          <strong>IP</strong> : <a href={`https://${user?.userIP}`} className="text-sky-700" target="_blank">{user?.userIP}</a>
           <br />
           <strong>Lock MAC</strong> : {user?.lockMac}
         </td>

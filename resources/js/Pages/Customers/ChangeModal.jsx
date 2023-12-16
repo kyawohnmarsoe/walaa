@@ -4,7 +4,7 @@ import TextInput from '@/Components/TextInput';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import SecondaryButton from '@/Components/SecondaryButton';
-import { useForm } from '@inertiajs/react';
+import { useForm, router } from '@inertiajs/react';
 import InputError from '@/Components/InputError';
 
 
@@ -25,7 +25,7 @@ export default function ChangeModal({ modals, setModals, user, apitoken, account
     const submit = (e) => {
         e.preventDefault();
         // console.log(data)
-        // console.log(filterObj)
+        // console.log(filterObj)        
 
         instance.post('/user/chnageaccounttype', data)
             .then(res => {
@@ -34,13 +34,15 @@ export default function ChangeModal({ modals, setModals, user, apitoken, account
                 !res.data.value ? setUpdateInfo({ errMessage: res?.data?.error?.message || 'Can not change account type for this user!', value: '' }) :
                     (setUpdateInfo({ errMessage: '', value: res.data.value }), location.reload())
 
-
             })
             .catch(err => {
                 setUpdateInfo({ errMessage: err.message, value: '' })
             })
 
-
+        // change account type in local db
+        // let customer_user_index = user.userIndex
+        // router.post(`/customers/change/account/${customer_user_index}`, data);
+        // closeModal()
     }
 
     const closeModal = () => {

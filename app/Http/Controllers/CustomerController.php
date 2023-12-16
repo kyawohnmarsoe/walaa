@@ -14,6 +14,7 @@ use App\Models\Sub_account;
 use App\Models\Deposit_pass;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Models\User_group;
+use App\Models\Invoice;
 
 class CustomerController extends Controller
 {
@@ -169,52 +170,49 @@ class CustomerController extends Controller
 
     public function getUserInfo($userID){
         $token = $this->getSavedToken();
-         $apiURL = 'https://rapi.earthlink.iq/api/reseller/userpayment/usersInvoice' ;
-         $headers = [
-         'Authorization'=>'Bearer '.$token,
-         'Accept' => 'application/json'
-         ];
-          $post_data = [
-          "UserID" => $userID, 
-          ];
+        $apiURL = 'https://rapi.earthlink.iq/api/reseller/userpayment/usersInvoice' ;
+        $headers = [
+            'Authorization'=>'Bearer '.$token,
+            'Accept' => 'application/json'
+        ];
+        $post_data = [
+            "UserID" => $userID, 
+        ];
 
         $new_user_api = Http::withHeaders($headers)->post($apiURL, $post_data);
-         $new_user_response = json_decode($new_user_api->getBody(), true);
-          $invoice = $new_user_response['value']['itemsList'][0];
-          $balance=$invoice['salePrice'];
-          $modifyUser=Auth::user()->name;
-          $data = [
-          'invoinceID' => $invoice['invoinceID'],
-          'userIndex' => $invoice['userIndex'],
-          'displayName' => $invoice['displayName'],
-          'affiliateName' => $invoice['affiliateName'],
-          'invoiceType' => $invoice['invoiceType'],
-          'invoiceDescription' => $invoice['invoiceDescription'],
-          'invoiceDuration' => $invoice['invoiceDuration'],
-          'salePrice' => $invoice['salePrice'],
-          'retailPriceCurrency' => $invoice['retailPriceCurrency'],
-          'retailPrice' => $invoice['retailPrice'],
-          'referenceRecord' => $invoice['referenceRecord'],
-          'recordDate' => $invoice['recordDate'],
-          'lastStatusChanged' => $invoice['lastStatusChanged'],
-          'accountName' => $invoice['accountName'],
-          // 'notes' => $invoice['notes'],
-          'userID' => $invoice['userID'],
-          'discountedPrice' => $invoice['discountedPrice'],
-          'paymentDueDate' => $invoice['paymentDueDate'],
-          // 'paymentDueDateTime' => $invoice['paymentDueDateTime'],
-          'paidPrice' => $invoice['paidPrice'],
-          'balance' => $balance,
-          'invoiceStatus' => $invoice['invoiceStatus'],
-          'notes' => $invoice['notes'],
-          'modifyUser' => $modifyUser,
-          ];
-
-            // dd($data);
-          Invoice::create($data);
-
-        //   return redirect()->route('invoices')->with('status', 200);
-        
+        $new_user_response = json_decode($new_user_api->getBody(), true);
+        $invoice = $new_user_response['value']['itemsList'][0];
+        $balance=$invoice['salePrice'];
+        $modifyUser=Auth::user()->name;
+        $data = [
+            'invoinceID' => $invoice['invoinceID'],
+            'userIndex' => $invoice['userIndex'],
+            'displayName' => $invoice['displayName'],
+            'affiliateName' => $invoice['affiliateName'],
+            'invoiceType' => $invoice['invoiceType'],
+            'invoiceDescription' => $invoice['invoiceDescription'],
+            'invoiceDuration' => $invoice['invoiceDuration'],
+            'salePrice' => $invoice['salePrice'],
+            'retailPriceCurrency' => $invoice['retailPriceCurrency'],
+            'retailPrice' => $invoice['retailPrice'],
+            'referenceRecord' => $invoice['referenceRecord'],
+            'recordDate' => $invoice['recordDate'],
+            'lastStatusChanged' => $invoice['lastStatusChanged'],
+            'accountName' => $invoice['accountName'],
+            // 'notes' => $invoice['notes'],
+            'userID' => $invoice['userID'],
+            'discountedPrice' => $invoice['discountedPrice'],
+            'paymentDueDate' => $invoice['paymentDueDate'],
+            // 'paymentDueDateTime' => $invoice['paymentDueDateTime'],
+            'paidPrice' => $invoice['paidPrice'],
+            'balance' => $balance,
+            'invoiceStatus' => $invoice['invoiceStatus'],
+            'notes' => $invoice['notes'],
+            'modifyUser' => $modifyUser,
+        ];
+        // dd($data);
+        Invoice::create($data);
+        //   return redirect()->route('invoices')->with('status', 200);        
     }
     
     public function insert(StoreCustomerRequest $request) {
@@ -434,12 +432,25 @@ class CustomerController extends Controller
 		$data = Customer::where('customer_user_index', $index)->firstOrFail();
 		$data->update($input);
         return redirect()->route('customers')->with('message', 'User is successfully disabled!');
-    } // destroy  
+    } // destroy      
     
-     public function deposit(){
-     $deposit_data = $this->get_deposit_password();
- 
-    //  return back()->with('pass', $deposit_data['deposit_password']);
-     }
+
+    public function change_account(Request $request, $index) 
+    {     
+        // $input = $request->all();
+        $input = [
+            'account_index'=> $request->AccountIndex,
+        ];
+		$data = Customer::where('customer_user_index', $index)->first();   
+        if($data) {  
+            $data = Customer::where('customer_user_index', $index)->firstOrFail(); 
+            $data->update($input);
+            $message = 'Account is successfully updated!';
+        } else {
+            $message = 'No data found in local datebase!';
+        }
+		
+        return redirect()->route('users.management')->with('message', $message);      
+    }
    
 }
