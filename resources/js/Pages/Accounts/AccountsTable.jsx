@@ -1,5 +1,6 @@
 import DangerButton from "@/Components/DangerButton";
 import PrimaryButton from "@/Components/PrimaryButton";
+import SecondaryButton from "@/Components/SecondaryButton";
 import React from "react";
 import { useEffect, useState } from "react";
 import { router } from '@inertiajs/react';
@@ -19,11 +20,11 @@ export default function AccountsTable({ accounts, listname }) {
     }
 
     function deleteLocalAccount(e) {
-        document.getElementById('deleteModal').close()
+        // document.getElementById('deleteModal').close()
         e.preventDefault()
         let accountId = document.getElementById('account_id').value
-        // console.log(accountId);        
         router.delete(`/accounts/${accountId}`);
+        onCloseModal();
     }
 
     const callModal = (account) => {
@@ -33,6 +34,7 @@ export default function AccountsTable({ accounts, listname }) {
         document.getElementById(`tr_${account.id}`).classList.toggle('bg-gray-300');
     }
     const onCloseModal = () => {
+        document.getElementById('deleteModal').close()
         let accountId = document.getElementById('account_id').value
         document.getElementById('tr_' + accountId).classList.toggle('bg-gray-300');
     };
@@ -49,8 +51,9 @@ export default function AccountsTable({ accounts, listname }) {
                         </div>
                     </div>
                     <TextInput id="account_id" name="account_id" type="hidden" />
-                    <div className="flex items-center gap-4">
-                        {<PrimaryButton disabled="" type="submit" >Delete</PrimaryButton>}
+                    <div className="mt-6 flex justify-end">
+                        <SecondaryButton onClick={onCloseModal}>Cancel</SecondaryButton>
+                        <PrimaryButton className="ml-3" disabled="" type="submit" >Delete</PrimaryButton>
                     </div>
                 </form>
             </Modal>

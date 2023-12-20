@@ -1,24 +1,34 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { router } from '@inertiajs/react';
+import { router, Link } from '@inertiajs/react';
 import Modal from '@/Components/DaisyUI/Modal';
-import DangerButton from "@/Components/DangerButton";
 import PrimaryButton from "@/Components/PrimaryButton";
+import SecondaryButton from "@/Components/SecondaryButton";
 import TextInput from '@/Components/TextInput';
+import RefillModal from "./Partials/RefillModal";
+import ChangeModal from "./Partials/ChangeModal";
 
-export default function CustomerTable({ customers, accounts, sub_accounts, user_groups, apitoken }) {
+export default function CustomerTable({ customers, accounts, sub_accounts, user_groups, apitoken, deposit_password, auth }) {
     const [loading, setLoading] = useState(false);
+
+    const [modals, setModals] = useState({
+        reFill: false,
+        change: false,
+        extend: false,
+    })
+
+    const [user, setUser] = useState([])
 
     function editLocalCusClick(index) {
         router.get(`/customers/${index}`);
     }
 
     function disableCustomer(e) {
-        document.getElementById('deleteModal').close()
+        // document.getElementById('deleteModal').close()
         e.preventDefault()
         let customerUserIndex = document.getElementById('customer_user_index').value
-        // console.log(customerUserIndex);        
         router.delete(`/customers/${customerUserIndex}`);
+        onCloseModal();
     }
 
     const callModal = (cus) => {
@@ -28,12 +38,47 @@ export default function CustomerTable({ customers, accounts, sub_accounts, user_
         document.getElementById(`tr_${cus.customer_user_index}`).classList.toggle('bg-gray-300');
     }
     const onCloseModal = () => {
+        document.getElementById('deleteModal').close()
         let customerUserIndex = document.getElementById('customer_user_index').value
         document.getElementById('tr_' + customerUserIndex).classList.toggle('bg-gray-300');
     };
 
+    const callRefillModal = (cus) => {
+        setModals({ ...modals, reFill: true })
+        setUser(cus)
+    }
+
+    const callChangeModal = (cus) => {
+        setModals({ ...modals, change: true })
+        setUser(cus)
+    }
+
+    const instance = axios.create({
+        baseURL: 'https://rapi.earthlink.iq/api/reseller',
+        headers: { 'Authorization': `Bearer ${apitoken}` }
+    });
+    const extendUser = () => {
+        instance.post(`/user/extend/${cus.customer_user_index}`)
+            .then(res => {
+                res.data.isSuccessful ? (alert(`Extend Success!`), location.reload()) : alert(`Sorry! ${res.data.error?.message}`);
+
+                console.log(res)
+
+            })
+            .catch(err => {
+                console.log(err)
+            })
+
+        console.log('extendUser running..')
+    }
+    const extendHandler = () => {
+        const result = confirm("Are you sure you want to extend this user!")
+        result && extendUser()
+    }
+
     useEffect(() => {
-        // console.log(sub_accounts);
+        // console.log(sub_accounts); 
+        console.log('filter => ', customers)
     }, [])
 
     return (
@@ -48,16 +93,25 @@ export default function CustomerTable({ customers, accounts, sub_accounts, user_
                         </div>
                     </div>
                     <TextInput id="customer_user_index" name="customer_user_index" type="hidden" />
-                    <div className="flex items-center gap-4">
-                        {<PrimaryButton disabled="" type="submit" >Disable</PrimaryButton>}
+                    <div className="mt-6 flex justify-end">
+                        <SecondaryButton onClick={onCloseModal}>Cancel</SecondaryButton>
+                        <PrimaryButton className="ml-3" disabled="" type="submit" >Disable</PrimaryButton>
                     </div>
                 </form>
             </Modal>
 
+            <RefillModal modals={modals} setModals={setModals}
+                accountTypes={accounts} apitoken={apitoken} user={user}
+                deposit_password={deposit_password} auth={auth}
+            />
+            <ChangeModal modals={modals} setModals={setModals}
+                accountTypes={accounts} apitoken={apitoken} user={user}
+            />
+
             <table className="table">
                 <thead>
                     <tr className='bg-emerald-300'>
-                        {/* <th>User Index</th> */}
+                        <th>Actions</th>
                         <th>Email</th>
                         <th>Display Name</th>
                         <th>Mobile Number</th>
@@ -66,7 +120,6 @@ export default function CustomerTable({ customers, accounts, sub_accounts, user_
                         <th>Sub Account Type</th>
                         <th>User Group</th>
                         <th>Active/Disable</th>
-                        <th colSpan="2">Actions</th>
                     </tr>
                 </thead>
 
@@ -83,6 +136,27 @@ export default function CustomerTable({ customers, accounts, sub_accounts, user_
                     <tbody>
                         {customers && customers.map(cus => (
                             <tr key={cus.id} id={"tr_" + (cus.customer_user_index)}>
+                                <td>
+                                    {cus?.can_refill && <><button className="btn btn-xs btn-outline btn-block btn-info mb-1"
+                                        onClick={() => callRefillModal(cus)}>Refill</button><br /></>}
+
+                                    {cus?.can_change_account && <><button className="btn btn-xs btn-outline btn-block btn-success mb-1"
+                                        onClick={() => callChangeModal(cus)}>Change</button> <br /> </>}
+
+                                    {cus?.can_extend_user && <><button className="btn btn-xs btn-outline btn-block btn-warning" onClick={extendHandler}>Extend</button> </>}
+
+                                    <>
+                                        <button className="btn btn-xs btn-outline btn-block btn-primary mt-1" onClick={() => editLocalCusClick(cus.customer_user_index)}>
+                                            Edit
+                                        </button>
+                                    </>
+
+                                    <>
+                                        <button className="btn btn-xs btn-outline btn-block btn-warning mt-1" onClick={() => callModal(cus)}>
+                                            Disable
+                                        </button>
+                                    </>
+                                </td>
                                 <td>{cus.email}</td>
                                 <td>{cus.display_name}</td>
                                 <td>
@@ -116,18 +190,6 @@ export default function CustomerTable({ customers, accounts, sub_accounts, user_
                                 </td>
                                 <td className={cus.active_status == 1 ? 'text-emerald-500' : 'text-red-500'}>
                                     {cus.active_status == 1 ? 'Active' : 'Disable'}
-                                </td>
-                                <td>
-                                    <PrimaryButton className="bg-sky-800" padding_x='px-2' disabled='' onClick={() => editLocalCusClick(cus.customer_user_index)}>
-                                        <svg className="h-4 w-4 text-white mr-1" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">  <path stroke="none" d="M0 0h24v24H0z" />  <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />  <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />  <line x1="16" y1="5" x2="19" y2="8" /></svg>
-                                        Edit
-                                    </PrimaryButton>
-                                </td>
-                                <td>
-                                    <DangerButton padding_x='px-2' disabled='' onClick={() => callModal(cus)} >
-                                        <svg className="h-4 w-4 text-white mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">  <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z" />  <line x1="18" y1="9" x2="12" y2="15" />  <line x1="12" y1="9" x2="18" y2="15" /></svg>
-                                        Disable
-                                    </DangerButton>
                                 </td>
                             </tr>
                         ))}

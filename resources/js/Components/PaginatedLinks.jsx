@@ -29,7 +29,8 @@ export default function PaginatedLinks({
     totalCount,
     listname,
     filterObj,
-    setFilterObj }) {
+    setFilterObj,
+    deposit_password }) {
     const [itemOffset, setItemOffset] = useState(0);
 
     let pageSize = +itemsPerPage
@@ -47,42 +48,39 @@ export default function PaginatedLinks({
     };
 
 
-   
-
     return (
         <>
-            
-               
-                <div className='pagination-wrapper'>
-                    <TotalItemsCount total={ items.length } />
+            <div className='pagination-wrapper'>
+                <TotalItemsCount total={items.length} />
 
-                    <ReactPaginate
-                        breakLabel="..."
-                        nextLabel=" >>"
-                        onPageChange={handlePageClick}
-                        pageRangeDisplayed={3}
-                        pageCount={pageCount}
-                        previousLabel="<<"
-                        renderOnZeroPageCount={null}
-                        className="pagination"
-                    />
+                <ReactPaginate
+                    breakLabel="..."
+                    nextLabel=" >>"
+                    onPageChange={handlePageClick}
+                    pageRangeDisplayed={3}
+                    pageCount={pageCount}
+                    previousLabel="<<"
+                    renderOnZeroPageCount={null}
+                    className="pagination"
+                />
 
-                    <PageSize
-                        className="pagination"
-                        setFilterObj={setFilterObj}
-                        filterObj={filterObj}
-                    />
-                </div>
-
-              
-            
+                <PageSize
+                    className="pagination"
+                    setFilterObj={setFilterObj}
+                    filterObj={filterObj}
+                />
+            </div>
 
             {
                 tableName == 'account' && <AccountsTable accounts={currentItems} listname={listname} />
             }
 
             {
-                tableName == 'customer' && <CustomerTable customers={currentItems} accounts={accounts} sub_accounts={sub_accounts} user_groups={user_groups} apitoken={apitoken} totalCount={totalCount} />
+                tableName == 'customer' &&
+                <CustomerTable customers={currentItems} accounts={accounts}
+                    sub_accounts={sub_accounts} user_groups={user_groups} apitoken={apitoken}
+                    totalCount={totalCount} deposit_password={deposit_password} auth={auth}
+                />
             }
 
             {
@@ -106,12 +104,12 @@ export default function PaginatedLinks({
             }
 
             {
-                tableName == 'invoices' && <InvoiceTable items={ currentItems } auth={ auth }  />
+                tableName == 'invoices' && <InvoiceTable items={currentItems} auth={auth} />
 
             }
 
             {
-                tableName == 'expenses' && <ExpenseTable items={ currentItems } auth={ auth } users={ users }/>
+                tableName == 'expenses' && <ExpenseTable items={currentItems} auth={auth} users={users} />
 
             }
 

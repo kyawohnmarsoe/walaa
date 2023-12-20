@@ -2,6 +2,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { usePage, router } from '@inertiajs/react';
 import PrimaryButton from "@/Components/PrimaryButton";
+import SecondaryButton from "@/Components/SecondaryButton";
 import DangerButton from "@/Components/DangerButton";
 import Modal from "@/Components/DaisyUI/Modal";
 import InputLabel from '@/Components/InputLabel';
@@ -98,6 +99,7 @@ export default function TicketTable({ tickets, users, remarks }) {
     const onCloseModal = () => {
         // console.log('Close Modal - ', values.ticket_id)
         // console.log('Close Modal status - ', values.ticket_status)
+        document.getElementById('ticket_deleteModal').close()
         {
             values.ticket_status == 0
                 ? ''
@@ -107,11 +109,12 @@ export default function TicketTable({ tickets, users, remarks }) {
     };
 
     function deleteData(e) {
-        document.getElementById('ticket_deleteModal').close()
+        // document.getElementById('ticket_deleteModal').close()
         e.preventDefault()
         let ticketId = document.getElementById('ticket_id').value
         // console.log(ticketId)
         router.delete(`/tickets/${ticketId} `);
+        onCloseModal();
     }
 
     function deleteImageData(e) {
@@ -159,8 +162,10 @@ export default function TicketTable({ tickets, users, remarks }) {
                         </div>
                     </div>
                     <TextInput className="ticket_id" id="ticket_id" name="ticket_id" type="hidden" value={values.ticket_id} />
-                    <div className="flex items-center gap-4">
-                        {<PrimaryButton disabled="" type="submit" >Delete</PrimaryButton>}
+
+                    <div className="mt-6 flex justify-end">
+                        <SecondaryButton onClick={onCloseModal}>Cancel</SecondaryButton>
+                        <PrimaryButton className="ml-3" disabled="" type="submit" >Delete</PrimaryButton>
                     </div>
                 </form>
             </Modal>
@@ -211,7 +216,7 @@ export default function TicketTable({ tickets, users, remarks }) {
                         type="hidden"
                         value={values.ticket_id}
                     />
-                    <div className="flex items-center gap-4">
+                    <div className="mt-6 flex justify-end">
                         <PrimaryButton disabled="" type="submit" >Add Remark</PrimaryButton>
                     </div>
                 </form>
@@ -223,7 +228,7 @@ export default function TicketTable({ tickets, users, remarks }) {
                 </div>
                 <form onSubmit={deleteImageData} className="space-y-6 ">
                     <TextInput className="ticket_id" id="ticket_id" name="ticket_id" type="hidden" value={values.ticket_id} />
-                    <div className="flex items-center gap-4">
+                    <div className="mt-6 flex justify-end">
                         {<PrimaryButton disabled="" type="submit" >Delete This Image</PrimaryButton>}
                     </div>
                 </form>
@@ -237,7 +242,7 @@ export default function TicketTable({ tickets, users, remarks }) {
                 </div>
                 <form onSubmit={deleteFileData} className="space-y-6 ">
                     <TextInput className="ticket_id" id="ticket_id" name="ticket_id" type="hidden" value={values.ticket_id} />
-                    <div className="flex items-center gap-4">
+                    <div className="mt-6 flex justify-end">
                         {<PrimaryButton disabled="" type="submit" >Delete This File</PrimaryButton>}
                     </div>
                 </form>

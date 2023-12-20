@@ -35,30 +35,16 @@ class CustomerController extends Controller
         
         $totalCount = 0;
         if ($all_users_response){
+            return response(compact('all_users_response'));
             if($all_users_response['isSuccessful'] === true) { 
                 $totalCount = $all_users_response['value']['totalCount'];
+            } else {
+                $totalCount = 0;
             }
         }
         return $totalCount;     
        
-    } // get_totalcount
-
-    // public function get_deposit_password() {
-    // public function get_deposit_password() {
-
-    //     $all_data = Deposit_pass::all();
-    //     if($all_data->count() > 0) {
-    //         $id = $all_data[0]['id'];
-    //         $data = Deposit_pass::findOrFail($id);
-    //         $deposit_password = $data->deposit_password;
-    //         $deposit_password_id = $data->id;
-    //         return [
-    //             'id'=> $deposit_password_id,
-    //             'deposit_password' => $deposit_password
-    //         ];
-    //     }      
-    // } 
-    // get_deposit_password   
+    } // get_totalcount   
    
     public function index(Request $request)
     {
@@ -70,6 +56,8 @@ class CustomerController extends Controller
         $token = $this->getSavedToken();  
         
         $totalCount = $this->get_totalcount(); 
+
+        $deposit_data = $this->get_deposit_password();
         
         if ($request->hasAny(['account_index', 'sub_account_id', 'affiliate_index', 'customer_user_id', 'status', 'user_group_id'])) {
            
@@ -121,19 +109,16 @@ class CustomerController extends Controller
             'sub_accounts' => Sub_account::all(),              
             'accounts'    => Account::all(),
             'affiliates'  => Affiliate::all(),  
-            'user_groups' => $filter_user_groups,// User_group::all(),
+            'user_groups' => $filter_user_groups,
             'show_data'  => $show_data,
             'apitoken'   => $token, 
-            'totalCount' => $totalCount,                 
+            'totalCount' => $totalCount, 
+            'deposit_password' => $deposit_data['deposit_password'],                
         ]);
     } // index
-
     public function create() {
-
         // $this->getUserInfo('testuser@gmail.comm');
-
-        $token = $this->getSavedToken();
-        
+        $token = $this->getSavedToken();        
         return Inertia::render('Customers/Customers', [
             'show_data'  => 'add_form',
             'accounts' => Account::all(),
@@ -143,23 +128,8 @@ class CustomerController extends Controller
             'apitoken' => $token,
         ]);
         
-    } // create
-    
-    // public function change_deposit_password() {
-    //     $token = $this->getSavedToken();
-    //     $deposit_data = $this->get_deposit_password();
-    //     return Inertia::render('Customers/Customers', [
-    //         'show_data'  => 'deposit_form',
-    //         'accounts' => Account::all(),
-    //         'sub_accounts' => Sub_account::all(),
-    //         'affiliates' => Affiliate::all(),
-    //         'apitoken' => $token,
-    //         'deposit_password' => $deposit_data['deposit_password'],  
-    //         'deposit_id' => $deposit_data['id'],
-    //     ]);
-        
-    // } // change_deposit_password
-
+    } // create   
+  
     public function update_deposit_password(Request $request, $id) 
     {       
         $input = $request->all();
@@ -328,8 +298,9 @@ class CustomerController extends Controller
             
         ]; 
         $all_users_api = Http::withHeaders($headers)->post($apiURL, $post_data);
-        $all_users_response  = json_decode($all_users_api->getBody(), true);        
-
+        $all_users_response  = json_decode($all_users_api->getBody(), true); 
+        // return response(compact('all_users_response'));      
+      
         if ($all_users_response) {
             if($all_users_response['isSuccessful'] === true) {                 
                 $affiliates = Affiliate::all();
@@ -349,7 +320,7 @@ class CustomerController extends Controller
                             $affiliate_index = $aff['affiliate_index'];
                         }
                     }
-                    $sub_account_id = 0; 
+                    $sub_account_id = 0;                   
                     
                     // if existed data, update some fields
                     if (in_array($dt['userIndex'], $existed_userIndex)) {                        
@@ -357,7 +328,11 @@ class CustomerController extends Controller
                             'caller_id' => $dt['callerID'],
                             'status' => $dt['onlineStatus'], 
                             'account_status' => $dt['accountStatus'], 
-                            'account_package_type' => $dt['accountPackageType'],
+                            'account_package_type' => $dt['accountPackageType'],  
+
+                            'can_refill'             => $dt['canRefill'],
+                            'can_change_account' => $dt['canChangeAccount'],
+                            'can_extend_user'    => $dt['canExtendUser'],
                         ];                     
                         Customer::where('customer_user_index', $dt['userIndex'])->update($update_data); 
                         continue; // for skip duplicate index                       
@@ -385,7 +360,11 @@ class CustomerController extends Controller
                         'customer_user_notes'  => $dt['userNotes'],
                         'status'               => $dt['onlineStatus'],
                         'account_status'       => $dt['accountStatus'],
-                        'account_package_type' =>  $dt['accountPackageType'],                          
+                        'account_package_type' =>  $dt['accountPackageType'],
+
+                        'can_refill'             => $dt['canRefill'],
+                        'can_change_account' => $dt['canChangeAccount'],
+                        'can_extend_user'    => $dt['canExtendUser'],                       
                     ]);   
                 }     
                 
@@ -451,6 +430,6 @@ class CustomerController extends Controller
         }
 		
         return redirect()->route('users.management')->with('message', $message);      
-    }
+    }  
    
 }

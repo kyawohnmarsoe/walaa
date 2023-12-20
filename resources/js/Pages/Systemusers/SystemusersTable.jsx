@@ -1,5 +1,6 @@
 import DangerButton from "@/Components/DangerButton";
 import PrimaryButton from "@/Components/PrimaryButton";
+import SecondaryButton from "@/Components/SecondaryButton";
 import React from "react";
 import { useEffect, useState } from "react";
 import { usePage, router } from '@inertiajs/react';
@@ -20,10 +21,11 @@ export default function SystemusersTable({ systemusers, user_has_groups }) {
         router.get(`/systemuser/${id}`);
     }
     function deleteData(e) {
-        document.getElementById('deleteModal').close()
+        // document.getElementById('deleteModal').close()
         e.preventDefault()
         let userId = document.getElementById('user_id').value
         router.delete(`/systemuser/${userId}`);
+        onCloseModal();
     }
 
     const callModal = (systemuser) => {
@@ -33,6 +35,7 @@ export default function SystemusersTable({ systemusers, user_has_groups }) {
         document.getElementById(`tr_${systemuser.id}`).classList.toggle('bg-gray-300');
     }
     const onCloseModal = () => {
+        document.getElementById('deleteModal').close()
         let userId = document.getElementById('user_id').value
         document.getElementById('tr_' + userId).classList.toggle('bg-gray-300');
     };
@@ -48,8 +51,9 @@ export default function SystemusersTable({ systemusers, user_has_groups }) {
                         </div>
                     </div>
                     <TextInput id="user_id" name="id" type="hidden" />
-                    <div className="flex items-center gap-4">
-                        {<PrimaryButton disabled="" type="submit" >Disable</PrimaryButton>}
+                    <div className="mt-6 flex justify-end">
+                        <SecondaryButton onClick={onCloseModal}>Cancel</SecondaryButton>
+                        <PrimaryButton className="ml-3" disabled="" type="submit" >Disable</PrimaryButton>
                     </div>
                 </form>
             </Modal>

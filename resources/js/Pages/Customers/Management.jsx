@@ -13,7 +13,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import { DownloadTableExcel } from 'react-export-table-to-excel';
 import { Link, useForm, usePage, router } from '@inertiajs/react';
 
-export default function Management ({ auth, apitoken, affiliates, accountTypes, deposit_password }) {
+export default function Management({ auth, apitoken, affiliates, accountTypes, deposit_password }) {
   // const { flash } = usePage().props
   const tableRef = useRef(null);
   const [onlineUsersData, setOnlineUsersData] = useState({ users: [], total: 0, errMessage: '', loading: true })
@@ -24,7 +24,7 @@ export default function Management ({ auth, apitoken, affiliates, accountTypes, 
     baseURL: 'https://rapi.earthlink.iq/api/reseller',
     headers: { 'Authorization': `Bearer ${apitoken}` }
   });
-  
+
   useEffect(() => {
     instance.post('/user/all', filterObj)
       .then(res => {
@@ -66,7 +66,7 @@ export default function Management ({ auth, apitoken, affiliates, accountTypes, 
               {!errMessage && !loading &&
                 <>
                   <div className='flex items-center justify-end gap-4 p-2'>
-                    <PrimaryButton className="bg-sky-800" onClick={ () => location.reload() }>
+                    <PrimaryButton className="bg-sky-800" onClick={() => location.reload()}>
                       <svg xmlns="https://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
                         <path fillRule="evenodd" d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.433a.75.75 0 000-1.5H3.989a.75.75 0 00-.75.75v4.242a.75.75 0 001.5 0v-2.43l.31.31a7 7 0 0011.712-3.138.75.75 0 00-1.449-.39zm1.23-3.723a.75.75 0 00.219-.53V2.929a.75.75 0 00-1.5 0V5.36l-.31-.31A7 7 0 003.239 8.188a.75.75 0 101.448.389A5.5 5.5 0 0113.89 6.11l.311.31h-2.432a.75.75 0 000 1.5h4.243a.75.75 0 00.53-.219z" clipRule="evenodd" />
                       </svg>
@@ -102,7 +102,7 @@ export default function Management ({ auth, apitoken, affiliates, accountTypes, 
                     filterObj={filterObj}
                   >
 
-                  <AllUsersTable users={ users } tableRef={ tableRef } accountTypes={ accountTypes } apitoken={ apitoken } deposit_password={ deposit_password } auth={ auth }/>
+                    <AllUsersTable users={users} tableRef={tableRef} accountTypes={accountTypes} apitoken={apitoken} deposit_password={deposit_password} auth={auth} />
 
                   </PaginatedItems>
                 </>
