@@ -12,6 +12,7 @@ export default function Tickets({
     mustVerifyEmail,
     tickets,
     customers,
+    user_groups,
     filter_customers,
     users,
     remarks,
@@ -41,43 +42,42 @@ export default function Tickets({
 
             <div className="py-12 ">
                 <div className="max-w-8xl mx-auto sm:px-6 lg:px-4">
+
+                    {flash.status == 422 &&
+                        <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4 mb-2" role="alert">
+                            <p className="font-bold">Warning</p>
+                            <p>Something went wrong!</p>
+                        </div>
+                    }
+
+                    {flash.status == 201 &&
+                        <div className="alert alert-success mb-2">
+                            Data created successfully.
+                        </div>
+                    }
+
+                    {flash.status == 200 &&
+                        <div className="alert alert-success mb-2">
+                            Data updated successfully.
+                        </div>
+                    }
+
+                    {flash.status == 204 &&
+                        <div className="alert alert-success mb-2">
+                            Data deleted successfully.
+                        </div>
+                    }
+
+                    {flash.message &&
+                        <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-2" role="alert">
+                            <p>{flash.message}</p>
+                        </div>
+                    }
+
                     <div className="bg-white overflow-hidden shadow-sm ">
                         <div className="text-gray-900">
 
-                            {/* {roles}
-                    {permissions} */}
-
-                            {flash.status == 422 &&
-                                <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
-                                    <p className="font-bold">Warning</p>
-                                    <p>Something went wrong!</p>
-                                </div>
-                            }
-
-                            {flash.status == 201 &&
-                                <div className="alert alert-success">
-                                    Data created successfully.
-                                </div>
-                            }
-
-                            {flash.status == 200 &&
-                                <div className="alert alert-success">
-                                    Data updated successfully.
-                                </div>
-                            }
-
-                            {flash.status == 204 &&
-                                <div className="alert alert-success">
-                                    Data deleted successfully.
-                                </div>
-                            }
-
-                            {flash.message &&
-                                <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4" role="alert">
-                                    {/* <p className="font-bold">Success!</p> */}
-                                    <p>{flash.message}</p>
-                                </div>
-                            }
+                            {/* {roles} {permissions} */}
 
                             {
                                 (show_data == 'list' || show_data == 'filter_list') &&
@@ -121,6 +121,7 @@ export default function Tickets({
                                             itemsPerPage={filterObj.RowCount}
                                             items={tickets}
                                             users={users}
+                                            user_groups={user_groups}
                                             remarks={remarks}
                                             tableName="ticket"
                                             setFilterObj={setFilterObj}

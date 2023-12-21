@@ -6,6 +6,7 @@ import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import Checkbox from '@/Components/Checkbox';
+import SelectOption from '@/Components/SelectOption';
 
 export default function EditForm({ className = '', systemuser, user_has_group, user_groups }) {
 
@@ -13,7 +14,27 @@ export default function EditForm({ className = '', systemuser, user_has_group, u
         name: systemuser.name,
         email: systemuser.email,
         group_id: user_has_group,
+        active_status: systemuser.active_status
     });
+
+    const optionsActiveStatus = [
+        {
+            "index": 0,
+            "name": "Disable"
+        },
+        {
+            "index": 1,
+            "name": "Active"
+        }
+    ];
+
+    function activeStatusHandleChange(e) {
+        const value = e.target.value
+        setData(values => ({
+            ...data,
+            'active_status': value,
+        }))
+    }
 
     const handleChange = (e) => {
         // const checked = e.target.checked;
@@ -81,6 +102,19 @@ export default function EditForm({ className = '', systemuser, user_has_group, u
                             required
                         />
                         <InputError message={errors.email} className="mt-2" />
+                    </div>
+
+                    <div>
+                        <InputLabel htmlFor="active_status" value="Active / Disable Status" />
+                        <SelectOption
+                            id="active_status"
+                            className="mt-1 block w-full"
+                            options={optionsActiveStatus}
+                            select_text="Active / Disable Status"
+                            name="active_status"
+                            value={data.active_status}
+                            onChange={activeStatusHandleChange}
+                        />
                     </div>
 
                     <div>

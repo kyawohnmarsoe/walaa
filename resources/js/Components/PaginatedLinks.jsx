@@ -84,15 +84,20 @@ export default function PaginatedLinks({
             }
 
             {
-                tableName == 'affiliate' && <AffiliatesTable affiliates={currentItems} apitoken={apitoken} />
+                tableName == 'affiliate' &&
+                <AffiliatesTable affiliates={currentItems} apitoken={apitoken} />
             }
 
             {
-                tableName == 'ticket' && <TicketTable tickets={currentItems} users={users} remarks={remarks} />
+                tableName == 'ticket' &&
+                <TicketTable tickets={currentItems} users={users} user_groups={user_groups}
+                    remarks={remarks}
+                />
             }
 
             {
-                tableName == 'systemuser' && <SystemusersTable systemusers={currentItems} user_has_groups={user_has_groups} />
+                tableName == 'systemuser' &&
+                <SystemusersTable systemusers={currentItems} user_has_groups={user_has_groups} />
             }
 
             {

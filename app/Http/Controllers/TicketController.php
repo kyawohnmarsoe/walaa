@@ -49,11 +49,11 @@ class TicketController extends Controller
         }  
         
         if(count($user_has_groups_idArr) == 0 || $count_user_groups == count($user_has_groups_idArr)){
-            $tickets = $tickets_query->get(['tickets.*', 'customers.customer_user_id']);            
+            $tickets = $tickets_query->get(['tickets.*', 'customers.customer_user_id', 'customers.user_group_id']);            
             $filter_customers = Customer::all();
         } else {
             $tickets = $tickets_query->orWhereIn('customers.user_group_id', $user_has_groups_idArr)
-                        ->get(['tickets.*', 'customers.customer_user_id']);
+                        ->get(['tickets.*', 'customers.customer_user_id', 'customers.user_group_id']);
             $filter_customers = Customer::whereIn('customers.user_group_id', $user_has_groups_idArr)
                         ->get();
         }       
@@ -64,6 +64,7 @@ class TicketController extends Controller
             'customers' => Customer::all(),
             'filter_customers' => $filter_customers,
             'remarks'   => Ticket_remark::all(),
+            'user_groups' => User_group::all(),
             'show_data' => $show_data
         ])->with([
             'ticket_source'        => config('constants.ticket_source'), //Config::get('constants.ticket_source'),

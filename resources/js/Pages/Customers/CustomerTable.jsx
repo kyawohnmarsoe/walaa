@@ -110,7 +110,6 @@ export default function CustomerTable({ customers, accounts, sub_accounts, user_
             <table className="table">
                 <thead>
                     <tr className='bg-emerald-300'>
-                        <th>Actions</th>
                         <th>Email</th>
                         <th>Display Name</th>
                         <th>Mobile Number</th>
@@ -119,6 +118,7 @@ export default function CustomerTable({ customers, accounts, sub_accounts, user_
                         <th>Sub Account Type</th>
                         <th>User Group</th>
                         <th>Active/Disable</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
 
@@ -136,29 +136,8 @@ export default function CustomerTable({ customers, accounts, sub_accounts, user_
                         {customers && customers.map(cus => (
                             <tr key={cus.id} id={"tr_" + (cus.customer_user_index)}>
                                 <td>
-                                    {cus?.can_refill && <><button className="btn btn-xs btn-outline btn-block btn-info mb-1"
-                                        onClick={() => callRefillModal(cus)}>Refill</button><br /></>}
-
-                                    {cus?.can_change_account && <><button className="btn btn-xs btn-outline btn-block btn-success mb-1"
-                                        onClick={() => callChangeModal(cus)}>Change</button> <br /> </>}
-
-                                    {cus?.can_extend_user && <><button className="btn btn-xs btn-outline btn-block btn-warning" onClick={extendHandler}>Extend</button> </>}
-
-                                    <>
-                                        <button className="btn btn-xs btn-outline btn-block btn-primary mt-1" onClick={() => editLocalCusClick(cus.customer_user_index)}>
-                                            Edit
-                                        </button>
-                                    </>
-
-                                    <>
-                                        <button className="btn btn-xs btn-outline btn-block btn-warning mt-1" onClick={() => callModal(cus)}>
-                                            Disable
-                                        </button>
-                                    </>
-                                </td>
-                                <td>
                                     <div className="font-bold text-sky-700">
-                                        <Link href={`/customers/${cus.customer_user_index}`}>{cus.email}</Link>
+                                        <Link href={`/customers/details/${cus.customer_user_index}`}>{cus.email}</Link>
                                     </div>
                                 </td>
                                 <td>{cus.display_name}</td>
@@ -193,6 +172,27 @@ export default function CustomerTable({ customers, accounts, sub_accounts, user_
                                 </td>
                                 <td className={cus.active_status == 1 ? 'text-emerald-500' : 'text-red-500'}>
                                     {cus.active_status == 1 ? 'Active' : 'Disable'}
+                                </td>
+                                <td>
+                                    {cus?.can_refill && <><button className="btn btn-xs btn-outline btn-block btn-info mb-2"
+                                        onClick={() => callRefillModal(cus)}>Refill</button><br /></>}
+
+                                    {cus?.can_change_account && <><button className="btn btn-xs btn-outline btn-block btn-success mb-2"
+                                        onClick={() => callChangeModal(cus)}>Change</button> <br /> </>}
+
+                                    {cus?.can_extend_user && <><button className="btn btn-xs btn-outline btn-block btn-warning mb-2" onClick={extendHandler}>Extend</button> </>}
+
+                                    <>
+                                        <button className="btn btn-xs btn-outline btn-block btn-default mb-2"
+                                            onClick={() => editLocalCusClick(cus.customer_user_index)}>
+                                            Edit
+                                        </button>
+
+                                        <button className="btn btn-xs btn-outline btn-block btn-secondary"
+                                            onClick={() => callModal(cus)}>
+                                            Disable
+                                        </button>
+                                    </>
                                 </td>
                             </tr>
                         ))}

@@ -137,7 +137,7 @@ class CustomerController extends Controller
 		$data = Deposit_pass::findOrFail($id);
 		$data->update($input);
         return redirect()->route('customers')->with('message', 'Deposit password is successfully updated!');      
-    }
+    } // update_deposit_password
     
     public function insert(StoreCustomerRequest $request) {
         $token   = $this->getSavedToken();
@@ -395,8 +395,7 @@ class CustomerController extends Controller
         ]);
     } // edit
 
-    public function update(StoreCustomerRequest $request, $index) 
-    {
+    public function update(StoreCustomerRequest $request, $index) {
 		$input = $request->all();
         $data = $request->validated(); 
 		$data = Customer::where('customer_user_index', $index)->firstOrFail();
@@ -404,8 +403,7 @@ class CustomerController extends Controller
         return redirect()->route('customers')->with('message', 'Data is successfully updated!'); 
 	} // update
 
-    public function destroy($index)
-    {
+    public function destroy($index) {
         $input = [
             'active_status'=> 0,
         ];
@@ -415,8 +413,7 @@ class CustomerController extends Controller
     } // destroy      
     
 
-    public function change_account(Request $request, $index) 
-    {     
+    public function change_account(Request $request, $index) {     
         // $input = $request->all();
         $input = [
             'account_index'=> $request->AccountIndex,
@@ -431,10 +428,9 @@ class CustomerController extends Controller
         }
 		
         return redirect()->route('users.management')->with('message', $message);      
-    }  
+    } // change_account
 
-    public function details($index)
-    {
+    public function details($index) {
         $token = $this->getSavedToken(); 
         $apiURL  = 'https://rapi.earthlink.iq/api/reseller/user/'.$index ;  
         $headers = [
@@ -448,24 +444,13 @@ class CustomerController extends Controller
             $response_data = $all_data_response['value'];
         } else {
             $response_data = '';
-        }
-              
-        // return response(compact('all_data_response'));
-        // $response_data = '';
-        // if($all_data_response){
-        //     if($all_data_response['message']) {
-        //         $response_data = $all_data_response['message'];
-        //     } else {
-        //         $response_data = $all_data_response['value'];
-        //     }
-            
-        // }
+        }            
         
         return Inertia::render('Customers/Details',[
             'response_data' => $response_data,
             'accountTypes' => Account::all(), 
             'apitoken' => $token          
         ]);
-    }
+    } // details
    
 }

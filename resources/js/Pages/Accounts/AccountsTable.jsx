@@ -1,4 +1,3 @@
-import DangerButton from "@/Components/DangerButton";
 import PrimaryButton from "@/Components/PrimaryButton";
 import SecondaryButton from "@/Components/SecondaryButton";
 import React from "react";
@@ -66,10 +65,9 @@ export default function AccountsTable({ accounts, listname }) {
                         <th>Description</th>
                         <th>Account Price</th>
                         <th>End User Account Price</th>
-                        {/* <th>Image</th> */}
                         {
                             listname == '' &&
-                            <th colSpan="2">Actions</th>
+                            <th>Actions</th>
                         }
                     </tr>
                 </thead>
@@ -91,34 +89,19 @@ export default function AccountsTable({ accounts, listname }) {
                                 </td>
                                 <td>{acc.account_price}</td>
                                 <td>{acc.end_user_account_price}</td>
-                                {/* <td>
-                                    {
-                                        acc.account_image_path ?
-                                            <img
-                                                src={acc.account_image_path}
-                                                width={60}
-                                                alt='Image'
-                                            />
-                                            :
-                                            ''
-                                    }
-                                </td> */}
+
                                 {
                                     listname == '' &&
-                                    <td>
-                                        <PrimaryButton className="bg-sky-800" padding_x='px-2' disabled='' onClick={() => editLocalAccountClick(acc.id)}>
-                                            <svg className="h-4 w-4 text-white mr-1" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">  <path stroke="none" d="M0 0h24v24H0z" />  <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />  <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />  <line x1="16" y1="5" x2="19" y2="8" /></svg>
+                                    <td className="w-2.5">
+                                        <button className="btn btn-xs btn-outline btn-block btn-default"
+                                            onClick={() => editLocalAccountClick(acc.id)}>
                                             Edit
-                                        </PrimaryButton>
-                                    </td>
-                                }
-                                {
-                                    listname == '' &&
-                                    <td>
-                                        <DangerButton padding_x='px-2' disabled='' onClick={() => callModal(acc)} >
-                                            <svg className="h-4 w-4 text-white mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">  <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z" />  <line x1="18" y1="9" x2="12" y2="15" />  <line x1="12" y1="9" x2="18" y2="15" /></svg>
+                                        </button>
+
+                                        <button className="btn btn-xs btn-outline btn-block btn-secondary mt-2"
+                                            onClick={() => callModal(acc)}>
                                             Delete
-                                        </DangerButton>
+                                        </button>
                                     </td>
                                 }
                             </tr>
