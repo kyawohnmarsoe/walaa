@@ -78,7 +78,6 @@ export default function CustomerTable({ customers, accounts, sub_accounts, user_
 
     useEffect(() => {
         // console.log(sub_accounts); 
-        console.log('filter => ', customers)
     }, [])
 
     return (
@@ -157,7 +156,11 @@ export default function CustomerTable({ customers, accounts, sub_accounts, user_
                                         </button>
                                     </>
                                 </td>
-                                <td>{cus.email}</td>
+                                <td>
+                                    <div className="font-bold text-sky-700">
+                                        <Link href={`/customers/${cus.customer_user_index}`}>{cus.email}</Link>
+                                    </div>
+                                </td>
                                 <td>{cus.display_name}</td>
                                 <td>
                                     <strong>Mobile 1</strong> : {cus.mobile_number}

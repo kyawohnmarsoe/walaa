@@ -17,7 +17,8 @@ use App\Models\User_group;
 use App\Models\Invoice;
 
 class CustomerController extends Controller
-{
+{      
+
     public function get_totalcount() {
         $token   = $this->getSavedToken();
         $apiURL  = 'https://rapi.earthlink.iq/api/reseller/user/all' ;  
@@ -137,53 +138,6 @@ class CustomerController extends Controller
 		$data->update($input);
         return redirect()->route('customers')->with('message', 'Deposit password is successfully updated!');      
     }
-
-    public function getUserInfo($userID){
-        $token = $this->getSavedToken();
-        $apiURL = 'https://rapi.earthlink.iq/api/reseller/userpayment/usersInvoice' ;
-        $headers = [
-            'Authorization'=>'Bearer '.$token,
-            'Accept' => 'application/json'
-        ];
-        $post_data = [
-            "UserID" => $userID, 
-        ];
-
-        $new_user_api = Http::withHeaders($headers)->post($apiURL, $post_data);
-        $new_user_response = json_decode($new_user_api->getBody(), true);
-        $invoice = $new_user_response['value']['itemsList'][0];
-        $balance=$invoice['salePrice'];
-        $modifyUser=Auth::user()->name;
-        $data = [
-            'invoinceID' => $invoice['invoinceID'],
-            'userIndex' => $invoice['userIndex'],
-            'displayName' => $invoice['displayName'],
-            'affiliateName' => $invoice['affiliateName'],
-            'invoiceType' => $invoice['invoiceType'],
-            'invoiceDescription' => $invoice['invoiceDescription'],
-            'invoiceDuration' => $invoice['invoiceDuration'],
-            'salePrice' => $invoice['salePrice'],
-            'retailPriceCurrency' => $invoice['retailPriceCurrency'],
-            'retailPrice' => $invoice['retailPrice'],
-            'referenceRecord' => $invoice['referenceRecord'],
-            'recordDate' => $invoice['recordDate'],
-            'lastStatusChanged' => $invoice['lastStatusChanged'],
-            'accountName' => $invoice['accountName'],
-            // 'notes' => $invoice['notes'],
-            'userID' => $invoice['userID'],
-            'discountedPrice' => $invoice['discountedPrice'],
-            'paymentDueDate' => $invoice['paymentDueDate'],
-            // 'paymentDueDateTime' => $invoice['paymentDueDateTime'],
-            'paidPrice' => $invoice['paidPrice'],
-            'balance' => $balance,
-            'invoiceStatus' => $invoice['invoiceStatus'],
-            'notes' => $invoice['notes'],
-            'modifyUser' => $modifyUser,
-        ];
-        // dd($data);
-        Invoice::create($data);
-        //   return redirect()->route('invoices')->with('status', 200);        
-    }
     
     public function insert(StoreCustomerRequest $request) {
         $token   = $this->getSavedToken();
@@ -282,7 +236,54 @@ class CustomerController extends Controller
         
         return redirect()->route('customers')->with('status', 422);
        
-    } // insert       
+    } // insert 
+    
+    public function getUserInfo($userID){
+        $token = $this->getSavedToken();
+        $apiURL = 'https://rapi.earthlink.iq/api/reseller/userpayment/usersInvoice' ;
+        $headers = [
+            'Authorization'=>'Bearer '.$token,
+            'Accept' => 'application/json'
+        ];
+        $post_data = [
+            "UserID" => $userID, 
+        ];
+
+        $new_user_api = Http::withHeaders($headers)->post($apiURL, $post_data);
+        $new_user_response = json_decode($new_user_api->getBody(), true);
+        $invoice = $new_user_response['value']['itemsList'][0];
+        $balance=$invoice['salePrice'];
+        $modifyUser=Auth::user()->name;
+        $data = [
+            'invoinceID' => $invoice['invoinceID'],
+            'userIndex' => $invoice['userIndex'],
+            'displayName' => $invoice['displayName'],
+            'affiliateName' => $invoice['affiliateName'],
+            'invoiceType' => $invoice['invoiceType'],
+            'invoiceDescription' => $invoice['invoiceDescription'],
+            'invoiceDuration' => $invoice['invoiceDuration'],
+            'salePrice' => $invoice['salePrice'],
+            'retailPriceCurrency' => $invoice['retailPriceCurrency'],
+            'retailPrice' => $invoice['retailPrice'],
+            'referenceRecord' => $invoice['referenceRecord'],
+            'recordDate' => $invoice['recordDate'],
+            'lastStatusChanged' => $invoice['lastStatusChanged'],
+            'accountName' => $invoice['accountName'],
+            // 'notes' => $invoice['notes'],
+            'userID' => $invoice['userID'],
+            'discountedPrice' => $invoice['discountedPrice'],
+            'paymentDueDate' => $invoice['paymentDueDate'],
+            // 'paymentDueDateTime' => $invoice['paymentDueDateTime'],
+            'paidPrice' => $invoice['paidPrice'],
+            'balance' => $balance,
+            'invoiceStatus' => $invoice['invoiceStatus'],
+            'notes' => $invoice['notes'],
+            'modifyUser' => $modifyUser,
+        ];
+        // dd($data);
+        Invoice::create($data);
+        //   return redirect()->route('invoices')->with('status', 200);        
+    }
 
     public function store_api(Request $request) {
         $row_count = $request->totalCount;
@@ -431,5 +432,40 @@ class CustomerController extends Controller
 		
         return redirect()->route('users.management')->with('message', $message);      
     }  
+
+    public function details($index)
+    {
+        $token = $this->getSavedToken(); 
+        $apiURL  = 'https://rapi.earthlink.iq/api/reseller/user/'.$index ;  
+        $headers = [
+            'Authorization'=>'Bearer '.$token, 
+            'Accept' => 'application/json'
+        ]; 
+        $all_data_api = Http::withHeaders($headers)->get($apiURL);
+        $all_data_response  = json_decode($all_data_api->getBody(), true);
+        
+        if(\Illuminate\Support\Arr::has($all_data_response, 'value')) {
+            $response_data = $all_data_response['value'];
+        } else {
+            $response_data = '';
+        }
+              
+        // return response(compact('all_data_response'));
+        // $response_data = '';
+        // if($all_data_response){
+        //     if($all_data_response['message']) {
+        //         $response_data = $all_data_response['message'];
+        //     } else {
+        //         $response_data = $all_data_response['value'];
+        //     }
+            
+        // }
+        
+        return Inertia::render('Customers/Details',[
+            'response_data' => $response_data,
+            'accountTypes' => Account::all(), 
+            'apitoken' => $token          
+        ]);
+    }
    
 }
