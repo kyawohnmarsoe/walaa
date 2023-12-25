@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from "react";
 import Modal from '@/Components/Modal';
-import TextInput from '@/Components/TextInput';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import SecondaryButton from '@/Components/SecondaryButton';
 import { useForm, router } from '@inertiajs/react';
-import InputError from '@/Components/InputError';
 
 
 export default function ChangeModal({ modals, setModals, user, apitoken, accountTypes }) {
-    const { data, setData, post, processing, errors, reset } = useForm({
-        UserId: user.userID,
-        AccountIndex: ''
+    const { data, setData } = useForm({
+        UserId: user.customer_user_id,
+        AccountIndex: user.account_index
     })
 
     const [updateInfo, setUpdateInfo] = useState({ value: '', errMessage: '' })
@@ -24,13 +22,9 @@ export default function ChangeModal({ modals, setModals, user, apitoken, account
 
     const submit = (e) => {
         e.preventDefault();
-        // console.log(data)
-        // console.log(filterObj)        
 
         instance.post('/user/chnageaccounttype', data)
             .then(res => {
-                // console.log(res.data.value)
-
                 !res.data.value ? setUpdateInfo({ errMessage: res?.data?.error?.message || 'Can not change account type for this user!', value: '' }) :
                     (setUpdateInfo({ errMessage: '', value: res.data.value }), location.reload())
 
@@ -40,9 +34,9 @@ export default function ChangeModal({ modals, setModals, user, apitoken, account
             })
 
         // change account type in local db
-        // let customer_user_index = user.userIndex
-        // router.post(`/customers/change/account/${customer_user_index}`, data);
-        // closeModal()
+        let customer_user_index = user.userIndex
+        router.post(`/customers/change/account/${customer_user_index}`, data);
+        closeModal()
     }
 
     const closeModal = () => {
@@ -57,11 +51,6 @@ export default function ChangeModal({ modals, setModals, user, apitoken, account
             ...data,
             AccountIndex: '',
         })
-
-
-
-        // flash.status == 201 && 
-
     };
 
 
@@ -73,7 +62,8 @@ export default function ChangeModal({ modals, setModals, user, apitoken, account
                 </h2>
 
                 <p className="mt-1 text-sm ">
-                    You are about to change the account of this user: <span className="font-bold text-sky-700">{user?.userID}</span>
+                    You are about to change the account of this user:
+                    <span className="font-bold text-sky-700">{user?.customer_user_id}</span>
                 </p>
 
                 <div className="mt-6">
@@ -82,7 +72,7 @@ export default function ChangeModal({ modals, setModals, user, apitoken, account
                         name="AccountIndex"
                         id="AccountIndex"
                         className='mt-1 block w-full border-gray-300 focus:border-sky-500 focus:ring-sky-500 rounded-md shadow-sm '
-                        value={data?.AccountIndex}
+                        value={data.AccountIndex}
                         onChange={(e) => setData('AccountIndex', e.target.value)}
                     >
                         <option>Select New Account </option>

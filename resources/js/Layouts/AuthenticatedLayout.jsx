@@ -152,7 +152,7 @@ export default function Authenticated({ user, header, children }) {
                                 </div>
 
 
-                                <NavLink href={ route('accounts') } active={ url.startsWith('/accounts')}>
+                                <NavLink href={route('accounts')} active={url.startsWith('/accounts')}>
                                     Accounts
                                 </NavLink>
                                 <NavLink href={route('affiliates')} active={url.startsWith('/affiliates')}>
@@ -161,7 +161,6 @@ export default function Authenticated({ user, header, children }) {
                                 <NavLink href={route('customers')} active={url.startsWith('/customers')}>
                                     Users
                                 </NavLink>
-
                                 <NavLink href={route('tickets')} active={url.startsWith('/tickets')}>
                                     Tickets
                                 </NavLink>
@@ -206,13 +205,13 @@ export default function Authenticated({ user, header, children }) {
                                         {
                                             roles == 'admin' &&
                                             <>
-                                                <Dropdown.Link href={ route('deposit') } active={ url.startsWith('/deposit') }> Deposit Password</Dropdown.Link>
+                                                <Dropdown.Link href={route('deposit')} active={url.startsWith('/deposit')}> Deposit Password</Dropdown.Link>
 
-                                                 <Dropdown.Link href={ route('usergroup') } active={ url.startsWith('/usergroup') }> Users Group Manage</Dropdown.Link>
-                                                <Dropdown.Link href={ route('systemuser') } active={ url.startsWith('/systemuser') }> Staffs Manage</Dropdown.Link>
+                                                <Dropdown.Link href={route('usergroup')} active={url.startsWith('/usergroup')}> Users Group Manage</Dropdown.Link>
+                                                <Dropdown.Link href={route('systemuser')} active={url.startsWith('/systemuser')}> Staffs Manage</Dropdown.Link>
 
                                                 {/* <Dropdown.Link href={ route('apidata') } active={ url.startsWith('/apidata') }> API Data Manage</Dropdown.Link> */}
-                                                  </>
+                                            </>
                                         }
                                         <Dropdown.Link href={route('logout')} method="post" as="button">
                                             Log Out
@@ -332,7 +331,7 @@ export default function Authenticated({ user, header, children }) {
                         </div>
                     </div>
                 </div>
-            </nav>
+            </nav >
 
             {/* {header && (
                 <header className="bg-white shadow">
@@ -340,8 +339,8 @@ export default function Authenticated({ user, header, children }) {
                 </header>
             )} */}
 
-            <main>{children}</main>
+            < main > {children}</main >
 
-        </div>
+        </div >
     );
 }

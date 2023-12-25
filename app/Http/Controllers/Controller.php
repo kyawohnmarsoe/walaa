@@ -121,45 +121,44 @@ class Controller extends BaseController
         return $customers;
     }
 
-        public function get_deposit_password() {
+    public function get_deposit_password() {
 
         $all_data = Deposit_pass::all();
         if($all_data->count() > 0) {
-        $id = $all_data[0]['id'];
-        $data = Deposit_pass::findOrFail($id);
-        $deposit_password = $data->deposit_password;
-        $deposit_password_id = $data->id;
-        return [
-        'id'=> $deposit_password_id,
-        'deposit_password' => $deposit_password
-        ];
-        }
-        } // get_deposit_password
-
-
-            public function get_totalcount() {
-            $token = $this->getSavedToken();
-            $apiURL = 'https://rapi.earthlink.iq/api/reseller/user/all' ;
-            $headers = [
-            'Authorization'=>'Bearer '.$token,
-            'Accept' => 'application/json'
+            $id = $all_data[0]['id'];
+            $data = Deposit_pass::findOrFail($id);
+            $deposit_password = $data->deposit_password;
+            $deposit_password_id = $data->id;
+            return [
+                'id'=> $deposit_password_id,
+                'deposit_password' => $deposit_password
             ];
-            $post_data = [
+        }
+    } // get_deposit_password
+
+
+    public function get_totalcount() {
+        $token = $this->getSavedToken();
+        $apiURL = 'https://rapi.earthlink.iq/api/reseller/user/all' ;
+        $headers = [
+        'Authorization'=>'Bearer '.$token,
+        'Accept' => 'application/json'
+        ];
+        $post_data = [
             "Rowcount" => 1,
             "OrderBy" => 'Account Name',
-
-            ];
-            $all_users_api = Http::withHeaders($headers)->post($apiURL, $post_data);
-            $all_users_response = json_decode($all_users_api->getBody(), true);
+        ];
+        $all_users_api = Http::withHeaders($headers)->post($apiURL, $post_data);
+        $all_users_response = json_decode($all_users_api->getBody(), true);
 
             $totalCount = 0;
             if ($all_users_response){
-            if($all_users_response['isSuccessful'] === true) {
-            $totalCount = $all_users_response['value']['totalCount'];
-            }
+                if($all_users_response['isSuccessful'] === true) {
+                    $totalCount = $all_users_response['value']['totalCount'];
+                }
             }
             return $totalCount;
 
-            } // get_totalcount
+    } // get_totalcount
     
 }

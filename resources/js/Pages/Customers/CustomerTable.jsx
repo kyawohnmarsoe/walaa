@@ -1,9 +1,10 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { router, Link } from '@inertiajs/react';
+import { router, Link } from '@inertiajs/react';
 import Modal from '@/Components/DaisyUI/Modal';
-import DangerButton from "@/Components/DangerButton";
 import PrimaryButton from "@/Components/PrimaryButton";
+import SecondaryButton from "@/Components/SecondaryButton";
 import TextInput from '@/Components/TextInput';
 import RefillModal from "./RefillModal";
 
@@ -13,16 +14,29 @@ export default function CustomerTable ({ customers, accounts, sub_accounts, user
     deposit_password, auth}) {
     const [loading, setLoading] = useState(false);
 
+    const [modals, setModals] = useState({
+        reFill: false,
+        change: false,
+        extend: false,
+        notify: false,
+    })
+
+    const [user, setUser] = useState([])
+
     function editLocalCusClick(index) {
         router.get(`/customers/${index}`);
     }
 
+    // function notifyCusClick(index) {
+    //     router.get(`/customers/notify/${index}`);
+    // }
+
     function disableCustomer(e) {
-        document.getElementById('deleteModal').close()
+        // document.getElementById('deleteModal').close()
         e.preventDefault()
         let customerUserIndex = document.getElementById('customer_user_index').value
-        // console.log(customerUserIndex);        
         router.delete(`/customers/${customerUserIndex}`);
+        onCloseModal();
     }
 
     const callModal = (cus) => {
@@ -32,12 +46,51 @@ export default function CustomerTable ({ customers, accounts, sub_accounts, user
         document.getElementById(`tr_${cus.customer_user_index}`).classList.toggle('bg-gray-300');
     }
     const onCloseModal = () => {
+        document.getElementById('deleteModal').close()
         let customerUserIndex = document.getElementById('customer_user_index').value
         document.getElementById('tr_' + customerUserIndex).classList.toggle('bg-gray-300');
     };
 
+    const callRefillModal = (cus) => {
+        setModals({ ...modals, reFill: true })
+        setUser(cus)
+    }
+
+    const callChangeModal = (cus) => {
+        setModals({ ...modals, change: true })
+        setUser(cus)
+    }
+
+    const callNotifyModal = (cus) => {
+        setModals({ ...modals, notify: true })
+        setUser(cus)
+    }
+
+    const instance = axios.create({
+        baseURL: 'https://rapi.earthlink.iq/api/reseller',
+        headers: { 'Authorization': `Bearer ${apitoken}` }
+    });
+    const extendUser = () => {
+        instance.post(`/user/extend/${cus.customer_user_index}`)
+            .then(res => {
+                res.data.isSuccessful ? (alert(`Extend Success!`), location.reload()) : alert(`Sorry! ${res.data.error?.message}`);
+
+                console.log(res)
+
+            })
+            .catch(err => {
+                console.log(err)
+            })
+
+        console.log('extendUser running..')
+    }
+    const extendHandler = () => {
+        const result = confirm("Are you sure you want to extend this user!")
+        result && extendUser()
+    }
+
     useEffect(() => {
-        // console.log(sub_accounts);
+        // console.log(sub_accounts); 
     }, [])
 
     const [modalUser,setModalUser] = useState(null)
@@ -64,11 +117,21 @@ export default function CustomerTable ({ customers, accounts, sub_accounts, user
                         </div>
                     </div>
                     <TextInput id="customer_user_index" name="customer_user_index" type="hidden" />
-                    <div className="flex items-center gap-4">
-                        {<PrimaryButton disabled="" type="submit" >Disable</PrimaryButton>}
+                    <div className="mt-6 flex justify-end">
+                        <SecondaryButton onClick={onCloseModal}>Cancel</SecondaryButton>
+                        <PrimaryButton className="ml-3" disabled="" type="submit" >Disable</PrimaryButton>
                     </div>
                 </form>
             </Modal>
+
+            <RefillModal modals={modals} setModals={setModals}
+                accountTypes={accounts} apitoken={apitoken} user={user}
+                deposit_password={deposit_password} auth={auth}
+            />
+            <ChangeModal modals={modals} setModals={setModals}
+                accountTypes={accounts} apitoken={apitoken} user={user}
+            />
+            <NotifyModal modals={modals} setModals={setModals} user={user} />
 
             <table className="table">
                 <thead>
@@ -80,9 +143,8 @@ export default function CustomerTable ({ customers, accounts, sub_accounts, user
                         <th>Display Name</th>
                         <th>Mobile Number</th>
                         <th>Affiliate Name</th>
-                        <th>Main Account Info</th>
-                        <th>Sub Account Type</th>
-                        <th>User Group</th>
+                        <th>Account Info</th>
+                        <th>Expiration Date	</th>
                         <th>Active/Disable</th>
                         <th >Actions</th>
                     </tr>
@@ -126,22 +188,20 @@ export default function CustomerTable ({ customers, accounts, sub_accounts, user
                                     <strong>Acc Status</strong> : {cus.account_status}
                                     <br />
                                     <strong>Acc Pkg Type</strong> : {cus.account_package_type}
-                                </td>
-                                <td>
+
                                     {
                                         sub_accounts.filter(subacc => subacc.id == cus.sub_account_id)
                                             .map(filteredRes => (
-                                                filteredRes.account_name
+                                                <>
+                                                    <br />
+                                                    <strong>Sub Acc Name</strong> : filteredRes.account_name
+                                                </>
                                             ))
                                     }
+                                    <br />
                                 </td>
                                 <td>
-                                    {
-                                        user_groups.filter(user_gp => user_gp.id == cus.user_group_id)
-                                            .map(filteredRes => (
-                                                filteredRes.group_name
-                                            ))
-                                    }
+                                    {cus.manual_expiration_date}
                                 </td>
                                 <td className={cus.active_status == 1 ? 'text-emerald-500' : 'text-red-500'}>
                                     {cus.active_status == 1 ? 'Active' : 'Disable'}

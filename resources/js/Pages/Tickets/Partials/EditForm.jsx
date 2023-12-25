@@ -11,8 +11,7 @@ import Select, { components } from "react-select";
 import InputError from '@/Components/InputError';
 import { format, formatDistance } from 'date-fns';
 
-
-export default function EditForm ({ className = '', ticket, customers, updated_by_loggedin_user, remarks, users }) {
+export default function EditForm({ className = '', ticket, customers, updated_by_loggedin_user, remarks, users }) {
 
     // console.log(users)
     const { processing, recentlySuccessful } = useForm();
@@ -132,7 +131,7 @@ export default function EditForm ({ className = '', ticket, customers, updated_b
     }
 
     useEffect(() => {
-       
+
         getCustomers()
         getSelectedCustomer(ticket.user_id)
         // console.log("old user value ", values.user_id)
@@ -223,7 +222,7 @@ export default function EditForm ({ className = '', ticket, customers, updated_b
         router.post(`/tickets/${ticket.id}`, values)
     }
 
-   
+
     return (
         <section className={className}>
             <div className='flex items-center justify-end gap-4 p-2'>
@@ -346,21 +345,19 @@ export default function EditForm ({ className = '', ticket, customers, updated_b
                         <InputLabel htmlFor="image" value="Image" />
                         <div className='flex border-none'>
                             <div>
-                            <TextInput
-                                id="image"
-                                name="image"
-                                onChange={ imageHandleChange }
-                                type="file"
-                                className="mt-1 block w-full border-none rounded-none"
-                            /><p className="mt-2 text-sm text-gray-500 " id="file_input_help">
-                                svg, png, jpg, jpeg or gif.
-                            </p>
+                                <TextInput
+                                    id="image"
+                                    name="image"
+                                    onChange={imageHandleChange}
+                                    type="file"
+                                    className="mt-1 block w-full border-none rounded-none"
+                                /><p className="mt-2 text-sm text-gray-500 " id="file_input_help">
+                                    svg, png, jpg, jpeg or gif.
+                                </p>
                             </div>
-                            <img className="h-auto max-w-xs rounded-lg" src={ urlImage } width='50' />
+                            <img className="h-auto max-w-xs rounded-lg" src={urlImage} width='50' />
                         </div>
-                        
-                        
-                       
+
                         <InputError className="mt-2" message={errors.image} />
                     </div>
 
@@ -372,7 +369,7 @@ export default function EditForm ({ className = '', ticket, customers, updated_b
                                 <TextInput
                                     id="attach_file"
                                     name="attach_file"
-                                    onChange={ attachFileHandleChange }
+                                    onChange={attachFileHandleChange}
                                     type="file"
                                     className="mt-1 block w-full border-none rounded-none"
                                 />
@@ -380,11 +377,9 @@ export default function EditForm ({ className = '', ticket, customers, updated_b
                                     docx, doc, pdf, csv, xls or xlsx.
                                 </p>
                             </div>
-                            <p className="mt-4 text-sm text-emerald-600">{ urlAttachFile }</p>
+                            <p className="mt-4 text-sm text-emerald-600">{urlAttachFile}</p>
                         </div>
 
-                        
-                        
                         <InputError className="mt-2" message={errors.attach_file} />
                     </div>
 
@@ -398,21 +393,37 @@ export default function EditForm ({ className = '', ticket, customers, updated_b
                     />
                 </div>
 
-               
                 {
-                  remarks.map(rm => (
-                     
-                      <div className="max-w-xl rounded overflow-hidden shadow-lg px-3 pt-4 mb-4">
-                                <div className="grid grid-cols-3 gap-4">
-                                    <div className="col-span-2">
-                                        {rm.remarks}
-                                        <br/>
+                    remarks && remarks.map(rm => (
+                        <>
+                            <div key={"rmdiv_" + (rm.id)}>
+                                <span className="text-gray-700">
+                                    Remarks :
+                                </span>
+                                <div className="max-w-xl rounded overflow-hidden shadow-lg px-3 pt-4 mb-4">
+                                    <div className="grid grid-cols-3 gap-4">
+                                        <div className="col-span-2">
+                                            {rm.remarks}
+                                            <br />
+                                        </div>
+                                        <div className="text-right">
+                                            {/* <a href={`/tickets/delete_remark/${rm.id}`} key={rm.id} className="text-sm text-red-500 underline remove_rm">Remove</a> */}
+                                        </div>
                                     </div>
-                                    <div className="text-right">
-                                  {/* <a href='/tickets/delete_remark/${rm.id}' key={ rm.id } className="text-sm text-red-500 underline remove_rm">Remove</a> */}
-                                    </div>
-                                </div>
 
+                                    <div className="flex items-center pb-3">
+                                        <div className="mt-4 mb-2">
+                                            <p className="text-sm text-gray-900 leading-none mb-1">
+                                                {users.filter(user => user.id == rm.remark_by).map(filteredUser => (
+                                                    filteredUser.name
+                                                ))}
+
+                                            </p>
+                                            <p className="text-xs text-gray-600">
+                                                {format(new Date(rm.created_at), 'MMMM, dd yyyy')}
+                                            </p>
+                                        </div>
+                                    </div>
                                 <div className="flex items-center pb-3">
                                     <div className="mt-4 mb-2">
                                         <p className="text-sm text-gray-900 leading-none mb-1">
@@ -428,11 +439,12 @@ export default function EditForm ({ className = '', ticket, customers, updated_b
                                     </div>
                                 </div>
 
-                        </div>
-
-                  ))
+                                </div>
+                            </div>
+                        </>
+                    ))
                 }
-               
+
 
                 <div className="flex items-center gap-4">
                     <PrimaryButton disabled={processing} type="submit">Update</PrimaryButton>
@@ -448,6 +460,6 @@ export default function EditForm ({ className = '', ticket, customers, updated_b
                     </Transition>
                 </div>
             </form>
-        </section>
+        </section >
     );
 }

@@ -2,16 +2,16 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { usePage, router } from '@inertiajs/react';
 import PrimaryButton from "@/Components/PrimaryButton";
-import DangerButton from "@/Components/DangerButton";
+import SecondaryButton from "@/Components/SecondaryButton";
 import Modal from "@/Components/DaisyUI/Modal";
 import InputLabel from '@/Components/InputLabel';
 import TextInput from "@/Components/TextInput";
 import Textarea from '@/Components/Textarea';
 import { format, formatDistance } from 'date-fns';
 
-export default function TicketTable({ tickets, users, remarks }) {
+export default function TicketTable({ tickets, users, user_groups, remarks }) {
     const [loading] = useState(false);
-   
+
     const { ticket_source, topic, level_of_importance } = usePage().props
     const [ticketSource] = useState([ticket_source])
     const [topicData] = useState([topic])
@@ -98,6 +98,7 @@ export default function TicketTable({ tickets, users, remarks }) {
     const onCloseModal = () => {
         // console.log('Close Modal - ', values.ticket_id)
         // console.log('Close Modal status - ', values.ticket_status)
+        document.getElementById('ticket_deleteModal').close()
         {
             values.ticket_status == 0
                 ? ''
@@ -107,11 +108,12 @@ export default function TicketTable({ tickets, users, remarks }) {
     };
 
     function deleteData(e) {
-        document.getElementById('ticket_deleteModal').close()
+        // document.getElementById('ticket_deleteModal').close()
         e.preventDefault()
         let ticketId = document.getElementById('ticket_id').value
         // console.log(ticketId)
         router.delete(`/tickets/${ticketId} `);
+        onCloseModal();
     }
 
     function deleteImageData(e) {
@@ -137,8 +139,9 @@ export default function TicketTable({ tickets, users, remarks }) {
     }
 
     function addRemark(e) {
-        e.preventDefault()
+        document.getElementById('ticket_viewModal').close()
         onCloseModal()
+        e.preventDefault()
         router.post(`/tickets/store/remark`, values);
     }
 
@@ -158,8 +161,10 @@ export default function TicketTable({ tickets, users, remarks }) {
                         </div>
                     </div>
                     <TextInput className="ticket_id" id="ticket_id" name="ticket_id" type="hidden" value={values.ticket_id} />
-                    <div className="flex items-center gap-4">
-                        {<PrimaryButton disabled="" type="submit" >Delete</PrimaryButton>}
+
+                    <div className="mt-6 flex justify-end">
+                        <SecondaryButton onClick={onCloseModal}>Cancel</SecondaryButton>
+                        <PrimaryButton className="ml-3" disabled="" type="submit" >Delete</PrimaryButton>
                     </div>
                 </form>
             </Modal>
@@ -210,7 +215,7 @@ export default function TicketTable({ tickets, users, remarks }) {
                         type="hidden"
                         value={values.ticket_id}
                     />
-                    <div className="flex items-center gap-4">
+                    <div className="mt-6 flex justify-end">
                         <PrimaryButton disabled="" type="submit" >Add Remark</PrimaryButton>
                     </div>
                 </form>
@@ -222,7 +227,7 @@ export default function TicketTable({ tickets, users, remarks }) {
                 </div>
                 <form onSubmit={deleteImageData} className="space-y-6 ">
                     <TextInput className="ticket_id" id="ticket_id" name="ticket_id" type="hidden" value={values.ticket_id} />
-                    <div className="flex items-center gap-4">
+                    <div className="mt-6 flex justify-end">
                         {<PrimaryButton disabled="" type="submit" >Delete This Image</PrimaryButton>}
                     </div>
                 </form>
@@ -236,7 +241,7 @@ export default function TicketTable({ tickets, users, remarks }) {
                 </div>
                 <form onSubmit={deleteFileData} className="space-y-6 ">
                     <TextInput className="ticket_id" id="ticket_id" name="ticket_id" type="hidden" value={values.ticket_id} />
-                    <div className="flex items-center gap-4">
+                    <div className="mt-6 flex justify-end">
                         {<PrimaryButton disabled="" type="submit" >Delete This File</PrimaryButton>}
                     </div>
                 </form>
@@ -253,7 +258,7 @@ export default function TicketTable({ tickets, users, remarks }) {
                         <th>Address</th>
                         <th>Image</th>
                         <th>Attached File</th>
-                        <th colSpan="2">Actions</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
 
@@ -282,7 +287,7 @@ export default function TicketTable({ tickets, users, remarks }) {
                                     >
                                         {dt.ticket_number}
                                     </a>
-                                    <small className="block mt-2">
+                                    <small className={`block mt-2 ${dt.ticket_status == 0 ? '' : 'font-bold text-teal-150'}`}>
                                         Status : {dt.ticket_status == 0 ? 'Opened' : 'Closed'}
                                     </small>
                                     {
@@ -296,7 +301,18 @@ export default function TicketTable({ tickets, users, remarks }) {
                                         </small>
                                     }
                                 </td>
-                                <td>{dt.customer_user_id}</td>
+                                <td>
+                                    {dt.customer_user_id}
+
+                                    {dt.user_group_id &&
+                                        user_groups.filter(user_gp => user_gp.id == dt.user_group_id)
+                                            .map(filteredRes =>
+                                                <small className="block mt-2">
+                                                    User Group : {filteredRes.group_name}
+                                                </small>
+                                            )
+                                    }
+                                </td>
                                 <td>{topicData[0][dt.topic]}</td>
                                 <td>{levelData[0][dt.level_of_importance]}</td>
                                 <td>{ticketSource[0][dt.ticket_source]}</td>
@@ -330,16 +346,15 @@ export default function TicketTable({ tickets, users, remarks }) {
                                     }
                                 </td>
                                 <td>
-                                    <PrimaryButton className="bg-sky-800" padding_x='px-2' disabled='' onClick={() => editData(dt.id)}>
-                                        <svg className="h-4 w-4 text-white mr-1" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">  <path stroke="none" d="M0 0h24v24H0z" />  <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />  <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />  <line x1="16" y1="5" x2="19" y2="8" /></svg>
+                                    <button className="btn btn-xs btn-outline btn-block btn-default"
+                                        onClick={() => editData(dt.id)}>
                                         Edit
-                                    </PrimaryButton>
-                                </td>
-                                <td>
-                                    <DangerButton onClick={() => callModal(dt, 'ticket_deleteModal')} padding_x='px-2' disabled=''>
-                                        <svg className="h-4 w-4 text-white mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">  <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z" />  <line x1="18" y1="9" x2="12" y2="15" />  <line x1="12" y1="9" x2="18" y2="15" /></svg>
+                                    </button>
+
+                                    <button className="btn btn-xs btn-outline btn-block btn-secondary mt-2"
+                                        onClick={() => callModal(dt, 'ticket_deleteModal')}>
                                         Delete
-                                    </DangerButton>
+                                    </button>
                                 </td>
                             </tr>
                         ))}

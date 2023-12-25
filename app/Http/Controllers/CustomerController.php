@@ -14,9 +14,14 @@ use App\Models\Sub_account;
 use App\Models\Deposit_pass;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Models\User_group;
+use App\Models\Invoice;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 
 class CustomerController extends Controller
-{
+{      
+
     public function get_totalcount() {
         $token   = $this->getSavedToken();
         $apiURL  = 'https://rapi.earthlink.iq/api/reseller/user/all' ;  
@@ -34,30 +39,16 @@ class CustomerController extends Controller
         
         $totalCount = 0;
         if ($all_users_response){
+            return response(compact('all_users_response'));
             if($all_users_response['isSuccessful'] === true) { 
                 $totalCount = $all_users_response['value']['totalCount'];
+            } else {
+                $totalCount = 0;
             }
         }
         return $totalCount;     
        
-    } // get_totalcount
-
-    // public function get_deposit_password() {
-    // public function get_deposit_password() {
-
-    //     $all_data = Deposit_pass::all();
-    //     if($all_data->count() > 0) {
-    //         $id = $all_data[0]['id'];
-    //         $data = Deposit_pass::findOrFail($id);
-    //         $deposit_password = $data->deposit_password;
-    //         $deposit_password_id = $data->id;
-    //         return [
-    //             'id'=> $deposit_password_id,
-    //             'deposit_password' => $deposit_password
-    //         ];
-    //     }      
-    // } 
-    // get_deposit_password   
+    } // get_totalcount   
    
     public function index(Request $request)
     {
@@ -69,6 +60,8 @@ class CustomerController extends Controller
         $token = $this->getSavedToken();  
         
         $totalCount = $this->get_totalcount(); 
+
+        $deposit_data = $this->get_deposit_password();
         
         if ($request->hasAny(['account_index', 'sub_account_id', 'affiliate_index', 'customer_user_id', 'status', 'user_group_id'])) {
            
@@ -98,7 +91,9 @@ class CustomerController extends Controller
             
             $customers_query = Customer::leftJoin('affiliates', 'affiliates.affiliate_index', '=', 'customers.affiliate_index')
                 ->leftJoin('accounts', 'accounts.account_index', '=', 'customers.account_index');
-                // ->whereNull('customers.user_group_id')
+                // ->where(DB::raw("(STR_TO_DATE(customers.manual_expiration_date,'%d/%m/%Y'))"), ">=", Carbon::now())
+                // ->where(DB::raw("(STR_TO_DATE(customers.manual_expiration_date,'%d/%m/%Y'))"), '=', today()->addDays(2));
+                // ->whereNull('customers.user_group_id')              
 
             $show_data = 'list';
         } 
@@ -120,19 +115,17 @@ class CustomerController extends Controller
             'sub_accounts' => Sub_account::all(),              
             'accounts'    => Account::all(),
             'affiliates'  => Affiliate::all(),  
-            'user_groups' => $filter_user_groups,// User_group::all(),
+            'sys_users'   => User::all(),
+            'user_groups' => $filter_user_groups,
             'show_data'  => $show_data,
             'apitoken'   => $token, 
-            'totalCount' => $totalCount,                 
+            'totalCount' => $totalCount, 
+            'deposit_password' => $deposit_data['deposit_password'],                
         ]);
     } // index
-
     public function create() {
-
         // $this->getUserInfo('testuser@gmail.comm');
-
-        $token = $this->getSavedToken();
-        
+        $token = $this->getSavedToken();        
         return Inertia::render('Customers/Customers', [
             'show_data'  => 'add_form',
             'accounts' => Account::all(),
@@ -142,80 +135,15 @@ class CustomerController extends Controller
             'apitoken' => $token,
         ]);
         
-    } // create
-    
-    // public function change_deposit_password() {
-    //     $token = $this->getSavedToken();
-    //     $deposit_data = $this->get_deposit_password();
-    //     return Inertia::render('Customers/Customers', [
-    //         'show_data'  => 'deposit_form',
-    //         'accounts' => Account::all(),
-    //         'sub_accounts' => Sub_account::all(),
-    //         'affiliates' => Affiliate::all(),
-    //         'apitoken' => $token,
-    //         'deposit_password' => $deposit_data['deposit_password'],  
-    //         'deposit_id' => $deposit_data['id'],
-    //     ]);
-        
-    // } // change_deposit_password
-
+    } // create   
+  
     public function update_deposit_password(Request $request, $id) 
     {       
         $input = $request->all();
 		$data = Deposit_pass::findOrFail($id);
 		$data->update($input);
         return redirect()->route('customers')->with('message', 'Deposit password is successfully updated!');      
-    }
-
-    public function getUserInfo($userID){
-        $token = $this->getSavedToken();
-         $apiURL = 'https://rapi.earthlink.iq/api/reseller/userpayment/usersInvoice' ;
-         $headers = [
-         'Authorization'=>'Bearer '.$token,
-         'Accept' => 'application/json'
-         ];
-          $post_data = [
-          "UserID" => $userID, 
-          ];
-
-        $new_user_api = Http::withHeaders($headers)->post($apiURL, $post_data);
-         $new_user_response = json_decode($new_user_api->getBody(), true);
-          $invoice = $new_user_response['value']['itemsList'][0];
-          $balance=$invoice['salePrice'];
-          $modifyUser=Auth::user()->name;
-          $data = [
-          'invoinceID' => $invoice['invoinceID'],
-          'userIndex' => $invoice['userIndex'],
-          'displayName' => $invoice['displayName'],
-          'affiliateName' => $invoice['affiliateName'],
-          'invoiceType' => $invoice['invoiceType'],
-          'invoiceDescription' => $invoice['invoiceDescription'],
-          'invoiceDuration' => $invoice['invoiceDuration'],
-          'salePrice' => $invoice['salePrice'],
-          'retailPriceCurrency' => $invoice['retailPriceCurrency'],
-          'retailPrice' => $invoice['retailPrice'],
-          'referenceRecord' => $invoice['referenceRecord'],
-          'recordDate' => $invoice['recordDate'],
-          'lastStatusChanged' => $invoice['lastStatusChanged'],
-          'accountName' => $invoice['accountName'],
-          // 'notes' => $invoice['notes'],
-          'userID' => $invoice['userID'],
-          'discountedPrice' => $invoice['discountedPrice'],
-          'paymentDueDate' => $invoice['paymentDueDate'],
-          // 'paymentDueDateTime' => $invoice['paymentDueDateTime'],
-          'paidPrice' => $invoice['paidPrice'],
-          'balance' => $balance,
-          'invoiceStatus' => $invoice['invoiceStatus'],
-          'notes' => $invoice['notes'],
-          'modifyUser' => $modifyUser,
-          ];
-
-            // dd($data);
-          Invoice::create($data);
-
-        //   return redirect()->route('invoices')->with('status', 200);
-        
-    }
+    } // update_deposit_password
     
     public function insert(StoreCustomerRequest $request) {
         $token   = $this->getSavedToken();
@@ -314,7 +242,54 @@ class CustomerController extends Controller
         
         return redirect()->route('customers')->with('status', 422);
        
-    } // insert       
+    } // insert 
+    
+    public function getUserInfo($userID){
+        $token = $this->getSavedToken();
+        $apiURL = 'https://rapi.earthlink.iq/api/reseller/userpayment/usersInvoice' ;
+        $headers = [
+            'Authorization'=>'Bearer '.$token,
+            'Accept' => 'application/json'
+        ];
+        $post_data = [
+            "UserID" => $userID, 
+        ];
+
+        $new_user_api = Http::withHeaders($headers)->post($apiURL, $post_data);
+        $new_user_response = json_decode($new_user_api->getBody(), true);
+        $invoice = $new_user_response['value']['itemsList'][0];
+        $balance=$invoice['salePrice'];
+        $modifyUser=Auth::user()->name;
+        $data = [
+            'invoinceID' => $invoice['invoinceID'],
+            'userIndex' => $invoice['userIndex'],
+            'displayName' => $invoice['displayName'],
+            'affiliateName' => $invoice['affiliateName'],
+            'invoiceType' => $invoice['invoiceType'],
+            'invoiceDescription' => $invoice['invoiceDescription'],
+            'invoiceDuration' => $invoice['invoiceDuration'],
+            'salePrice' => $invoice['salePrice'],
+            'retailPriceCurrency' => $invoice['retailPriceCurrency'],
+            'retailPrice' => $invoice['retailPrice'],
+            'referenceRecord' => $invoice['referenceRecord'],
+            'recordDate' => $invoice['recordDate'],
+            'lastStatusChanged' => $invoice['lastStatusChanged'],
+            'accountName' => $invoice['accountName'],
+            // 'notes' => $invoice['notes'],
+            'userID' => $invoice['userID'],
+            'discountedPrice' => $invoice['discountedPrice'],
+            'paymentDueDate' => $invoice['paymentDueDate'],
+            // 'paymentDueDateTime' => $invoice['paymentDueDateTime'],
+            'paidPrice' => $invoice['paidPrice'],
+            'balance' => $balance,
+            'invoiceStatus' => $invoice['invoiceStatus'],
+            'notes' => $invoice['notes'],
+            'modifyUser' => $modifyUser,
+        ];
+        // dd($data);
+        Invoice::create($data);
+        //   return redirect()->route('invoices')->with('status', 200);        
+    }
 
     public function store_api(Request $request) {
         $row_count = $request->totalCount;
@@ -330,8 +305,9 @@ class CustomerController extends Controller
             
         ]; 
         $all_users_api = Http::withHeaders($headers)->post($apiURL, $post_data);
-        $all_users_response  = json_decode($all_users_api->getBody(), true);        
-
+        $all_users_response  = json_decode($all_users_api->getBody(), true); 
+        // return response(compact('all_users_response'));      
+      
         if ($all_users_response) {
             if($all_users_response['isSuccessful'] === true) {                 
                 $affiliates = Affiliate::all();
@@ -351,7 +327,7 @@ class CustomerController extends Controller
                             $affiliate_index = $aff['affiliate_index'];
                         }
                     }
-                    $sub_account_id = 0; 
+                    $sub_account_id = 0;                   
                     
                     // if existed data, update some fields
                     if (in_array($dt['userIndex'], $existed_userIndex)) {                        
@@ -359,7 +335,12 @@ class CustomerController extends Controller
                             'caller_id' => $dt['callerID'],
                             'status' => $dt['onlineStatus'], 
                             'account_status' => $dt['accountStatus'], 
-                            'account_package_type' => $dt['accountPackageType'],
+                            'account_package_type' => $dt['accountPackageType'],  
+
+                            'manual_expiration_date' => $dt['manualExpirationDate'],
+                            'can_refill'             => $dt['canRefill'],
+                            'can_change_account' => $dt['canChangeAccount'],
+                            'can_extend_user'    => $dt['canExtendUser'],
                         ];                     
                         Customer::where('customer_user_index', $dt['userIndex'])->update($update_data); 
                         continue; // for skip duplicate index                       
@@ -387,7 +368,12 @@ class CustomerController extends Controller
                         'customer_user_notes'  => $dt['userNotes'],
                         'status'               => $dt['onlineStatus'],
                         'account_status'       => $dt['accountStatus'],
-                        'account_package_type' =>  $dt['accountPackageType'],                          
+                        'account_package_type' =>  $dt['accountPackageType'],
+
+                        'manual_expiration_date' => $dt['manualExpirationDate'],
+                        'can_refill'             => $dt['canRefill'],
+                        'can_change_account' => $dt['canChangeAccount'],
+                        'can_extend_user'    => $dt['canExtendUser'],                       
                     ]);   
                 }     
                 
@@ -417,8 +403,7 @@ class CustomerController extends Controller
         ]);
     } // edit
 
-    public function update(StoreCustomerRequest $request, $index) 
-    {
+    public function update(StoreCustomerRequest $request, $index) {
 		$input = $request->all();
         $data = $request->validated(); 
 		$data = Customer::where('customer_user_index', $index)->firstOrFail();
@@ -426,20 +411,122 @@ class CustomerController extends Controller
         return redirect()->route('customers')->with('message', 'Data is successfully updated!'); 
 	} // update
 
-    public function destroy($index)
-    {
+    public function destroy($index) {
         $input = [
             'active_status'=> 0,
         ];
 		$data = Customer::where('customer_user_index', $index)->firstOrFail();
 		$data->update($input);
         return redirect()->route('customers')->with('message', 'User is successfully disabled!');
-    } // destroy  
+    } // destroy      
     
-     public function deposit(){
-     $deposit_data = $this->get_deposit_password();
- 
-    //  return back()->with('pass', $deposit_data['deposit_password']);
-     }
+
+    public function change_account(Request $request, $index) {     
+        // $input = $request->all();
+        $input = [
+            'account_index'=> $request->AccountIndex,
+        ];
+		$data = Customer::where('customer_user_index', $index)->first();   
+        if($data) {  
+            $data = Customer::where('customer_user_index', $index)->firstOrFail(); 
+            $data->update($input);
+            $message = 'Account is successfully updated!';
+        } else {
+            $message = 'No data found in local datebase!';
+        }
+		
+        return redirect()->route('users.management')->with('message', $message);      
+    } // change_account
+
+    public function details($index) {
+        $token = $this->getSavedToken(); 
+        $apiURL  = 'https://rapi.earthlink.iq/api/reseller/user/'.$index ;  
+        $headers = [
+            'Authorization'=>'Bearer '.$token, 
+            'Accept' => 'application/json'
+        ]; 
+        $all_data_api = Http::withHeaders($headers)->get($apiURL);
+        $all_data_response  = json_decode($all_data_api->getBody(), true);
+        
+        if(\Illuminate\Support\Arr::has($all_data_response, 'value')) {
+            $response_data = $all_data_response['value'];
+        } else {
+            $response_data = '';
+        }            
+        
+        return Inertia::render('Customers/Details',[
+            'response_data' => $response_data,
+            'accountTypes' => Account::all(), 
+            'apitoken' => $token          
+        ]);
+    } // details
+
+    public function notify($index) {
+        $data = Customer::where('customer_user_index', $index)->get();  
+        $send_mobile = ''; 
+        if(count($data) > 0) {
+            $send_mobile = $data[0]['mobile_number'] ? $data[0]['mobile_number'] : $data[0]['mobile_number2']; 
+            // $send_mobile = '66952806757';
+        }
+        
+        $token   = 'd2FsYS1saW5rOldsQDFlZjZeYXpY';
+        $apiURL  = 'http://sms.alufiq.com/sms/2/text/advanced' ;  
+        $headers = [
+            'Authorization'=>'Basic '.$token, 
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json'          
+        ];    
+     
+        $post_data = [
+            "messages"=> [
+                  "destinations" => [
+                      "to"=> $send_mobile // 41793026727
+                  ],
+                  "from"=> "InfoSMS-Walaa",
+                  "text"=> "Your account is going to expiring soon!"
+              ]
+        ];
+
+        if($send_mobile != '') {
+            $sms_api = Http::withHeaders($headers)->post($apiURL, $post_data);
+            $sms_api_response  = json_decode($sms_api->getBody(), true); 
+
+            // return response(compact('sms_api_response'));
+
+            // {"messages":[
+            //     {"messageId":"4034247944424335443522",
+            //         "status":{
+            //             "description":"Message sent to next instance",
+            //             "groupId":1,
+            //             "groupName":"PENDING",
+            //             "id":26,
+            //             "name":"PENDING_ACCEPTED"
+            //         },
+            //         "to":"66952806757"}
+            //     ]
+            // }
+
+            // $sms_api_response = '';
+            
+            if(\Illuminate\Support\Arr::has($sms_api_response, 'messages')) {                
+                if($sms_api_response['messages'][0]['status']['name'] == 'PENDING_ACCEPTED') {
+                    $update_data = [
+                        'sms_status'=> 1,
+                        'sms_sent_by' => Auth::id(),
+                    ];            
+                    $data = Customer::where('customer_user_index', $index)->firstOrFail(); 
+                    $data->update($update_data);
+                   
+                    return redirect()->route('customers')->with('message', 'Notification message is successfully sent!');
+                }
+            } else {
+                return redirect()->route('customers')->with('error_message', 'Something went wrong in sending message!');
+            }         
+            
+        } else {
+            return redirect()->route('customers')->with('error_message', 'Not found mobile number to send SMS.');  
+        }         
+               
+    } // notify
    
 }
