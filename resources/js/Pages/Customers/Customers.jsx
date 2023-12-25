@@ -16,6 +16,7 @@ export default function Customers({
     affiliates,
     accounts,
     sub_accounts,
+    sys_users,
     user_groups,
     apitoken,
     totalCount,
@@ -73,14 +74,14 @@ export default function Customers({
             <div className="py-12 ">
                 <div className="max-w-8xl mx-auto sm:px-6 lg:px-4">
                     {flash.status == 422 &&
-                        <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
+                        <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4 mb-2" role="alert">
                             <p className="font-bold">Warning</p>
                             <p>Something went wrong!</p>
                         </div>
                     }
 
                     {flash.status == 201 &&
-                        <div className="alert alert-success">
+                        <div className="alert alert-success mb-2">
                             Data created successfully.
                         </div>
                     }
@@ -92,14 +93,13 @@ export default function Customers({
                     }
 
                     {flash.error_message &&
-                        <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
+                        <div className="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4 mb-2" role="alert">
                             <p className="font-bold">Warning</p>
                             <p>{flash.error_message}</p>
                         </div>
                     }
                     <div className="bg-white overflow-hidden shadow-sm ">
                         <div className="text-gray-900">
-
                             {
                                 (show_data == 'list' || show_data == 'filter_list') &&
                                 <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
@@ -155,6 +155,7 @@ export default function Customers({
                                             tableName="customer"
                                             sub_accounts={sub_accounts}
                                             accounts={accounts}
+                                            users={sys_users}
                                             user_groups={user_groups}
                                             setFilterObj={setFilterObj}
                                             filterObj={filterObj}

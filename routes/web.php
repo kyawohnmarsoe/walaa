@@ -89,6 +89,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/customers/{index}', [CustomerController::class, 'destroy'])->name('customers.destroy');
     Route::post('/customers/change/account/{index}', [CustomerController::class, 'change_account'])->name('customers.change.account'); 
     Route::get('/customers/details/{index}', [CustomerController::class, 'details'])->name('customers.details');
+    Route::get('/customers/notify/{index}', [CustomerController::class, 'notify'])->name('customers.notify');
     // Route::get('/customers/change_deposit_pass', [CustomerController::class, 'change_deposit_password'])->name('customers.change_deposit_pass');
     // Route::post('/customers/change_deposit_pass/{id}', [CustomerController::class, 'update_deposit_password'])->name('customers.update_deposit_pass');  
     Route::get('/users/management', [UserController::class, 'showAllUsers'])->name('users.management');

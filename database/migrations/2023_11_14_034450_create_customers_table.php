@@ -36,10 +36,14 @@ return new class extends Migration
             $table->string('account_status')->nullable();
             $table->string('account_package_type')->nullable();
             $table->integer('user_group_id')->nullable(); 
-
+            
+            $table->string('manual_expiration_date')->nullable();              
             $table->string('can_refill')->nullable();              
             $table->string('can_change_account')->nullable();              
-            $table->string('can_extend_user')->nullable();              
+            $table->string('can_extend_user')->nullable();  
+            
+            $table->integer('sms_status')->default(0);
+            $table->integer('sms_sent_by')->default(0);            
                 
             $table->timestamps();
         });

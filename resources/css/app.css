@@ -33,4 +33,17 @@ tr:hover{
 .required:after {
     content:" *";
     color: crimson;
-  }
+}
+
+.btn-outline.btn-danger {
+    --tw-text-opacity: 1;
+    color: crimson;
+}
+.btn-outline.btn-danger:hover {
+    --tw-border-opacity: 1;
+    border-color: crimson;
+    --tw-bg-opacity: 1;
+    background-color: crimson;
+    --tw-text-opacity: 1;
+    color: #fff;
+}

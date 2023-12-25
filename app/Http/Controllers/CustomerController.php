@@ -15,6 +15,9 @@ use App\Models\Deposit_pass;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Models\User_group;
 use App\Models\Invoice;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 
 class CustomerController extends Controller
 {      
@@ -88,7 +91,9 @@ class CustomerController extends Controller
             
             $customers_query = Customer::leftJoin('affiliates', 'affiliates.affiliate_index', '=', 'customers.affiliate_index')
                 ->leftJoin('accounts', 'accounts.account_index', '=', 'customers.account_index');
-                // ->whereNull('customers.user_group_id')
+                // ->where(DB::raw("(STR_TO_DATE(customers.manual_expiration_date,'%d/%m/%Y'))"), ">=", Carbon::now())
+                // ->where(DB::raw("(STR_TO_DATE(customers.manual_expiration_date,'%d/%m/%Y'))"), '=', today()->addDays(2));
+                // ->whereNull('customers.user_group_id')              
 
             $show_data = 'list';
         } 
@@ -110,6 +115,7 @@ class CustomerController extends Controller
             'sub_accounts' => Sub_account::all(),              
             'accounts'    => Account::all(),
             'affiliates'  => Affiliate::all(),  
+            'sys_users'   => User::all(),
             'user_groups' => $filter_user_groups,
             'show_data'  => $show_data,
             'apitoken'   => $token, 
@@ -331,6 +337,7 @@ class CustomerController extends Controller
                             'account_status' => $dt['accountStatus'], 
                             'account_package_type' => $dt['accountPackageType'],  
 
+                            'manual_expiration_date' => $dt['manualExpirationDate'],
                             'can_refill'             => $dt['canRefill'],
                             'can_change_account' => $dt['canChangeAccount'],
                             'can_extend_user'    => $dt['canExtendUser'],
@@ -363,6 +370,7 @@ class CustomerController extends Controller
                         'account_status'       => $dt['accountStatus'],
                         'account_package_type' =>  $dt['accountPackageType'],
 
+                        'manual_expiration_date' => $dt['manualExpirationDate'],
                         'can_refill'             => $dt['canRefill'],
                         'can_change_account' => $dt['canChangeAccount'],
                         'can_extend_user'    => $dt['canExtendUser'],                       
@@ -452,5 +460,73 @@ class CustomerController extends Controller
             'apitoken' => $token          
         ]);
     } // details
+
+    public function notify($index) {
+        $data = Customer::where('customer_user_index', $index)->get();  
+        $send_mobile = ''; 
+        if(count($data) > 0) {
+            $send_mobile = $data[0]['mobile_number'] ? $data[0]['mobile_number'] : $data[0]['mobile_number2']; 
+            // $send_mobile = '66952806757';
+        }
+        
+        $token   = 'd2FsYS1saW5rOldsQDFlZjZeYXpY';
+        $apiURL  = 'http://sms.alufiq.com/sms/2/text/advanced' ;  
+        $headers = [
+            'Authorization'=>'Basic '.$token, 
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json'          
+        ];    
+     
+        $post_data = [
+            "messages"=> [
+                  "destinations" => [
+                      "to"=> $send_mobile // 41793026727
+                  ],
+                  "from"=> "InfoSMS-Walaa",
+                  "text"=> "Your account is going to expiring soon!"
+              ]
+        ];
+
+        if($send_mobile != '') {
+            $sms_api = Http::withHeaders($headers)->post($apiURL, $post_data);
+            $sms_api_response  = json_decode($sms_api->getBody(), true); 
+
+            // return response(compact('sms_api_response'));
+
+            // {"messages":[
+            //     {"messageId":"4034247944424335443522",
+            //         "status":{
+            //             "description":"Message sent to next instance",
+            //             "groupId":1,
+            //             "groupName":"PENDING",
+            //             "id":26,
+            //             "name":"PENDING_ACCEPTED"
+            //         },
+            //         "to":"66952806757"}
+            //     ]
+            // }
+
+            // $sms_api_response = '';
+            
+            if(\Illuminate\Support\Arr::has($sms_api_response, 'messages')) {                
+                if($sms_api_response['messages'][0]['status']['name'] == 'PENDING_ACCEPTED') {
+                    $update_data = [
+                        'sms_status'=> 1,
+                        'sms_sent_by' => Auth::id(),
+                    ];            
+                    $data = Customer::where('customer_user_index', $index)->firstOrFail(); 
+                    $data->update($update_data);
+                   
+                    return redirect()->route('customers')->with('message', 'Notification message is successfully sent!');
+                }
+            } else {
+                return redirect()->route('customers')->with('error_message', 'Something went wrong in sending message!');
+            }         
+            
+        } else {
+            return redirect()->route('customers')->with('error_message', 'Not found mobile number to send SMS.');  
+        }         
+               
+    } // notify
    
 }

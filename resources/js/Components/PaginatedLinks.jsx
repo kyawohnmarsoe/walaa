@@ -77,8 +77,8 @@ export default function PaginatedLinks({
 
             {
                 tableName == 'customer' &&
-                <CustomerTable customers={currentItems} accounts={accounts}
-                    sub_accounts={sub_accounts} user_groups={user_groups} apitoken={apitoken}
+                <CustomerTable customers={currentItems} accounts={accounts} sub_accounts={sub_accounts}
+                    sys_users={users} user_groups={user_groups} apitoken={apitoken}
                     totalCount={totalCount} deposit_password={deposit_password} auth={auth}
                 />
             }
