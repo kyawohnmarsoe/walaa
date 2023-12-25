@@ -48,7 +48,8 @@ export default function OnlineUsersTableRow({ user, index, apitoken }) {
               </div>
             </div> */}
           <div>
-            <div className="font-bold text-sky-700"><Link href={`/user/${user?.userIndex}`}>{user?.userID}</Link></div>
+            {/* <div className="font-bold text-sky-700"><Link href={ `/user/${ user?.userIndex }` }>{ user?.userID }</Link></div> */}
+            <div className="font-bold text-sky-700">{user?.userID}</div>
 
             <div><span className="text-sm opacity-50"> {user?.userObject?.displayName}</span></div>
           </div>
@@ -66,8 +67,7 @@ export default function OnlineUsersTableRow({ user, index, apitoken }) {
       <td><a href={ `https://${ user?.userIP }` } className="text-sky-700" target="_blank">{ user?.userIP }</a></td>
       <td>{ user?.loginFrom }</td>
       <td>{ user?.affiliateName }</td>
-      {/* <td><span className="text-sky-700" onClick={ disconnectHandler }>Disconnect</span></td> */}
-      <td> <button className="btn btn-xs btn-outline btn-block btn-info mb-1" onClick={ disconnectHandler } >Disconnect</button><br /></td>
+       {/* <td> <button className="btn btn-xs btn-outline btn-block btn-info mb-1" onClick={ disconnectHandler } >Disconnect</button><br /></td> */}
 
     </tr >
   )

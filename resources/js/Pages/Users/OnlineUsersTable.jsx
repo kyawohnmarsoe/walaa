@@ -19,7 +19,7 @@ export default function OnlineUsersTable({ users, apitoken }) {
             <th>UserIP</th>
             <th>Login From</th>
             <th>Login Affiliate</th>
-            <th>Action</th>
+            {/* <th>Action</th> */}
           </tr>
         </thead>
 

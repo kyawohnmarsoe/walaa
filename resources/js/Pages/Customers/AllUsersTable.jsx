@@ -11,7 +11,7 @@ export default function AllUsersTable ({ auth,users, tableRef, accountTypes, api
         <thead>
           <tr className='bg-emerald-300'>
             {/* <th>#Index</th> */}
-            <th>Actions</th>
+            {/* <th>Actions</th> */}
             <th>Username</th>
             <th>Customer Name</th>
             <th>Accounting Info</th>

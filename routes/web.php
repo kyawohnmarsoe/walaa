@@ -20,6 +20,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ApidataController;
+use App\Http\Controllers\WalletController;
 
 Route::get('/test', [DashboardController::class, 'test'])->name('test');
 Route::get('/test2', [DashboardController::class, 'test2'])->name('test2');
@@ -133,6 +134,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
       Route::get('/expenses/create', [ExpenseController::class, 'create'])->name('expenses.create');
       Route::post('/expenses/store', [ExpenseController::class, 'store'])->name('expenses.store');
       Route::post('/expenses/update/{id}', [ExpenseController::class, 'update'])->name('expenses.update');
+
+      Route::get('/wallets', [WalletController::class, 'index'])->name('wallets');
+      Route::get('/wallets/transfer', [WalletController::class, 'transfer'])->name('wallets.transfer');
+      Route::post('/wallets/store', [WalletController::class, 'store'])->name('wallets.store');
+      Route::post('/wallets/search', [WalletController::class, 'search'])->name('wallets.search');
+
     
 });
 

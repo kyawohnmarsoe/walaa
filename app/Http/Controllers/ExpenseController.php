@@ -70,8 +70,6 @@ class ExpenseController extends Controller
 
           $user = User::findOrFail($request->expense['walletUserId']);
 
-       
-
           if($request->expense['amount'] > $request->prevAmount){
             $walletBalance = $user['balance'] - ($request->expense['amount']- $request->prevAmount);
           }else{

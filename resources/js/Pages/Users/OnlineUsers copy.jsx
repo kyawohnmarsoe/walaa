@@ -34,8 +34,7 @@ export default function OnlineUsers({ auth, apitoken, affiliates, userIndexByGro
         if (res?.data?.value?.itemsList?.length > 0 && userIndexByGroup !== 'all'){
           const results = filterUsersByGroup(res?.data?.value?.itemsList)
           // console.log(results)
-          // setOnlineUsersData({ users: results, total: results.length, errMessage: '', loading: false })
-          setOnlineUsersData({ users: res?.data?.value?.itemsList, total: res?.data?.value?.totalCount, errMessage: '', loading: false })
+          setOnlineUsersData({ users: results, total: results.length, errMessage: '', loading: false })
 
         }else{
           setOnlineUsersData({ users: res?.data?.value?.itemsList, total: res?.data?.value?.totalCount, errMessage: '', loading: false })

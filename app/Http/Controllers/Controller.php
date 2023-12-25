@@ -110,7 +110,8 @@ class Controller extends BaseController
         
         $count_user_groups = User_group::count();
 
-        if(count($user_has_groups_idArr) == 0 || $count_user_groups == count($user_has_groups_idArr)){
+        // if(count($user_has_groups_idArr) == 0 || $count_user_groups == count($user_has_groups_idArr)){
+        if(count($user_has_groups_idArr) == 0){
             // $customers = Customer::get();
             $customers = 'all';
         } else {

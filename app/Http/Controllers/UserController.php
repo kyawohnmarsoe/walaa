@@ -9,6 +9,8 @@ use Inertia\Response;
 use Illuminate\Http\Request;
 use App\Models\Affiliate;
 use App\Models\Account;
+use App\Models\Customer;
+use App\Models\Invoice;
 use Illuminate\Support\Facades\Http;
  
 class UserController extends Controller
@@ -47,11 +49,16 @@ class UserController extends Controller
     {
         $token = $this->getSavedToken();      
          $deposit_data = $this->get_deposit_password();
+        $cusDataByLoginUserGroupId = $this->getUserIndexReqData_byLoggedInGroupSysUserId();
+
         return Inertia::render('Customers/Management',[
             'apitoken' => $token, 
             'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get(),
             'accountTypes' => Account::all(),
              'deposit_password' => $deposit_data['deposit_password'],
+            'customers' => Customer::all(),
+            'invoices'=>Invoice::all(),
+            'userIndexByGroup' => $cusDataByLoginUserGroupId
         ]);
     }
 }

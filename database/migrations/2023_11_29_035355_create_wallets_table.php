@@ -14,8 +14,13 @@ return new class extends Migration
         Schema::create('wallets', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
-            $table->bigInteger('debit')->default(0);
-            $table->bigInteger('credit')->default(0);
+            $table->bigInteger('balance')->default(0);
+            $table->string('type');
+            $table->integer('fromWallet')->nullable();
+            $table->integer('toWallet')->nullable();
+            $table->string('description')->nullable();
+            $table->bigInteger('amount');
+            $table->string('modifyUser');
             $table->timestamps();
         });
     }

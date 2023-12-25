@@ -9,15 +9,20 @@ import InputError from '@/Components/InputError';
 
 export default function RefillModal ({ auth,modals, setModals, user, apitoken, accountTypes, deposit_password }) {
     let { flash } = usePage().props
-  
+   
+    console.log(user?.customer_user_id)
+
     const { data, setData, post, processing, errors, reset } = useForm({
-        UserId: user?.userID,
+        UserId: user?.customer_user_id,
         DepositPassword: deposit_password,
         AccountId: '',
         Status: 'NotPaid',
         PaymentDueDate: '',
         Notes: '',
     })
+
+   
+    console.log(data?.UserId)
 
     const [updateInfo, setUpdateInfo] = useState({ value: '', errMessage: '' })
     const { value, errMessage } = updateInfo
@@ -32,15 +37,15 @@ export default function RefillModal ({ auth,modals, setModals, user, apitoken, a
     });
 
     const getUserInfo = () => {
-        console.log({ UserID: user?.userID })
-        instance.post('/userpayment/usersInvoice', { UserID: user?.userID })
+       
+        instance.post('/userpayment/usersInvoice', { UserID: user?.customer_user_id })
             .then(res => {
-                console.log(res.data.value.itemsList[0])
+                // console.log(res.data.value.itemsList[0])
 
                 if (res.data.value.itemsList.length){
                     
                     const invoice = res.data.value.itemsList[0];
-                    console.log(auth.user.name)
+                    // console.log(auth.user.name)
                     post(route('invoices.store', { invoice: { ...invoice, modifyUser: auth.user.name} }));
 
                     console.log(' data stored')
@@ -87,6 +92,7 @@ export default function RefillModal ({ auth,modals, setModals, user, apitoken, a
 
         setData({
             ...data,
+            UserId: user?.customer_user_id,
             DepositPassword: deposit_password,
             AccountId: '',
             Status: 'NotPaid',
@@ -99,6 +105,11 @@ export default function RefillModal ({ auth,modals, setModals, user, apitoken, a
         flash.status == 201 && location.reload()
 
     };
+
+   useEffect(()=>{
+    console.log(data)
+   },[data])
+    
 
     return (
         <Modal show={modals.reFill} onClose={closeModal} maxWidth={'xl'}>
@@ -117,7 +128,8 @@ export default function RefillModal ({ auth,modals, setModals, user, apitoken, a
                     <TextInput
                         id="UserId"
                         className="mt-1 block w-full  bg-gray-100"
-                        value={data?.UserId}
+                        // value={data?.UserId}
+                        value={ user?.customer_user_id }
                         readOnly={true}
                         autoComplete="off"
                     />
@@ -207,7 +219,7 @@ export default function RefillModal ({ auth,modals, setModals, user, apitoken, a
 
                 </div>
 
-
+              
 
                 <div className="mt-6 flex justify-end">
                     {/* { value && <span className='text-success pr-4'> Refill Success </span> } */}

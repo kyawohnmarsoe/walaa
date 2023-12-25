@@ -49,8 +49,7 @@ export default function AllUsersTableRow ({ auth, user, accountTypes, apitoken, 
       <tr>
        
 
-        {/* <td>{user?.userIndex}</td> */}
-        <td>
+        {/* <td>
 
           {user?.canRefill && <><button className="btn btn-xs btn-outline btn-block btn-info mb-1" onClick={() => setModals({ ...modals, reFill: true })}>Refill</button><br /></>}
 
@@ -58,18 +57,14 @@ export default function AllUsersTableRow ({ auth, user, accountTypes, apitoken, 
 
           { user?.canExtendUser && <><button className="btn btn-xs btn-outline btn-block btn-warning" onClick={ extendHandler }>Extend</button> </>}
 
-          {/* <span className="badge badge-ghost badge-sm">Desktop Support Technician</span> */}
-        </td>
+        </td> */}
 
         <td>
           <div className="flex items-center space-x-3">
-            {/* <div className="avatar">
-              <div className="mask mask-squircle w-12 h-12">
-                <img src="/tailwind-css-component-profile-2@56w.png" alt="Avatar Tailwind CSS Component" />
-              </div>
-            </div> */}
+            
             <div>
-              <div className="font-bold text-sky-700"><Link href={`/user/${user?.userIndex}`}>{user?.userID}</Link></div>
+              {/* <div className="font-bold text-sky-700"><Link href={ `/user/${ user?.userIndex }` }>{ user?.userID }</Link></div> */}
+              <div className="font-bold text-sky-700">{user?.userID}</div>
 
               <div> <strong>Affiliate </strong><span className="text-sm opacity-50"> : {user?.affiliateName}</span></div>
             </div>

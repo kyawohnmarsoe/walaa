@@ -200,7 +200,7 @@ export default function Authenticated({ user, header, children }) {
                                     </Dropdown.Trigger>
 
                                     <Dropdown.Content>
-                                        <Dropdown.Link href={route('profile.edit')}> Wallet : <span className="text-emerald-700">{user.balance.toLocaleString()} IQD </span></Dropdown.Link>
+                                        <Dropdown.Link href={route('wallets')}> Wallet : <span className="text-emerald-700">{user.balance.toLocaleString()} IQD </span></Dropdown.Link>
                                         <Dropdown.Link href={route('profile.edit')}> Profile</Dropdown.Link>
                                         {/* <Dropdown.Link href={ route('earthlink.edit') }>EarthLink Profile</Dropdown.Link> */}
                                         {

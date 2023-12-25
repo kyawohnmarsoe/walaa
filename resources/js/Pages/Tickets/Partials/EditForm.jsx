@@ -9,6 +9,8 @@ import Textarea from '@/Components/Textarea';
 import SelectOption from '@/Components/SelectOption';
 import Select, { components } from "react-select";
 import InputError from '@/Components/InputError';
+import { format, formatDistance } from 'date-fns';
+
 
 export default function EditForm ({ className = '', ticket, customers, updated_by_loggedin_user, remarks, users }) {
 
@@ -407,7 +409,7 @@ export default function EditForm ({ className = '', ticket, customers, updated_b
                                         <br/>
                                     </div>
                                     <div className="text-right">
-                                  <a href='/tickets/delete_remark/${rm.id}' key={ rm.id } className="text-sm text-red-500 underline remove_rm">Remove</a>
+                                  {/* <a href='/tickets/delete_remark/${rm.id}' key={ rm.id } className="text-sm text-red-500 underline remove_rm">Remove</a> */}
                                     </div>
                                 </div>
 
@@ -420,7 +422,8 @@ export default function EditForm ({ className = '', ticket, customers, updated_b
                                      
                                     
                                         </p><p className="text-xs text-gray-600">
-                                            { rm.created_at}
+                                           
+                                      { format(new Date(rm.created_at), 'MMMM, dd yyyy') }  
                                         </p>
                                     </div>
                                 </div>

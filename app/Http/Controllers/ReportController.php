@@ -42,9 +42,11 @@ class ReportController extends Controller
 
      public function getBalanceTransfer(){
         $token = $this->getSavedToken();  
+         $deposit_data = $this->get_deposit_password();
         return Inertia::render('Reports/Deposit/BalanceTransfer',[
             'apitoken' => $token,
-            'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get()
+            'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get(),
+             'deposit_password' => $deposit_data['deposit_password'],
     ]);
     }
 

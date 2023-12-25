@@ -1,12 +1,16 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { router } from '@inertiajs/react';
+import { router, Link } from '@inertiajs/react';
 import Modal from '@/Components/DaisyUI/Modal';
 import DangerButton from "@/Components/DangerButton";
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from '@/Components/TextInput';
+import RefillModal from "./RefillModal";
 
-export default function CustomerTable({ customers, accounts, sub_accounts, user_groups, apitoken }) {
+
+export default function CustomerTable ({ customers, accounts, sub_accounts, user_groups, apitoken, modals,
+    setModals,
+    deposit_password, auth}) {
     const [loading, setLoading] = useState(false);
 
     function editLocalCusClick(index) {
@@ -36,8 +40,20 @@ export default function CustomerTable({ customers, accounts, sub_accounts, user_
         // console.log(sub_accounts);
     }, [])
 
+    const [modalUser,setModalUser] = useState(null)
+
+    const modalData = (name,user) =>{
+        setModals({ ...modals, [name]: true })
+        setModalUser(user)
+        // console.log(modalUser)
+    }
+
     return (
         <div className="overflow-x-auto mt-3">
+            {
+                !!modalUser && <RefillModal modals={ modals } setModals={ setModals } accountTypes={ accounts } apitoken={ apitoken } user={ modalUser } deposit_password={ deposit_password } auth={ auth } />
+                 
+            }
 
             <Modal id="deleteModal" title="Disable Customer Confirmation" closeModal={onCloseModal}>
                 <form onSubmit={disableCustomer} className="space-y-6 ">
@@ -58,6 +74,8 @@ export default function CustomerTable({ customers, accounts, sub_accounts, user_
                 <thead>
                     <tr className='bg-emerald-300'>
                         {/* <th>User Index</th> */}
+                        <th>Actions</th>
+
                         <th>Email</th>
                         <th>Display Name</th>
                         <th>Mobile Number</th>
@@ -66,7 +84,7 @@ export default function CustomerTable({ customers, accounts, sub_accounts, user_
                         <th>Sub Account Type</th>
                         <th>User Group</th>
                         <th>Active/Disable</th>
-                        <th colSpan="2">Actions</th>
+                        <th >Actions</th>
                     </tr>
                 </thead>
 
@@ -83,7 +101,18 @@ export default function CustomerTable({ customers, accounts, sub_accounts, user_
                     <tbody>
                         {customers && customers.map(cus => (
                             <tr key={cus.id} id={"tr_" + (cus.customer_user_index)}>
-                                <td>{cus.email}</td>
+                                {/* <RefillModal modals={ modals } setModals={ setModals } accountTypes={ accounts } apitoken={ apitoken } user={ cus } deposit_password={ deposit_password } auth={ auth } /> */}
+
+                               <td> 
+                                    {/* { user?.canRefill && <><button className="btn btn-xs btn-outline btn-block btn-info mb-1" onClick={ () => setModals({ ...modals, reFill: true }) }>Refill</button><br /></> } */}
+                                    { <><button className="btn btn-xs btn-outline btn-block btn-info mb-1" onClick={ () => modalData('reFill', cus) }>Refill</button><br /></> }
+
+                                    {/* { user?.canChangeAccount && <><button className="btn btn-xs btn-outline btn-block btn-success mb-1" onClick={ () => setModals({ ...modals, change: true }) }>Change</button> <br /> </> } */}
+
+                                    {/* { user?.canExtendUser && <><button className="btn btn-xs btn-outline btn-block btn-warning" onClick={ extendHandler }>Extend</button> </> } */}
+
+                               </td>
+                                <td className="font-bold text-sky-700" ><Link href={ `/user/${ cus?.customer_user_index }` }>{cus.email}</Link></td>
                                 <td>{cus.display_name}</td>
                                 <td>
                                     <strong>Mobile 1</strong> : {cus.mobile_number}
@@ -118,17 +147,15 @@ export default function CustomerTable({ customers, accounts, sub_accounts, user_
                                     {cus.active_status == 1 ? 'Active' : 'Disable'}
                                 </td>
                                 <td>
-                                    <PrimaryButton className="bg-sky-800" padding_x='px-2' disabled='' onClick={() => editLocalCusClick(cus.customer_user_index)}>
-                                        <svg className="h-4 w-4 text-white mr-1" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">  <path stroke="none" d="M0 0h24v24H0z" />  <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />  <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />  <line x1="16" y1="5" x2="19" y2="8" /></svg>
+                                    <PrimaryButton style={ { width: "75px" } } className="bg-sky-800 mb-1" padding_x='px-2' disabled='' onClick={() => editLocalCusClick(cus.customer_user_index)}>
+                                        <svg className="h-4 w-4 text-white mr-1 " viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">  <path stroke="none" d="M0 0h24v24H0z" />  <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />  <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />  <line x1="16" y1="5" x2="19" y2="8" /></svg>
                                         Edit
                                     </PrimaryButton>
-                                </td>
-                                <td>
-                                    <DangerButton padding_x='px-2' disabled='' onClick={() => callModal(cus)} >
-                                        <svg className="h-4 w-4 text-white mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">  <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z" />  <line x1="18" y1="9" x2="12" y2="15" />  <line x1="12" y1="9" x2="18" y2="15" /></svg>
+                                    <DangerButton padding_x='px-2' disabled='' onClick={ () => callModal(cus) } style={ { width: "75px" } }>
                                         Disable
                                     </DangerButton>
                                 </td>
+                               
                             </tr>
                         ))}
                     </tbody>

@@ -12,6 +12,7 @@ import TotalItemsCount from '@/Components/DaisyUI/TotalItemsCount'
 import PageSize from '@/Components/DaisyUI/PageSize'
 import ExpenseTable from '@/Pages/Expenses/ExpenseTable';
 import InvoiceTable from '@/Pages/Invoices/InvoiceTable';
+import WalletTable from '@/Pages/Wallets/WalletTable';
 
 
 export default function PaginatedLinks({
@@ -21,6 +22,9 @@ export default function PaginatedLinks({
     sub_accounts,
     accounts,
     users,
+    modals,
+    setModals,
+    deposit_password,
     remarks,
     user_has_groups,
     user_groups,
@@ -31,6 +35,8 @@ export default function PaginatedLinks({
     filterObj,
     setFilterObj }) {
     const [itemOffset, setItemOffset] = useState(0);
+
+    // console.log(items)
 
     let pageSize = +itemsPerPage
 
@@ -82,7 +88,9 @@ export default function PaginatedLinks({
             }
 
             {
-                tableName == 'customer' && <CustomerTable customers={currentItems} accounts={accounts} sub_accounts={sub_accounts} user_groups={user_groups} apitoken={apitoken} totalCount={totalCount} />
+                tableName == 'customer' && <CustomerTable customers={ currentItems } accounts={ accounts } sub_accounts={ sub_accounts } user_groups={ user_groups } apitoken={ apitoken } totalCount={ totalCount } modals={ modals }
+                    setModals={ setModals }
+                    deposit_password={ deposit_password } auth={ auth }/>
             }
 
             {
@@ -112,6 +120,11 @@ export default function PaginatedLinks({
 
             {
                 tableName == 'expenses' && <ExpenseTable items={ currentItems } auth={ auth } users={ users }/>
+
+            }
+
+            {
+                tableName == 'wallets' && <WalletTable items={ currentItems } auth={ auth } users={ users } />
 
             }
 

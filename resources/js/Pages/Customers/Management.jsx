@@ -13,7 +13,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import { DownloadTableExcel } from 'react-export-table-to-excel';
 import { Link, useForm, usePage, router } from '@inertiajs/react';
 
-export default function Management ({ auth, apitoken, affiliates, accountTypes, deposit_password }) {
+export default function Management ({ auth, apitoken, affiliates, accountTypes, deposit_password, userIndexByGroup, customers, invoices }) {
   // const { flash } = usePage().props
   const tableRef = useRef(null);
   const [onlineUsersData, setOnlineUsersData] = useState({ users: [], total: 0, errMessage: '', loading: true })
@@ -24,13 +24,34 @@ export default function Management ({ auth, apitoken, affiliates, accountTypes, 
     baseURL: 'https://rapi.earthlink.iq/api/reseller',
     headers: { 'Authorization': `Bearer ${apitoken}` }
   });
+
+  const filterUsersByGroup = (resUsers) =>
+  {
+    
+    const results = resUsers.filter(r => userIndexByGroup.find(u => u.customer_user_index == r.customer_user_index))
+    return results;
+    console.log(results)
+  }
   
   useEffect(() => {
+    
     instance.post('/user/all', filterObj)
       .then(res => {
-        setOnlineUsersData({ users: res?.data?.value?.itemsList, total: res?.data?.value?.totalCount, errMessage: '', loading: false })
-        // setOnlineUsersData({ users: [], errMessage: '', loading: false })
-        // console.log(res?.data?.value?.itemsList)
+        if (res?.data?.value?.itemsList?.length > 0 && userIndexByGroup !== 'all')
+        {
+          // const results = filterUsersByGroup(res?.data?.value?.itemsList)
+          const results = filterUsersByGroup(customers)
+         
+          // setOnlineUsersData({ users: results, total: results.length, errMessage: '', loading: false })
+          setOnlineUsersData({ users: res?.data?.value?.itemsList, total: res?.data?.value?.totalCount, errMessage: '', loading: false })
+
+
+        } else
+        {
+        
+          setOnlineUsersData({ users: res?.data?.value?.itemsList, total: res?.data?.value?.totalCount, errMessage: '', loading: false })
+         
+        }
       })
       .catch(err => {
         setOnlineUsersData({ users: [], total: 0, errMessage: err.message, loading: false })

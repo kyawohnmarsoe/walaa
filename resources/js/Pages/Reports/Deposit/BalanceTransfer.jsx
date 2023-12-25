@@ -11,14 +11,14 @@ import { Head } from "@inertiajs/react";
 import Modal from '@/Components/Modal';
 import InputError from '@/Components/InputError';
 
-export default function BalanceTransfer ({ className = '', affiliates, apitoken, auth })
+export default function BalanceTransfer ({ className = '', affiliates, apitoken, auth, deposit_password })
 {
     const [main, setMain] = useState({ affiliate: '', errMessage: '', failMessage: '', value: '' })
     const { affiliate, errMessage, failMessage, value } = main
     const { data, setData, post, processing, errors, reset } = useForm({
         TargetAffiliateIndex: '',
         Amount: '',
-        DepositPassword: ''
+        DepositPassword: deposit_password
     });
 
 
@@ -71,6 +71,8 @@ export default function BalanceTransfer ({ className = '', affiliates, apitoken,
     const submit = (e) =>
     {
         e.preventDefault();
+
+        console.log('submit')
 
         instance.post('/affiliate/deposit/transferBalance', data)
             .then(res =>
@@ -242,9 +244,19 @@ export default function BalanceTransfer ({ className = '', affiliates, apitoken,
 
                                 <div className='grid md:grid-cols-3 gap-4'>
                                     <div></div>
-                                    <div className="flex items-center gap-4">
-                                        <PrimaryBtn onClick={ confirmTransfer }>Transfer</PrimaryBtn>
+                                    <div className="items-center gap-4">
+                                        {/* <PrimaryBtn onClick={ confirmTransfer }>Transfer</PrimaryBtn> */}
+                                        <div className="mb-3">
+                                            <PrimaryButton disabled={ processing }>
+                                                Transfer
+                                            </PrimaryButton>
+                                        </div>
+                                        <div>
+                                            { value && <span className='text-success text-sm'> Transfer Success </span> }
 
+                                            { failMessage && <span className='text-red-500 text-sm'> { failMessage } </span> }
+                                        </div>
+                                       
                                         {/* <PrimaryButton disabled={ processing } onClick={ () => reset() } className="resetBtn">Reset</PrimaryButton> */ }
 
                                         {/* <Transition
@@ -257,6 +269,7 @@ export default function BalanceTransfer ({ className = '', affiliates, apitoken,
                                 <p className="text-sm text-gray-600">Saved.</p>
                             </Transition> */}
                                     </div>
+                                    
                                 </div>
 
 
