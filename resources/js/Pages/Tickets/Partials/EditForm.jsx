@@ -407,7 +407,7 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                                             <br />
                                         </div>
                                         <div className="text-right">
-                                            {/* <a href={`/tickets/delete_remark/${rm.id}`} key={rm.id} className="text-sm text-red-500 underline remove_rm">Remove</a> */}
+                                            <a href={`/tickets/delete_remark/${rm.id}`} key={rm.id} className="text-sm text-red-500 underline remove_rm">Remove</a>
                                         </div>
                                     </div>
 
@@ -424,20 +424,6 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                                             </p>
                                         </div>
                                     </div>
-                                <div className="flex items-center pb-3">
-                                    <div className="mt-4 mb-2">
-                                        <p className="text-sm text-gray-900 leading-none mb-1">
-                                      { users.filter(user => user.id == rm.remark_by).map(filteredUser => (
-                                                filteredUser.name
-                                            )) }
-                                     
-                                    
-                                        </p><p className="text-xs text-gray-600">
-                                           
-                                      { format(new Date(rm.created_at), 'MMMM, dd yyyy') }  
-                                        </p>
-                                    </div>
-                                </div>
 
                                 </div>
                             </div>

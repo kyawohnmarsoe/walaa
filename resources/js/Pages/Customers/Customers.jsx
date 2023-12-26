@@ -1,15 +1,12 @@
 import { useState } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, usePage, router, Link } from '@inertiajs/react';
+import { Head, usePage, router } from '@inertiajs/react';
 import AddForm from './Partials/AddForm';
 import PrimaryButton from '@/Components/PrimaryButton';
 import PaginatedLinks from '@/Components/PaginatedLinks';
 import FilterForm from './Partials/FilterForm';
 import DepositForm from './Partials/DepositForm';
 import EditForm from './Partials/EditForm';
-import RefillModal from "./RefillModal";
-
-
 
 export default function Customers({
     auth,
@@ -26,12 +23,6 @@ export default function Customers({
     deposit_password,
     deposit_id
 }) {
-
-    const [modals, setModals] = useState({
-        reFill: false,
-        change: false,
-        extend: false,
-    })
 
     const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10 })
 
@@ -69,6 +60,7 @@ export default function Customers({
         //     }
         // })
     }
+
 
     return (
         <AuthenticatedLayout
@@ -121,9 +113,9 @@ export default function Customers({
                                 </div>
                             }
 
-                    {
-                        (show_data == 'list' || show_data == 'filter_list') &&
-                        <div className=" bg-white shadow sm:rounded-lg">
+                            {
+                                (show_data == 'list' || show_data == 'filter_list') &&
+                                <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
 
                                     <div className='flex items-center justify-end gap-4 p-2 mb-2'>
                                         <PrimaryButton disabled='' onClick={ev => addCustomerClick()}>
@@ -155,24 +147,22 @@ export default function Customers({
                                         </header>
                                     }
 
-                            {
-                                customers.length > 0 &&
-                                <PaginatedLinks
-                                    itemsPerPage={filterObj.RowCount}
-                                    items={customers}
-                                    tableName="customer"
-                                    sub_accounts={sub_accounts}
-                                    accounts={accounts}
-                                    user_groups={user_groups}
-                                    setFilterObj={setFilterObj}
-                                    filterObj={filterObj}
-                                    apitoken={apitoken}
-                                    totalCount={totalCount} 
-                                                modals={ modals }
-                                                setModals={ setModals }
-                                                deposit_password={ deposit_password }
-                                    
-                                    />
+                                    {
+                                        customers.length > 0 &&
+                                        <PaginatedLinks
+                                            itemsPerPage={filterObj.RowCount}
+                                            items={customers}
+                                            tableName="customer"
+                                            sub_accounts={sub_accounts}
+                                            accounts={accounts}
+                                            users={sys_users}
+                                            user_groups={user_groups}
+                                            setFilterObj={setFilterObj}
+                                            filterObj={filterObj}
+                                            apitoken={apitoken}
+                                            totalCount={totalCount}
+                                            deposit_password={deposit_password}
+                                            auth={auth} />
 
                                     }
                                 </div>

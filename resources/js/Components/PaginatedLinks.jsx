@@ -14,7 +14,6 @@ import ExpenseTable from '@/Pages/Expenses/ExpenseTable';
 import InvoiceTable from '@/Pages/Invoices/InvoiceTable';
 import WalletTable from '@/Pages/Wallets/WalletTable';
 
-
 export default function PaginatedLinks({
     auth,
     itemsPerPage,
@@ -22,9 +21,6 @@ export default function PaginatedLinks({
     sub_accounts,
     accounts,
     users,
-    modals,
-    setModals,
-    deposit_password,
     remarks,
     user_has_groups,
     user_groups,
@@ -86,7 +82,6 @@ export default function PaginatedLinks({
                 <CustomerTable customers={currentItems} accounts={accounts} sub_accounts={sub_accounts}
                     sys_users={users} user_groups={user_groups} apitoken={apitoken}
                     totalCount={totalCount} deposit_password={deposit_password} auth={auth}
-                    modals={modals} setModals={setModals}
                 />
             }
 
@@ -126,11 +121,9 @@ export default function PaginatedLinks({
             }
 
             {
-                tableName == 'wallets' && <WalletTable items={ currentItems } auth={ auth } users={ users } />
+                tableName == 'wallets' && <WalletTable items={currentItems} auth={auth} users={users} />
 
             }
-
-           
 
         </>
     );

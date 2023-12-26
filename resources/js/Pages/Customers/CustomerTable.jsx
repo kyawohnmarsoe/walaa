@@ -1,17 +1,15 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { router, Link } from '@inertiajs/react';
-import { router, Link } from '@inertiajs/react';
 import Modal from '@/Components/DaisyUI/Modal';
 import PrimaryButton from "@/Components/PrimaryButton";
 import SecondaryButton from "@/Components/SecondaryButton";
 import TextInput from '@/Components/TextInput';
-import RefillModal from "./RefillModal";
+import RefillModal from "./Partials/RefillModal";
+import ChangeModal from "./Partials/ChangeModal";
+import NotifyModal from "./Partials/NotifyModal";
 
-
-export default function CustomerTable ({ customers, accounts, sub_accounts, user_groups, apitoken, modals,
-    setModals,
-    deposit_password, auth}) {
+export default function CustomerTable({ customers, accounts, sub_accounts, sys_users, user_groups, apitoken, deposit_password, auth }) {
     const [loading, setLoading] = useState(false);
 
     const [modals, setModals] = useState({
@@ -93,20 +91,8 @@ export default function CustomerTable ({ customers, accounts, sub_accounts, user
         // console.log(sub_accounts); 
     }, [])
 
-    const [modalUser,setModalUser] = useState(null)
-
-    const modalData = (name,user) =>{
-        setModals({ ...modals, [name]: true })
-        setModalUser(user)
-        // console.log(modalUser)
-    }
-
     return (
         <div className="overflow-x-auto mt-3">
-            {
-                !!modalUser && <RefillModal modals={ modals } setModals={ setModals } accountTypes={ accounts } apitoken={ apitoken } user={ modalUser } deposit_password={ deposit_password } auth={ auth } />
-                 
-            }
 
             <Modal id="deleteModal" title="Disable Customer Confirmation" closeModal={onCloseModal}>
                 <form onSubmit={disableCustomer} className="space-y-6 ">
@@ -136,17 +122,14 @@ export default function CustomerTable ({ customers, accounts, sub_accounts, user
             <table className="table">
                 <thead>
                     <tr className='bg-emerald-300'>
-                        {/* <th>User Index</th> */}
-                        <th>Actions</th>
-
-                        <th>Email</th>
+                        <th>User Email</th>
                         <th>Display Name</th>
                         <th>Mobile Number</th>
                         <th>Affiliate Name</th>
                         <th>Account Info</th>
                         <th>Expiration Date	</th>
                         <th>Active/Disable</th>
-                        <th >Actions</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
 
@@ -163,18 +146,19 @@ export default function CustomerTable ({ customers, accounts, sub_accounts, user
                     <tbody>
                         {customers && customers.map(cus => (
                             <tr key={cus.id} id={"tr_" + (cus.customer_user_index)}>
-                                {/* <RefillModal modals={ modals } setModals={ setModals } accountTypes={ accounts } apitoken={ apitoken } user={ cus } deposit_password={ deposit_password } auth={ auth } /> */}
-
-                               <td> 
-                                    {/* { user?.canRefill && <><button className="btn btn-xs btn-outline btn-block btn-info mb-1" onClick={ () => setModals({ ...modals, reFill: true }) }>Refill</button><br /></> } */}
-                                    { <><button className="btn btn-xs btn-outline btn-block btn-info mb-1" onClick={ () => modalData('reFill', cus) }>Refill</button><br /></> }
-
-                                    {/* { user?.canChangeAccount && <><button className="btn btn-xs btn-outline btn-block btn-success mb-1" onClick={ () => setModals({ ...modals, change: true }) }>Change</button> <br /> </> } */}
-
-                                    {/* { user?.canExtendUser && <><button className="btn btn-xs btn-outline btn-block btn-warning" onClick={ extendHandler }>Extend</button> </> } */}
-
-                               </td>
-                                <td className="font-bold text-sky-700" ><Link href={ `/user/${ cus?.customer_user_index }` }>{cus.email}</Link></td>
+                                <td>
+                                    <div className="font-bold text-sky-700">
+                                        <Link href={`/customers/details/${cus.customer_user_index}`}>{cus.email}</Link>
+                                    </div>
+                                    {
+                                        user_groups.filter(user_gp => user_gp.id == cus.user_group_id)
+                                            .map(filteredRes => (
+                                                <small className="block mt-2">
+                                                    User Group : {filteredRes.group_name}
+                                                </small>
+                                            ))
+                                    }
+                                </td>
                                 <td>{cus.display_name}</td>
                                 <td>
                                     <strong>Mobile 1</strong> : {cus.mobile_number}
@@ -207,15 +191,59 @@ export default function CustomerTable ({ customers, accounts, sub_accounts, user
                                     {cus.active_status == 1 ? 'Active' : 'Disable'}
                                 </td>
                                 <td>
-                                    <PrimaryButton style={ { width: "75px" } } className="bg-sky-800 mb-1" padding_x='px-2' disabled='' onClick={() => editLocalCusClick(cus.customer_user_index)}>
-                                        <svg className="h-4 w-4 text-white mr-1 " viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">  <path stroke="none" d="M0 0h24v24H0z" />  <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />  <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />  <line x1="16" y1="5" x2="19" y2="8" /></svg>
-                                        Edit
-                                    </PrimaryButton>
-                                    <DangerButton padding_x='px-2' disabled='' onClick={ () => callModal(cus) } style={ { width: "75px" } }>
-                                        Disable
-                                    </DangerButton>
+                                    {cus?.can_refill && <><button className="btn btn-xs btn-outline btn-block btn-info mb-2"
+                                        onClick={() => callRefillModal(cus)}>Refill</button><br /></>}
+
+                                    {cus?.can_change_account && <><button className="btn btn-xs btn-outline btn-block btn-success mb-2"
+                                        onClick={() => callChangeModal(cus)}>Change</button> <br /> </>}
+
+                                    {
+                                        cus?.can_extend_user &&
+                                        <>
+                                            <button className="btn btn-xs btn-outline btn-block btn-warning mb-2"
+                                                onClick={extendHandler}>Extend</button>
+                                        </>
+                                    }
+
+                                    <>
+                                        <button className="btn btn-xs btn-outline btn-block btn-default mb-2"
+                                            onClick={() => editLocalCusClick(cus.customer_user_index)}>
+                                            Edit
+                                        </button>
+
+                                        <button className="btn btn-xs btn-outline btn-block btn-secondary"
+                                            onClick={() => callModal(cus)}>
+                                            Disable
+                                        </button>
+
+                                        {
+                                            cus.account_status == "ExpiringSoon" ?
+                                                cus.sms_status === 0 ?
+                                                    <>
+                                                        <button className="btn btn-xs btn-outline btn-block btn-danger mt-2"
+                                                            onClick={() => callNotifyModal(cus)}>
+                                                            Notify
+                                                            <span className="relative flex h-3 w-3">
+                                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                                                <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                                                            </span>
+                                                        </button>
+                                                    </>
+                                                    :
+                                                    <>
+                                                        {
+                                                            sys_users.filter(user => user.id == cus.sms_sent_by)
+                                                                .map(filteredRes => (
+                                                                    <small className="text-red-500 block mt-2">
+                                                                        SMS sent by : {filteredRes.email}
+                                                                    </small>
+                                                                ))
+                                                        }
+                                                    </>
+                                                : ''
+                                        }
+                                    </>
                                 </td>
-                               
                             </tr>
                         ))}
                     </tbody>
