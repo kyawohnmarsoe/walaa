@@ -41,7 +41,8 @@ export default function WalletTableRow ({ item, auth, users, user, modals, setMo
                 <td> { item.toWallet && getToWallet(item.toWallet) }</td>
                
                 <td>{ item?.description }</td>
-                <td>{ item?.amount }</td>
+                {/* <td>{ item?.amount }</td> */}
+                <td>{ (auth.user.id == item.fromWallet) ? item?.amount*-1 : item?.amount }</td>
                 {/* <td>{ item?.balance }</td> */}
                
                 <td>{ new Date(item?.created_at).toLocaleDateString('en-US') }</td>

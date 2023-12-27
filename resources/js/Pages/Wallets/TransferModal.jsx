@@ -24,6 +24,7 @@ export default function TransferModal ({ modals, setModals, auth, users, wallets
     const submit = (e) =>
     {
         e.preventDefault();
+        console.log(data)
         router.post(`/wallets/store/`, { wallets: data })
     }
 

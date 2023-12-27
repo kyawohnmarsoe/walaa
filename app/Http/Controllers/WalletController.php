@@ -18,7 +18,9 @@ class WalletController extends Controller
       if (Auth::user()->id == 1) {
         $wallets = Wallet::orderBy('id','desc')->get();
       }else{
-        $wallets = Wallet::where('fromWallet',Auth::user()->id)->orderBy('id','desc')->get();
+        $wallets = Wallet::where('fromWallet',Auth::user()->id)
+        ->orwhere('toWallet',Auth::user()->id)
+        ->orderBy('id','desc')->get();
       }
 
      
@@ -48,9 +50,11 @@ class WalletController extends Controller
 
       public function store(Request $request)
       {
-      
+       
+        // $amount = $request->wallets['amount'] * -1;
+        $amount = $request->wallets['amount'];
        $fromUser = User::findOrFail($request->wallets['fromWallet']);
-       $fromBalance = $fromUser->balance - $request->wallets['amount'];
+       $fromBalance = $fromUser->balance - $amount;
 
         $toUser = User::findOrFail($request->wallets['toWallet']);
         $toBalance = $toUser->balance + $request->wallets['amount'];
@@ -64,7 +68,7 @@ class WalletController extends Controller
        'fromWallet'=> $request->wallets['fromWallet'],
        'toWallet'=> $request->wallets['toWallet'],
        'description'=> $request->wallets['description'],
-       'amount'=> $request->wallets['amount'],
+       'amount'=> $amount,
        'modifyUser'=> Auth::user()->id,
       ];
 
@@ -99,37 +103,34 @@ class WalletController extends Controller
 
         if ($type) {
        
-
         if($id == 1){
         $results = Wallet::where('type', 'LIKE', "%$type%")->get();
 
         }else{
          $results = Wallet::where('fromWallet', $id)->where('type', 'LIKE', "%$type%")->get();
         }
-
-
         }
+
+                 if ($toWallet){
+
+                 if($id == 1){
+                 $results = Wallet::where('toWallet', $toWallet)->get();
+
+                 }else{
+                 $results=Wallet::where('fromWallet', $id)->where('toWallet', $toWallet)->orderBy('id','desc')->get();
+
+                 }
+
+                 }
         
         if ($fromWallet){
-        $results = Wallet::where('fromWallet', $fromWallet)->get();
-
-        }
-
          if ($toWallet){
-        
-          if($id == 1){
-          $results = Wallet::where('toWallet', $toWallet)->get();
-          
-          }else{
-          $results=Wallet::where('fromWallet', $id)->where('toWallet', $toWallet)->orderBy('id','desc')->get();
-          
-        }
-         
+          $results = Wallet::where('fromWallet', $id)->where('toWallet', $toWallet)->get();
+         }else{
+           $results = Wallet::where('fromWallet', $fromWallet)->get();
          }
 
-          
-
-
+        }
 
         return Inertia::render('Wallets/Wallets',[
         'users' => User::orderBy('id','asc')->get(),
