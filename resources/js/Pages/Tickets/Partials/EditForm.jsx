@@ -10,6 +10,7 @@ import SelectOption from '@/Components/SelectOption';
 import Select, { components } from "react-select";
 import InputError from '@/Components/InputError';
 import { format, formatDistance } from 'date-fns';
+import EditableRemark from './EditableRemark';
 
 export default function EditForm({ className = '', ticket, customers, updated_by_loggedin_user, remarks, users }) {
 
@@ -394,17 +395,22 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                 </div>
 
                 {
+                    remarks != '' && <span className="text-gray-700 mt-2">
+                        Remarks :
+                    </span>
+                }
+
+                {
                     remarks && remarks.map(rm => (
                         <>
                             <div key={"rmdiv_" + (rm.id)}>
-                                <span className="text-gray-700">
+                                {/* <span className="text-gray-700">
                                     Remarks :
-                                </span>
+                                </span> */}
                                 <div className="max-w-xl rounded overflow-hidden shadow-lg px-3 pt-4 mb-4">
                                     <div className="grid grid-cols-3 gap-4">
                                         <div className="col-span-2">
-                                            {rm.remarks}
-                                            <br />
+                                            <EditableRemark initialText={rm.remarks} remarkId={rm.id} />
                                         </div>
                                         <div className="text-right">
                                             <a href={`/tickets/delete_remark/${rm.id}`} key={rm.id} className="text-sm text-red-500 underline remove_rm">Remove</a>

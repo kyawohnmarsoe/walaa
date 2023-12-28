@@ -61,9 +61,22 @@ export default function Authenticated({ user, header, children }) {
                                             </Dropdown.Trigger>
 
                                             <Dropdown.Content align={'left'}>
-                                                <Dropdown.Link href={route('users.online')}>Online Users</Dropdown.Link>
-                                                <Dropdown.Link href={route('users.management')}> Manage Users</Dropdown.Link >
-                                                <Dropdown.Link href={route('customers.create')}> Create New User</Dropdown.Link >
+                                                <Dropdown.Link href={route('users.online')}
+                                                    active={(url === '/users/online') ? 'active' : ''}>
+                                                    Online Users
+                                                </Dropdown.Link>
+                                                <Dropdown.Link href={route('users.management')}
+                                                    active={(url === '/users/management') ? 'active' : ''}>
+                                                    All Users
+                                                </Dropdown.Link >
+                                                <Dropdown.Link href={route('customers')}
+                                                    active={(url === '/customers') ? 'active' : ''}>
+                                                    Manage Users
+                                                </Dropdown.Link >
+                                                <Dropdown.Link href={route('customers.create')}
+                                                    active={(url === '/customers/create') ? 'active' : ''}>
+                                                    Create New User
+                                                </Dropdown.Link >
                                             </Dropdown.Content>
                                         </Dropdown>
                                     </div>
@@ -158,9 +171,9 @@ export default function Authenticated({ user, header, children }) {
                                 <NavLink href={route('affiliates')} active={url.startsWith('/affiliates')}>
                                     Affiliates
                                 </NavLink>
-                                <NavLink href={route('customers')} active={url.startsWith('/customers')}>
+                                {/* <NavLink href={route('customers')} active={url.startsWith('/customers')}>
                                     Users
-                                </NavLink>
+                                </NavLink> */}
                                 <NavLink href={route('tickets')} active={url.startsWith('/tickets')}>
                                     Tickets
                                 </NavLink>

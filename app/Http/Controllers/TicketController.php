@@ -206,7 +206,6 @@ class TicketController extends Controller
 		
         return redirect()->route('tickets')->with('status', 200); 
 	} // update
-
     public function destroy($id)
     {
         $ticket = Ticket::findOrFail($id);
@@ -267,6 +266,20 @@ class TicketController extends Controller
         ]); 
         return redirect()->route('tickets')->with('status', 201);   
     } // store_remark
+
+    public function update_remark(Request $request, $rmId) 
+    {
+		$input = $request->all();
+        // return response(compact('input'));  
+        $ticket_remark = Ticket_remark::findOrFail($rmId);   
+
+        $ticket_remark->update([
+            'remarks' => $request->remarks,             
+            'remark_by' =>  Auth::id() 
+        ]);
+		
+        return redirect()->back()->with('status', 200); 
+	} // update_remark
 
     public function destroy_remark($id)
     {
