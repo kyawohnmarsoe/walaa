@@ -33,7 +33,7 @@ export default function WalletTableRow ({ item, auth, users, user, modals, setMo
 
             <tr >
                 {/* <td>{ user.name }</td> */}
-                <td>{ item?.type }</td>
+                {/* <td>{ item?.type }</td> */}
 
                 <td> { item.fromWallet && getFromWallet(item.fromWallet) }</td>
 

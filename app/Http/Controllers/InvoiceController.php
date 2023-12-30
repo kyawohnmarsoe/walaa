@@ -85,6 +85,7 @@ class InvoiceController extends Controller
 
      public function show($id){
         $token = $this->getSavedToken();  
+        // dd($token);
         return Inertia::render('Invoices/Invoice',[
             'apitoken' => $token,
             'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get(),

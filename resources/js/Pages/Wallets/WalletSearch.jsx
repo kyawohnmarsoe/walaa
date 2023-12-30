@@ -43,7 +43,7 @@ export default function WalletSearch ({ className = '', setFilterObj, filterObj,
                         <form onSubmit={ submit } className="mt-6 space-y-6 ">
                             <div className='grid grid-cols-3 gap-4'>
 
-                                <div>
+                                {/* <div>
                                     <InputLabel htmlFor="type" value="Type" />
 
                                     <TextInput
@@ -55,8 +55,9 @@ export default function WalletSearch ({ className = '', setFilterObj, filterObj,
                                         onChange={ (e) => setData('type', e.target.value) }
                                     />
 
-                                    {/* <InputError className="mt-2" message={errors.name} /> */ }
-                                </div>
+                                    
+                                </div> */}
+
                                 {
                                     (auth.user.id == 1) && (
                                 
