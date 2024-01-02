@@ -41,6 +41,7 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {   
 
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+    Route::post('/dashboard/writing', [DashboardController::class, 'writing'])->name('writing');
 
     //========= Start Get Data From API Route =========//
     Route::get('/dashboard/statslist', [DashboardController::class, 'get_statsList'])->name('dashboard.statslist');
@@ -106,7 +107,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/tickets/{id}', [TicketController::class, 'edit'])->name('tickets.edit');
         Route::post('/tickets/{id}', [TicketController::class, 'update'])->name('tickets.update'); 
         Route::delete('/tickets/{id}', [TicketController::class, 'destroy'])->name('tickets.destroy');
-        Route::post('/tickets/store/remark', [TicketController::class, 'store_remark'])->name('tickets.store.remark');  
+        Route::post('/tickets/store/remark', [TicketController::class, 'store_remark'])->name('tickets.store.remark'); 
+        Route::post('/tickets/update/remark/{rmId}', [TicketController::class, 'update_remark'])->name('tickets.update.remark');  
         Route::get('/tickets/delete_remark/{id}', [TicketController::class, 'destroy_remark'])->name('tickets.destroy.remark');
         Route::delete('/tickets/image/{id}', [TicketController::class, 'destroy_image'])->name('tickets.destroy.image');
         Route::delete('/tickets/attach_file/{id}', [TicketController::class, 'destroy_attachFile'])->name('tickets.destroy.attachfile');
@@ -118,11 +120,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/usersessions', [ReportController::class, 'getUserSessions'])->name('usersessions');
     Route::get('/prepaid/needed', [ReportController::class, 'getPrepaidNeeded'])->name('prepaid.needed');
     Route::get('/deposit/statement', [ReportController::class, 'getAccountStatement'])->name('deposit.statement');
-    Route::get('/deposit/transfer', [ReportController::class, 'getBalanceTransfer'])->name('deposit.transfer');
     Route::get('/affiliate/group', [ReportController::class, 'getAffiliateGroup'])->name('affiliate.group');
     Route::get('/test/usage', [ReportController::class, 'getTestUsage'])->name('test.usage');
     Route::get('/account/stats', [ReportController::class, 'getAccountStats'])->name('account.stats');
     Route::get('/affiliate/stats', [ReportController::class, 'getAffiliateStats'])->name('affiliate.stats');
+
+     Route::get('/deposit/transfer', [ReportController::class, 'getBalanceTransfer'])->name('deposit.transfer');
     
     Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices');
     Route::post('/invoices/search', [InvoiceController::class, 'search'])->name('invoices.search');

@@ -15,6 +15,8 @@ export default function FilterForm({ className = '', accounts, sub_accounts, aff
         sub_account_id: '',
         affiliate_index: '',
         customer_user_id: '',
+        display_name: '',
+        mobile_number: '',
         status: '',
         active_status: '',
         user_group_id: '',
@@ -229,6 +231,32 @@ export default function FilterForm({ className = '', accounts, sub_accounts, aff
                             id="customer_user_id"
                             name="customer_user_id"
                             value={values.customer_user_id}
+                            onChange={handleChange}
+                            type="text"
+                            className="mt-1 block w-full"
+                            autoComplete="off"
+                        />
+                    </div>
+
+                    <div>
+                        <InputLabel htmlFor="display_name" value="Display Name" />
+                        <TextInput
+                            id="display_name"
+                            name="display_name"
+                            value={values.display_name}
+                            onChange={handleChange}
+                            type="text"
+                            className="mt-1 block w-full"
+                            autoComplete="off"
+                        />
+                    </div>
+
+                    <div>
+                        <InputLabel htmlFor="mobile_number" value="Phone Number" />
+                        <TextInput
+                            id="mobile_number"
+                            name="mobile_number"
+                            value={values.mobile_number}
                             onChange={handleChange}
                             type="text"
                             className="mt-1 block w-full"
