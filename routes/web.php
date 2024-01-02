@@ -29,6 +29,8 @@ Route::get('/earthlink/profile', function () {
     return Inertia::render('Profile/Earthlink/Edit');
 });
 
+Route::post('/deposit/store', [ReportController::class, 'storeBalanceTransfer'])->name('deposit.store');
+
 Route::get('/', function () {   
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -126,6 +128,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/affiliate/stats', [ReportController::class, 'getAffiliateStats'])->name('affiliate.stats');
 
      Route::get('/deposit/transfer', [ReportController::class, 'getBalanceTransfer'])->name('deposit.transfer');
+    //  Route::post('/deposit/store', [ReportController::class, 'storeBalanceTransfer'])->name('deposit.store');
     
     Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices');
     Route::post('/invoices/search', [InvoiceController::class, 'search'])->name('invoices.search');

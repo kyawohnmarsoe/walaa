@@ -10,7 +10,6 @@ export default function Board ({ board }) {
     const [writing, setWriting] = !!board.length ? useState(board[0]['writing']) : useState('')
 
     const saveEdits =()=>{
-       
         router.post(`/dashboard/writing/`, { board: writing, id: board[0]['id'] })
     }
   return (

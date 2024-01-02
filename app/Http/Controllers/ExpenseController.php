@@ -40,7 +40,7 @@ class ExpenseController extends Controller
           'description' => $request->expense['description'],
           'amount' => $request->expense['amount'],
           'submittedBy' => $request->expense['submittedBy'],
-          'modifyUser' => $request->expense['modifyUser'],
+          'modifyUser' => Auth::user()->name
         ];
 
       $result=Expense::create($data);
