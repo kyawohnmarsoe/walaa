@@ -55,11 +55,11 @@ function Invoice ({ invoice })
                         <tbody>
                             <tr>
                                 <td className="py-2 px-4 border"> 1</td>
-                                <td className="py-2 px-4 border"> { payment?.accountName }</td>
-                                <td className="py-2 px-4 border">{ payment?.invoiceDescription }</td>
-                                <td className="py-2 px-4 border">{ payment?.affiliateName }</td>
-                                <td className="py-2 px-4 border">{ payment?.salePrice }</td>
-                                <td className="py-2 px-4 border">{ payment?.salePrice }</td>
+                                <td className="py-2 px-4 border"> { invoice?.accountName }</td>
+                                <td className="py-2 px-4 border">{ invoice?.invoiceDescription }</td>
+                                <td className="py-2 px-4 border">{ invoice?.affiliateName }</td>
+                                <td className="py-2 px-4 border">{ invoice?.salePrice }</td>
+                                <td className="py-2 px-4 border">{ invoice?.salePrice }</td>
                             </tr>
 
                         </tbody>
@@ -67,16 +67,16 @@ function Invoice ({ invoice })
                 </div>
                 <div className="mt-4">
                     <div className="text-right">
-                        <p className="text-gray-600">Subtotal: { payment?.salePrice }</p>
+                        <p className="text-gray-600">Subtotal: { invoice?.salePrice }</p>
                         <p className="text-gray-600">Tax (0%): 0.00</p>
-                        <p className="text-gray-600">Total: { payment?.salePrice }</p>
+                        <p className="text-gray-600">Total: { invoice?.salePrice }</p>
                     </div>
                 </div>
                 <div className="mt-8">
-                    <p className="text-gray-600">Due Date: { payment?.paymentDueDate }</p>
-                    <p className="text-gray-600">Reference: { payment?.referenceRecord }</p>
-                    <p className="text-gray-600">Invocice Type: { payment?.invoiceType }</p>
-                    <p className="text-gray-600">Invoice Status: { payment?.invoiceStatus }</p>
+                    <p className="text-gray-600">Due Date: { invoice?.paymentDueDate }</p>
+                    <p className="text-gray-600">Reference: { invoice?.referenceRecord }</p>
+                    <p className="text-gray-600">Invocice Type: { invoice?.invoiceType }</p>
+                    <p className="text-gray-600">Invoice Status: { invoice?.invoiceStatus }</p>
                 </div>
             </div >
         </div>

@@ -24,7 +24,7 @@ export default function InvoiceTableRow ({ item, apitoken, auth })
 
             {/* <td className="font-bold text-sky-700">{ item?.invoinceID }</td> */}
             <td>{ item?.affiliateName }</td>
-            <td className="font-bold text-sky-700"><a href={ `/invoice/${ item?.id }` } target="_blank">{ item?.userID }</a></td>
+            <td className="font-bold text-sky-700"><a href={ `/invoices/${ item?.id }` } target="_blank">{ item?.userID }</a></td>
             {/* <td>{ item?.invoiceType }</td> */}
             <td>{ item?.invoiceDescription }</td>
             <td>{ item?.salePrice }</td>

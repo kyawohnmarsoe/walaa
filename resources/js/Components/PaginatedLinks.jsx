@@ -13,9 +13,11 @@ import PageSize from '@/Components/DaisyUI/PageSize'
 import ExpenseTable from '@/Pages/Expenses/ExpenseTable';
 import InvoiceTable from '@/Pages/Invoices/InvoiceTable';
 import WalletTable from '@/Pages/Wallets/WalletTable';
+import BalanceTransferTable from '@/Pages/Reports/Deposit/BalanceTransferTable';
 
 export default function PaginatedLinks({
     auth,
+    affiliates,
     itemsPerPage,
     items,
     sub_accounts,
@@ -122,6 +124,11 @@ export default function PaginatedLinks({
 
             {
                 tableName == 'wallets' && <WalletTable items={currentItems} auth={auth} users={users} />
+
+            }
+
+            {
+                tableName == 'balance_transfer' && <BalanceTransferTable items={ currentItems } auth={ auth } users={ users } affiliates={ affiliates } />
 
             }
 

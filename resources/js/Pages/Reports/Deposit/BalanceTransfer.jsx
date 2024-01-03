@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import { useForm } from '@inertiajs/react';
+import { useForm, usePage, router } from '@inertiajs/react';
 import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
 import PrimaryButton from '@/Components/PrimaryButton';
@@ -10,9 +10,13 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from "@inertiajs/react";
 import Modal from '@/Components/Modal';
 import InputError from '@/Components/InputError';
+import PaginatedLinks from '@/Components/PaginatedLinks';
 
-export default function BalanceTransfer ({ className = '', affiliates, apitoken, auth, deposit_password })
+
+export default function BalanceTransfer ({ className = '', affiliates, apitoken, auth, deposit_password, transactions })
 {
+    let { flash } = usePage().props
+    const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10 })
     const [main, setMain] = useState({ affiliate: '', errMessage: '', failMessage: '', value: '' })
     const { affiliate, errMessage, failMessage, value } = main
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -20,6 +24,7 @@ export default function BalanceTransfer ({ className = '', affiliates, apitoken,
         Amount: '',
         DepositPassword: deposit_password
     });
+
 
 
     const instance = axios.create({
@@ -74,17 +79,22 @@ export default function BalanceTransfer ({ className = '', affiliates, apitoken,
 
         console.log('submit')
 
+        // router.post(`/deposit/store/`, data) 
+
         instance.post('/affiliate/deposit/transferBalance', data)
             .then(res =>
             {
                 console.log(res.data)
-                res.data.value ? setMain({ ...main, failMessage: '', value: res.data.value }) :
+                res.data.value ? ( setMain({ ...main, failMessage: '', value: res.data.value }), 
+                    router.post(`/deposit/store/`, data) ):
                     setMain({ ...main, failMessage: res.data.error.message, value: '' })
 
             })
             .catch(err =>
             {
+               
                 setMain({ ...main, failMessage: err.message, value: '' })
+               
                 console.log(err.message)
             })
 
@@ -189,7 +199,7 @@ export default function BalanceTransfer ({ className = '', affiliates, apitoken,
                                             className='mt-1 block w-full border-gray-300 focus:border-sky-500 focus:ring-sky-500 rounded-md shadow-sm '
                                             value={ data?.TargetAffiliateIndex }
                                             onChange={ (e) => setData('TargetAffiliateIndex', e.target.value) }
-                                        // required
+                                        required
                                         >
                                             <option value=''>All</option>
                                             {
@@ -278,6 +288,28 @@ export default function BalanceTransfer ({ className = '', affiliates, apitoken,
                     </div>
                 </div>
             </div >
+
+            <div className="py-12 ">
+                <div className="max-w-8xl mx-auto sm:px-6 lg:px-4">
+                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                        <div className="text-gray-900">
+
+
+                            <PaginatedLinks
+                                itemsPerPage={ filterObj.RowCount }
+                                items={ transactions }
+                                tableName="balance_transfer"
+                                setFilterObj={ setFilterObj }
+                                filterObj={ filterObj }
+                                auth={ auth }
+                                apitoken={ apitoken }
+                                affiliates={ affiliates }
+                            />
+
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
         </AuthenticatedLayout >

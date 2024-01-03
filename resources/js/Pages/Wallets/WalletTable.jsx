@@ -20,7 +20,7 @@ export default function WalletTable ({ items, auth, users })
                     <tr className='bg-emerald-300'>
 
                         {/* <th>Wallet</th> */}
-                        <th>Type</th>
+                        {/* <th>Type</th> */}
                         <th>From</th>
                         <th>To</th>
                         <th>Description</th>
