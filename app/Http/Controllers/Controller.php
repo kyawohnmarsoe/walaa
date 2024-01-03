@@ -7,7 +7,6 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Http;
 // use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Apitoken;
 use App\Models\User_group;
@@ -38,11 +37,11 @@ class Controller extends BaseController
 
         $api_user_data = $this->get_api_user();
         // return response(compact('api_user_data'));         
-        
+        $password = decrypt($api_user_data['apiuser_data']['password']);
         $apiURL = 'https://rapi.earthlink.iq/api/reseller/Token' ;  
         $data = [
             "username"   => $api_user_data['apiuser_data']['username'], 
-            "password"   => Crypt::decrypt($api_user_data['apiuser_data']['password']),
+            "password"   => $password,
             "loginType"  =>  $api_user_data['apiuser_data']['login_type'],
             "grant_type" => $api_user_data['apiuser_data']['grant_type'],            
         ];         

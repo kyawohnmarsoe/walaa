@@ -3,21 +3,20 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Crypt;
 use App\Models\Apiusers; 
 use Inertia\Inertia;
 
 class ApiUserController extends Controller
 {   
     public function change_api_user() {       
-        // $password = Crypt::encrypt('@walaalink@');
+        // $password = encrypt('@walaalink@');
         // Apiusers::insert([
         //     "username"   => "walaaim",
         //     "password"   => $password,
         //     "login_type"  => "1",
         //     "grant_type" => "password"           
         // ]); 
-        // $decrypted_password = Crypt::decrypt($password);
+        // $decrypted_password = decrypt($password);
         // return response(compact('decrypted_password')); 
 
         $api_user_data = $this->get_api_user();
@@ -35,7 +34,7 @@ class ApiUserController extends Controller
         if($request->password == $data['password']) {
             $password = $data['password'];
         } else {
-            $password = Crypt::encrypt($request->password);
+            $password = encrypt($request->password);
         }        
         $new_data = [
             "username"   => $request->username,
