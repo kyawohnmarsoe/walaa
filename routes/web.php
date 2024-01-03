@@ -170,12 +170,12 @@ Route::middleware('auth')->group(function () {
 //     Route::delete('/earthlink/profile', [EarthlinkProfileController::class, 'destroy'])->name('earthlink.destroy');
 // });
 
-Route::get('/clear-cache-all', function() {    
-    Artisan::call('route:cache');
-    Artisan::call('config:cache');
-    Artisan::call('cache:clear');
-    Artisan::call('view:clear');
-    dd("Cache Clear All");
-});
+// Route::get('/clear-cache-all', function() {    
+//     Artisan::call('route:cache');
+//     Artisan::call('config:cache');
+//     Artisan::call('cache:clear');
+//     Artisan::call('view:clear');
+//     dd("Cache Clear All");
+// });
 
 require __DIR__.'/auth.php';

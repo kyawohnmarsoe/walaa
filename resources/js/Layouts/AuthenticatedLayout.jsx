@@ -61,10 +61,22 @@ export default function Authenticated({ user, header, children }) {
                                             </Dropdown.Trigger>
 
                                             <Dropdown.Content align={'left'}>
-                                                <Dropdown.Link href={route('users.online')}>Online Users</Dropdown.Link>
-                                                <Dropdown.Link href={ route('users.management') }> All Users</Dropdown.Link >
-                                                <Dropdown.Link href={ route('customers') }> Manage Users</Dropdown.Link >
-                                                <Dropdown.Link href={route('customers.create')}> Create New User</Dropdown.Link >
+                                                <Dropdown.Link href={route('users.online')}
+                                                    active={(url === '/users/online') ? 'active' : ''}>
+                                                    Online Users
+                                                </Dropdown.Link>
+                                                <Dropdown.Link href={route('users.management')}
+                                                    active={(url === '/users/management') ? 'active' : ''}>
+                                                    All Users
+                                                </Dropdown.Link >
+                                                <Dropdown.Link href={route('customers')}
+                                                    active={(url === '/customers') ? 'active' : ''}>
+                                                    Manage Users
+                                                </Dropdown.Link >
+                                                <Dropdown.Link href={route('customers.create')}
+                                                    active={(url === '/customers/create') ? 'active' : ''}>
+                                                    Create New User
+                                                </Dropdown.Link >
                                             </Dropdown.Content>
                                         </Dropdown>
                                     </div>
@@ -103,7 +115,7 @@ export default function Authenticated({ user, header, children }) {
                                                 <Dropdown.Link href={route('usersessions')}>User Sessions</Dropdown.Link>
                                                 <Dropdown.Link href={route('prepaid.needed')}>Prepaid Needed</Dropdown.Link >
                                                 {/* <Dropdown.Link href={ route('deposit.statement') }>Account Statement</Dropdown.Link > */}
-                                                   <Dropdown.Link href={route('invoices')}>Invoices</Dropdown.Link >
+                                                <Dropdown.Link href={route('invoices')}>Invoices</Dropdown.Link >
                                                 <Dropdown.Link href={route('expenses')}>Expenses</Dropdown.Link >
                                             </Dropdown.Content>
                                         </Dropdown>
@@ -210,7 +222,7 @@ export default function Authenticated({ user, header, children }) {
                                                 <Dropdown.Link href={route('systemuser')} active={url.startsWith('/systemuser')}> Staffs Manage</Dropdown.Link>
                                                 <Dropdown.Link href={route('apiuser')} active={url.startsWith('/apiuser')}> Api User Manage </Dropdown.Link>
                                                 {/* <Dropdown.Link href={ route('apidata') } active={ url.startsWith('/apidata') }> API Data Manage</Dropdown.Link> */}
-                                                <Dropdown.Link href={ route('deposit.transfer') }>Balance Transfer</Dropdown.Link >
+                                                <Dropdown.Link href={route('deposit.transfer')}>Balance Transfer</Dropdown.Link >
 
                                             </>
                                         }
