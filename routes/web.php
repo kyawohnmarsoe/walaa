@@ -119,6 +119,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/tickets/delete_remark/{id}', [TicketController::class, 'destroy_remark'])->name('tickets.destroy.remark');
         Route::delete('/tickets/image/{id}', [TicketController::class, 'destroy_image'])->name('tickets.destroy.image');
         Route::post('/tickets/attach_file/{id}', [TicketController::class, 'destroy_attachFile'])->name('tickets.destroy.attachfile');
+        Route::get('/tickets/user/{user_id}', [TicketController::class, 'tickets_by_user'])->name('tickets.user');
     // });
 
     Route::get('/log/error', [LogController::class, 'getErrorLog'])->name('log.error');

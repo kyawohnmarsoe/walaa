@@ -19,10 +19,6 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
         notify: false,
     })
 
-    const [values, setValues] = useState({
-        user_id: '',
-    });
-
     const [user, setUser] = useState([])
 
     function editLocalCusClick(index) {
@@ -91,15 +87,8 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
         result && extendUser()
     }
 
-    function handleTicketSubmit(e) {
-        e.preventDefault()
-        let userId = document.getElementById('user_id').value;
-        setValues(values => ({
-            ...values,
-            user_id: userId,
-        }))
-        console.log(values.user_id);
-        // router.post('/tickets', values);
+    function handleTicketSubmit(user_id) {
+        router.get(`/tickets/user/${user_id} `);
     }
 
     useEffect(() => {
@@ -169,12 +158,14 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                     </div>
 
                                     {cus.ticket_id &&
-                                        <form onSubmit={handleTicketSubmit}>
-                                            <input type="hidden" id="user_id" name="user_id" value={cus.id} />
-                                            <button type="submit">
-                                                Ticket Data
-                                            </button>
-                                        </form>
+                                        <small key={"usrticket_" + (cus.ticket_id)} className="block mt-2">
+                                            <a className='inline-flex items-center underline decoration-sky-300 text-sm font-medium text-sky-600 focus:border-sky-700 cursor-pointer'
+                                                onClick={() => handleTicketSubmit(cus.id)}
+                                                key={cus.ticket_id}>
+                                                View Ticket
+                                            </a>
+                                        </small>
+
 
                                     }
 

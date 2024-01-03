@@ -24,15 +24,13 @@ class TicketController extends Controller
         $user_has_groups_idArr = $this->getLoggedInUserGroup();
         $count_user_groups = User_group::count();        
 
-        if ($request->hasAny(['customer_user_id', 'display_name', 'ticket_source', 'topic', 'ticket_status', 'level_of_importance', 'ticket_number'])) {
+        if ($request->hasAny(['user_id', 'display_name', 'topic', 'ticket_status', 'level_of_importance', 'ticket_number'])) {
             $data = $request->all();      
             $tickets_query = Ticket::join('customers', 'customers.id', '=', 'tickets.user_id')                 
                     ->when(request('user_id') != '', function ($q) {
                         return $q->where('tickets.user_id', request('user_id'));
                     })->when(request('display_name') != '', function ($q) {
                         return $q->orWhere('tickets.user_id', request('display_name'));
-                    })->when(request('ticket_source') != '', function ($q) {
-                        return $q->where('tickets.ticket_source', request('ticket_source'));
                     })->when(request('topic') != '', function ($q) {
                         return $q->where('tickets.topic', request('topic'));
                     })->when(request('ticket_status') != '', function ($q) {
@@ -76,6 +74,40 @@ class TicketController extends Controller
         ]);
         
     } // index
+
+    public function tickets_by_user($user_id)
+    {
+        $user_has_groups_idArr = $this->getLoggedInUserGroup();
+        $count_user_groups = User_group::count();        
+
+        $tickets_query = Ticket::join('customers', 'customers.id', '=', 'tickets.user_id');
+        $show_data = 'list';
+        
+        if(count($user_has_groups_idArr) == 0 || $count_user_groups == count($user_has_groups_idArr)){
+            $tickets = $tickets_query->where('tickets.user_id', $user_id)
+                    ->get(['tickets.*', 'customers.customer_user_id', 'customers.display_name', 'customers.user_group_id']);            
+            $filter_customers = Customer::all();
+        } else {
+            $tickets = $tickets_query->orWhereIn('customers.user_group_id', $user_has_groups_idArr)
+                        ->get(['tickets.*', 'customers.customer_user_id', 'customers.display_name', 'customers.user_group_id']);
+            $filter_customers = Customer::whereIn('customers.user_group_id', $user_has_groups_idArr)
+                        ->get();
+        }       
+
+        return Inertia::render('Tickets/Tickets', [
+            'tickets' =>  $tickets, 
+            'users'   => User::all(),
+            'customers' => Customer::all(),
+            'filter_customers' => $filter_customers,
+            'remarks'   => Ticket_remark::all(),
+            'user_groups' => User_group::all(),
+            'show_data' => $show_data
+        ])->with([
+            'topic'                => config('constants.topic'),
+            'level_of_importance'  => config('constants.level_of_importance')
+        ]);
+        
+    } // tickets_by_user
 
     public function create() {
         $token = $this->getSavedToken();
