@@ -24,6 +24,13 @@ class DatabaseSeeder extends Seeder
             'deposit_password' => '6666667',
         ]);
 
+        DB::table('apiusers')->insert([
+            "username"   => "walaaim",
+            "password"   => \Illuminate\Support\Facades\Crypt::encrypt('@walaalink@'),
+            "login_type"  => "1",
+            "grant_type" => "password"  
+        ]);
+
         $this->call([
             RolesSeeder::class,
             UserSeeder::class,

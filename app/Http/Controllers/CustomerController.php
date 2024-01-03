@@ -15,6 +15,7 @@ use App\Models\Deposit_pass;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Models\User_group;
 use App\Models\Invoice;
+use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
@@ -68,6 +69,8 @@ class CustomerController extends Controller
             
             $customers_query = Customer::leftJoin('affiliates', 'affiliates.affiliate_index', '=', 'customers.affiliate_index')
                 ->leftJoin('accounts', 'accounts.account_index', '=', 'customers.account_index')
+                ->leftJoin('tickets', 'tickets.user_id', '=', 'customers.id')
+                ->groupBy('customers.id')
                 ->when(request('account_index') != '', function ($q) {
                     return $q->where('customers.account_index', request('account_index'));
                 })->when(request('sub_account_id') != '', function ($q) {
@@ -90,13 +93,16 @@ class CustomerController extends Controller
             
             $show_data = 'filter_list';
         } else {
-            // select cus.*, aff.affiliate_name, acc.account_name from customers cus
+            // select cus.*, aff.affiliate_name, acc.account_name, t.id AS ticket_id from customers cus
             // left join affiliates aff on aff.affiliate_index=cus.affiliate_index
             // left join accounts acc on acc.account_index=cus.account_index
+            // left join tickets t on t.user_id=cus.id GROUP BY cus.id
             // where cus.user_group_id in('1') OR cus.user_group_id IS NULL;
 
             $customers_query = Customer::leftJoin('affiliates', 'affiliates.affiliate_index', '=', 'customers.affiliate_index')
-                ->leftJoin('accounts', 'accounts.account_index', '=', 'customers.account_index');
+                ->leftJoin('accounts', 'accounts.account_index', '=', 'customers.account_index')
+                ->leftJoin('tickets', 'tickets.user_id', '=', 'customers.id')
+                ->groupBy('customers.id');
             // ->where(DB::raw("(STR_TO_DATE(customers.manual_expiration_date,'%d/%m/%Y'))"), ">=", Carbon::now())
             // ->where(DB::raw("(STR_TO_DATE(customers.manual_expiration_date,'%d/%m/%Y'))"), '=', today()->addDays(2));
             // ->whereNull('customers.user_group_id')              
@@ -105,12 +111,12 @@ class CustomerController extends Controller
         }
 
         if (count($user_has_groups_idArr) == 0 || $count_user_groups == count($user_has_groups_idArr)) {
-            $customers = $customers_query->get(['customers.*', 'affiliates.affiliate_name', 'accounts.account_name']);
+            $customers = $customers_query->get(['customers.*', 'affiliates.affiliate_name', 'accounts.account_name', 'tickets.id As ticket_id']);
             $filter_user_groups = User_group::all();
 
         } else {
             $customers = $customers_query->whereIn('customers.user_group_id', $user_has_groups_idArr)
-                ->get(['customers.*', 'affiliates.affiliate_name', 'accounts.account_name']);
+                        ->get(['customers.*', 'affiliates.affiliate_name', 'accounts.account_name', 'tickets.id As ticket_id']);
             $filter_user_groups = User_group::whereIn('user_groups.id', $user_has_groups_idArr)
                 ->get();
         }

@@ -7,26 +7,41 @@ import Modal from "@/Components/DaisyUI/Modal";
 import InputLabel from '@/Components/InputLabel';
 import TextInput from "@/Components/TextInput";
 import Textarea from '@/Components/Textarea';
-import { format, formatDistance } from 'date-fns';
+import { format } from 'date-fns';
 
 export default function TicketTable({ tickets, users, user_groups, remarks }) {
     const [loading] = useState(false);
 
-    const { ticket_source, topic, level_of_importance } = usePage().props
-    const [ticketSource] = useState([ticket_source])
+    const { topic, level_of_importance } = usePage().props
     const [topicData] = useState([topic])
     const [levelData] = useState([level_of_importance])
 
     const [values, setValues] = useState({
         ticket_id: '',
         remarks: '',
-        ticket_status: ''
+        ticket_status: '',
+        attachfile_name: '',
     });
 
     useEffect(() => {
         // console.log(ticketSource);
         // console.log(ticketSource[0]['ts_3']);     
     }, [])
+
+    function splitFile(props, dt) {
+
+        let files = props.split(",");
+        return (
+            <div>
+                {files.map((file, index) => {
+                    return <a className='inline-flex items-center px-1 pt-1 underline decoration-sky-300 text-sm font-medium text-sky-600 focus:border-sky-700 cursor-pointer'
+                        key={index} onClick={() => callModal(dt, 'ticket_fileModal', file)}>
+                        {file.length > 10 ? `(${index + 1}) ${file.substring(0, 10)}...` : file}
+                    </a>;
+                })}
+            </div>
+        );
+    }
 
     function handleChange(e) {
         const key = e.target.id;
@@ -37,16 +52,16 @@ export default function TicketTable({ tickets, users, user_groups, remarks }) {
         }))
     }
 
-    const callModal = (ticket, modal_id) => {
+    const callModal = (ticket, modal_id, attachfile_name) => {
         setValues(values => ({
             ...values,
             remarks: '',
             ticket_id: ticket.id,
-            ticket_status: ticket.ticket_status
+            ticket_status: ticket.ticket_status,
+            attachfile_name: attachfile_name,
         }))
 
         document.getElementById('show_remarks').innerHTML = ''
-        document.getElementById('image_div').innerHTML = ''
         document.getElementById('file_link').innerHTML = ''
 
         var ticket_number = document.getElementsByClassName('ticket_number')
@@ -86,18 +101,15 @@ export default function TicketTable({ tickets, users, user_groups, remarks }) {
                         </p></div></div></div>`
                 ))
             }
-        } else if (modal_id == 'ticket_imageModal') {
-            document.getElementById('image_div').innerHTML += `<img class="h-auto max-w-md rounded-lg" src='uploads/${ticket.image}' />`
         } else if (modal_id == 'ticket_fileModal') {
-            document.getElementById('file_link').innerHTML += ` ${ticket.attach_file}`
-            document.getElementById('file_link').href = `/uploads/others/${ticket.attach_file}`
+            document.getElementById('file_link').innerHTML += ` ${attachfile_name}`
+            document.getElementById('file_link').href = `/uploads/others/${attachfile_name}`
         }
 
     }
 
     const onCloseModal = () => {
-        // console.log('Close Modal - ', values.ticket_id)
-        // console.log('Close Modal status - ', values.ticket_status)
+
         document.getElementById('ticket_deleteModal').close()
         {
             values.ticket_status == 0
@@ -116,20 +128,12 @@ export default function TicketTable({ tickets, users, user_groups, remarks }) {
         onCloseModal();
     }
 
-    function deleteImageData(e) {
-        document.getElementById('ticket_imageModal').close()
-        e.preventDefault()
-        let ticketId = document.getElementById('ticket_id').value
-        // console.log(ticketId)
-        router.delete(`/tickets/image/${ticketId} `);
-    }
-
     function deleteFileData(e) {
         document.getElementById('ticket_fileModal').close()
         e.preventDefault()
-        let ticketId = document.getElementById('ticket_id').value
+        let ticketId = document.getElementById('ticket_id').value;
         console.log(ticketId)
-        router.delete(`/tickets/attach_file/${ticketId} `);
+        router.post(`/tickets/attach_file/${ticketId}`, values);
     }
 
     function clickFileLink(e) {
@@ -221,18 +225,6 @@ export default function TicketTable({ tickets, users, user_groups, remarks }) {
                 </form>
             </Modal>
 
-            <Modal id="ticket_imageModal" title="View Image" closeModal={onCloseModal}>
-                <div className='grid grid-cols-1 gap-4'>
-                    <div className="pt-4" id="image_div"></div>
-                </div>
-                <form onSubmit={deleteImageData} className="space-y-6 ">
-                    <TextInput className="ticket_id" id="ticket_id" name="ticket_id" type="hidden" value={values.ticket_id} />
-                    <div className="mt-6 flex justify-end">
-                        {<PrimaryButton disabled="" type="submit" >Delete This Image</PrimaryButton>}
-                    </div>
-                </form>
-            </Modal>
-
             <Modal id="ticket_fileModal" title="View File" closeModal={onCloseModal}>
                 <div className='grid grid-cols-1 gap-4'>
                     <div className="pt-4">
@@ -241,8 +233,9 @@ export default function TicketTable({ tickets, users, user_groups, remarks }) {
                 </div>
                 <form onSubmit={deleteFileData} className="space-y-6 ">
                     <TextInput className="ticket_id" id="ticket_id" name="ticket_id" type="hidden" value={values.ticket_id} />
+                    <TextInput className="attachfile_name" id="attachfile_name" name="attachfile_name" type="hidden" value={values.attachfile_name} />
                     <div className="mt-6 flex justify-end">
-                        {<PrimaryButton disabled="" type="submit" >Delete This File</PrimaryButton>}
+                        <PrimaryButton disabled="" type="submit" >Delete This File</PrimaryButton>
                     </div>
                 </form>
             </Modal>
@@ -251,12 +244,10 @@ export default function TicketTable({ tickets, users, user_groups, remarks }) {
                 <thead>
                     <tr className='bg-emerald-300'>
                         <th>Ticket Number</th>
+                        <th>Title</th>
                         <th>User</th>
                         <th>Topic</th>
                         <th>Level of Importance</th>
-                        <th>Ticket Source</th>
-                        <th>Address</th>
-                        <th>Image</th>
                         <th>Attached File</th>
                         <th>Actions</th>
                     </tr>
@@ -282,17 +273,17 @@ export default function TicketTable({ tickets, users, user_groups, remarks }) {
                                 <td>
                                     <a
                                         className='inline-flex items-center px-1 pt-1 underline decoration-sky-300 text-sm font-medium text-sky-600 focus:border-sky-700 cursor-pointer'
-                                        onClick={() => callModal(dt, 'ticket_viewModal')}
+                                        onClick={() => callModal(dt, 'ticket_viewModal', '')}
                                         key={dt.id}
                                     >
                                         {dt.ticket_number}
                                     </a>
-                                    <small className={`block mt-2 ${dt.ticket_status == 0 ? '' : 'font-bold text-teal-150'}`}>
+                                    <small key={"status_" + (dt.id)} className={`block mt-2 ${dt.ticket_status == 0 ? '' : 'font-bold text-teal-150'}`}>
                                         Status : {dt.ticket_status == 0 ? 'Opened' : 'Closed'}
                                     </small>
                                     {
                                         dt.ticket_status == 1 &&
-                                        <small className="block mt-2">
+                                        <small key={"updateduser_" + (dt.id)} className="block mt-2">
                                             Updated by : {
                                                 users.filter(user => user.id == dt.updated_by_loggedin_user).map(filteredUser => (
                                                     filteredUser.name
@@ -301,13 +292,22 @@ export default function TicketTable({ tickets, users, user_groups, remarks }) {
                                         </small>
                                     }
                                 </td>
+                                <td>{dt.title}</td>
                                 <td>
                                     {dt.customer_user_id}
+
+                                    {
+                                        dt.display_name &&
+                                        <small key={"name_" + (dt.id)} className="block mt-2">
+                                            Name : {dt.display_name}
+                                        </small>
+                                    }
+
 
                                     {dt.user_group_id &&
                                         user_groups.filter(user_gp => user_gp.id == dt.user_group_id)
                                             .map(filteredRes =>
-                                                <small className="block mt-2">
+                                                <small key={"usrgp_" + (dt.id)} className="block mt-2">
                                                     User Group : {filteredRes.group_name}
                                                 </small>
                                             )
@@ -315,35 +315,26 @@ export default function TicketTable({ tickets, users, user_groups, remarks }) {
                                 </td>
                                 <td>{topicData[0][dt.topic]}</td>
                                 <td>{levelData[0][dt.level_of_importance]}</td>
-                                <td>{ticketSource[0][dt.ticket_source]}</td>
-                                <td>{dt.ticket_address}</td>
                                 <td>
-                                    {
-                                        dt.image ?
-                                            <img
-                                                className="cursor-pointer"
-                                                src={`uploads/${dt.image}`}
-                                                width={60}
-                                                onClick={() => callModal(dt, 'ticket_imageModal')}
-                                            />
-                                            :
-                                            ''
-                                    }
-                                </td>
-                                <td>
+
                                     {
                                         dt.attach_file ?
-                                            <a
-                                                className='inline-flex items-center px-1 pt-1 underline decoration-sky-300 text-sm font-medium text-sky-600 focus:border-sky-700 cursor-pointer'
-                                                onClick={() => callModal(dt, 'ticket_fileModal')}
-                                                key={dt.id}
-                                            >
-                                                {
-                                                    dt.attach_file.length > 10 ?
-                                                        `${dt.attach_file.substring(0, 10)}...` : dt.attach_file
-                                                }
-                                            </a> : ''
+                                            dt.attach_file.includes(',') ?
+                                                splitFile(dt.attach_file, dt)
+                                                :
+                                                <a
+                                                    className='inline-flex items-center px-1 pt-1 underline decoration-sky-300 text-sm font-medium text-sky-600 focus:border-sky-700 cursor-pointer'
+                                                    onClick={() => callModal(dt, 'ticket_fileModal', dt.attach_file)}
+                                                    key={dt.id}
+                                                >
+                                                    {
+                                                        dt.attach_file.length > 10 ?
+                                                            `${dt.attach_file.substring(0, 10)}...` : dt.attach_file
+                                                    }
+                                                </a>
+                                            : ''
                                     }
+
                                 </td>
                                 <td>
                                     <button className="btn btn-xs btn-outline btn-block btn-default"

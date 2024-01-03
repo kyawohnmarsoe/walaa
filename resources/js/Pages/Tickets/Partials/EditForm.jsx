@@ -21,37 +21,19 @@ export default function EditForm({ className = '', ticket, customers, updated_by
 
     const [values, setValues] = useState({
         user_id: ticket.user_id,
-        ticket_source: ticket.ticket_source,
+        title: ticket.title,
         topic: ticket.topic,
-        ticket_address: ticket.ticket_address,
         level_of_importance: ticket.level_of_importance,
-        ticket_number: ticket.ticket_number,
         ticket_status: ticket.ticket_status,
         updated_by_loggedin_user: updated_by_loggedin_user,
-        image: ticket.image,
         attach_file: ticket.attach_file,
     });
 
-    const [urlImage, setUrlImage] = useState();
     const [urlAttachFile, setUrlAttachFile] = useState('');
 
     const [optionsCustomers, setoptionsCustomers] = useState([])
     const [selectedOpt, setSelectedOpt] = useState('')
 
-    const optionsTicketSource = [
-        {
-            "index": "ts_1",
-            "name": "Phone"
-        },
-        {
-            "index": "ts_2",
-            "name": "Email"
-        },
-        {
-            "index": "ts_3",
-            "name": "Other"
-        },
-    ];
     const optionsTopic = [
         {
             "index": "tp_1",
@@ -131,17 +113,24 @@ export default function EditForm({ className = '', ticket, customers, updated_by
         }
     }
 
+    function splitFile(props) {
+        let files = props.split(",");
+        return (
+            <div>
+                {files.map((file, index) => {
+                    return <p key={index} >
+                        {file}
+                    </p>;
+                })}
+            </div>
+        );
+    }
+
     useEffect(() => {
 
         getCustomers()
         getSelectedCustomer(ticket.user_id)
-        // console.log("old user value ", values.user_id)
-        {
-            ticket.image ?
-                setUrlImage(`/uploads/${ticket.image}`)
-                :
-                setUrlImage('')
-        }
+        // console.log("old user value ", values.user_id)        
         {
             ticket.attach_file ?
                 setUrlAttachFile(ticket.attach_file)
@@ -161,13 +150,6 @@ export default function EditForm({ className = '', ticket, customers, updated_by
         getSelectedCustomer(value)
     }
 
-    function ticketSourceHandleChange(e) {
-        const value = e.target.value
-        setValues(values => ({
-            ...values,
-            'ticket_source': value,
-        }))
-    }
     function topicHandleChange(e) {
         const value = e.target.value
         setValues(values => ({
@@ -190,22 +172,25 @@ export default function EditForm({ className = '', ticket, customers, updated_by
         }))
     }
 
-    function imageHandleChange(e) {
-        // console.log(e.target.files);
-        setUrlImage(URL.createObjectURL(e.target.files[0]));
-        setValues(values => ({
-            ...values,
-            'image': e.target.files[0],
-        }))
-    }
-
     function attachFileHandleChange(e) {
-        // console.log(e.target.files);
+
         setUrlAttachFile('');
         setValues(values => ({
             ...values,
-            'attach_file': e.target.files[0],
+            'attach_file': [],
         }))
+        let attachFiles = [];
+        const files = e.target.files;
+        if (files) {
+            for (let i = 0; i < files.length; i++) {
+                attachFiles.push(files[i]);
+            }
+            setValues(values => ({
+                ...values,
+                'attach_file': attachFiles,
+            }))
+        }
+        console.log(attachFiles);
     }
 
     function handleChange(e) {
@@ -237,7 +222,10 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                 </a>
             </div>
             <header>
-                <h2 className="text-lg font-medium text-sky-600">Edit Ticket</h2>
+                <h2 className="text-lg font-medium text-sky-600">
+                    Edit Ticket -
+                    <span className='font-bold'> {ticket.ticket_number}</span>
+                </h2>
             </header>
 
             <form onSubmit={handleSubmit} className="mt-6 space-y-6 ">
@@ -262,17 +250,14 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                     </div>
 
                     <div>
-                        <InputLabel htmlFor="ticket_source" value="Ticket Source" className='required' />
-                        <SelectOption
-                            id="ticket_source"
+                        <InputLabel htmlFor="title" value="Ticket Title" />
+                        <TextInput
+                            id="title"
+                            name="title"
+                            value={values.title}
+                            onChange={handleChange}
                             className="mt-1 block w-full"
-                            options={optionsTicketSource}
-                            select_text="Ticket Source"
-                            name="ticket_source"
-                            onChange={ticketSourceHandleChange}
-                            value={values.ticket_source}
                         />
-                        <InputError className="mt-2" message={errors.ticket_source} />
                     </div>
 
                     <div>
@@ -285,19 +270,6 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                             name="topic"
                             onChange={topicHandleChange}
                             value={values.topic}
-                        />
-                    </div>
-
-                    <div>
-                        <InputLabel htmlFor="ticket_address" value="Ticket Address" />
-                        <Textarea
-                            id="ticket_address"
-                            name="ticket_address"
-                            placeholder="Ticket Address..."
-                            value={values.ticket_address}
-                            onChange={handleChange}
-                            className="mt-1 block w-full"
-                            minRows={5}
                         />
                     </div>
 
@@ -316,20 +288,6 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                     </div>
 
                     <div>
-                        <InputLabel htmlFor="ticket_number" value="Ticket Number" className='required' />
-                        <TextInput
-                            id="ticket_number"
-                            name="ticket_number"
-                            value={values.ticket_number}
-                            onChange={handleChange}
-                            type="text"
-                            className="mt-1 block w-full"
-                            autoComplete="off"
-                        />
-                        <InputError className="mt-2" message={errors.ticket_number} />
-                    </div>
-
-                    <div>
                         <InputLabel htmlFor="ticket_status" value="Status" />
                         <SelectOption
                             id="ticket_status"
@@ -343,43 +301,28 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                     </div>
 
                     <div>
-                        <InputLabel htmlFor="image" value="Image" />
-                        <div className='flex border-none'>
-                            <div>
-                                <TextInput
-                                    id="image"
-                                    name="image"
-                                    onChange={imageHandleChange}
-                                    type="file"
-                                    className="mt-1 block w-full border-none rounded-none"
-                                /><p className="mt-2 text-sm text-gray-500 " id="file_input_help">
-                                    svg, png, jpg, jpeg or gif.
-                                </p>
-                            </div>
-                            <img className="h-auto max-w-xs rounded-lg" src={urlImage} width='50' />
-                        </div>
-
-                        <InputError className="mt-2" message={errors.image} />
-                    </div>
-
-                    <div>
                         <InputLabel htmlFor="attach_file" value="File Attachment" />
 
                         <div className='flex border-none'>
                             <div>
                                 <TextInput
                                     id="attach_file"
-                                    name="attach_file"
+                                    name="attach_file[]"
                                     onChange={attachFileHandleChange}
                                     type="file"
                                     className="mt-1 block w-full border-none rounded-none"
+                                    multiple
                                 />
-                                <p className="mt-2 text-sm text-gray-500 " id="file_input_help">
-                                    docx, doc, pdf, csv, xls or xlsx.
-                                </p>
                             </div>
-                            <p className="mt-4 text-sm text-emerald-600">{urlAttachFile}</p>
                         </div>
+                        <p className="mt-4 text-sm text-emerald-600">
+                            {
+                                urlAttachFile.includes(',') ?
+                                    splitFile(urlAttachFile)
+                                    :
+                                    urlAttachFile
+                            }
+                        </p>
 
                         <InputError className="mt-2" message={errors.attach_file} />
                     </div>

@@ -8,6 +8,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SystemUserController;
 use App\Http\Controllers\UserGroupController;
+use App\Http\Controllers\ApiUserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AffiliateController;
@@ -57,7 +58,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/systemuser/{id}', [SystemUserController::class, 'update'])->name('systemuser.update');
     Route::delete('/systemuser/{id}', [SystemUserController::class, 'destroy'])->name('systemuser.destroy'); 
     
-    Route::get('/apidata', [ApidataController::class, 'index'])->name('apidata');
+    Route::get('/apidata', [ApidataController::class, 'index'])->name('apidata');    
 
     Route::get('/usergroup', [UserGroupController::class, 'index'])->name('usergroup');
     Route::get('/usergroup/create', [UserGroupController::class, 'create'])->name('usergroup.create');
@@ -96,7 +97,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/users/management', [UserController::class, 'showAllUsers'])->name('users.management');
 
     Route::get('/deposit', [DepositController::class, 'change_deposit_password'])->name('deposit');
-    Route::post('/deposit/{id}', [DepositController::class, 'update_deposit_password'])->name('deposit.update_deposit_pass'); 
+    Route::post('/deposit/{id}', [DepositController::class, 'update_deposit_password'])->name('deposit.update_deposit_pass');
+    
+    Route::get('/apiuser', [ApiUserController::class, 'change_api_user'])->name('apiuser');
+    Route::post('/apiuser/{id}', [ApiUserController::class, 'update_api_user'])->name('apiuser.update_api_user');
+ 
 
     // Route::group(['middleware' => ['auth', 'role:admin']], function() {
         Route::get('/tickets', [TicketController::class, 'index'])->name('tickets');
@@ -110,7 +115,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/tickets/update/remark/{rmId}', [TicketController::class, 'update_remark'])->name('tickets.update.remark');  
         Route::get('/tickets/delete_remark/{id}', [TicketController::class, 'destroy_remark'])->name('tickets.destroy.remark');
         Route::delete('/tickets/image/{id}', [TicketController::class, 'destroy_image'])->name('tickets.destroy.image');
-        Route::delete('/tickets/attach_file/{id}', [TicketController::class, 'destroy_attachFile'])->name('tickets.destroy.attachfile');
+        Route::post('/tickets/attach_file/{id}', [TicketController::class, 'destroy_attachFile'])->name('tickets.destroy.attachfile');
     // });
 
     Route::get('/log/error', [LogController::class, 'getErrorLog'])->name('log.error');

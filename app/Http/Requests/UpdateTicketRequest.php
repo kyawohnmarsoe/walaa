@@ -16,11 +16,9 @@ class UpdateTicketRequest extends FormRequest
     {
         return [
             'user_id' => 'required',
-            'ticket_source' => 'required',             
+            'title' => '',
             'topic'=> '',
-            'ticket_address'=> '',
             'level_of_importance'=> 'required',
-            'ticket_number'=> 'required',
         ];
     }
 }

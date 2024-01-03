@@ -19,6 +19,10 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
         notify: false,
     })
 
+    const [values, setValues] = useState({
+        user_id: '',
+    });
+
     const [user, setUser] = useState([])
 
     function editLocalCusClick(index) {
@@ -87,6 +91,17 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
         result && extendUser()
     }
 
+    function handleTicketSubmit(e) {
+        e.preventDefault()
+        let userId = document.getElementById('user_id').value;
+        setValues(values => ({
+            ...values,
+            user_id: userId,
+        }))
+        console.log(values.user_id);
+        // router.post('/tickets', values);
+    }
+
     useEffect(() => {
         // console.log(sub_accounts); 
     }, [])
@@ -145,15 +160,28 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                 {!loading &&
                     <tbody>
                         {customers && customers.map(cus => (
-                            <tr key={cus.id} id={"tr_" + (cus.customer_user_index)}>
+                            <tr key={"key_" + (cus.id)} id={"tr_" + (cus.customer_user_index)}>
                                 <td>
-                                    <div className="font-bold text-sky-700">
-                                        <Link href={`/customers/details/${cus.customer_user_index}`}>{cus.email}</Link>
+                                    <div key={"email_" + (cus.id)} className="font-bold text-sky-700">
+                                        <Link href={`/customers/details/${cus.customer_user_index}`}>
+                                            {cus.email}
+                                        </Link>
                                     </div>
+
+                                    {cus.ticket_id &&
+                                        <form onSubmit={handleTicketSubmit}>
+                                            <input type="hidden" id="user_id" name="user_id" value={cus.id} />
+                                            <button type="submit">
+                                                Ticket Data
+                                            </button>
+                                        </form>
+
+                                    }
+
                                     {
                                         user_groups.filter(user_gp => user_gp.id == cus.user_group_id)
                                             .map(filteredRes => (
-                                                <small className="block mt-2">
+                                                <small key={"usrgp_" + (cus.id)} className="block mt-2">
                                                     User Group : {filteredRes.group_name}
                                                 </small>
                                             ))
@@ -234,7 +262,7 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                                         {
                                                             sys_users.filter(user => user.id == cus.sms_sent_by)
                                                                 .map(filteredRes => (
-                                                                    <small className="text-red-500 block mt-2">
+                                                                    <small key={"user_" + (user.id)} className="text-red-500 block mt-2">
                                                                         SMS sent by : {filteredRes.email}
                                                                     </small>
                                                                 ))

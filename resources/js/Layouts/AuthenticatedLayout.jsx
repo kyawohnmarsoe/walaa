@@ -219,10 +219,9 @@ export default function Authenticated({ user, header, children }) {
                                             roles == 'admin' &&
                                             <>
                                                 <Dropdown.Link href={route('deposit')} active={url.startsWith('/deposit')}> Deposit Password</Dropdown.Link>
-
                                                 <Dropdown.Link href={route('usergroup')} active={url.startsWith('/usergroup')}> Users Group Manage</Dropdown.Link>
                                                 <Dropdown.Link href={route('systemuser')} active={url.startsWith('/systemuser')}> Staffs Manage</Dropdown.Link>
-
+                                                <Dropdown.Link href={route('apiuser')} active={url.startsWith('/apiuser')}> Api User Manage </Dropdown.Link>
                                                 {/* <Dropdown.Link href={ route('apidata') } active={ url.startsWith('/apidata') }> API Data Manage</Dropdown.Link> */}
                                             </>
                                         }

@@ -13,20 +13,38 @@ use App\Models\User_group;
 use App\Models\User_has_group;
 use App\Models\Customer;
 use App\Models\Deposit_pass;
+use App\Models\Apiusers;
 
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
+    public function get_api_user() {
+        $all_data = Apiusers::all();
+        if($all_data->count() > 0) {
+            $id = $all_data[0]['id'];
+            $data = Apiusers::findOrFail($id);     
+
+            return [         
+                'apiuser_data' => $data
+            ];
+        }      
+    } // get_api_user 
+
     public function GetApiToken()
     {
+
+        $api_user_data = $this->get_api_user();
+        // return response(compact('api_user_data')); 
+        
+        $decrypted_password = \Illuminate\Support\Facades\Crypt::decrypt($api_user_data['apiuser_data']['password']);
         $apiURL = 'https://rapi.earthlink.iq/api/reseller/Token' ;  
         $data = [
-            "username"   => "walaaim",
-            "password"   => "@walaalink@",
-            "loginType"  => "1",
-            "grant_type" => "password"
+            "username"   => $api_user_data['apiuser_data']['username'], 
+            "password"   => $decrypted_password,
+            "loginType"  =>  $api_user_data['apiuser_data']['login_type'],
+            "grant_type" => $api_user_data['apiuser_data']['grant_type'], 
         ];         
         $api_response       = Http::asForm()->post($apiURL, $data);
         // dd($api_response) ;
