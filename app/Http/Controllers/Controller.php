@@ -7,6 +7,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Http;
 // use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Apitoken;
 use App\Models\User_group;
@@ -36,23 +37,23 @@ class Controller extends BaseController
     {
 
         $api_user_data = $this->get_api_user();
-        // return response(compact('api_user_data')); 
+        // return response(compact('api_user_data'));         
         
-        $decrypted_password = \Illuminate\Support\Facades\Crypt::decrypt($api_user_data['apiuser_data']['password']);
         $apiURL = 'https://rapi.earthlink.iq/api/reseller/Token' ;  
         $data = [
             "username"   => $api_user_data['apiuser_data']['username'], 
-            "password"   => $decrypted_password,
+            "password"   => Crypt::decrypt($api_user_data['apiuser_data']['password']),
             "loginType"  =>  $api_user_data['apiuser_data']['login_type'],
-            "grant_type" => $api_user_data['apiuser_data']['grant_type'], 
+            "grant_type" => $api_user_data['apiuser_data']['grant_type'],            
         ];         
-        $api_response       = Http::asForm()->post($apiURL, $data);
-        // dd($api_response) ;
+        $api_response       = Http::asForm()->post($apiURL, $data);       
+        
         if (!$api_response){
             return "can not get token";
         }
         $api_response_token = json_decode($api_response->getBody(), true); 
-        $api_token = $api_response_token ? $api_response_token['access_token'] : null;  
+        $api_token = $api_response_token ? $api_response_token['access_token'] : null; 
+        // dd($api_response_token);
         return $api_token;
     } // GetApiToken
 

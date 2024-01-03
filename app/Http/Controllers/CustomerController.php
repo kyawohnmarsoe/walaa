@@ -25,7 +25,7 @@ class CustomerController extends Controller
 
     public function get_totalcount()
     {
-        $token = $this->getSavedToken();
+        $token = $this->getSavedToken();          
         $apiURL = 'https://rapi.earthlink.iq/api/reseller/user/all';
         $headers = [
             'Authorization' => 'Bearer ' . $token,
@@ -59,7 +59,7 @@ class CustomerController extends Controller
 
         // return response(compact('user_has_groups_idArr'));
 
-        $token = $this->getSavedToken();
+        $token = $this->getSavedToken();        
 
         $totalCount = $this->get_totalcount();
 
