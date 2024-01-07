@@ -145,6 +145,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
      Route::get('/invoices/{id}', [InvoiceController::class, 'show'])->name('invoices.show');
      Route::get('/invoices/edit/{id}', [InvoiceController::class, 'edit'])->name('invoices.edit');
      Route::post('/invoices/update/{id}', [InvoiceController::class, 'update'])->name('invoices.update');
+     Route::get('/invoices/user/{user_index}', [InvoiceController::class, 'invoices_by_user'])->name('invoices.user');
 
       Route::get('/expenses', [ExpenseController::class, 'index'])->name('expenses');
       Route::post('/expenses/search', [ExpenseController::class, 'search'])->name('expenses.search');

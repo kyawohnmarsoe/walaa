@@ -91,6 +91,10 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
         router.get(`/tickets/user/${user_id} `);
     }
 
+    function handleInvoiceSubmit(customer_user_index) {
+        router.get(`/invoices/user/${customer_user_index} `);
+    }
+
     function clickWhatsapp() {
         router.get('/send_whatsapp');
     }
@@ -169,8 +173,17 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                                 View Ticket
                                             </a>
                                         </small>
+                                    }
 
-
+                                    {
+                                        cus.invoice_id &&
+                                        <small key={"usrinvoice_" + (cus.invoice_id)} className="block mt-2">
+                                            <a className='inline-flex items-center underline decoration-sky-300 text-sm font-medium text-sky-600 focus:border-sky-700 cursor-pointer'
+                                                onClick={() => handleInvoiceSubmit(cus.customer_user_index)}
+                                                key={cus.invoice_id}>
+                                                View Invoice
+                                            </a>
+                                        </small>
                                     }
 
                                     {
@@ -201,7 +214,7 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                             .map(filteredRes => (
                                                 <>
                                                     <br />
-                                                    <strong>Sub Acc Name</strong> : filteredRes.account_name
+                                                    <strong>Sub Acc Name</strong> : {filteredRes.account_name}
                                                 </>
                                             ))
                                     }

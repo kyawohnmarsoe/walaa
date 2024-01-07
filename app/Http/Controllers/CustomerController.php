@@ -70,6 +70,7 @@ class CustomerController extends Controller
             $customers_query = Customer::leftJoin('affiliates', 'affiliates.affiliate_index', '=', 'customers.affiliate_index')
                 ->leftJoin('accounts', 'accounts.account_index', '=', 'customers.account_index')
                 ->leftJoin('tickets', 'tickets.user_id', '=', 'customers.id')
+                ->leftJoin('invoices', 'invoices.userIndex', '=', 'customers.customer_user_index')
                 ->groupBy('customers.id')
                 ->when(request('account_index') != '', function ($q) {
                     return $q->where('customers.account_index', request('account_index'));
@@ -102,6 +103,7 @@ class CustomerController extends Controller
             $customers_query = Customer::leftJoin('affiliates', 'affiliates.affiliate_index', '=', 'customers.affiliate_index')
                 ->leftJoin('accounts', 'accounts.account_index', '=', 'customers.account_index')
                 ->leftJoin('tickets', 'tickets.user_id', '=', 'customers.id')
+                ->leftJoin('invoices', 'invoices.userIndex', '=', 'customers.customer_user_index')
                 ->groupBy('customers.id');
             // ->where(DB::raw("(STR_TO_DATE(customers.manual_expiration_date,'%d/%m/%Y'))"), ">=", Carbon::now())
             // ->where(DB::raw("(STR_TO_DATE(customers.manual_expiration_date,'%d/%m/%Y'))"), '=', today()->addDays(2));
@@ -111,12 +113,12 @@ class CustomerController extends Controller
         }
 
         if (count($user_has_groups_idArr) == 0 || $count_user_groups == count($user_has_groups_idArr)) {
-            $customers = $customers_query->get(['customers.*', 'affiliates.affiliate_name', 'accounts.account_name', 'tickets.id As ticket_id']);
+            $customers = $customers_query->get(['customers.*', 'affiliates.affiliate_name', 'accounts.account_name', 'tickets.id As ticket_id', 'invoices.id As invoice_id']);
             $filter_user_groups = User_group::all();
 
         } else {
             $customers = $customers_query->whereIn('customers.user_group_id', $user_has_groups_idArr)
-                        ->get(['customers.*', 'affiliates.affiliate_name', 'accounts.account_name', 'tickets.id As ticket_id']);
+                        ->get(['customers.*', 'affiliates.affiliate_name', 'accounts.account_name', 'tickets.id As ticket_id', 'invoices.id As invoice_id']);
             $filter_user_groups = User_group::whereIn('user_groups.id', $user_has_groups_idArr)
                 ->get();
         }

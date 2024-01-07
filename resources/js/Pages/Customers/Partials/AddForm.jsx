@@ -439,6 +439,19 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
                     </div>
 
                     <div>
+                        <InputLabel htmlFor="user_group_id" value="User Groups" />
+                        <SelectOption
+                            id="user_group_id"
+                            className="mt-1 block w-full"
+                            options={optionsUserGroups}
+                            select_text="User Groups"
+                            name="user_group_id"
+                            value={values.user_group_id}
+                            onChange={userGroupHandleChange}
+                        />
+                    </div>
+
+                    <div>
                         <InputLabel htmlFor="customer_user_notes" value="User Notes" />
                         <Textarea
                             id="customer_user_notes"
@@ -451,18 +464,6 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
                         />
                     </div>
 
-                    <div>
-                        <InputLabel htmlFor="user_group_id" value="User Groups" />
-                        <SelectOption
-                            id="user_group_id"
-                            className="mt-1 block w-full"
-                            options={optionsUserGroups}
-                            select_text="User Groups"
-                            name="user_group_id"
-                            value={values.user_group_id}
-                            onChange={userGroupHandleChange}
-                        />
-                    </div>
                 </div>
 
                 <div className="flex items-center gap-4">
