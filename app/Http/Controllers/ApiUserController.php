@@ -34,7 +34,7 @@ class ApiUserController extends Controller
         if($request->password == $data['password']) {
             $password = $data['password'];
         } else {
-            $password = encrypt($request->password);
+            $password = $request->password; // encrypt($request->password);
         }        
         $new_data = [
             "username"   => $request->username,

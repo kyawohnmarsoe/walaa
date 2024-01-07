@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WhatsAppController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -105,6 +106,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/apiuser', [ApiUserController::class, 'change_api_user'])->name('apiuser');
     Route::post('/apiuser/{id}', [ApiUserController::class, 'update_api_user'])->name('apiuser.update_api_user');
  
+    Route::get('/send_whatsapp', [WhatsAppController::class, 'send_whatsapp'])->name('send_whatsapp');
 
     // Route::group(['middleware' => ['auth', 'role:admin']], function() {
         Route::get('/tickets', [TicketController::class, 'index'])->name('tickets');

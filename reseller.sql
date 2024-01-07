@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 25, 2023 at 09:20 AM
+-- Generation Time: Jan 04, 2024 at 08:13 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -126,7 +126,58 @@ CREATE TABLE `apitokens` (
 --
 
 INSERT INTO `apitokens` (`id`, `apitoken`, `current_time`, `created_at`, `updated_at`) VALUES
-(1, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6IndhbGFhaW0iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJSZXNlbGxlciIsIkFmZmlsaWF0ZUluZGV4IjoiNjMwMzEiLCJBZmZpbGlhdGVOYW1lIjoid2FsYWFsaW5rMSIsIkFwcGxpY2F0aW9uTmFtZSI6IlJlc2VsbGVyIiwibmJmIjoxNzAzNDkyMzg1LCJleHAiOjE3MDM0OTU5ODUsImlzcyI6ImJpbGxpbmdhcGkiLCJhdWQiOiJkMjZkMTFkZTUxYmE0YmE2YWQ0ZGVhZTc5ODY1Mzk4YiJ9.akdn_-TfMNbcqtBdHkFmprkKe15L3HZdKPod-AgdgxE', 1703492385, NULL, '2023-12-25 01:19:45');
+(1, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6IndhbGFhaW0iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJSZXNlbGxlciIsIkFmZmlsaWF0ZUluZGV4IjoiNjMwMzEiLCJBZmZpbGlhdGVOYW1lIjoid2FsYWFsaW5rMSIsIkFwcGxpY2F0aW9uTmFtZSI6IlJlc2VsbGVyIiwibmJmIjoxNzA0MzUxMzU5LCJleHAiOjE3MDQzNTQ5NTksImlzcyI6ImJpbGxpbmdhcGkiLCJhdWQiOiJkMjZkMTFkZTUxYmE0YmE2YWQ0ZGVhZTc5ODY1Mzk4YiJ9.PAENxuezsGT-HFFZkFEpcl09KaikDxECtUklZMNwid8', 1704351358, NULL, '2024-01-03 23:55:58');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `apiusers`
+--
+
+CREATE TABLE `apiusers` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `username` varchar(191) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `login_type` varchar(191) NOT NULL,
+  `grant_type` varchar(191) NOT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `apiusers`
+--
+
+INSERT INTO `apiusers` (`id`, `username`, `password`, `login_type`, `grant_type`, `created_at`, `updated_at`) VALUES
+(1, 'walaaim', 'eyJpdiI6ImIxN1E1N3ZiZC8rK1dqc2JRZzN1VHc9PSIsInZhbHVlIjoiTUhVRWR1VkFrWWxUU1BIQkwvQTZsLzYrem9ORFJycDJFTXp1RDBNRnNrST0iLCJtYWMiOiI1M2RjOGQyNmVhNzRmNzcyNDdmZTQxMmZlZDk1ZDE0MzVlYmUwNmU3ZDg1Mjg3Y2E1OGZkOGVhZWUyZGFmYjdlIiwidGFnIjoiIn0=', '1', 'password', '2024-01-03 03:24:59', '2024-01-02 20:33:04');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `balance_transfers`
+--
+
+CREATE TABLE `balance_transfers` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `affiliate` varchar(191) NOT NULL,
+  `amount` bigint(20) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `boards`
+--
+
+CREATE TABLE `boards` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `writing` text DEFAULT NULL,
+  `modifyUser` varchar(191) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -186,7 +237,7 @@ INSERT INTO `customers` (`id`, `account_index`, `sub_account_id`, `affiliate_ind
 (10, 114, 0, 63035, '', '', '01@walaalink3', 27690601, '07200000021', NULL, '', '01@walaalink3', '', '', '', '', 'سرمد كريم شطب', NULL, '', 'Offline', 1, 'ExpiringSoon', 'MonthlyPrepaid', NULL, NULL, NULL, NULL, NULL, 1, 1, NULL, '2023-12-25 00:51:24'),
 (11, 114, 0, 63035, '', '', '02@walaalink3', 27690606, '07200000021', NULL, '', '02@walaalink3', '', '', '', '', 'محل', NULL, '', 'Offline', 1, 'Suspended', 'MonthlyPrepaid', NULL, '12/12/2023 12:10 AM', '1', '1', '1', 0, 0, NULL, '2023-12-22 23:27:21'),
 (12, 114, 0, 63038, '', '', '02@walaalink4', 27690619, '07200000022', NULL, '', '02@walaalink4', '', '', '', '', '', NULL, '', 'Offline', 1, 'Suspended', 'MonthlyPrepaid', NULL, '19/11/2023 12:11 PM', '1', '1', '1', 0, 0, NULL, '2023-12-22 23:27:21'),
-(13, 114, 0, 63040, '', '', '01@walaalink5', 27690623, '07200000023', NULL, '', '01@walaalink5', '', '', '', '', 'php', '2C:C8:1B:40:F4:5F', '', 'Online', 1, 'ExpiringSoon', 'MonthlyPrepaid', NULL, '23/12/2023 05:36 PM', '1', '1', '1', 0, 0, NULL, '2023-12-22 23:27:21'),
+(13, 114, 0, 63040, '', '', '01@walaalink5', 27690623, '07200000023', NULL, '', '01@walaalink5', '', '', '', '', 'php', '2C:C8:1B:40:F4:5F', '', 'Online', 1, 'ExpiringSoon', 'MonthlyPrepaid', NULL, '23/12/2023 05:36 PM', '1', '1', '1', 0, 0, NULL, '2024-01-03 23:56:46'),
 (14, 114, 0, 63040, '', '', '02@walaalink5', 27690627, '07200000023', NULL, '', '02@walaalink5', '', '', '', '', 'محل - 5', NULL, '', 'Offline', 1, 'Suspended', 'MonthlyPrepaid', NULL, '16/11/2023 06:41 PM', '1', '1', '1', 0, 0, NULL, '2023-12-22 23:27:21'),
 (15, 114, 0, 63040, '', '', '5005@walaa', 26704214, NULL, NULL, '', '5005@walaa', '', '', '', '', 'بشاره', '5C:54:6D:E7:B7:9E', '', 'Online', 1, 'ExpiringSoon', 'MonthlyPrepaid', NULL, '26/12/2023 10:43 PM', '1', '0', '1', 0, 0, NULL, '2023-12-22 23:27:21'),
 (16, 114, 0, 63040, '', '', 'mmmuuu@walaa', 28545383, '07513902902', NULL, '', 'mmmuuu@walaa', '', '', '', '', 'محمد احمد علي', NULL, NULL, 'Offline', 1, 'Suspended', 'MonthlyPrepaid', NULL, '18/01/2023 11:06 PM', '1', '1', '1', 0, 0, NULL, '2023-12-22 23:27:21'),
@@ -353,7 +404,10 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (16, '2023_11_30_022153_create_user_groups_table', 1),
 (17, '2023_11_30_055412_create_user_has_groups_table', 1),
 (18, '2023_12_01_072108_create_invoices_table', 1),
-(19, '2023_12_01_113909_create_expenses_table', 1);
+(19, '2023_12_01_113909_create_expenses_table', 1),
+(20, '2023_12_29_133955_create_apiusers_table', 2),
+(21, '2023_12_30_212531_create_boards_table', 3),
+(22, '2024_01_02_193322_create_balance_transfers_table', 3);
 
 -- --------------------------------------------------------
 
@@ -559,14 +613,13 @@ INSERT INTO `sub_accounts` (`id`, `account_index`, `account_name`, `account_desc
 CREATE TABLE `tickets` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` int(11) NOT NULL,
-  `ticket_source` varchar(191) NOT NULL,
+  `title` longtext DEFAULT NULL,
   `topic` varchar(191) NOT NULL,
-  `ticket_address` varchar(191) DEFAULT NULL,
   `level_of_importance` varchar(191) NOT NULL,
   `ticket_number` varchar(191) DEFAULT NULL,
   `ticket_status` int(11) NOT NULL DEFAULT 0,
   `image` varchar(191) DEFAULT NULL,
-  `attach_file` varchar(191) DEFAULT NULL,
+  `attach_file` longtext DEFAULT NULL,
   `updated_by_loggedin_user` int(11) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -576,12 +629,14 @@ CREATE TABLE `tickets` (
 -- Dumping data for table `tickets`
 --
 
-INSERT INTO `tickets` (`id`, `user_id`, `ticket_source`, `topic`, `ticket_address`, `level_of_importance`, `ticket_number`, `ticket_status`, `image`, `attach_file`, `updated_by_loggedin_user`, `created_at`, `updated_at`) VALUES
-(1, 5, 'ts_2', 'tp_2', NULL, 'lv_2', 'TKN123', 0, NULL, NULL, 1, '2023-11-25 15:46:36', '2023-11-27 14:17:26'),
-(2, 20, 'ts_2', 'tp_4', 'Testing', 'lv_3', 'TKN109', 1, '1701750223_cover.jpg', '', 1, '2023-12-02 20:44:48', '2023-12-06 11:33:59'),
-(6, 3, 'ts_1', 'tp_2', 'Yangon, MM', 'lv_1', 'TKN4122', 0, '1701846613_default.png', '1701912954_course code and title.xlsx', 1, '2023-12-03 23:19:03', '2023-12-06 11:35:54'),
-(10, 16, 'ts_3', 'tp_3', NULL, 'lv_3', 'TKN6121', 0, '', '', 0, '2023-12-05 12:11:42', '2023-12-05 12:11:42'),
-(12, 7, 'ts_1', 'tp_3', '201, 2St, 4Qtr, Ykn Tsp;', 'lv_2', 'TKN6124', 0, '1701842338_Screenshot (48).png', '1701842309_One of the Missing - Ambrose Bierce.pdf', 1, '2023-12-05 15:24:39', '2023-12-05 15:58:58');
+INSERT INTO `tickets` (`id`, `user_id`, `title`, `topic`, `level_of_importance`, `ticket_number`, `ticket_status`, `image`, `attach_file`, `updated_by_loggedin_user`, `created_at`, `updated_at`) VALUES
+(1, 5, NULL, 'tp_2', 'lv_2', 'TKN123', 0, NULL, NULL, 1, '2023-11-25 15:46:36', '2023-11-27 14:17:26'),
+(2, 20, NULL, 'tp_4', 'lv_3', 'TKN109', 1, '1701750223_cover.jpg', '', 1, '2023-12-02 20:44:48', '2023-12-06 11:33:59'),
+(6, 3, NULL, 'tp_2', 'lv_1', 'TKN4122', 0, '1701846613_default.png', '1701912954_course code and title.xlsx', 1, '2023-12-03 23:19:03', '2023-12-06 11:35:54'),
+(10, 16, NULL, 'tp_3', 'lv_3', 'TKN6121', 0, '', '', 0, '2023-12-05 12:11:42', '2023-12-05 12:11:42'),
+(12, 7, NULL, 'tp_3', 'lv_2', 'TKN6124', 0, '1701842338_Screenshot (48).png', '', 1, '2023-12-05 15:24:39', '2023-12-29 02:35:57'),
+(13, 4, NULL, 'tp_3', 'lv_3', 'TKN177', 0, '1703770890_course1.jpg', '1703770890_Git and Github.pdf', 1, '2023-12-28 06:37:07', '2023-12-28 06:41:30'),
+(16, 7, NULL, 'tp_5', 'lv_4', 'TKN9649', 0, '', '1703856568_Git and Github.pdf,1703856568_Rust(2023)ByWinHtut-NCCIOS.pdf', 1, '2023-12-28 23:42:04', '2023-12-29 06:29:28');
 
 -- --------------------------------------------------------
 
@@ -594,7 +649,7 @@ CREATE TABLE `ticket_remarks` (
   `ticket_id` int(11) NOT NULL,
   `remarks` varchar(191) DEFAULT NULL,
   `remark_by` int(11) NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -603,7 +658,9 @@ CREATE TABLE `ticket_remarks` (
 --
 
 INSERT INTO `ticket_remarks` (`id`, `ticket_id`, `remarks`, `remark_by`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Testing tkn123', 1, '2023-12-16 14:59:14', NULL);
+(2, 1, 'Test26 12', 1, '2023-12-28 04:50:27', NULL),
+(3, 1, 'tkn123 opened', 1, '2023-12-28 05:31:16', '2023-12-27 23:03:44'),
+(4, 2, 'already closed by last moth', 2, '2023-12-28 05:35:31', '2023-12-28 00:04:16');
 
 -- --------------------------------------------------------
 
@@ -726,6 +783,24 @@ ALTER TABLE `apitokens`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `apiusers`
+--
+ALTER TABLE `apiusers`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `balance_transfers`
+--
+ALTER TABLE `balance_transfers`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `boards`
+--
+ALTER TABLE `boards`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `customers`
 --
 ALTER TABLE `customers`
@@ -828,7 +903,8 @@ ALTER TABLE `sub_accounts`
 -- Indexes for table `tickets`
 --
 ALTER TABLE `tickets`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `ticket_number` (`ticket_number`);
 
 --
 -- Indexes for table `ticket_remarks`
@@ -884,6 +960,24 @@ ALTER TABLE `apitokens`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `apiusers`
+--
+ALTER TABLE `apiusers`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `balance_transfers`
+--
+ALTER TABLE `balance_transfers`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `boards`
+--
+ALTER TABLE `boards`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
@@ -917,7 +1011,7 @@ ALTER TABLE `invoices`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `payments`
@@ -953,13 +1047,13 @@ ALTER TABLE `sub_accounts`
 -- AUTO_INCREMENT for table `tickets`
 --
 ALTER TABLE `tickets`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `ticket_remarks`
 --
 ALTER TABLE `ticket_remarks`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`

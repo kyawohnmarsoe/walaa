@@ -37,7 +37,7 @@ class Controller extends BaseController
 
         $api_user_data = $this->get_api_user();
         // return response(compact('api_user_data'));         
-        $password = decrypt($api_user_data['apiuser_data']['password']);
+        $password = $api_user_data['apiuser_data']['password']; // decrypt($api_user_data['apiuser_data']['password']);
         $apiURL = 'https://rapi.earthlink.iq/api/reseller/Token' ;  
         $data = [
             "username"   => $api_user_data['apiuser_data']['username'], 

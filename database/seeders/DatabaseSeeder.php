@@ -26,7 +26,8 @@ class DatabaseSeeder extends Seeder
 
         DB::table('apiusers')->insert([
             "username"   => "walaaim",
-            "password"   => \Illuminate\Support\Facades\Crypt::encrypt('@walaalink@'),
+            // "password"   => \Illuminate\Support\Facades\Crypt::encrypt('@walaalink@'),
+            "password"   => '@walaalink@',
             "login_type"  => "1",
             "grant_type" => "password"  
         ]);
