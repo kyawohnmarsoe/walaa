@@ -21,7 +21,7 @@ export default function Board ({ board }) {
                           {/* <h2 className="text-lg font-medium text-sky-600">Online Users</h2> */}
 
                           <p className="mt-1 text-sm text-gray-600 float-left">
-                              Last Updated By : { board[0]?.modifyUser }
+                              Last Updated By : { board[0]?.modifyUser } @ ({ new Date(board[0]?.updated_at).toLocaleDateString('en-US') })
                             </p>
                           <button className="btn btn-xs btn-outline btn-default mb-2 float-right" onClick={saveEdits}>
                               Save
@@ -30,17 +30,15 @@ export default function Board ({ board }) {
                   </section>
                  
                   <div className="px-3">
-                      {
-                          writing && <Textarea
+                      <Textarea
                               id="writing"
                               name="writing"
                               value={ writing }
                               onChange={ (e) => setWriting(e.target.value) }
                               className="my-3 block w-full border-none focus:outline-none"
-
                               minRows={ 10 }
                           />
-                      }
+                    
                   </div>
               </div>
           </div>

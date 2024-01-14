@@ -33,7 +33,7 @@ export default function InvoiceTableRow ({ item, apitoken, auth })
             <td style={ { color: color } }>{ item?.invoiceStatus }</td>
             <td>{ item?.notes }</td>
             {/* <td>{ item?.paymentDueDate }</td>  */}
-            <td>{ item?.recordDate }</td>
+                <td>{ item?.recordDate ? item?.recordDate : new Date(item?.created_at).toLocaleDateString('en-US') }  </td>
                 <td> { item?.invoiceStatus == 'NotPaid' && <><button className="btn btn-xs btn-outline btn-block btn-info mb-1" onClick={ () => setModals({ setPayment :true}) } >Set Payment</button><br /></> }</td>
         </tr>
         </>

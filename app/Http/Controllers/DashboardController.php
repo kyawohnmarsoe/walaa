@@ -34,7 +34,7 @@ class DashboardController extends Controller
              'modifyUser'=> Auth::user()->name,
         ];
         $board->update($data);
-        return 'ok';
+        return redirect()->route('dashboard')->with('status', 201);
      }
     
     //========= Start Get Data From API =========//

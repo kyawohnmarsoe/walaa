@@ -7,75 +7,39 @@ import PrimaryBtn from '@/Components/PrimaryBtn';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 
-export default function Create ({ auth })
+export default function Create ({ auth, affiliates, customers, userIndexByGroup, accounts })
 {
     let { flash } = usePage().props
 
     const { data, setData, post, processing, errors, reset } = useForm({
         invoinceID: '',
         userIndex: '',
-        displayName: '',
         affiliateName: '',
         invoiceType: '',
-        invoiceDescription: '',
-        invoiceDuration: '',
-        salePrice: '',
-        retailPriceCurrency: '',
-        retailPrice: '',
-        referenceRecord: '',
-        recordDate: '',
-        invoiceStatus: '',
-        lastStatusChanged: '',
         accountName: '',
+        invoiceFrom: '',
+        invoiceTo: '',
+        referenceRecord: '',
         notes: '',
-        userID: '',
-        paidPrice: '',
-        discountedPrice: '',
+        invoiceStatus: 'NotPaid',
+        paidPrice: '0',
         modifyUser: auth.user.name,
-        paymentDueDate: '',
-        paymentDueDateTime: '',
     })
 
     const submit = (e) =>
     {
         e.preventDefault();
-        router.post('/invoices/store', {
-            invoice: {
-                "invoinceID": 117152102,
-                "userIndex": 27205453,
-                "displayName": "حسين يحيى خليف",
-                "affiliateName": "walaalink5",
-                "invoiceType": "Refill_Deposit",
-                "invoiceDescription": "Economy for period [2023/10/29 - 2023/11/29]",
-                "invoiceDuration": "2023/10/29 - 2023/11/29",
-                "salePrice": 60000.0,
-                "retailPriceCurrency": "IQD",
-                "retailPrice": 60000.0,
-                "referenceRecord": "0",
-                "recordDate": "29/10/2023 11:25 AM",
-                "invoiceStatus": "NotPaid",
-                "lastStatusChanged": "",
-                "accountName": "Economy",
-                "notes": null,
-                "userID": "2022@walaa",
-                "paidPrice": 0.0,
-                "discountedPrice": 0.0,
-                "balance": 40000.0,
-                "modifyUser": 'auth.user.name',
-                "paymentDueDate": "",
-                "paymentDueDateTime": null
-            }
-        })
-        console.log(data)
-
-        // router.post('/invoice/store', { invoice: data });
-    };
+        router.post('/invoices/storedata', { invoice: data });
+    }
 
     useEffect(() =>
     {
         (flash.status == 201) && reset()
-        console.log(flash.status)
+
+        // console.log(flash.status)
+
     }, [flash])
+ 
 
     return (
         <AuthenticatedLayout
@@ -98,8 +62,7 @@ export default function Create ({ auth })
 
                             <form onSubmit={ submit } className="mt-6 space-y-6 ">
                                 <div className='grid grid-cols-3 gap-4'>
-
-                                    <div>
+                                    <div className="mt-6">
                                         <InputLabel htmlFor="invoinceID" value="invoinceID" />
 
                                         <TextInput
@@ -107,134 +70,156 @@ export default function Create ({ auth })
                                             className="mt-1 block w-full "
                                             value={ data.invoinceID }
                                             isFocused
+                                            required
                                             autoComplete="invoinceID"
                                             onChange={ (e) => setData('invoinceID', e.target.value) }
                                         />
 
-                                        {/* <InputError className="mt-2" message={errors.name} /> */ }
                                     </div>
 
-                                    <div>
+                                    <div className="mt-6">
                                         <InputLabel htmlFor="userIndex" value="userIndex" />
-
-                                        <TextInput
+                                        <select
+                                            name="userIndex"
                                             id="userIndex"
-                                            className="mt-1 block w-full "
-                                            value={ data.userIndex }
-                                            isFocused
-                                            autoComplete="userIndex"
+                                            className='mt-1 block w-full border-gray-300 focus:border-sky-500 focus:ring-sky-500 rounded-md shadow-sm '
+                                            value={ data?.userIndex }
+                                            required
+                                            // onChange={ (e) => setData('userIndex', e.target.value) }
                                             onChange={ (e) => setData('userIndex', e.target.value) }
-                                        />
+                                        >
+                                            <option value='0' key='0' >
+                                                All
+                                            </option>
+                                            {
+                                                (userIndexByGroup == 'all') ?
+
+                                                    customers?.map(c => <option value={ c.customer_user_index } key={ c.id } >
+                                                        { c.customer_user_id }
+                                                    </option>) : userIndexByGroup?.map(c => <option value={ c.id } key={ c.id } >
+                                                        { c.customer_user_id }
+                                                    </option>)
+                                            }
+
+
+
+                                        </select>
+
 
                                     </div>
 
-                                    <div>
-                                        <InputLabel htmlFor="displayName" value="displayName" />
-
-                                        <TextInput
-                                            id="displayName"
-                                            className="mt-1 block w-full "
-                                            value={ data.displayName }
-                                            isFocused
-                                            autoComplete="displayName"
-                                            onChange={ (e) => setData('displayName', e.target.value) }
-                                        />
-
-                                    </div>
-
-                                    <div>
+                                    <div className="mt-6">
                                         <InputLabel htmlFor="affiliateName" value="affiliateName" />
 
-                                        <TextInput
+
+                                        <select
+                                            name="affiliateName"
                                             id="affiliateName"
-                                            className="mt-1 block w-full "
-                                            value={ data.affiliateName }
-                                            isFocused
-                                            autoComplete="affiliateName"
+                                            className='mt-1 block w-full border-gray-300 focus:border-sky-500 focus:ring-sky-500 rounded-md shadow-sm '
+                                            value={ data?.affiliateName }
+                                            required
                                             onChange={ (e) => setData('affiliateName', e.target.value) }
-                                        />
+                                        >
+                                            <option value='0' key='0' >
+                                                All
+                                            </option>
+                                            {
+                                                (!!affiliates.length) &&
+
+                                                affiliates?.map(a => <option value={ a.affiliate_name } key={ a.id } >
+                                                    { a.affiliate_name }
+                                                </option>)
+                                            }
+
+
+
+                                        </select>
 
                                     </div>
-                                    <div>
+
+
+                                    <div className="mt-6">
                                         <InputLabel htmlFor="invoiceType" value="invoiceType" />
 
-                                        <TextInput
+
+                                        <select
+                                            name="invoiceType"
                                             id="invoiceType"
-                                            className="mt-1 block w-full "
-                                            value={ data.invoiceType }
-                                            isFocused
-                                            autoComplete="invoiceType"
+                                            className='mt-1 block w-full border-gray-300 focus:border-sky-500 focus:ring-sky-500 rounded-md shadow-sm '
+                                            value={ data?.invoiceType }
+                                            required
                                             onChange={ (e) => setData('invoiceType', e.target.value) }
-                                        />
+                                        >
+                                            <option value='Manually_Create' key='0' >
+                                                Manually_Create
+                                            </option>
+                                            <option value=' Create_New_User' key='1' >
+                                                Create_New_User
+                                            </option>
+                                            <option value='Refill_Deposit' key='2' >
+                                                Refill_Deposit
+                                            </option>
+                                        </select>
 
                                     </div>
-                                    <div>
-                                        <InputLabel htmlFor="invoiceDescription" value="invoiceDescription" />
+
+                                    <div className="mt-6">
+                                        <InputLabel htmlFor="accountName" value="accountName" />
+
+
+                                        <select
+                                            name="accountName"
+                                            id="accountName"
+                                            className='mt-1 block w-full border-gray-300 focus:border-sky-500 focus:ring-sky-500 rounded-md shadow-sm '
+                                            value={ data?.accountName }
+                                            required
+                                            onChange={ (e) => setData('accountName', e.target.value) }
+                                        >
+                                            {
+                                                !!accounts?.length && accounts.map(a => <option value={ a.account_name } key={ a.account_index } >
+                                                    { a.account_name }
+                                                </option>)
+                                            }
+
+
+                                        </select>
+
+                                    </div>
+
+                                    <div className="mt-6">
+                                        <InputLabel htmlFor="invoiceFrom" value="invoiceFrom" />
 
                                         <TextInput
-                                            id="invoiceDescription"
+                                            id="invoiceFrom"
                                             className="mt-1 block w-full "
-                                            value={ data.invoiceDescription }
+                                            value={ data.invoiceFrom }
                                             isFocused
-                                            autoComplete="invoiceDescription"
-                                            onChange={ (e) => setData('invoiceDescription', e.target.value) }
+                                            required
+                                            type='date'
+                                            autoComplete="invoiceFrom"
+                                            onChange={ (e) => setData('invoiceFrom', e.target.value) }
                                         />
 
                                     </div>
-                                    <div>
-                                        <InputLabel htmlFor="invoiceDuration" value="invoiceDuration" />
+
+                                    <div className="mt-6">
+                                        <InputLabel htmlFor="invoiceTo" value="invoiceTo" />
 
                                         <TextInput
-                                            id="invoiceDuration"
+                                            id="invoiceTo"
                                             className="mt-1 block w-full "
-                                            value={ data.invoiceDuration }
+                                            value={ data.invoiceTo }
                                             isFocused
-                                            autoComplete="invoiceDuration"
-                                            onChange={ (e) => setData('invoiceDuration', e.target.value) }
+                                            required
+                                            type='date'
+                                            autoComplete="invoiceTo"
+                                            onChange={ (e) => setData('invoiceTo', e.target.value) }
                                         />
 
                                     </div>
 
-                                    <div>
-                                        <InputLabel htmlFor="salePrice" value="salePrice" />
 
-                                        <TextInput
-                                            id="salePrice"
-                                            className="mt-1 block w-full "
-                                            value={ data.salePrice }
-                                            isFocused
-                                            autoComplete="salePrice"
-                                            onChange={ (e) => setData('salePrice', e.target.value) }
-                                        />
-
-                                    </div>
-                                    <div>
-                                        <InputLabel htmlFor="retailPriceCurrency" value="retailPriceCurrency" />
-
-                                        <TextInput
-                                            id="retailPriceCurrency"
-                                            className="mt-1 block w-full "
-                                            value={ data.retailPriceCurrency }
-                                            isFocused
-                                            autoComplete="retailPriceCurrency"
-                                            onChange={ (e) => setData('retailPriceCurrency', e.target.value) }
-                                        />
-
-                                    </div>
-                                    <div>
-                                        <InputLabel htmlFor="retailPrice" value="retailPrice" />
-
-                                        <TextInput
-                                            id="retailPrice"
-                                            className="mt-1 block w-full "
-                                            value={ data.retailPrice }
-                                            isFocused
-                                            autoComplete="retailPrice"
-                                            onChange={ (e) => setData('retailPrice', e.target.value) }
-                                        />
-
-                                    </div>
-                                    <div>
+                                    <div className="mt-6">
                                         <InputLabel htmlFor="referenceRecord" value="referenceRecord" />
 
                                         <TextInput
@@ -242,25 +227,29 @@ export default function Create ({ auth })
                                             className="mt-1 block w-full "
                                             value={ data.referenceRecord }
                                             isFocused
+
                                             autoComplete="referenceRecord"
                                             onChange={ (e) => setData('referenceRecord', e.target.value) }
                                         />
 
                                     </div>
 
-                                    <div>
-                                        <InputLabel htmlFor="recordDate" value="recordDate" />
+                                    <div className="mt-6">
+                                        <InputLabel htmlFor="notes" value="notes" />
 
                                         <TextInput
-                                            id="recordDate"
+                                            id="notes"
                                             className="mt-1 block w-full "
-                                            value={ data.recordDate }
+                                            value={ data.notes }
                                             isFocused
-                                            autoComplete="recordDate"
-                                            onChange={ (e) => setData('recordDate', e.target.value) }
+                                            autoComplete="notes"
+                                            onChange={ (e) => setData('notes', e.target.value) }
                                         />
 
                                     </div>
+
+
+                                  
 
                                 </div>
 

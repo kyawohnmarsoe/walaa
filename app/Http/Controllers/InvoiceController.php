@@ -10,8 +10,11 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
+use App\Models\Customer;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Arr;
+use App\Models\Account;
+use App\Models\Sub_account;
 
 class InvoiceController extends Controller
 {
@@ -46,12 +49,15 @@ class InvoiceController extends Controller
 
         $cusDataByLoginUserGroupId = $this->getUserIndexReqData_byLoggedInGroupSysUserId();
         // $customers = response(compact('cusDataByLoginUserGroupId'));
-       
+        $accounts = Account::join('sub_accounts', 'sub_accounts.account_index', '=', 'accounts.account_index')
+        ->get(['accounts.account_price', 'sub_accounts.*']);
         return Inertia::render('Invoices/Invoices',[
             'apitoken' => $token,
             'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get(),
             'invoices'=> Invoice::orderBy('id','desc')->get()->all(),
             'userIndexByGroup' => $cusDataByLoginUserGroupId,
+             'customers'=>Customer::orderBy('customer_user_id','asc')->get(),
+             'accounts'=> $accounts
             
     ]);
     }
@@ -67,11 +73,13 @@ class InvoiceController extends Controller
 
           $token = $this->getSavedToken();
          $cusDataByLoginUserGroupId = $this->getUserIndexReqData_byLoggedInGroupSysUserId();
+       
           return Inertia::render('Invoices/Invoices',[
           'apitoken' => $token,
           'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get(),
           'invoices' => $results,
            'userIndexByGroup' => $cusDataByLoginUserGroupId,
+           
           ]);
 
           }
@@ -80,7 +88,17 @@ class InvoiceController extends Controller
 
          public function create() 
      {   $token = $this->getSavedToken();  
-        return Inertia::render('Invoices/Create',['apitoken' => $token]);
+        $cusDataByLoginUserGroupId = $this->getUserIndexReqData_byLoggedInGroupSysUserId();
+          $accounts = Account::join('sub_accounts', 'sub_accounts.account_index', '=', 'accounts.account_index')
+          ->get(['accounts.account_price', 'sub_accounts.*']);
+         
+        return Inertia::render('Invoices/Create',[
+          'apitoken' => $token,
+           'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get(),
+           'userIndexByGroup' => $cusDataByLoginUserGroupId,
+           'customers'=>Customer::orderBy('customer_user_id','asc')->get(),
+           'accounts'=> $accounts
+        ]);
     }
 
      public function show($id){
@@ -105,7 +123,9 @@ class InvoiceController extends Controller
     public function store(Request $request)
     {
       
-      // return $request->invoice;
+      return $request->invoice;
+      // dd($request);
+
       $balance=$request->invoice['salePrice'];
       $data = [
         'invoinceID' => $request->invoice['invoinceID'],
@@ -122,11 +142,9 @@ class InvoiceController extends Controller
         'recordDate' => $request->invoice['recordDate'],
         'lastStatusChanged' => $request->invoice['lastStatusChanged'],
         'accountName' => $request->invoice['accountName'],
-        // 'notes' => $request->invoice['notes'],
         'userID' => $request->invoice['userID'],
         'discountedPrice' => $request->invoice['discountedPrice'],
         'paymentDueDate' => $request->invoice['paymentDueDate'],
-        // 'paymentDueDateTime' => $request->invoice['paymentDueDateTime'],
          'paidPrice' => $request->invoice['paidPrice'],
          'balance' => $balance,
          'invoiceStatus' => $request->invoice['invoiceStatus'],
@@ -134,12 +152,65 @@ class InvoiceController extends Controller
          'modifyUser' => $request->invoice['modifyUser'],
       ];
 
-     
+      // return $data;
+      // return $request->invoice['invoiceDuration'];
+
       Invoice::create($data);
       // return  redirect()->route('users.management')->with('status', 201);  
       return redirect()->route('invoices')->with('status', 200);
        
     }
+
+        public function storeData(Request $request)
+        {
+
+        // return $request->invoice;
+        // dd($request);
+
+       
+        $customer=Customer::where('customer_user_index',$request->invoice['userIndex'])->first();
+        $sub_account=Sub_account::where('account_name',$request->invoice['accountName'])->first();
+        $balance=$sub_account->end_user_account_price;
+        $invoiceFrom = str_replace("-","/",$request->invoice['invoiceFrom']);
+        $invoiceTo = str_replace("-","/",$request->invoice['invoiceTo']);
+        $invoiceDuration= $invoiceFrom . ' - ' . $invoiceTo;
+        $invoiceDescription = $request->invoice['accountName'] . ' for period ' . '[' . $invoiceDuration . ']';
+
+        // return($sub_account->end_user_account_price);
+
+        $data = [
+        'invoinceID' => $request->invoice['invoinceID'],
+        'userIndex' => $request->invoice['userIndex'],
+        'displayName' => '',
+        'affiliateName' => $request->invoice['affiliateName'],
+        'invoiceType' => $request->invoice['invoiceType'],
+        'invoiceDescription' => $invoiceDescription,
+        'invoiceDuration' => $invoiceDuration,
+        'salePrice' => $sub_account->end_user_account_price,
+        'retailPriceCurrency' => '',
+        'retailPrice' => '',
+        'referenceRecord' => $request->invoice['referenceRecord'],
+        'recordDate' => '',
+        'lastStatusChanged' => '',
+        'accountName' => $request->invoice['accountName'],
+        'userID' => $customer->customer_user_id,
+        'discountedPrice' => '',
+        'paymentDueDate' => '',
+        'paidPrice' => $request->invoice['paidPrice'],
+        'balance' => $balance,
+        'invoiceStatus' => $request->invoice['invoiceStatus'],
+        'notes' => $request->invoice['notes'],
+        'modifyUser' => $request->invoice['modifyUser'],
+        ];
+
+        // return $data;
+        // return $request->invoice['invoiceDuration'];
+
+        Invoice::create($data);
+        // return redirect()->route('users.management')->with('status', 201);
+        return redirect()->route('invoices')->with('status', 200);
+
+        }
 
         public function update(Request $request,$id)
     {

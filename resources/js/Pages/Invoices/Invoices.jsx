@@ -1,16 +1,23 @@
 
 import React, { useState, useEffect } from "react";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import { Link,Head } from '@inertiajs/react';
 import Loading from "@/Components/DaisyUI/Loading";
 import Alert from "@/Components/DaisyUI/Alert";
 import InvoiceTable from "./InvoiceTable";
 import InvoiceSearch from './InvoiceSearch'
 import PaginatedLinks from '@/Components/PaginatedLinks';
+import AddInvoiceModal from './AddInvoiceModal'
+import PrimaryButton from '@/Components/PrimaryButton';
 
 
-export default function Invoices ({ auth, apitoken, affiliates, invoices, userIndexByGroup })
+
+export default function Invoices ({ auth, apitoken, affiliates, invoices, userIndexByGroup, customers, accounts })
 {
+    const [modals, setModals] = useState({
+        addInvoice: false,
+        // editExpense:false,
+    })
    
     const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10 })
     const [filterInvoices, setFilteredInvoices] = useState(invoices)
@@ -60,6 +67,17 @@ export default function Invoices ({ auth, apitoken, affiliates, invoices, userIn
         >
             <Head title="Invoices" />
 
+            <AddInvoiceModal 
+            modals={ modals } 
+            setModals={ setModals } 
+            auth={ auth } 
+                affiliates={ affiliates } 
+                customers={ customers } 
+                userIndexByGroup={ userIndexByGroup } 
+                accounts={ accounts }
+            />
+
+
             {/* { loading && <Loading className="mt-12 " /> }
             { errMessage && <Alert className="mt-12" msg={ errMessage } /> } */}
 
@@ -84,7 +102,17 @@ export default function Invoices ({ auth, apitoken, affiliates, invoices, userIn
                 <div className="max-w-8xl mx-auto sm:px-6 lg:px-4">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="text-gray-900">
-                         
+                            <div className='flex items-center justify-end gap-4 p-2'>
+                                {/* <PrimaryButton className="bg-sky-800" onClick={ () => setModals({ ...modals, addInvoice: true }) }>
+                                    <span > Add New Expense</span>
+                                </PrimaryButton> */}
+                                <Link href="/invoices/create"><PrimaryButton className="bg-sky-800" >
+                                    <span > Add New Expense</span>
+                                </PrimaryButton></Link>
+                            </div>
+
+
+                            <hr />
 
                             <PaginatedLinks
                                 itemsPerPage={ filterObj.RowCount }

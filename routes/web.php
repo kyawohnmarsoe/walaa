@@ -134,6 +134,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/invoices/search', [InvoiceController::class, 'search'])->name('invoices.search');
      Route::get('/invoices/create', [InvoiceController::class, 'create'])->name('invoices.create');
     Route::post('/invoices/store', [InvoiceController::class, 'store'])->name('invoices.store');
+    Route::post('/invoices/storedata', [InvoiceController::class, 'storeData'])->name('invoices.storedata');
      Route::get('/invoices/{id}', [InvoiceController::class, 'show'])->name('invoices.show');
      Route::get('/invoices/edit/{id}', [InvoiceController::class, 'edit'])->name('invoices.edit');
      Route::post('/invoices/update/{id}', [InvoiceController::class, 'update'])->name('invoices.update');
