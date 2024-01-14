@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Inertia\Inertia;
 use App\Models\Affiliate;
 use Illuminate\Http\Request;
@@ -18,34 +19,34 @@ use App\Models\Sub_account;
 
 class InvoiceController extends Controller
 {
-     public function getInvoicesByCustomerGroup($inv){
-      $cusDataByLoginUserGroupId = $this->getUserIndexReqData_byLoggedInGroupSysUserId();
-      // $invoices = Invoice::orderBy('id','desc')->get()->all();
-      $invoices=$inv;
+  public function getInvoicesByCustomerGroup($inv)
+  {
+    $cusDataByLoginUserGroupId = $this->getUserIndexReqData_byLoggedInGroupSysUserId();
+    // $invoices = Invoice::orderBy('id','desc')->get()->all();
+    $invoices = $inv;
 
-      if ($cusDataByLoginUserGroupId !== 'all'){
-        $filteredInvoices=[];
+    if ($cusDataByLoginUserGroupId !== 'all') {
+      $filteredInvoices = [];
 
-        foreach ($cusDataByLoginUserGroupId as $c) {
+      foreach ($cusDataByLoginUserGroupId as $c) {
 
-          $results = Arr::where($invoices, function ($value, $key) use($c) {
-         
+        $results = Arr::where($invoices, function ($value, $key) use ($c) {
+
           return $value['userIndex'] == $c["customer_user_index"];
+        });
 
-          });
-
-          array_push($filteredInvoices,...$results );
-        
-        }
-
-         return $filteredInvoices;
+        array_push($filteredInvoices, ...$results);
       }
 
-      return $invoices;
-     }
-  
-      public function index(){
-        $token = $this->getSavedToken();  
+      return $filteredInvoices;
+    }
+
+    return $invoices;
+  }
+
+  public function index()
+  {
+    $token = $this->getSavedToken();
 
         $cusDataByLoginUserGroupId = $this->getUserIndexReqData_byLoggedInGroupSysUserId();
         // $customers = response(compact('cusDataByLoginUserGroupId'));
@@ -60,16 +61,16 @@ class InvoiceController extends Controller
              'accounts'=> $accounts
             
     ]);
-    }
+  }
 
-          public function search(Request $request)
-          {
-           
-          $userID = $request['userID'];
-          $affiliateName = $request['affiliateName'];
-          $invoiceStatus = $request['invoiceStatus'];
+  public function search(Request $request)
+  {
 
-           $results = Invoice::orderBy('id','desc')->get()->all();
+    $userID = $request['userID'];
+    $affiliateName = $request['affiliateName'];
+    $invoiceStatus = $request['invoiceStatus'];
+
+    $results = Invoice::orderBy('id', 'desc')->get()->all();
 
           $token = $this->getSavedToken();
          $cusDataByLoginUserGroupId = $this->getUserIndexReqData_byLoggedInGroupSysUserId();
@@ -101,23 +102,25 @@ class InvoiceController extends Controller
         ]);
     }
 
-     public function show($id){
-        $token = $this->getSavedToken();  
-        // dd($token);
-        return Inertia::render('Invoices/Invoice',[
-            'apitoken' => $token,
-            'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get(),
-            'invoice' => Invoice::findOrFail($id),
+  public function show($id)
+  {
+    $token = $this->getSavedToken();
+    // dd($token);
+    return Inertia::render('Invoices/Invoice', [
+      'apitoken' => $token,
+      'affiliates' => Affiliate::orderBy('affiliate_name', 'asc')->get(),
+      'invoice' => Invoice::findOrFail($id),
     ]);
-    }
+  }
 
-     public function edit($id) 
-     {   $token = $this->getSavedToken();  
-        return Inertia::render('Invoices/Edit',[
-          'apitoken' => $token,
-          'invoice' => Invoice::findOrFail($id)
-        ]);
-    }
+  public function edit($id)
+  {
+    $token = $this->getSavedToken();
+    return Inertia::render('Invoices/Edit', [
+      'apitoken' => $token,
+      'invoice' => Invoice::findOrFail($id)
+    ]);
+  }
 
     
     public function store(Request $request)
@@ -212,63 +215,60 @@ class InvoiceController extends Controller
 
         }
 
-        public function update(Request $request,$id)
-    {
-            
-            $user = User::where('email', $request->invoice['modifyUser'])->firstOrFail();
-            // $user = User::findOrFail(1);
-           
-            $walletBalance = $user['balance'] + $request->invoice['currentPayment'];
+  public function update(Request $request, $id)
+  {
 
-            //  dd($walletBalance);
+    $user = User::where('email', $request->invoice['modifyUser'])->firstOrFail();
+    // $user = User::findOrFail(1);
 
-      $invoice = Invoice::findOrFail($id);
+    $walletBalance = $user['balance'] + $request->invoice['currentPayment'];
 
-      $paidPrice = $invoice['paidPrice'] + $request->invoice['currentPayment'];
-      $balance = $invoice['salePrice'] - $paidPrice;
-      
-      if($balance == 0){
-        $invoiceStatus = 'Paid';
-      }else{
-        $invoiceStatus = 'NotPaid';
-      };
+    //  dd($walletBalance);
 
-     
+    $invoice = Invoice::findOrFail($id);
 
-       $data = [
-       'invoinceID' => $invoice['invoinceID'],
-       'userIndex' => $invoice['userIndex'],
-       'displayName' => $invoice['displayName'],
-       'affiliateName' => $invoice['affiliateName'],
-       'invoiceType' => $invoice['invoiceType'],
-       'invoiceDescription' => $invoice['invoiceDescription'],
-       'invoiceDuration' => $invoice['invoiceDuration'],
-       'salePrice' => $invoice['salePrice'],
-       'retailPriceCurrency' => $invoice['retailPriceCurrency'],
-       'retailPrice' => $invoice['retailPrice'],
-       'referenceRecord' => $invoice['referenceRecord'],
-       'recordDate' => $invoice['recordDate'],
-       'lastStatusChanged' => $invoice['lastStatusChanged'],
-       'accountName' => $invoice['accountName'],
-       'userID' => $invoice['userID'],
-       'discountedPrice' => $invoice['discountedPrice'],
-       'paymentDueDate' => $invoice['paymentDueDate'],
-       'paymentDueDateTime' => $invoice['paymentDueDateTime'],
-        'paidPrice' => $paidPrice,
-        'balance' => $balance,
-         'invoiceStatus' => $invoiceStatus,
-         'notes' => $request->invoice['notes'],
-         'modifyUser' => $request->invoice['modifyUser'],
-       ];
+    $paidPrice = $invoice['paidPrice'] + $request->invoice['currentPayment'];
+    $balance = $invoice['salePrice'] - $paidPrice;
 
-      // dd($data);
-		  $invoice->update($data);
-
-      $result = User::where('email', $request->invoice['modifyUser'])->update(['balance' => $walletBalance]);
-
-      return redirect()->route('invoices')->with('status', 201); 
-    }
+    if ($balance == 0) {
+      $invoiceStatus = 'Paid';
+    } else {
+      $invoiceStatus = 'NotPaid';
+    };
 
 
 
+    $data = [
+      'invoinceID' => $invoice['invoinceID'],
+      'userIndex' => $invoice['userIndex'],
+      'displayName' => $invoice['displayName'],
+      'affiliateName' => $invoice['affiliateName'],
+      'invoiceType' => $invoice['invoiceType'],
+      'invoiceDescription' => $invoice['invoiceDescription'],
+      'invoiceDuration' => $invoice['invoiceDuration'],
+      'salePrice' => $invoice['salePrice'],
+      'retailPriceCurrency' => $invoice['retailPriceCurrency'],
+      'retailPrice' => $invoice['retailPrice'],
+      'referenceRecord' => $invoice['referenceRecord'],
+      'recordDate' => $invoice['recordDate'],
+      'lastStatusChanged' => $invoice['lastStatusChanged'],
+      'accountName' => $invoice['accountName'],
+      'userID' => $invoice['userID'],
+      'discountedPrice' => $invoice['discountedPrice'],
+      'paymentDueDate' => $invoice['paymentDueDate'],
+      'paymentDueDateTime' => $invoice['paymentDueDateTime'],
+      'paidPrice' => $paidPrice,
+      'balance' => $balance,
+      'invoiceStatus' => $invoiceStatus,
+      'notes' => $request->invoice['notes'],
+      'modifyUser' => $request->invoice['modifyUser'],
+    ];
+
+    // dd($data);
+    $invoice->update($data);
+
+    $result = User::where('email', $request->invoice['modifyUser'])->update(['balance' => $walletBalance]);
+
+    return redirect()->route('invoices')->with('status', 201);
+  }
 }

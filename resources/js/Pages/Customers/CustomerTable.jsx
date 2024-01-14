@@ -87,6 +87,18 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
         result && extendUser()
     }
 
+    function handleTicketSubmit(user_id) {
+        router.get(`/tickets/user/${user_id} `);
+    }
+
+    function handleInvoiceSubmit(customer_user_index) {
+        router.get(`/invoices/user/${customer_user_index} `);
+    }
+
+    function clickWhatsapp() {
+        router.get('/send_whatsapp');
+    }
+
     useEffect(() => {
         // console.log(sub_accounts); 
     }, [])
@@ -145,15 +157,39 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                 {!loading &&
                     <tbody>
                         {customers && customers.map(cus => (
-                            <tr key={cus.id} id={"tr_" + (cus.customer_user_index)}>
+                            <tr key={"key_" + (cus.id)} id={"tr_" + (cus.customer_user_index)}>
                                 <td>
-                                    <div className="font-bold text-sky-700">
-                                        <Link href={`/customers/details/${cus.customer_user_index}`}>{cus.email}</Link>
+                                    <div key={"email_" + (cus.id)} className="font-bold text-sky-700">
+                                        <Link href={`/customers/details/${cus.customer_user_index}`}>
+                                            {cus.email}
+                                        </Link>
                                     </div>
+
+                                    {cus.ticket_id &&
+                                        <small key={"usrticket_" + (cus.ticket_id)} className="block mt-2">
+                                            <a className='inline-flex items-center underline decoration-sky-300 text-sm font-medium text-sky-600 focus:border-sky-700 cursor-pointer'
+                                                onClick={() => handleTicketSubmit(cus.id)}
+                                                key={cus.ticket_id}>
+                                                View Ticket
+                                            </a>
+                                        </small>
+                                    }
+
+                                    {
+                                        cus.invoice_id &&
+                                        <small key={"usrinvoice_" + (cus.invoice_id)} className="block mt-2">
+                                            <a className='inline-flex items-center underline decoration-sky-300 text-sm font-medium text-sky-600 focus:border-sky-700 cursor-pointer'
+                                                onClick={() => handleInvoiceSubmit(cus.customer_user_index)}
+                                                key={cus.invoice_id}>
+                                                View Invoice
+                                            </a>
+                                        </small>
+                                    }
+
                                     {
                                         user_groups.filter(user_gp => user_gp.id == cus.user_group_id)
                                             .map(filteredRes => (
-                                                <small className="block mt-2">
+                                                <small key={"usrgp_" + (cus.id)} className="block mt-2">
                                                     User Group : {filteredRes.group_name}
                                                 </small>
                                             ))
@@ -178,7 +214,7 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                             .map(filteredRes => (
                                                 <>
                                                     <br />
-                                                    <strong>Sub Acc Name</strong> : filteredRes.account_name
+                                                    <strong>Sub Acc Name</strong> : {filteredRes.account_name}
                                                 </>
                                             ))
                                     }
@@ -228,13 +264,22 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                                                 <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
                                                             </span>
                                                         </button>
+
+                                                        {/* <button className="btn btn-xs btn-outline btn-block btn-danger mt-2"
+                                                            onClick={() => clickWhatsapp()}>
+                                                            Whatsapp
+                                                            <span className="relative flex h-3 w-3">
+                                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                                                <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                                                            </span>
+                                                        </button> */}
                                                     </>
                                                     :
                                                     <>
                                                         {
                                                             sys_users.filter(user => user.id == cus.sms_sent_by)
                                                                 .map(filteredRes => (
-                                                                    <small className="text-red-500 block mt-2">
+                                                                    <small key={"user_" + (user.id)} className="text-red-500 block mt-2">
                                                                         SMS sent by : {filteredRes.email}
                                                                     </small>
                                                                 ))

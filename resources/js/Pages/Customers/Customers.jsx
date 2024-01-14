@@ -18,6 +18,7 @@ export default function Customers({
     sub_accounts,
     sys_users,
     user_groups,
+    tickets,
     apitoken,
     totalCount,
     deposit_password,
@@ -34,31 +35,6 @@ export default function Customers({
     }
     const addApiCustomerClick = () => {
         router.get('/customers/store/api/' + totalCount)
-
-        // get total count of API users
-        // const instance = axios.create({
-        //     baseURL: 'https://rapi.earthlink.iq/api/reseller/user/all',
-        //     headers: { 'Authorization': `Bearer ${apitoken}` }
-        // });
-        // let postData = {
-        //     Rowcount: 1,
-        //     OrderBy: 'Account Name',
-        // }
-        // instance.post('', postData).then(res => {
-        //     if (res) {
-        //         // console.log(res.data.isSuccessful)
-        //         if (res.data.isSuccessful == true) {
-        //             // console.log(res.data.value.totalCount)
-
-        //             let totalCount = res.data.value.totalCount;
-        //             router.get('/customers/store/api/' + totalCount)
-        //         }
-        //     }
-        // }).catch(err => {
-        //     if (err) {
-        //         console.log(err.message)
-        //     }
-        // })
     }
 
 

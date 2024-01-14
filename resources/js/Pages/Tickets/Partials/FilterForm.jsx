@@ -18,6 +18,7 @@ export default function FilterForm({ className = '', customers, apitoken, errors
 
     const [values, setValues] = useState({
         user_id: '',
+        display_name: '',
         ticket_source: '',
         topic: '',
         level_of_importance: '',
@@ -26,6 +27,7 @@ export default function FilterForm({ className = '', customers, apitoken, errors
     });
 
     const [optionsCustomers, setOptionsCustomers] = useState([])
+    const [optionsCustomersName, setOptionsCustomersName] = useState([])
 
     const optionsTicketSource = [
         {
@@ -105,6 +107,20 @@ export default function FilterForm({ className = '', customers, apitoken, errors
             });
         }
         setOptionsCustomers(optionsCustomersArr)
+
+        let optionsCustomersNameArr = [];
+        {
+            customers.map((e) => {
+                e.display_name?.length > 0 &&
+                    optionsCustomersNameArr.push(
+                        {
+                            "value": e.id,
+                            "label": e.display_name
+                        }
+                    );
+            });
+        }
+        setOptionsCustomersName(optionsCustomersNameArr)
     }
 
     useEffect(() => {
@@ -117,6 +133,14 @@ export default function FilterForm({ className = '', customers, apitoken, errors
         setValues(values => ({
             ...values,
             'user_id': value,
+        }))
+    }
+
+    function customersNameHandleChange(e) {
+        const value = e.value
+        setValues(values => ({
+            ...values,
+            'display_name': value,
         }))
     }
     function ticketSourceHandleChange(e) {
@@ -187,6 +211,19 @@ export default function FilterForm({ className = '', customers, apitoken, errors
                     </div>
 
                     <div>
+                        <InputLabel htmlFor="display_name" value="Users Display Name" />
+                        <Select
+                            name="display_name"
+                            className="autoselect border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
+                            components={{ Input }}
+                            autoComplete="display_name"
+                            options={optionsCustomersName}
+                            onChange={customersNameHandleChange}
+                            noOptionsMessage={() => "No Users found..."}
+                        />
+                    </div>
+
+                    {/* <div>
                         <InputLabel htmlFor="ticket_source" value="Ticket Source" />
                         <SelectOption
                             id="ticket_source"
@@ -197,7 +234,7 @@ export default function FilterForm({ className = '', customers, apitoken, errors
                             onChange={ticketSourceHandleChange}
 
                         />
-                    </div>
+                    </div> */}
 
                     <div>
                         <InputLabel htmlFor="topic" value="Topic" />

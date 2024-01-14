@@ -17,13 +17,11 @@ class StoreTicketRequest extends FormRequest
     {
         return [         
             'user_id' => 'required',
-            'ticket_source' => 'required',             
+            'title' => '',
             'topic'=> '',
-            'ticket_address'=> '',
             'level_of_importance'=> 'required',
-            'ticket_number'=> 'required',
             'image' => [ 'nullable','image','mimes:jpeg,png,jpg,gif,svg', 'max:2048'], // 2M
-            'attach_file' => [ 'nullable','mimes:doc,docx,pdf,csv,xlsx,xls', 'max:2048'],
+            // 'attach_file' => [ 'nullable','mimes:doc,docx,pdf,csv,xlsx,xls', 'max:4048'],
         ];
     }
 }

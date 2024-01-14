@@ -21,33 +21,14 @@ export default function AddForm({ className = '', customers, apitoken, errors })
 
     const [values, setValues] = useState({
         user_id: '',
-        ticket_source: '',
+        title: '',
         topic: '',
-        ticket_address: '',
         level_of_importance: '',
-        ticket_number: '',
-        image: null,
-        attach_file: null,
+        attach_file: [],
     });
-
-    const [urlImage, setUrlImage] = useState('');
 
     const [optionsCustomers, setOptionsCustomers] = useState([])
 
-    const optionsTicketSource = [
-        {
-            "index": "ts_1",
-            "name": "Phone"
-        },
-        {
-            "index": "ts_2",
-            "name": "Email"
-        },
-        {
-            "index": "ts_3",
-            "name": "Other"
-        },
-    ];
     const optionsTopic = [
         {
             "index": "tp_1",
@@ -117,13 +98,6 @@ export default function AddForm({ className = '', customers, apitoken, errors })
             'user_id': value,
         }))
     }
-    function ticketSourceHandleChange(e) {
-        const value = e.target.value
-        setValues(values => ({
-            ...values,
-            'ticket_source': value,
-        }))
-    }
     function topicHandleChange(e) {
         const value = e.target.value
         setValues(values => ({
@@ -139,21 +113,23 @@ export default function AddForm({ className = '', customers, apitoken, errors })
         }))
     }
 
-    function imageHandleChange(e) {
-        // console.log(e.target.files);
-        setUrlImage(URL.createObjectURL(e.target.files[0]));
-        setValues(values => ({
-            ...values,
-            'image': e.target.files[0],
-        }))
-    }
-
     function attachFileHandleChange(e) {
-        // console.log(e.target.files);        
         setValues(values => ({
             ...values,
-            'attach_file': e.target.files[0],
+            'attach_file': [],
         }))
+        let attachFiles = [];
+        const files = e.target.files;
+        if (files) {
+            for (let i = 0; i < files.length; i++) {
+                attachFiles.push(files[i]);
+            }
+            setValues(values => ({
+                ...values,
+                'attach_file': attachFiles,
+            }))
+        }
+        // console.log(attachFiles);
     }
 
     function handleChange(e) {
@@ -206,17 +182,14 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                     </div>
 
                     <div>
-                        <InputLabel htmlFor="ticket_source" value="Ticket Source" className='required' />
-                        <SelectOption
-                            id="ticket_source"
+                        <InputLabel htmlFor="title" value="Ticket Title" />
+                        <TextInput
+                            id="title"
+                            name="title"
+                            value={values.title}
+                            onChange={handleChange}
                             className="mt-1 block w-full"
-                            options={optionsTicketSource}
-                            select_text="Ticket Source"
-                            name="ticket_source"
-                            onChange={ticketSourceHandleChange}
-
                         />
-                        <InputError className="mt-2" message={errors.ticket_source} />
                     </div>
 
                     <div>
@@ -228,19 +201,6 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                             select_text="Topic"
                             name="topic"
                             onChange={topicHandleChange}
-                        />
-                    </div>
-
-                    <div>
-                        <InputLabel htmlFor="ticket_address" value="Ticket Address" />
-                        <Textarea
-                            id="ticket_address"
-                            name="ticket_address"
-                            placeholder="Ticket Address..."
-                            value={values.ticket_address}
-                            onChange={handleChange}
-                            className="mt-1 block w-full"
-                            minRows={5}
                         />
                     </div>
 
@@ -258,54 +218,18 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                     </div>
 
                     <div>
-                        <InputLabel htmlFor="ticket_number" value="Ticket Number" className='required' />
-                        <TextInput
-                            id="ticket_number"
-                            name="ticket_number"
-                            value={values.ticket_number}
-                            onChange={handleChange}
-                            type="text"
-                            className="mt-1 block w-full"
-                            autoComplete="off"
-                        />
-                        <InputError className="mt-2" message={errors.ticket_number} />
-                    </div>
-
-                    <div>
-                        <InputLabel htmlFor="image" value="Image" />
-                        <div className='flex border-none'>
-                            <div>
-                                <TextInput
-                                    id="image"
-                                    name="image"
-                                    onChange={ imageHandleChange }
-                                    type="file"
-                                    className="mt-1 block w-full border-none rounded-none"
-                                /><p className="mt-2 text-sm text-gray-500 " id="file_input_help">
-                                    svg, png, jpg, jpeg or gif.
-                                </p>
-                            </div>
-                            <img className="h-auto max-w-xs rounded-lg" src={ urlImage } width='50' />
-                        </div>
-                        <InputError className="mt-2" message={errors.image} />
-                    </div>
-
-                    <div>
                         <InputLabel htmlFor="attach_file" value="File Attachment" />
                         <div className='flex border-none'>
                             <div>
                                 <TextInput
                                     id="attach_file"
-                                    name="attach_file"
-                                    onChange={ attachFileHandleChange }
+                                    name="attach_file[]"
+                                    onChange={attachFileHandleChange}
                                     type="file"
                                     className="mt-1 block w-full border-none rounded-none"
+                                    multiple
                                 />
-                                <p className="mt-2 text-sm text-gray-500 " id="file_input_help">
-                                    docx, doc, pdf, csv, xls or xlsx.
-                                </p>
                             </div>
-                            {/* <p className="mt-4 text-sm text-emerald-600">{ urlAttachFile }</p> */}
                         </div>
                         <InputError className="mt-2" message={errors.attach_file} />
                     </div>
