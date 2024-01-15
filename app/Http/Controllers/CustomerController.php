@@ -25,7 +25,7 @@ class CustomerController extends Controller
 
     public function get_totalcount()
     {
-        $token = $this->getSavedToken();          
+        $token = $this->getSavedToken();
         $apiURL = 'https://rapi.earthlink.iq/api/reseller/user/all';
         $headers = [
             'Authorization' => 'Bearer ' . $token,
@@ -49,7 +49,6 @@ class CustomerController extends Controller
             }
         }
         return $totalCount;
-
     } // get_totalcount   
 
     public function index(Request $request)
@@ -59,14 +58,14 @@ class CustomerController extends Controller
 
         // return response(compact('user_has_groups_idArr'));
 
-        $token = $this->getSavedToken();        
+        $token = $this->getSavedToken();
 
         $totalCount = $this->get_totalcount();
 
         $deposit_data = $this->get_deposit_password();
 
         if ($request->hasAny(['account_index', 'sub_account_id', 'affiliate_index', 'customer_user_id', 'display_name', 'mobile_number', 'status', 'user_group_id'])) {
-            
+
             $customers_query = Customer::leftJoin('affiliates', 'affiliates.affiliate_index', '=', 'customers.affiliate_index')
                 ->leftJoin('accounts', 'accounts.account_index', '=', 'customers.account_index')
                 ->leftJoin('tickets', 'tickets.user_id', '=', 'customers.id')
@@ -79,19 +78,19 @@ class CustomerController extends Controller
                 })->when(request('affiliate_index') != '', function ($q) {
                     return $q->where('customers.affiliate_index', request('affiliate_index'));
                 })->when(request('customer_user_id') != '', function ($q) {
-                    return $q->where('customers.customer_user_id', 'LIKE', request('customer_user_id').'%');
+                    return $q->where('customers.customer_user_id', 'LIKE', request('customer_user_id') . '%');
                 })->when(request('display_name') != '', function ($q) {
-                    return $q->where('customers.display_name', 'LIKE', request('display_name').'%');
+                    return $q->where('customers.display_name', 'LIKE', request('display_name') . '%');
                 })->when(request('mobile_number') != '', function ($q) {
-                    return $q->where('customers.mobile_number', 'LIKE',request('mobile_number').'%')
-                    ->orWhere('customers.mobile_number2', 'LIKE',request('mobile_number').'%');
+                    return $q->where('customers.mobile_number', 'LIKE', request('mobile_number') . '%')
+                        ->orWhere('customers.mobile_number2', 'LIKE', request('mobile_number') . '%');
                 })->when(request('active_status') != '', function ($q) {
                     return $q->where('customers.active_status', '=', request('active_status'));
                 })->when(request('user_group_id') != '', function ($q) {
                     return $q->where('customers.user_group_id', request('user_group_id'));
                 });
             // ->whereNull('customers.user_group_id')             
-            
+
             $show_data = 'filter_list';
         } else {
             // select cus.*, aff.affiliate_name, acc.account_name, t.id AS ticket_id from customers cus
@@ -115,10 +114,9 @@ class CustomerController extends Controller
         if (count($user_has_groups_idArr) == 0 || $count_user_groups == count($user_has_groups_idArr)) {
             $customers = $customers_query->get(['customers.*', 'affiliates.affiliate_name', 'accounts.account_name', 'tickets.id As ticket_id', 'invoices.id As invoice_id']);
             $filter_user_groups = User_group::all();
-
         } else {
             $customers = $customers_query->whereIn('customers.user_group_id', $user_has_groups_idArr)
-                        ->get(['customers.*', 'affiliates.affiliate_name', 'accounts.account_name', 'tickets.id As ticket_id', 'invoices.id As invoice_id']);
+                ->get(['customers.*', 'affiliates.affiliate_name', 'accounts.account_name', 'tickets.id As ticket_id', 'invoices.id As invoice_id']);
             $filter_user_groups = User_group::whereIn('user_groups.id', $user_has_groups_idArr)
                 ->get();
         }
@@ -150,7 +148,6 @@ class CustomerController extends Controller
             'user_groups' => User_group::all(),
             'apitoken' => $token,
         ]);
-
     } // create   
 
     public function update_deposit_password(Request $request, $id)
@@ -246,19 +243,16 @@ class CustomerController extends Controller
                     //Invoice
 
                     return redirect()->route('customers')->with('message', $new_user_response['responseMessage']);
-
-
-
                 } else {
                     return redirect()->route('customers.create')->with(
-                        'error_message', $new_user_response['error']
+                        'error_message',
+                        $new_user_response['error']
                     );
                 }
             }
         } // new_user_response
 
         return redirect()->route('customers')->with('status', 422);
-
     } // insert 
 
     public function getUserInfo($userID)
@@ -399,13 +393,13 @@ class CustomerController extends Controller
                 return redirect()->route('customers')->with('status', 201);
             } else {
                 return redirect()->route('customers')->with(
-                    'message', $all_users_response['responseMessage']
+                    'message',
+                    $all_users_response['responseMessage']
                 );
             }
         }
 
         return redirect()->route('customers')->with('status', 422);
-
     } // store_api
 
     public function edit($index)
@@ -491,7 +485,7 @@ class CustomerController extends Controller
         $send_mobile = '';
         if (count($data) > 0) {
             $send_mobile = $data[0]['mobile_number'] ? $data[0]['mobile_number'] : $data[0]['mobile_number2'];
-            // $send_mobile = '66952806757';
+            // $send_mobile = '66952806757';           
         }
 
         $token = 'd2FsYS1saW5rOldsQDFlZjZeYXpY';
@@ -547,11 +541,9 @@ class CustomerController extends Controller
             } else {
                 return redirect()->route('customers')->with('error_message', 'Something went wrong in sending message!');
             }
-
         } else {
             return redirect()->route('customers')->with('error_message', 'Not found mobile number to send SMS.');
         }
-
     } // notify
 
 }

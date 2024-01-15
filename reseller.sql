@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 04, 2024 at 08:13 AM
+-- Generation Time: Jan 09, 2024 at 08:38 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -126,7 +126,7 @@ CREATE TABLE `apitokens` (
 --
 
 INSERT INTO `apitokens` (`id`, `apitoken`, `current_time`, `created_at`, `updated_at`) VALUES
-(1, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6IndhbGFhaW0iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJSZXNlbGxlciIsIkFmZmlsaWF0ZUluZGV4IjoiNjMwMzEiLCJBZmZpbGlhdGVOYW1lIjoid2FsYWFsaW5rMSIsIkFwcGxpY2F0aW9uTmFtZSI6IlJlc2VsbGVyIiwibmJmIjoxNzA0MzUxMzU5LCJleHAiOjE3MDQzNTQ5NTksImlzcyI6ImJpbGxpbmdhcGkiLCJhdWQiOiJkMjZkMTFkZTUxYmE0YmE2YWQ0ZGVhZTc5ODY1Mzk4YiJ9.PAENxuezsGT-HFFZkFEpcl09KaikDxECtUklZMNwid8', 1704351358, NULL, '2024-01-03 23:55:58');
+(1, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6IndhbGFhaW0iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJSZXNlbGxlciIsIkFmZmlsaWF0ZUluZGV4IjoiNjMwMzEiLCJBZmZpbGlhdGVOYW1lIjoid2FsYWFsaW5rMSIsIkFwcGxpY2F0aW9uTmFtZSI6IlJlc2VsbGVyIiwibmJmIjoxNzA0Njc4NDY0LCJleHAiOjE3MDQ2ODIwNjQsImlzcyI6ImJpbGxpbmdhcGkiLCJhdWQiOiJkMjZkMTFkZTUxYmE0YmE2YWQ0ZGVhZTc5ODY1Mzk4YiJ9.6rFTceCuhBLCfUfFxxfHP5YOWHNd1dEQcXQgKAlRrTs', 1704678464, NULL, '2024-01-07 18:47:44');
 
 -- --------------------------------------------------------
 
@@ -149,7 +149,7 @@ CREATE TABLE `apiusers` (
 --
 
 INSERT INTO `apiusers` (`id`, `username`, `password`, `login_type`, `grant_type`, `created_at`, `updated_at`) VALUES
-(1, 'walaaim', 'eyJpdiI6ImIxN1E1N3ZiZC8rK1dqc2JRZzN1VHc9PSIsInZhbHVlIjoiTUhVRWR1VkFrWWxUU1BIQkwvQTZsLzYrem9ORFJycDJFTXp1RDBNRnNrST0iLCJtYWMiOiI1M2RjOGQyNmVhNzRmNzcyNDdmZTQxMmZlZDk1ZDE0MzVlYmUwNmU3ZDg1Mjg3Y2E1OGZkOGVhZWUyZGFmYjdlIiwidGFnIjoiIn0=', '1', 'password', '2024-01-03 03:24:59', '2024-01-02 20:33:04');
+(1, 'walaaim', '@walaalink@', '1', 'password', '2024-01-03 03:24:59', '2024-01-02 20:33:04');
 
 -- --------------------------------------------------------
 
@@ -278,7 +278,8 @@ INSERT INTO `customers` (`id`, `account_index`, `sub_account_id`, `affiliate_ind
 (8238, 114, 0, 91235, '', '', 'yp@walaa', 29237878, '07702436895', NULL, '', 'yp@walaa', '1', '', '', '', NULL, NULL, NULL, 'Offline', 1, 'Suspended', 'MonthlyPrepaid', NULL, '28/04/2023 12:19 AM', '1', '1', '1', 0, 0, '2023-12-19 23:03:00', '2023-12-22 23:27:21'),
 (8239, 114, 0, 91235, '', '', 'yv@walaa', 29381738, '07705431953', NULL, '', 'yv@walaa', '1', '', '', '', NULL, NULL, NULL, 'Offline', 1, 'Suspended', 'MonthlyPrepaid', NULL, '18/05/2023 09:22 PM', '1', '1', '1', 0, 0, '2023-12-19 23:03:00', '2023-12-22 23:27:21'),
 (8240, 114, 0, 91235, '', '', 'y299@walaa', 29436124, NULL, NULL, '', 'y299@walaa', '1', '', '', '', 'يونس', NULL, NULL, 'Offline', 1, 'Suspended', 'MonthlyPrepaid', NULL, '27/05/2023 01:02 AM', '1', '1', '1', 0, 0, '2023-12-19 23:03:00', '2023-12-22 23:27:21'),
-(8241, 114, 0, 91235, '', '', 'y30@walaa', 29437121, '07513447559', NULL, '', 'y30@walaa', '1', '', '', '', 'حسين العجمي', NULL, NULL, 'Offline', 1, 'Suspended', 'MonthlyPrepaid', NULL, '27/05/2023 01:19 PM', '1', '1', '1', 0, 0, NULL, '2023-12-22 23:27:21');
+(8241, 114, 0, 91235, '', '', 'y30@walaa', 29437121, '07513447559', NULL, '', 'y30@walaa', '1', '', '', '', 'حسين العجمي', NULL, NULL, 'Offline', 1, 'Suspended', 'MonthlyPrepaid', NULL, '27/05/2023 01:19 PM', '1', '1', '1', 0, 0, NULL, '2023-12-22 23:27:21'),
+(8242, 109, 1, 75643, 'Wai', 'Mar', 'wai@gmail.com', 111000, '0952806757', NULL, 'BKK', 'wai@gmail.com', 'wai', 'BKK', 'WE', 'BKK', 'WAI', '', 'Testing INvoice', 'Offline', 1, 'Active', 'MonthlyPrepaid', 1, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -368,6 +369,13 @@ CREATE TABLE `invoices` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `invoices`
+--
+
+INSERT INTO `invoices` (`id`, `invoinceID`, `userIndex`, `displayName`, `affiliateName`, `invoiceType`, `invoiceDescription`, `invoiceDuration`, `salePrice`, `retailPriceCurrency`, `retailPrice`, `referenceRecord`, `recordDate`, `invoiceStatus`, `lastStatusChanged`, `accountName`, `notes`, `userID`, `paidPrice`, `discountedPrice`, `balance`, `modifyUser`, `paymentDueDate`, `paymentDueDateTime`, `created_at`, `updated_at`) VALUES
+(1, '122303389', '111000', '', 'aligg', 'Refill_Deposit', 'Economy for period [2024/01/06 - 2024/02/06] with serial 211286154', '2024/01/06 - 2024/02/06', '30000', 'IQD', '30000', '211286154', '07/01/2024 10:55 AM', 'NotPaid', '', 'Economy', '', 'wai@gmail.com', '0', '0', '30000', 'Admin', '', NULL, '2024-01-07 01:54:01', '2024-01-07 01:54:01');
 
 -- --------------------------------------------------------
 
@@ -981,7 +989,7 @@ ALTER TABLE `boards`
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8242;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8243;
 
 --
 -- AUTO_INCREMENT for table `deposit_passes`
@@ -1005,7 +1013,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `invoices`
 --
 ALTER TABLE `invoices`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `migrations`
