@@ -32,7 +32,7 @@ export default function Dashboard({ auth, apitoken,board }) {
 
                             <Board board={board}/>
                             
-                            <ServicePhones apitoken={apitoken} />
+                            {/* <ServicePhones apitoken={apitoken} /> */}
                         </div>
                     </div>
                 </div>
