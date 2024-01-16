@@ -8,17 +8,17 @@ function Invoice ({ invoice })
     return (
         <div className="py-12 ">
             <Head title="Invoice" />
-
+            {/* Height  Should be 300 px */}
             <div className="bg-white p-8 max-w-xxl mx-auto  rounded-md" style={ { maxWidth: '900px' }
             }>
-               
+              
                 <div className="mt-8">
                     <table className="w-full border-collapse border border-gray-300">
                        
                         <tbody style={ { border: '2px dotted gray', }}>
                             <tr>
-                                <td colSpan={6}>
-                                    <img src="/img/logo.png" alt="Logo" style={ { minWidth: '95%',height:'100px', textAlign:'center', margin:'auto' } } />
+                                <td colSpan={ 6 } >
+                                    <img src="/img/logo.png" alt="Logo" style={ { minWidth: '85%',height:'80px', textAlign:'center', margin:'auto' } } />
                                 </td>
                             </tr>
                            
@@ -54,8 +54,10 @@ function Invoice ({ invoice })
                                 <td className="py-2 px-4 border">{ invoice?.salePrice } </td>
                             </tr>
                             <tr>
-                                <td colSpan={ 6 } style={ { textAlign: 'center', margin: 'auto' } }>
-                                    sdf
+                                <td colSpan={ 6 } style={ { textAlign: 'center', margin: 'auto' } } className='font-semibold text-sm'>
+                                    نستقبل مكالماتكم يوميا خلال اوقات العمل من الساعة ال ١٠ صباحا الى الساعة ال ١٢ مساءا كل ايام الاسبوع
+                                <br/>
+                                    زين العراق 07800000181 اسياسيل 07700003552 - 07700003662 كورك 07500088111
                                 </td>
                             </tr>
 
