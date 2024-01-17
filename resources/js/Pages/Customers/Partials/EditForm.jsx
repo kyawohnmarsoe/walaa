@@ -435,19 +435,6 @@ export default function AddForm({ className = '', customer, accounts, sub_accoun
                     </div>
 
                     <div>
-                        <InputLabel htmlFor="customer_user_notes" value="User Notes" />
-                        <Textarea
-                            id="customer_user_notes"
-                            name="customer_user_notes"
-                            placeholder="Notes..."
-                            value={values.customer_user_notes}
-                            onChange={handleChange}
-                            className="mt-1 block w-full"
-                            minRows={5}
-                        />
-                    </div>
-
-                    <div>
                         <InputLabel htmlFor="user_group_id" value="User Groups" />
                         <SelectOption
                             id="user_group_id"
@@ -457,6 +444,19 @@ export default function AddForm({ className = '', customer, accounts, sub_accoun
                             name="user_group_id"
                             value={values.user_group_id}
                             onChange={userGroupsHandleChange}
+                        />
+                    </div>
+
+                    <div>
+                        <InputLabel htmlFor="customer_user_notes" value="User Notes" />
+                        <Textarea
+                            id="customer_user_notes"
+                            name="customer_user_notes"
+                            placeholder="Notes..."
+                            value={values.customer_user_notes}
+                            onChange={handleChange}
+                            className="mt-1 block w-full"
+                            minRows={5}
                         />
                     </div>
                 </div>

@@ -103,6 +103,7 @@ class CustomerController extends Controller
                 ->leftJoin('accounts', 'accounts.account_index', '=', 'customers.account_index')
                 ->leftJoin('tickets', 'tickets.user_id', '=', 'customers.id')
                 ->leftJoin('invoices', 'invoices.userIndex', '=', 'customers.customer_user_index')
+                // ->where('customers.active_status', '=', 1)
                 ->groupBy('customers.id');
             // ->where(DB::raw("(STR_TO_DATE(customers.manual_expiration_date,'%d/%m/%Y'))"), ">=", Carbon::now())
             // ->where(DB::raw("(STR_TO_DATE(customers.manual_expiration_date,'%d/%m/%Y'))"), '=', today()->addDays(2));
@@ -509,23 +510,6 @@ class CustomerController extends Controller
         if ($send_mobile != '') {
             $sms_api = Http::withHeaders($headers)->post($apiURL, $post_data);
             $sms_api_response = json_decode($sms_api->getBody(), true);
-
-            // return response(compact('sms_api_response'));
-
-            // {"messages":[
-            //     {"messageId":"4034247944424335443522",
-            //         "status":{
-            //             "description":"Message sent to next instance",
-            //             "groupId":1,
-            //             "groupName":"PENDING",
-            //             "id":26,
-            //             "name":"PENDING_ACCEPTED"
-            //         },
-            //         "to":"66952806757"}
-            //     ]
-            // }
-
-            // $sms_api_response = '';
 
             if (\Illuminate\Support\Arr::has($sms_api_response, 'messages')) {
                 if ($sms_api_response['messages'][0]['status']['name'] == 'PENDING_ACCEPTED') {

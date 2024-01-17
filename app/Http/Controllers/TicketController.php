@@ -22,45 +22,45 @@ class TicketController extends Controller
     public function index(Request $request)
     {
         $user_has_groups_idArr = $this->getLoggedInUserGroup();
-        $count_user_groups = User_group::count();        
+        $count_user_groups = User_group::count();
 
         if ($request->hasAny(['user_id', 'display_name', 'topic', 'ticket_status', 'level_of_importance', 'ticket_number'])) {
-            $data = $request->all();      
-            $tickets_query = Ticket::join('customers', 'customers.id', '=', 'tickets.user_id')                 
-                    ->when(request('user_id') != '', function ($q) {
-                        return $q->where('tickets.user_id', request('user_id'));
-                    })->when(request('display_name') != '', function ($q) {
-                        return $q->orWhere('tickets.user_id', request('display_name'));
-                    })->when(request('topic') != '', function ($q) {
-                        return $q->where('tickets.topic', request('topic'));
-                    })->when(request('ticket_status') != '', function ($q) {
-                        return $q->where('tickets.ticket_status', request('ticket_status'));
-                    })->when(request('level_of_importance') != '', function ($q) {
-                        return $q->where('tickets.level_of_importance', request('level_of_importance'));
-                    })->when(request('ticket_number') != '', function ($q) {
-                        return $q->where('tickets.ticket_number', request('ticket_number'));
-                    });
-                    // ->whereNull('customers.user_group_id')
+            $data = $request->all();
+            $tickets_query = Ticket::join('customers', 'customers.id', '=', 'tickets.user_id')
+                ->when(request('user_id') != '', function ($q) {
+                    return $q->where('tickets.user_id', request('user_id'));
+                })->when(request('display_name') != '', function ($q) {
+                    return $q->orWhere('tickets.user_id', request('display_name'));
+                })->when(request('topic') != '', function ($q) {
+                    return $q->where('tickets.topic', request('topic'));
+                })->when(request('ticket_status') != '', function ($q) {
+                    return $q->where('tickets.ticket_status', request('ticket_status'));
+                })->when(request('level_of_importance') != '', function ($q) {
+                    return $q->where('tickets.level_of_importance', request('level_of_importance'));
+                })->when(request('ticket_number') != '', function ($q) {
+                    return $q->where('tickets.ticket_number', request('ticket_number'));
+                });
+            // ->whereNull('customers.user_group_id')
 
             $show_data = 'filter_list';
         } else {
             $tickets_query = Ticket::join('customers', 'customers.id', '=', 'tickets.user_id');
-                            // ->whereNull('customers.user_group_id')
+            // ->whereNull('customers.user_group_id')
             $show_data = 'list';
-        }  
-        
-        if(count($user_has_groups_idArr) == 0 || $count_user_groups == count($user_has_groups_idArr)){
-            $tickets = $tickets_query->get(['tickets.*', 'customers.customer_user_id', 'customers.display_name', 'customers.user_group_id']);            
+        }
+
+        if (count($user_has_groups_idArr) == 0 || $count_user_groups == count($user_has_groups_idArr)) {
+            $tickets = $tickets_query->get(['tickets.*', 'customers.customer_user_id', 'customers.display_name', 'customers.user_group_id']);
             $filter_customers = Customer::all();
         } else {
             $tickets = $tickets_query->orWhereIn('customers.user_group_id', $user_has_groups_idArr)
-                        ->get(['tickets.*', 'customers.customer_user_id', 'customers.display_name', 'customers.user_group_id']);
+                ->get(['tickets.*', 'customers.customer_user_id', 'customers.display_name', 'customers.user_group_id']);
             $filter_customers = Customer::whereIn('customers.user_group_id', $user_has_groups_idArr)
-                        ->get();
-        }       
+                ->get();
+        }
 
         return Inertia::render('Tickets/Tickets', [
-            'tickets' =>  $tickets, 
+            'tickets' =>  $tickets,
             'users'   => User::all(),
             'customers' => Customer::all(),
             'filter_customers' => $filter_customers,
@@ -72,30 +72,29 @@ class TicketController extends Controller
             'topic'                => config('constants.topic'),
             'level_of_importance'  => config('constants.level_of_importance')
         ]);
-        
     } // index
 
     public function tickets_by_user($user_id)
     {
         $user_has_groups_idArr = $this->getLoggedInUserGroup();
-        $count_user_groups = User_group::count();        
+        $count_user_groups = User_group::count();
 
         $tickets_query = Ticket::join('customers', 'customers.id', '=', 'tickets.user_id');
         $show_data = 'list';
-        
-        if(count($user_has_groups_idArr) == 0 || $count_user_groups == count($user_has_groups_idArr)){
+
+        if (count($user_has_groups_idArr) == 0 || $count_user_groups == count($user_has_groups_idArr)) {
             $tickets = $tickets_query->where('tickets.user_id', $user_id)
-                    ->get(['tickets.*', 'customers.customer_user_id', 'customers.display_name', 'customers.user_group_id']);            
+                ->get(['tickets.*', 'customers.customer_user_id', 'customers.display_name', 'customers.user_group_id']);
             $filter_customers = Customer::all();
         } else {
             $tickets = $tickets_query->orWhereIn('customers.user_group_id', $user_has_groups_idArr)
-                        ->get(['tickets.*', 'customers.customer_user_id', 'customers.display_name', 'customers.user_group_id']);
+                ->get(['tickets.*', 'customers.customer_user_id', 'customers.display_name', 'customers.user_group_id']);
             $filter_customers = Customer::whereIn('customers.user_group_id', $user_has_groups_idArr)
-                        ->get();
-        }       
+                ->get();
+        }
 
         return Inertia::render('Tickets/Tickets', [
-            'tickets' =>  $tickets, 
+            'tickets' =>  $tickets,
             'users'   => User::all(),
             'customers' => Customer::all(),
             'filter_customers' => $filter_customers,
@@ -106,21 +105,21 @@ class TicketController extends Controller
             'topic'                => config('constants.topic'),
             'level_of_importance'  => config('constants.level_of_importance')
         ]);
-        
     } // tickets_by_user
 
-    public function create() {
+    public function create()
+    {
         $token = $this->getSavedToken();
         $user_has_groups_idArr = $this->getLoggedInUserGroup();
         $count_user_groups = User_group::count();
 
-        if(count($user_has_groups_idArr) == 0 || $count_user_groups == count($user_has_groups_idArr)){
-            $customers = Customer::all();            
+        if (count($user_has_groups_idArr) == 0 || $count_user_groups == count($user_has_groups_idArr)) {
+            $customers = Customer::all();
         } else {
             $customers = Customer::whereIn('customers.user_group_id', $user_has_groups_idArr)
-                        ->get();
+                ->get();
         }
-        
+
         return Inertia::render('Tickets/Tickets', [
             'show_data'  => 'add_form',
             'customers' => $customers,
@@ -128,49 +127,51 @@ class TicketController extends Controller
         ]);
     } // create
 
-    public function store(StoreTicketRequest $request) { 
-        $token = $this->getSavedToken();       
-        $data = $request->validated();      
-              
+    public function store(StoreTicketRequest $request)
+    {
+        $token = $this->getSavedToken();
+        $data = $request->validated();
+
         $attachFileName = [];
-        if($request->hasFile('attach_file')) {
+        if ($request->hasFile('attach_file')) {
             foreach ($request->attach_file as $file) {
-                $fileName = time() . '_'.$file->getClientOriginalName();
+                $fileName = time() . '_' . $file->getClientOriginalName();
                 $file_path = $file->move(public_path('uploads/others'), $fileName);
-    
+
                 array_push($attachFileName, $fileName);
             }
-        }      
-
-        $fileName = '';
-        if($attachFileName) {
-            for ($i = 0; $i < count($attachFileName); $i++) {
-                if($i < count($attachFileName)-1) {                    
-                    $fileName .= $attachFileName[$i].',';
-                } else {
-                    $fileName .= $attachFileName[$i];
-                }                
-            }          
         }
 
-        $ticket_number =  'TKN'.mt_rand(1000,9999);
+        $fileName = '';
+        if ($attachFileName) {
+            for ($i = 0; $i < count($attachFileName); $i++) {
+                if ($i < count($attachFileName) - 1) {
+                    $fileName .= $attachFileName[$i] . ',';
+                } else {
+                    $fileName .= $attachFileName[$i];
+                }
+            }
+        }
+
+        $ticket_number =  'TKN' . mt_rand(1000, 9999);
 
         Ticket::create([
             'user_id' => $request->user_id,
             'title' => $request->title,
-            'topic'=> $request->topic,
-            'level_of_importance'=> $request->level_of_importance,
-            'ticket_number'=> $ticket_number,
+            'topic' => $request->topic,
+            'level_of_importance' => $request->level_of_importance,
+            'ticket_number' => $ticket_number,
             'attach_file' => $fileName,
         ]);
-        return redirect()->route('tickets')->with('status', 201);   
+        return redirect()->route('tickets')->with('status', 201);
     } // store
 
-    public function edit($id) {
-        $token = $this->getSavedToken(); 
+    public function edit($id)
+    {
+        $token = $this->getSavedToken();
 
         // dd(Ticket_remark::where('ticket_id', $id)->get());
-        
+
         return Inertia::render('Tickets/Tickets', [
             'show_data'  => 'edit_form',
             'ticket' => Ticket::findOrFail($id),
@@ -181,83 +182,83 @@ class TicketController extends Controller
         ]);
     } // edit
 
-    public function update(UpdateTicketRequest $request, $id) 
+    public function update(UpdateTicketRequest $request, $id)
     {
-		$input = $request->all();
+        $input = $request->all();
         // return response(compact('input'));  
-        $data = $request->validated(); 
-        $ticket = Ticket::findOrFail($id);         
-        
-        if($request->hasFile('attach_file')) {
+        $data = $request->validated();
+        $ticket = Ticket::findOrFail($id);
+
+        if ($request->hasFile('attach_file')) {
             $request->validate([
                 // 'attach_file' => 'nullable|mimes:doc,docx,pdf,csv,xlsx,xls|max:2048',
-            ]); 
-        }        
+            ]);
+        }
 
-        if($request->file('attach_file')){                 
-           
+        if ($request->file('attach_file')) {
+
             $attachFileName = [];
-            if($request->hasFile('attach_file')) {
+            if ($request->hasFile('attach_file')) {
                 foreach ($request->attach_file as $file) {
-                    $fileName = time() . '_'.$file->getClientOriginalName();
+                    $fileName = time() . '_' . $file->getClientOriginalName();
                     $file_path = $file->move(public_path('uploads/others'), $fileName);
-        
+
                     array_push($attachFileName, $fileName);
                 }
-            }      
+            }
 
-            $attach_file_name = $ticket->attach_file.',';
-            if($attachFileName) {
+            $attach_file_name = $ticket->attach_file . ',';
+            if ($attachFileName) {
                 for ($i = 0; $i < count($attachFileName); $i++) {
-                    if($i < count($attachFileName)-1) {                    
-                        $attach_file_name .= $attachFileName[$i].',';
+                    if ($i < count($attachFileName) - 1) {
+                        $attach_file_name .= $attachFileName[$i] . ',';
                     } else {
                         $attach_file_name .= $attachFileName[$i];
-                    }                
-                }          
+                    }
+                }
             }
         } else {
             $attach_file_name = $ticket->attach_file;
-        }       
-       
+        }
+
         $ticket->update([
             'user_id' => $request->user_id,
             'title' => $request->title,
-            'topic'=> $request->topic,
-            'level_of_importance'=> $request->level_of_importance,
+            'topic' => $request->topic,
+            'level_of_importance' => $request->level_of_importance,
             'ticket_status' => $request->ticket_status,
             'updated_by_loggedin_user' => $request->updated_by_loggedin_user,
             'attach_file' => $attach_file_name,
         ]);
-		
-        return redirect()->route('tickets')->with('status', 200); 
-	} // update
+
+        return redirect()->route('tickets')->with('status', 200);
+    } // update
     public function destroy($id)
     {
         $ticket = Ticket::findOrFail($id);
-        if($ticket->image){
-            if(file_exists(public_path('uploads/'.$ticket->image))){                
-                unlink(public_path('uploads/'.$ticket->image));
-            }                     
-        } 
+        if ($ticket->image) {
+            if (file_exists(public_path('uploads/' . $ticket->image))) {
+                unlink(public_path('uploads/' . $ticket->image));
+            }
+        }
 
-        if($ticket->attach_file){
-            if(Str::contains($ticket->attach_file, ',')){
-                $exp_file = explode(',',$ticket->attach_file);
+        if ($ticket->attach_file) {
+            if (Str::contains($ticket->attach_file, ',')) {
+                $exp_file = explode(',', $ticket->attach_file);
                 for ($i = 0; $i < count($exp_file); $i++) {
-                    if(file_exists(public_path('uploads/others/'.$exp_file[$i]))){                
-                        unlink(public_path('uploads/others/'.$exp_file[$i]));
-                    } 
+                    if (file_exists(public_path('uploads/others/' . $exp_file[$i]))) {
+                        unlink(public_path('uploads/others/' . $exp_file[$i]));
+                    }
                 }
             } else {
-                if(file_exists(public_path('uploads/others/'.$ticket->attach_file))){                
-                    unlink(public_path('uploads/others/'.$ticket->attach_file));
-                } 
-            }                                
-        } 
+                if (file_exists(public_path('uploads/others/' . $ticket->attach_file))) {
+                    unlink(public_path('uploads/others/' . $ticket->attach_file));
+                }
+            }
+        }
         // return response(compact('ticket'));
         $ticket->delete();
-        return redirect()->route('tickets')->with('status', 204); 
+        return redirect()->route('tickets')->with('status', 204);
     } // destroy   
 
     public function destroy_attachFile(Request $request, $id)
@@ -266,73 +267,72 @@ class TicketController extends Controller
         $delete_fileName = $request->attachfile_name;
 
         $ticket = Ticket::findOrFail($id);
-        if($ticket->attach_file){
+        if ($ticket->attach_file) {
             $update_attach_file = '';
-            if(Str::contains($ticket->attach_file, ',')) {
-                $exp_file = explode(',',$ticket->attach_file);
+            if (Str::contains($ticket->attach_file, ',')) {
+                $exp_file = explode(',', $ticket->attach_file);
                 $update_attach_file = '';
                 for ($i = 0; $i < count($exp_file); $i++) {
                     $exp_file_length = count($exp_file);
-                    if($exp_file[$i] == $delete_fileName){
-                        if(file_exists(public_path('uploads/others/'.$exp_file[$i]))){                
-                            unlink(public_path('uploads/others/'.$exp_file[$i]));
+                    if ($exp_file[$i] == $delete_fileName) {
+                        if (file_exists(public_path('uploads/others/' . $exp_file[$i]))) {
+                            unlink(public_path('uploads/others/' . $exp_file[$i]));
                         }
                         $exp_file_length -= 1;
                     } else {
-                        if($i < $exp_file_length) {
-                            $update_attach_file .= $exp_file[$i].',';                            
+                        if ($i < $exp_file_length) {
+                            $update_attach_file .= $exp_file[$i] . ',';
                         } else {
                             $update_attach_file .= $exp_file[$i];
-                        }   
+                        }
                     }
-                }                
-
+                }
             } else {
-                if(file_exists(public_path('uploads/others/'.$ticket->attach_file))){                
-                    unlink(public_path('uploads/others/'.$ticket->attach_file));
+                if (file_exists(public_path('uploads/others/' . $ticket->attach_file))) {
+                    unlink(public_path('uploads/others/' . $ticket->attach_file));
                 }
                 $update_attach_file = '';
-            } 
-            
-            $ticket->update([               
-                'attach_file' => $update_attach_file,                
+            }
+
+            $ticket->update([
+                'attach_file' => $update_attach_file,
             ]);
-            
-        } 
-        
-        return redirect()->route('tickets')->with('message', 'Attached file deleted successfully.'); 
+        }
+
+        return redirect()->route('tickets')->with('message', 'Attached file deleted successfully.');
     } // destroy_attachFile
 
-    public function store_remark(Request $request) { 
-        $input = $request->all();     
+    public function store_remark(Request $request)
+    {
+        $input = $request->all();
         // return response(compact('input')); 
         // $ticket = Ticket_remark::create($data);
         Ticket_remark::insert([
             'ticket_id' => $request->ticket_id,
             'remarks'   => $request->remarks,
-            'remark_by' =>  Auth::id()         
-        ]); 
-        return redirect()->route('tickets')->with('status', 201);   
+            'remark_by' =>  Auth::id()
+        ]);
+        return redirect()->route('tickets')->with('status', 201);
     } // store_remark
 
-    public function update_remark(Request $request, $rmId) 
+    public function update_remark(Request $request, $rmId)
     {
-		$input = $request->all();
+        $input = $request->all();
         // return response(compact('input'));  
-        $ticket_remark = Ticket_remark::findOrFail($rmId);   
+        $ticket_remark = Ticket_remark::findOrFail($rmId);
 
         $ticket_remark->update([
-            'remarks' => $request->remarks,             
-            'remark_by' =>  Auth::id() 
+            'remarks' => $request->remarks,
+            'remark_by' =>  Auth::id()
         ]);
-		
-        return redirect()->back()->with('status', 200); 
-	} // update_remark
+
+        return redirect()->back()->with('status', 200);
+    } // update_remark
 
     public function destroy_remark($id)
     {
         Ticket_remark::findOrFail($id)->delete();
-        return redirect()->route('tickets')->with('status', 204); 
+        return redirect()->route('tickets')->with('status', 204);
     } // destroy_remark   
 
 }

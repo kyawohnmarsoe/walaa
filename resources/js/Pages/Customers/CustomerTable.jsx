@@ -5,6 +5,7 @@ import Modal from '@/Components/DaisyUI/Modal';
 import PrimaryButton from "@/Components/PrimaryButton";
 import SecondaryButton from "@/Components/SecondaryButton";
 import TextInput from '@/Components/TextInput';
+import Dropdown from '@/Components/Dropdown';
 import RefillModal from "./Partials/RefillModal";
 import ChangeModal from "./Partials/ChangeModal";
 import NotifyModal from "./Partials/NotifyModal";
@@ -96,8 +97,10 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
         router.get(`/invoices/user/${customer_user_index} `);
     }
 
-    function clickWhatsapp() {
-        router.get('/send_whatsapp');
+    function clickWhatsapp(cus) {
+        let customer_user_index = cus.customer_user_index
+        // console.log(customer_user_index)
+        router.get(`/send_whatsapp/${customer_user_index}`);
     }
 
     useEffect(() => {
@@ -141,7 +144,7 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                         <th>Affiliate Name</th>
                         <th>Account Info</th>
                         <th>Expiration Date	</th>
-                        <th>Active/Disable</th>
+                        {/* <th>Active/Disable</th> */}
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -213,20 +216,19 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                     {
                                         sub_accounts.filter(subacc => subacc.id == cus.sub_account_id)
                                             .map(filteredRes => (
-                                                <>
+                                                <span key={"subAcDiv_" + (cus.id)}>
                                                     <br />
                                                     <strong>Sub Acc Name</strong> : {filteredRes.account_name}
-                                                </>
+                                                </span>
                                             ))
                                     }
-                                    <br />
                                 </td>
                                 <td>
                                     {cus.manual_expiration_date}
                                 </td>
-                                <td className={cus.active_status == 1 ? 'text-emerald-500' : 'text-red-500'}>
+                                {/* <td className={cus.active_status == 1 ? 'text-emerald-500' : 'text-red-500'}>
                                     {cus.active_status == 1 ? 'Active' : 'Disable'}
-                                </td>
+                                </td> */}
                                 <td>
                                     <div className="sm:flex sm:items-center">
                                         <div className="relative">
@@ -324,8 +326,8 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                    {cus?.can_refill && <><button className="btn btn-xs btn-outline btn-block btn-info mb-2"
                                         onClick={() => callRefillModal(cus)}>Refill</button><br /></>}
 
-                                    {cus?.can_change_account && <><button className="btn btn-xs btn-outline btn-block btn-success mb-2"
-                                        onClick={() => callChangeModal(cus)}>Change</button> <br /> </>}
+                                            {cus?.can_change_account && <li><button className="btn btn-xs btn-outline btn-block btn-success mb-2"
+                                                onClick={() => callChangeModal(cus)}>Change</button></li>}
 
                                     {
                                         cus?.can_extend_user &&
@@ -387,11 +389,12 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                 </td> */}
 
                             </tr>
-                        ))}
-                    </tbody>
+                        ))
+                        }
+                    </tbody >
                 }
 
-            </table>
+            </table >
         </div >
     )
 }
