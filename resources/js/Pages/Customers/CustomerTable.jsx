@@ -257,25 +257,25 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                                     </span>
                                                 </Dropdown.Trigger>
 
-                                                <Dropdown.Content align={ 'left' } width={ '30' } >
-                                                    { cus?.can_refill && <><div className="px-3 pt-2 pb-2 cursor-pointer" style={{width:'100px'}}
-                                                            onClick={ () => callRefillModal(cus) }>Refill</div></> }
-                                                    { cus?.can_change_account && <><div className="px-3 pb-2 cursor-pointer"
-                                                        onClick={ () => callChangeModal(cus) }>Change</div> </> }
+                                                <Dropdown.Content align={'left'} width={'30'} >
+                                                    {cus?.can_refill && <><div className="px-3 pt-2 pb-2 cursor-pointer" style={{ width: '100px' }}
+                                                        onClick={() => callRefillModal(cus)}>Refill</div></>}
+                                                    {cus?.can_change_account && <><div className="px-3 pb-2 cursor-pointer"
+                                                        onClick={() => callChangeModal(cus)}>Change</div> </>}
 
                                                     {
                                                         cus?.can_extend_user &&
                                                         <>
                                                             <div className="px-3 pb-2 cursor-pointer"
-                                                                onClick={ extendHandler }>Extend</div>
+                                                                onClick={extendHandler}>Extend</div>
                                                         </>
                                                     }
                                                     <div className="px-3 pb-2 cursor-pointer"
-                                                        onClick={ () => editLocalCusClick(cus.customer_user_index) }>
+                                                        onClick={() => editLocalCusClick(cus.customer_user_index)}>
                                                         Edit
                                                     </div>
                                                     <div className="px-3 pb-2 cursor-pointer"
-                                                        onClick={ () => callModal(cus) }>
+                                                        onClick={() => callModal(cus)}>
                                                         Disable
                                                     </div>
 
@@ -284,37 +284,37 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                                             cus.sms_status === 0 ?
                                                                 <>
                                                                     <div className="px-3 pb-2 cursor-pointer"
-                                                                        onClick={ () => callNotifyModal(cus) }>
-                                                                        Notify
-                                                                        <span className="relative flex h-3 w-3">
+                                                                        onClick={() => callNotifyModal(cus)}>
+                                                                        Notify SMS
+                                                                        {/* <span className="relative flex h-3 w-3">
                                                                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                                                                             <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
-                                                                        </span>
+                                                                        </span> */}
                                                                     </div>
 
-                                                                    {/* <button className="btn btn-xs btn-outline btn-block btn-danger mt-2"
-                                                            onClick={() => clickWhatsapp(cus)}>
-                                                            Whatsapp
-                                                            <span className="relative flex h-3 w-3">
-                                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                                                                <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
-                                                            </span>
-                                                        </button> */}
+                                                                    <div className="px-3 pb-2 cursor-pointer"
+                                                                        onClick={() => clickWhatsapp(cus)}>
+                                                                        Whatsapp
+                                                                        {/* <span className="relative flex h-3 w-3">
+                                                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                                                            <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                                                                        </span> */}
+                                                                    </div>
                                                                 </>
                                                                 :
                                                                 <>
                                                                     {
                                                                         sys_users.filter(user => user.id == cus.sms_sent_by)
                                                                             .map(filteredRes => (
-                                                                                <small key={ "user_" + (user.id) } className="text-red-500 block mt-2">
-                                                                                    SMS sent by : { filteredRes.email }
+                                                                                <small key={"user_" + (user.id)} className="text-red-500 block mt-2">
+                                                                                    SMS sent by : {filteredRes.email}
                                                                                 </small>
                                                                             ))
                                                                     }
                                                                 </>
                                                             : ''
                                                     }
-                                                    
+
                                                 </Dropdown.Content>
                                             </Dropdown>
                                         </div>
@@ -334,9 +334,7 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                             <button className="btn btn-xs btn-outline btn-block btn-warning mb-2"
                                                 onClick={extendHandler}>Extend</button>
                                         </>
-                                    } 
-
-                                   
+                                    }                                    
 
                                     <>
                                         <button className="btn btn-xs btn-outline btn-block btn-default mb-2"
