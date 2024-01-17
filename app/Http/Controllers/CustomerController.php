@@ -510,23 +510,6 @@ class CustomerController extends Controller
             $sms_api = Http::withHeaders($headers)->post($apiURL, $post_data);
             $sms_api_response = json_decode($sms_api->getBody(), true);
 
-            // return response(compact('sms_api_response'));
-
-            // {"messages":[
-            //     {"messageId":"4034247944424335443522",
-            //         "status":{
-            //             "description":"Message sent to next instance",
-            //             "groupId":1,
-            //             "groupName":"PENDING",
-            //             "id":26,
-            //             "name":"PENDING_ACCEPTED"
-            //         },
-            //         "to":"66952806757"}
-            //     ]
-            // }
-
-            // $sms_api_response = '';
-
             if (\Illuminate\Support\Arr::has($sms_api_response, 'messages')) {
                 if ($sms_api_response['messages'][0]['status']['name'] == 'PENDING_ACCEPTED') {
                     $update_data = [

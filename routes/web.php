@@ -27,13 +27,13 @@ use App\Http\Controllers\WalletController;
 Route::get('/test', [DashboardController::class, 'test'])->name('test');
 Route::get('/test2', [DashboardController::class, 'test2'])->name('test2');
 
-Route::get('/earthlink/profile', function () {    
+Route::get('/earthlink/profile', function () {
     return Inertia::render('Profile/Earthlink/Edit');
 });
 
 Route::post('/deposit/store', [ReportController::class, 'storeBalanceTransfer'])->name('deposit.store');
 
-Route::get('/', function () {   
+Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
@@ -42,7 +42,7 @@ Route::get('/', function () {
     ]);
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {   
+Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::post('/dashboard/writing', [DashboardController::class, 'writing'])->name('writing');
@@ -50,19 +50,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
     //========= Start Get Data From API Route =========//
     Route::get('/dashboard/statslist', [DashboardController::class, 'get_statsList'])->name('dashboard.statslist');
     Route::get('/dashboard/servicePhones', [DashboardController::class, 'get_servicePhones'])->name('dashboard.servicePhones');
-    
+
     Route::get('/users/online', [UserController::class, 'showOnlineUsers'])->name('users.online');
     Route::get('/user/{id}', [UserController::class, 'getUserDetails'])->name('user.details');
     Route::post('/user/update', [UserController::class, 'updateUserDetails'])->name('user.update');
-   
+
     Route::get('/systemuser', [SystemUserController::class, 'index'])->name('systemuser');
     Route::get('/systemuser/create', [SystemUserController::class, 'create'])->name('systemuser.create');
     Route::post('/systemuser/store', [SystemUserController::class, 'store'])->name('systemuser.store');
     Route::get('/systemuser/{id}', [SystemUserController::class, 'edit'])->name('systemuser.edit');
     Route::post('/systemuser/{id}', [SystemUserController::class, 'update'])->name('systemuser.update');
-    Route::delete('/systemuser/{id}', [SystemUserController::class, 'destroy'])->name('systemuser.destroy'); 
-    
-    Route::get('/apidata', [ApidataController::class, 'index'])->name('apidata');    
+    Route::delete('/systemuser/{id}', [SystemUserController::class, 'destroy'])->name('systemuser.destroy');
+
+    Route::get('/apidata', [ApidataController::class, 'index'])->name('apidata');
 
     Route::get('/usergroup', [UserGroupController::class, 'index'])->name('usergroup');
     Route::get('/usergroup/create', [UserGroupController::class, 'create'])->name('usergroup.create');
@@ -71,29 +71,29 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/usergroup/{id}', [UserGroupController::class, 'update'])->name('usergroup.update');
     Route::delete('/usergroup/{id}', [UserGroupController::class, 'destroy'])->name('usergroup.destroy');
 
-    Route::get('/accounts', [AccountController::class, 'index'])->name('accounts'); 
-    Route::get('/accounts/apilist', [AccountController::class, 'api_list'])->name('accounts.apilist');   
+    Route::get('/accounts', [AccountController::class, 'index'])->name('accounts');
+    Route::get('/accounts/apilist', [AccountController::class, 'api_list'])->name('accounts.apilist');
     Route::get('/accounts/create', [AccountController::class, 'create'])->name('accounts.create');
     Route::post('/accounts/insert', [AccountController::class, 'insert'])->name('accounts.insert');
     Route::get('/accounts/store', [AccountController::class, 'store_api'])->name('accounts.store_api');
     Route::get('/accounts/{id}', [AccountController::class, 'edit'])->name('accounts.edit');
-    Route::post('/accounts/{id}', [AccountController::class, 'update'])->name('accounts.update');    
-    Route::delete('/accounts/{id}', [AccountController::class, 'destroy'])->name('accounts.destroy');   
+    Route::post('/accounts/{id}', [AccountController::class, 'update'])->name('accounts.update');
+    Route::delete('/accounts/{id}', [AccountController::class, 'destroy'])->name('accounts.destroy');
 
     Route::get('/affiliates', [AffiliateController::class, 'index'])->name('affiliates');
     Route::get('/affiliates/store', [AffiliateController::class, 'store'])->name('affiliates.store');
 
-    Route::get('/deposit/password',[CustomerController::class, 'deposit'])->name('deposit.password');
+    Route::get('/deposit/password', [CustomerController::class, 'deposit'])->name('deposit.password');
 
     Route::get('/customers', [CustomerController::class, 'index'])->name('customers');
     Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create');
     Route::post('/customers/insert', [CustomerController::class, 'insert'])->name('customers.insert');
-    Route::post('/customers', [CustomerController::class, 'index'])->name('customers.filter');    
+    Route::post('/customers', [CustomerController::class, 'index'])->name('customers.filter');
     Route::get('/customers/store/api/{totalCount}', [CustomerController::class, 'store_api'])->name('customers.store.api');
     Route::get('/customers/{index}', [CustomerController::class, 'edit'])->name('customers.edit');
-    Route::post('/customers/{index}', [CustomerController::class, 'update'])->name('customers.update');    
+    Route::post('/customers/{index}', [CustomerController::class, 'update'])->name('customers.update');
     Route::delete('/customers/{index}', [CustomerController::class, 'destroy'])->name('customers.destroy');
-    Route::post('/customers/change/account/{index}', [CustomerController::class, 'change_account'])->name('customers.change.account'); 
+    Route::post('/customers/change/account/{index}', [CustomerController::class, 'change_account'])->name('customers.change.account');
     Route::get('/customers/details/{index}', [CustomerController::class, 'details'])->name('customers.details');
     Route::get('/customers/notify/{index}', [CustomerController::class, 'notify'])->name('customers.notify');
     // Route::get('/customers/change_deposit_pass', [CustomerController::class, 'change_deposit_password'])->name('customers.change_deposit_pass');
@@ -102,26 +102,26 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/deposit', [DepositController::class, 'change_deposit_password'])->name('deposit');
     Route::post('/deposit/{id}', [DepositController::class, 'update_deposit_password'])->name('deposit.update_deposit_pass');
-    
+
     Route::get('/apiuser', [ApiUserController::class, 'change_api_user'])->name('apiuser');
     Route::post('/apiuser/{id}', [ApiUserController::class, 'update_api_user'])->name('apiuser.update_api_user');
- 
-    Route::get('/send_whatsapp', [WhatsAppController::class, 'send_whatsapp'])->name('send_whatsapp');
+
+    Route::get('/send_whatsapp/{index}', [WhatsAppController::class, 'send_whatsapp'])->name('send_whatsapp');
 
     // Route::group(['middleware' => ['auth', 'role:admin']], function() {
-        Route::get('/tickets', [TicketController::class, 'index'])->name('tickets');
-        Route::get('/tickets/create', [TicketController::class, 'create'])->name('tickets.create');
-        Route::post('/tickets/store', [TicketController::class, 'store'])->name('tickets.store');
-        Route::post('/tickets', [TicketController::class, 'index'])->name('tickets.filter');
-        Route::get('/tickets/{id}', [TicketController::class, 'edit'])->name('tickets.edit');
-        Route::post('/tickets/{id}', [TicketController::class, 'update'])->name('tickets.update'); 
-        Route::delete('/tickets/{id}', [TicketController::class, 'destroy'])->name('tickets.destroy');
-        Route::post('/tickets/store/remark', [TicketController::class, 'store_remark'])->name('tickets.store.remark'); 
-        Route::post('/tickets/update/remark/{rmId}', [TicketController::class, 'update_remark'])->name('tickets.update.remark');  
-        Route::get('/tickets/delete_remark/{id}', [TicketController::class, 'destroy_remark'])->name('tickets.destroy.remark');
-        Route::delete('/tickets/image/{id}', [TicketController::class, 'destroy_image'])->name('tickets.destroy.image');
-        Route::post('/tickets/attach_file/{id}', [TicketController::class, 'destroy_attachFile'])->name('tickets.destroy.attachfile');
-        Route::get('/tickets/user/{user_id}', [TicketController::class, 'tickets_by_user'])->name('tickets.user');
+    Route::get('/tickets', [TicketController::class, 'index'])->name('tickets');
+    Route::get('/tickets/create', [TicketController::class, 'create'])->name('tickets.create');
+    Route::post('/tickets/store', [TicketController::class, 'store'])->name('tickets.store');
+    Route::post('/tickets', [TicketController::class, 'index'])->name('tickets.filter');
+    Route::get('/tickets/{id}', [TicketController::class, 'edit'])->name('tickets.edit');
+    Route::post('/tickets/{id}', [TicketController::class, 'update'])->name('tickets.update');
+    Route::delete('/tickets/{id}', [TicketController::class, 'destroy'])->name('tickets.destroy');
+    Route::post('/tickets/store/remark', [TicketController::class, 'store_remark'])->name('tickets.store.remark');
+    Route::post('/tickets/update/remark/{rmId}', [TicketController::class, 'update_remark'])->name('tickets.update.remark');
+    Route::get('/tickets/delete_remark/{id}', [TicketController::class, 'destroy_remark'])->name('tickets.destroy.remark');
+    Route::delete('/tickets/image/{id}', [TicketController::class, 'destroy_image'])->name('tickets.destroy.image');
+    Route::post('/tickets/attach_file/{id}', [TicketController::class, 'destroy_attachFile'])->name('tickets.destroy.attachfile');
+    Route::get('/tickets/user/{user_id}', [TicketController::class, 'tickets_by_user'])->name('tickets.user');
     // });
 
     Route::get('/log/error', [LogController::class, 'getErrorLog'])->name('log.error');
@@ -135,31 +135,29 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/account/stats', [ReportController::class, 'getAccountStats'])->name('account.stats');
     Route::get('/affiliate/stats', [ReportController::class, 'getAffiliateStats'])->name('affiliate.stats');
 
-     Route::get('/deposit/transfer', [ReportController::class, 'getBalanceTransfer'])->name('deposit.transfer');
+    Route::get('/deposit/transfer', [ReportController::class, 'getBalanceTransfer'])->name('deposit.transfer');
     //  Route::post('/deposit/store', [ReportController::class, 'storeBalanceTransfer'])->name('deposit.store');
-    
+
     Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices');
     Route::post('/invoices/search', [InvoiceController::class, 'search'])->name('invoices.search');
-     Route::get('/invoices/create', [InvoiceController::class, 'create'])->name('invoices.create');
+    Route::get('/invoices/create', [InvoiceController::class, 'create'])->name('invoices.create');
     Route::post('/invoices/store', [InvoiceController::class, 'store'])->name('invoices.store');
     Route::post('/invoices/storedata', [InvoiceController::class, 'storeData'])->name('invoices.storedata');
-     Route::get('/invoices/{id}', [InvoiceController::class, 'show'])->name('invoices.show');
-     Route::get('/invoices/edit/{id}', [InvoiceController::class, 'edit'])->name('invoices.edit');
-     Route::post('/invoices/update/{id}', [InvoiceController::class, 'update'])->name('invoices.update');
-     Route::get('/invoices/user/{user_index}', [InvoiceController::class, 'invoices_by_user'])->name('invoices.user');
+    Route::get('/invoices/{id}', [InvoiceController::class, 'show'])->name('invoices.show');
+    Route::get('/invoices/edit/{id}', [InvoiceController::class, 'edit'])->name('invoices.edit');
+    Route::post('/invoices/update/{id}', [InvoiceController::class, 'update'])->name('invoices.update');
+    Route::get('/invoices/user/{user_index}', [InvoiceController::class, 'invoices_by_user'])->name('invoices.user');
 
-      Route::get('/expenses', [ExpenseController::class, 'index'])->name('expenses');
-      Route::post('/expenses/search', [ExpenseController::class, 'search'])->name('expenses.search');
-      Route::get('/expenses/create', [ExpenseController::class, 'create'])->name('expenses.create');
-      Route::post('/expenses/store', [ExpenseController::class, 'store'])->name('expenses.store');
-      Route::post('/expenses/update/{id}', [ExpenseController::class, 'update'])->name('expenses.update');
+    Route::get('/expenses', [ExpenseController::class, 'index'])->name('expenses');
+    Route::post('/expenses/search', [ExpenseController::class, 'search'])->name('expenses.search');
+    Route::get('/expenses/create', [ExpenseController::class, 'create'])->name('expenses.create');
+    Route::post('/expenses/store', [ExpenseController::class, 'store'])->name('expenses.store');
+    Route::post('/expenses/update/{id}', [ExpenseController::class, 'update'])->name('expenses.update');
 
-      Route::get('/wallets', [WalletController::class, 'index'])->name('wallets');
-      Route::get('/wallets/transfer', [WalletController::class, 'transfer'])->name('wallets.transfer');
-      Route::post('/wallets/store', [WalletController::class, 'store'])->name('wallets.store');
-      Route::post('/wallets/search', [WalletController::class, 'search'])->name('wallets.search');
-
-    
+    Route::get('/wallets', [WalletController::class, 'index'])->name('wallets');
+    Route::get('/wallets/transfer', [WalletController::class, 'transfer'])->name('wallets.transfer');
+    Route::post('/wallets/store', [WalletController::class, 'store'])->name('wallets.store');
+    Route::post('/wallets/search', [WalletController::class, 'search'])->name('wallets.search');
 });
 
 Route::middleware('auth')->group(function () {
@@ -182,4 +180,4 @@ Route::middleware('auth')->group(function () {
 //     dd("Cache Clear All");
 // });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

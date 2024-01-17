@@ -96,8 +96,10 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
         router.get(`/invoices/user/${customer_user_index} `);
     }
 
-    function clickWhatsapp() {
-        router.get('/send_whatsapp');
+    function clickWhatsapp(cus) {
+        let customer_user_index = cus.customer_user_index
+        // console.log(customer_user_index)
+        router.get(`/send_whatsapp/${customer_user_index}`);
     }
 
     useEffect(() => {
@@ -228,7 +230,76 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                 </td>
                                 <td>
 
-                                    {cus?.can_refill && <><button className="btn btn-xs btn-outline btn-block btn-info mb-2"
+                                    <div className="dropdown dropdown-hover dropdown-bottom dropdown-end">
+                                        <div tabIndex={0} role="button" className="btn btn-sm btn-outline btn-block btn-info">Actions</div>
+                                        <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                                            {cus?.can_refill && <li><button className="btn btn-sm btn-outline btn-block btn-info mb-2"
+                                                onClick={() => callRefillModal(cus)}>Refill</button></li>}
+
+                                            {cus?.can_change_account && <li><button className="btn btn-sm btn-outline btn-block btn-success mb-2"
+                                                onClick={() => callChangeModal(cus)}>Change</button></li>}
+
+                                            {
+                                                cus?.can_extend_user &&
+                                                <li>
+                                                    <button className="btn btn-sm btn-outline btn-block btn-warning mb-2"
+                                                        onClick={extendHandler}>Extend</button>
+                                                </li>
+                                            }
+                                            <li>
+                                                <button className="btn btn-sm btn-outline btn-block btn-default mb-2"
+                                                    onClick={() => editLocalCusClick(cus.customer_user_index)}>
+                                                    Edit
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button className="btn btn-sm btn-outline btn-block btn-secondary"
+                                                    onClick={() => callModal(cus)}>
+                                                    Disable
+                                                </button>
+                                            </li>
+                                            {
+                                                cus.account_status == "ExpiringSoon" ?
+                                                    cus.sms_status === 0 ?
+                                                        <>
+                                                            <li>
+                                                                <button className="btn btn-sm btn-outline btn-block btn-danger mt-2"
+                                                                    onClick={() => callNotifyModal(cus)}>
+                                                                    Notify
+                                                                    <span className="relative flex h-3 w-3">
+                                                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                                                        <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                                                                    </span>
+                                                                </button>
+                                                            </li>
+                                                            <li>
+                                                                <button className="btn btn-sm btn-outline btn-block btn-danger mt-2"
+                                                                    onClick={() => clickWhatsapp(cus)}>
+                                                                    Whatsapp
+                                                                    <span className="relative flex h-3 w-3">
+                                                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                                                        <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                                                                    </span>
+                                                                </button>
+                                                            </li>
+                                                        </>
+                                                        :
+                                                        <li>
+                                                            {
+                                                                sys_users.filter(user => user.id == cus.sms_sent_by)
+                                                                    .map(filteredRes => (
+                                                                        <small key={"user_" + (user.id)} className="text-red-500 block mt-2">
+                                                                            SMS sent by : {filteredRes.email}
+                                                                        </small>
+                                                                    ))
+                                                            }
+                                                        </li>
+                                                    : ''
+                                            }
+                                        </ul>
+                                    </div>
+
+                                    {/* {cus?.can_refill && <><button className="btn btn-xs btn-outline btn-block btn-info mb-2"
                                         onClick={() => callRefillModal(cus)}>Refill</button><br /></>}
 
                                     {cus?.can_change_account && <><button className="btn btn-xs btn-outline btn-block btn-success mb-2"
@@ -240,10 +311,10 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                             <button className="btn btn-xs btn-outline btn-block btn-warning mb-2"
                                                 onClick={extendHandler}>Extend</button>
                                         </>
-                                    }
+                                    } */}
 
                                     <>
-                                        <button className="btn btn-xs btn-outline btn-block btn-default mb-2"
+                                        {/* <button className="btn btn-xs btn-outline btn-block btn-default mb-2"
                                             onClick={() => editLocalCusClick(cus.customer_user_index)}>
                                             Edit
                                         </button>
@@ -251,9 +322,9 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                         <button className="btn btn-xs btn-outline btn-block btn-secondary"
                                             onClick={() => callModal(cus)}>
                                             Disable
-                                        </button>
+                                        </button> */}
 
-                                        {
+                                        {/* {
                                             cus.account_status == "ExpiringSoon" ?
                                                 cus.sms_status === 0 ?
                                                     <>
@@ -266,14 +337,14 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                                             </span>
                                                         </button>
 
-                                                        {/* <button className="btn btn-xs btn-outline btn-block btn-danger mt-2"
+                                                        <button className="btn btn-xs btn-outline btn-block btn-danger mt-2"
                                                             onClick={() => clickWhatsapp(cus)}>
                                                             Whatsapp
                                                             <span className="relative flex h-3 w-3">
                                                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                                                                 <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
                                                             </span>
-                                                        </button> */}
+                                                        </button>
                                                     </>
                                                     :
                                                     <>
@@ -287,7 +358,7 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                                         }
                                                     </>
                                                 : ''
-                                        }
+                                        } */}
                                     </>
                                 </td>
                             </tr>
