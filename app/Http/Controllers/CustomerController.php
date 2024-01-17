@@ -103,6 +103,7 @@ class CustomerController extends Controller
                 ->leftJoin('accounts', 'accounts.account_index', '=', 'customers.account_index')
                 ->leftJoin('tickets', 'tickets.user_id', '=', 'customers.id')
                 ->leftJoin('invoices', 'invoices.userIndex', '=', 'customers.customer_user_index')
+                // ->where('customers.active_status', '=', 1)
                 ->groupBy('customers.id');
             // ->where(DB::raw("(STR_TO_DATE(customers.manual_expiration_date,'%d/%m/%Y'))"), ">=", Carbon::now())
             // ->where(DB::raw("(STR_TO_DATE(customers.manual_expiration_date,'%d/%m/%Y'))"), '=', today()->addDays(2));

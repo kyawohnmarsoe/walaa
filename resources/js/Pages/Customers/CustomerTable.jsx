@@ -143,7 +143,7 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                         <th>Affiliate Name</th>
                         <th>Account Info</th>
                         <th>Expiration Date	</th>
-                        <th>Active/Disable</th>
+                        {/* <th>Active/Disable</th> */}
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -225,45 +225,45 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                 <td>
                                     {cus.manual_expiration_date}
                                 </td>
-                                <td className={cus.active_status == 1 ? 'text-emerald-500' : 'text-red-500'}>
+                                {/* <td className={cus.active_status == 1 ? 'text-emerald-500' : 'text-red-500'}>
                                     {cus.active_status == 1 ? 'Active' : 'Disable'}
-                                </td>
+                                </td> */}
                                 <td>
 
-                                    <div className="dropdown dropdown-hover dropdown-bottom dropdown-end">
-                                        <div tabIndex={0} role="button" className="btn btn-sm btn-outline btn-block btn-info">Actions</div>
+                                    <div className="dropdown dropdown-hover dropdown-top dropdown-end">
+                                        <div tabIndex={0} role="button" className="btn btn-xs btn-outline btn-block btn-info">Actions</div>
                                         <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-                                            {cus?.can_refill && <li><button className="btn btn-sm btn-outline btn-block btn-info mb-2"
+                                            {cus?.can_refill && <li><button className="btn btn-xs btn-outline btn-block btn-info mb-2"
                                                 onClick={() => callRefillModal(cus)}>Refill</button></li>}
 
-                                            {cus?.can_change_account && <li><button className="btn btn-sm btn-outline btn-block btn-success mb-2"
+                                            {cus?.can_change_account && <li><button className="btn btn-xs btn-outline btn-block btn-success mb-2"
                                                 onClick={() => callChangeModal(cus)}>Change</button></li>}
 
                                             {
                                                 cus?.can_extend_user &&
                                                 <li>
-                                                    <button className="btn btn-sm btn-outline btn-block btn-warning mb-2"
+                                                    <button className="btn btn-xs btn-outline btn-block btn-warning mb-2"
                                                         onClick={extendHandler}>Extend</button>
                                                 </li>
                                             }
                                             <li>
-                                                <button className="btn btn-sm btn-outline btn-block btn-default mb-2"
+                                                <button className="btn btn-xs btn-outline btn-block btn-default mb-2"
                                                     onClick={() => editLocalCusClick(cus.customer_user_index)}>
                                                     Edit
                                                 </button>
                                             </li>
-                                            <li>
-                                                <button className="btn btn-sm btn-outline btn-block btn-secondary"
+                                            {/* <li>
+                                                <button className="btn btn-xs btn-outline btn-block btn-secondary"
                                                     onClick={() => callModal(cus)}>
                                                     Disable
                                                 </button>
-                                            </li>
+                                            </li> */}
                                             {
                                                 cus.account_status == "ExpiringSoon" ?
                                                     cus.sms_status === 0 ?
                                                         <>
                                                             <li>
-                                                                <button className="btn btn-sm btn-outline btn-block btn-danger mt-2"
+                                                                <button className="btn btn-xs btn-outline btn-block btn-danger mt-2"
                                                                     onClick={() => callNotifyModal(cus)}>
                                                                     Notify
                                                                     <span className="relative flex h-3 w-3">
@@ -273,7 +273,7 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                                                 </button>
                                                             </li>
                                                             <li>
-                                                                <button className="btn btn-sm btn-outline btn-block btn-danger mt-2"
+                                                                <button className="btn btn-xs btn-outline btn-block btn-danger mt-2"
                                                                     onClick={() => clickWhatsapp(cus)}>
                                                                     Whatsapp
                                                                     <span className="relative flex h-3 w-3">
@@ -299,67 +299,6 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                         </ul>
                                     </div>
 
-                                    {/* {cus?.can_refill && <><button className="btn btn-xs btn-outline btn-block btn-info mb-2"
-                                        onClick={() => callRefillModal(cus)}>Refill</button><br /></>}
-
-                                    {cus?.can_change_account && <><button className="btn btn-xs btn-outline btn-block btn-success mb-2"
-                                        onClick={() => callChangeModal(cus)}>Change</button> <br /> </>}
-
-                                    {
-                                        cus?.can_extend_user &&
-                                        <>
-                                            <button className="btn btn-xs btn-outline btn-block btn-warning mb-2"
-                                                onClick={extendHandler}>Extend</button>
-                                        </>
-                                    } */}
-
-                                    <>
-                                        {/* <button className="btn btn-xs btn-outline btn-block btn-default mb-2"
-                                            onClick={() => editLocalCusClick(cus.customer_user_index)}>
-                                            Edit
-                                        </button>
-
-                                        <button className="btn btn-xs btn-outline btn-block btn-secondary"
-                                            onClick={() => callModal(cus)}>
-                                            Disable
-                                        </button> */}
-
-                                        {/* {
-                                            cus.account_status == "ExpiringSoon" ?
-                                                cus.sms_status === 0 ?
-                                                    <>
-                                                        <button className="btn btn-xs btn-outline btn-block btn-danger mt-2"
-                                                            onClick={() => callNotifyModal(cus)}>
-                                                            Notify
-                                                            <span className="relative flex h-3 w-3">
-                                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                                                                <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
-                                                            </span>
-                                                        </button>
-
-                                                        <button className="btn btn-xs btn-outline btn-block btn-danger mt-2"
-                                                            onClick={() => clickWhatsapp(cus)}>
-                                                            Whatsapp
-                                                            <span className="relative flex h-3 w-3">
-                                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                                                                <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
-                                                            </span>
-                                                        </button>
-                                                    </>
-                                                    :
-                                                    <>
-                                                        {
-                                                            sys_users.filter(user => user.id == cus.sms_sent_by)
-                                                                .map(filteredRes => (
-                                                                    <small key={"user_" + (user.id)} className="text-red-500 block mt-2">
-                                                                        SMS sent by : {filteredRes.email}
-                                                                    </small>
-                                                                ))
-                                                        }
-                                                    </>
-                                                : ''
-                                        } */}
-                                    </>
                                 </td>
                             </tr>
                         ))
