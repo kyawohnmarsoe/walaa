@@ -184,7 +184,7 @@ export default function FilterForm({ className = '', accounts, sub_accounts, aff
     return (
         <section className={className}>
             <header>
-                <h2 className="text-lg font-medium text-sky-600">Filter User</h2>
+                <h2 className="text-lg font-medium text-sky-600">Manage Users</h2>
             </header>
 
             <form onSubmit={handleSubmit} className="mt-6 space-y-6 ">

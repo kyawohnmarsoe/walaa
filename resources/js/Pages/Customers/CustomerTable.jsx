@@ -9,7 +9,6 @@ import Dropdown from '@/Components/Dropdown';
 import RefillModal from "./Partials/RefillModal";
 import ChangeModal from "./Partials/ChangeModal";
 import NotifyModal from "./Partials/NotifyModal";
-import Dropdown from '@/Components/Dropdown';
 
 export default function CustomerTable({ customers, accounts, sub_accounts, sys_users, user_groups, apitoken, deposit_password, auth }) {
     const [loading, setLoading] = useState(false);
@@ -258,24 +257,24 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                                     </span>
                                                 </Dropdown.Trigger>
 
-                                                <Dropdown.Content align={ 'left' } width={'30'} >
-                                                       { cus?.can_refill && <><div className="px-3 pt-2 pb-2 " style={{width:'100px'}}
+                                                <Dropdown.Content align={ 'left' } width={ '30' } >
+                                                    { cus?.can_refill && <><div className="px-3 pt-2 pb-2 cursor-pointer" style={{width:'100px'}}
                                                             onClick={ () => callRefillModal(cus) }>Refill</div></> }
-                                                    { cus?.can_change_account && <><div className="px-3 pb-2"
+                                                    { cus?.can_change_account && <><div className="px-3 pb-2 cursor-pointer"
                                                         onClick={ () => callChangeModal(cus) }>Change</div> </> }
 
                                                     {
                                                         cus?.can_extend_user &&
                                                         <>
-                                                            <div className="px-3 pb-2"
+                                                            <div className="px-3 pb-2 cursor-pointer"
                                                                 onClick={ extendHandler }>Extend</div>
                                                         </>
                                                     }
-                                                    <div className="px-3 pb-2"
+                                                    <div className="px-3 pb-2 cursor-pointer"
                                                         onClick={ () => editLocalCusClick(cus.customer_user_index) }>
                                                         Edit
                                                     </div>
-                                                    <div className="px-3 pb-2"
+                                                    <div className="px-3 pb-2 cursor-pointer"
                                                         onClick={ () => callModal(cus) }>
                                                         Disable
                                                     </div>
@@ -284,7 +283,7 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                                         cus.account_status == "ExpiringSoon" ?
                                                             cus.sms_status === 0 ?
                                                                 <>
-                                                                    <div className="px-3 pb-2"
+                                                                    <div className="px-3 pb-2 cursor-pointer"
                                                                         onClick={ () => callNotifyModal(cus) }>
                                                                         Notify
                                                                         <span className="relative flex h-3 w-3">
