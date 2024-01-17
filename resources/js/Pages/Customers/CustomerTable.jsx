@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { router, Link } from '@inertiajs/react';
+import { router, Link, usePage } from '@inertiajs/react';
 import Modal from '@/Components/DaisyUI/Modal';
 import PrimaryButton from "@/Components/PrimaryButton";
 import SecondaryButton from "@/Components/SecondaryButton";
@@ -8,10 +8,11 @@ import TextInput from '@/Components/TextInput';
 import RefillModal from "./Partials/RefillModal";
 import ChangeModal from "./Partials/ChangeModal";
 import NotifyModal from "./Partials/NotifyModal";
+import Dropdown from '@/Components/Dropdown';
 
 export default function CustomerTable({ customers, accounts, sub_accounts, sys_users, user_groups, apitoken, deposit_password, auth }) {
     const [loading, setLoading] = useState(false);
-
+    const { url } = usePage()
     const [modals, setModals] = useState({
         reFill: false,
         change: false,
@@ -227,7 +228,100 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                     {cus.active_status == 1 ? 'Active' : 'Disable'}
                                 </td>
                                 <td>
-                                    {cus?.can_refill && <><button className="btn btn-xs btn-outline btn-block btn-info mb-2"
+                                    <div className="sm:flex sm:items-center">
+                                        <div className="relative">
+                                            <Dropdown >
+                                                <Dropdown.Trigger>
+                                                    <span className="inline-flex rounded-md">
+                                                        <button
+                                                            type="button"
+                                                            className="inline-flex items-center px-3 py-2 border text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                                        >
+                                                            Actions
+
+                                                            <svg
+                                                                className="ml-2 -mr-0.5 h-4 w-4"
+                                                                xmlns="https://www.w3.org/2000/svg"
+                                                                viewBox="0 0 20 20"
+                                                                fill="currentColor"
+                                                            >
+                                                                <path
+                                                                    fillRule="evenodd"
+                                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                                    clipRule="evenodd"
+                                                                />
+                                                            </svg>
+                                                        </button>
+
+                                                    </span>
+                                                </Dropdown.Trigger>
+
+                                                <Dropdown.Content align={ 'left' } width={'30'} >
+                                                       { cus?.can_refill && <><div className="px-3 pt-2 pb-2 " style={{width:'100px'}}
+                                                            onClick={ () => callRefillModal(cus) }>Refill</div></> }
+                                                    { cus?.can_change_account && <><div className="px-3 pb-2"
+                                                        onClick={ () => callChangeModal(cus) }>Change</div> </> }
+
+                                                    {
+                                                        cus?.can_extend_user &&
+                                                        <>
+                                                            <div className="px-3 pb-2"
+                                                                onClick={ extendHandler }>Extend</div>
+                                                        </>
+                                                    }
+                                                    <div className="px-3 pb-2"
+                                                        onClick={ () => editLocalCusClick(cus.customer_user_index) }>
+                                                        Edit
+                                                    </div>
+                                                    <div className="px-3 pb-2"
+                                                        onClick={ () => callModal(cus) }>
+                                                        Disable
+                                                    </div>
+
+                                                    {
+                                                        cus.account_status == "ExpiringSoon" ?
+                                                            cus.sms_status === 0 ?
+                                                                <>
+                                                                    <div className="px-3 pb-2"
+                                                                        onClick={ () => callNotifyModal(cus) }>
+                                                                        Notify
+                                                                        <span className="relative flex h-3 w-3">
+                                                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                                                            <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                                                                        </span>
+                                                                    </div>
+
+                                                                    {/* <button className="btn btn-xs btn-outline btn-block btn-danger mt-2"
+                                                            onClick={() => clickWhatsapp(cus)}>
+                                                            Whatsapp
+                                                            <span className="relative flex h-3 w-3">
+                                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                                                <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                                                            </span>
+                                                        </button> */}
+                                                                </>
+                                                                :
+                                                                <>
+                                                                    {
+                                                                        sys_users.filter(user => user.id == cus.sms_sent_by)
+                                                                            .map(filteredRes => (
+                                                                                <small key={ "user_" + (user.id) } className="text-red-500 block mt-2">
+                                                                                    SMS sent by : { filteredRes.email }
+                                                                                </small>
+                                                                            ))
+                                                                    }
+                                                                </>
+                                                            : ''
+                                                    }
+                                                    
+                                                </Dropdown.Content>
+                                            </Dropdown>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                {/* <td>
+                                   {cus?.can_refill && <><button className="btn btn-xs btn-outline btn-block btn-info mb-2"
                                         onClick={() => callRefillModal(cus)}>Refill</button><br /></>}
 
                                     {cus?.can_change_account && <><button className="btn btn-xs btn-outline btn-block btn-success mb-2"
@@ -239,7 +333,9 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                             <button className="btn btn-xs btn-outline btn-block btn-warning mb-2"
                                                 onClick={extendHandler}>Extend</button>
                                         </>
-                                    }
+                                    } 
+
+                                   
 
                                     <>
                                         <button className="btn btn-xs btn-outline btn-block btn-default mb-2"
@@ -250,7 +346,7 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                         <button className="btn btn-xs btn-outline btn-block btn-secondary"
                                             onClick={() => callModal(cus)}>
                                             Disable
-                                        </button>
+                                        </button> 
 
                                         {
                                             cus.account_status == "ExpiringSoon" ?
@@ -265,14 +361,14 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                                             </span>
                                                         </button>
 
-                                                        {/* <button className="btn btn-xs btn-outline btn-block btn-danger mt-2"
+                                                       <button className="btn btn-xs btn-outline btn-block btn-danger mt-2"
                                                             onClick={() => clickWhatsapp(cus)}>
                                                             Whatsapp
                                                             <span className="relative flex h-3 w-3">
                                                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                                                                 <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
                                                             </span>
-                                                        </button> */}
+                                                        </button> 
                                                     </>
                                                     :
                                                     <>
@@ -288,7 +384,8 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                                 : ''
                                         }
                                     </>
-                                </td>
+                                </td> */}
+
                             </tr>
                         ))}
                     </tbody>
