@@ -6,13 +6,13 @@ function Invoice ({ invoice })
 {
     console.log(invoice)
     return (
-        <div className="py-12 ">
+        <div >
             <Head title="Invoice" />
             {/* Height  Should be 300 px */}
-            <div className="bg-white p-8 max-w-xxl mx-auto  rounded-md" style={ { maxWidth: '900px' }
+            <div className="bg-white max-w-xxl mx-auto  rounded-md" style={ { maxWidth: '850px' }
             }>
               
-                <div className="mt-8">
+                <div>
                     <table className="w-full border-collapse border border-gray-300">
                        
                         <tbody style={ { border: '2px dotted gray', }}>
