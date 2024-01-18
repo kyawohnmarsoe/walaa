@@ -198,7 +198,7 @@ class InvoiceController extends Controller
     $data = [
       'invoinceID' => $request->invoice['invoinceID'],
       'userIndex' => $request->invoice['userIndex'],
-      'displayName' => '',
+      'displayName' => $customer->display_name,
       'affiliateName' => $request->invoice['affiliateName'],
       'invoiceType' => $request->invoice['invoiceType'],
       'invoiceDescription' => $invoiceDescription,
