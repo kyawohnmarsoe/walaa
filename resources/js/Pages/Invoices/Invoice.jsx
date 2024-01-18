@@ -9,16 +9,16 @@ function Invoice ({ invoice })
         <div >
             <Head title="Invoice" />
             {/* Height  Should be 300 px */}
-            <div className="bg-white max-w-xxl mx-auto  rounded-md" style={ { maxWidth: '850px' }
+            <div className="bg-white p-3 max-w-xxl mx-auto  rounded-md" style={ { maxWidth: '850px' }
             }>
               
                 <div>
-                    <table className="w-full border-collapse border border-gray-300">
+                    <table className="w-full border-collapse border border-gray-300 text-sm">
                        
                         <tbody style={ { border: '2px dotted gray', }}>
                             <tr>
                                 <td colSpan={ 6 } >
-                                    <img src="/img/logo.png" alt="Logo" style={ { minWidth: '85%',height:'80px', textAlign:'center', margin:'auto' } } />
+                                    <img src="/img/logo.png" alt="Logo" style={ { minWidth: '80%',height:'70px', textAlign:'center', margin:'auto' } } />
                                 </td>
                             </tr>
                            
