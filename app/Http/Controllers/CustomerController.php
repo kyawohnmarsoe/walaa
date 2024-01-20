@@ -518,7 +518,7 @@ class CustomerController extends Controller
                         'sms_sent_by' => Auth::id(),
                     ];
                     $data = Customer::where('customer_user_index', $index)->firstOrFail();
-                    $data->update($update_data);
+                    // $data->update($update_data);
 
                     return redirect()->route('customers')->with('message', 'Notification message is successfully sent!');
                 }

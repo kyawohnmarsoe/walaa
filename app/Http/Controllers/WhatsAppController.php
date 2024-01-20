@@ -12,66 +12,110 @@ class WhatsAppController extends Controller
 {
     public function send_whatsapp($index)
     {
-        // Testing with infobip
+        // Testing with last API
         $data = Customer::where('customer_user_index', $index)->get();
         $send_mobile = '';
         if (count($data) > 0) {
-            $send_mobile = $data[0]['mobile_number'] ? $data[0]['mobile_number'] : $data[0]['mobile_number2'];
+            // $send_mobile = $data[0]['mobile_number'] ? $data[0]['mobile_number'] : $data[0]['mobile_number2'];
             $email = $data[0]['customer_user_id'];
-            // $send_mobile = '66952806757'; //  959425324224
+            $send_mobile = '66952806757'; //  959425324224
         }
 
-        $token = 'App d2cb4f14f7e3aa18ce494c8ba5d7d26a-2883dddd-294a-4cc5-b69d-cd107ec9cd28';
-        $apiURL = 'https://qyqzqw.api.infobip.com/whatsapp/1/message/template';
-        $headers = [
-            'Authorization' => $token,
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json'
-        ];
+        $auth = 'o8r28s0001qm0crilgie8f9dkv8djs8ors';
+        $apiURL = 'http://46.105.147.132:8080/otp_api/send.php';
 
         $post_data = [
-            "messages" => [
-                [
-                    "from" => "447860099299",
-                    "to" => $send_mobile,
-                    // "messageId" => "0bc55e32-1fc1-491f-82ad-1d1908c277e8",
-                    "content" => [
-                        "templateName" => "message_test",
-                        "templateData" => ["body" => ["placeholders" => [$email]]],
-                        "language" => "en"
-                    ]
-                ]
-            ]
+            "auth" => $auth,
+            "phone" => $send_mobile,
+            "msg" => $email . ', your account will be expired soon!'
         ];
 
         if ($send_mobile != '') {
-            $whatsapp_api = Http::withOptions([
-                'headers' => $headers,
-                'follow_redirects' => TRUE
-            ])->post($apiURL, $post_data);
+
+            $whatsapp_api = Http::asForm()->post($apiURL, $post_data);
             $whatsapp_api_response = json_decode($whatsapp_api->getBody(), true);
 
-            // return response(compact('whatsapp_api_response'));
+            if ($whatsapp_api->successful()) {
+                return redirect()->route('customers')->with('message', 'Message is successfully sent via Whatsapp!');
+                // if ($whatsapp_api_response == 'successful') {
+                //     $update_data = [
+                //         'sms_status' => 1,
+                //         'sms_sent_by' => Auth::id(),
+                //     ];
+                //     $data = Customer::where('customer_user_index', $index)->firstOrFail();
+                //     // $data->update($update_data);
 
-            if (\Illuminate\Support\Arr::has($whatsapp_api_response, 'messages')) {
-                if ($whatsapp_api_response['messages'][0]['status']['groupName'] == 'PENDING') {
-                    $update_data = [
-                        'sms_status' => 1,
-                        'sms_sent_by' => Auth::id(),
-                    ];
-                    $data = Customer::where('customer_user_index', $index)->firstOrFail();
-                    // $data->update($update_data);
-
-                    return redirect()->route('customers')->with('message', 'Message is successfully sent via Whatsapp!');
-                } else {
-                    return redirect()->route('customers')->with('error_message', $whatsapp_api_response['messages'][0]['status']['description']);
-                }
+                //     return redirect()->route('customers')->with('message', 'Message is successfully sent via Whatsapp!');
+                // } else {
+                //     return redirect()->route('customers')->with('error_message', $whatsapp_api_response);
+                // }
             } else {
                 return redirect()->route('customers')->with('error_message', 'Something went wrong in sending Whatsapp message!');
             }
         } else {
             return redirect()->route('customers')->with('error_message', 'Not found mobile number to send Whatsapp message.');
         }
+
+        // Testing with infobip
+        // $data = Customer::where('customer_user_index', $index)->get();
+        // $send_mobile = '';
+        // if (count($data) > 0) {
+        //     $send_mobile = $data[0]['mobile_number'] ? $data[0]['mobile_number'] : $data[0]['mobile_number2'];
+        //     $email = $data[0]['customer_user_id'];
+        //     // $send_mobile = '66952806757'; //  959425324224
+        // }
+
+        // $token = 'App d2cb4f14f7e3aa18ce494c8ba5d7d26a-2883dddd-294a-4cc5-b69d-cd107ec9cd28';
+        // $apiURL = 'https://qyqzqw.api.infobip.com/whatsapp/1/message/template';
+        // $headers = [
+        //     'Authorization' => $token,
+        //     'Content-Type' => 'application/json',
+        //     'Accept' => 'application/json'
+        // ];
+
+        // $post_data = [
+        //     "messages" => [
+        //         [
+        //             "from" => "447860099299",
+        //             "to" => $send_mobile,
+        //             // "messageId" => "0bc55e32-1fc1-491f-82ad-1d1908c277e8",
+        //             "content" => [
+        //                 "templateName" => "message_test",
+        //                 "templateData" => ["body" => ["placeholders" => [$email]]],
+        //                 "language" => "en"
+        //             ]
+        //         ]
+        //     ]
+        // ];
+
+        // if ($send_mobile != '') {
+        //     $whatsapp_api = Http::withOptions([
+        //         'headers' => $headers,
+        //         'follow_redirects' => TRUE
+        //     ])->post($apiURL, $post_data);
+        //     $whatsapp_api_response = json_decode($whatsapp_api->getBody(), true);
+
+        //     // return response(compact('whatsapp_api_response'));
+
+        //     if (\Illuminate\Support\Arr::has($whatsapp_api_response, 'messages')) {
+        //         if ($whatsapp_api_response['messages'][0]['status']['groupName'] == 'PENDING') {
+        //             $update_data = [
+        //                 'sms_status' => 1,
+        //                 'sms_sent_by' => Auth::id(),
+        //             ];
+        //             $data = Customer::where('customer_user_index', $index)->firstOrFail();
+        //             // $data->update($update_data);
+
+        //             return redirect()->route('customers')->with('message', 'Message is successfully sent via Whatsapp!');
+        //         } else {
+        //             return redirect()->route('customers')->with('error_message', $whatsapp_api_response['messages'][0]['status']['description']);
+        //         }
+        //     } else {
+        //         return redirect()->route('customers')->with('error_message', 'Something went wrong in sending Whatsapp message!');
+        //     }
+        // } else {
+        //     return redirect()->route('customers')->with('error_message', 'Not found mobile number to send Whatsapp message.');
+        // }
 
         // Testing with Twilio 
         // $twilioSid = config('app.twilio_sid');
