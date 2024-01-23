@@ -18,7 +18,7 @@ export default function FilterForm({ className = '', customers, apitoken, errors
 
     const [values, setValues] = useState({
         user_id: '',
-        display_name: '',
+        // display_name: '',
         ticket_source: '',
         topic: '',
         level_of_importance: '',
@@ -27,7 +27,7 @@ export default function FilterForm({ className = '', customers, apitoken, errors
     });
 
     const [optionsCustomers, setOptionsCustomers] = useState([])
-    const [optionsCustomersName, setOptionsCustomersName] = useState([])
+    // const [optionsCustomersName, setOptionsCustomersName] = useState([])
 
     const optionsTicketSource = [
         {
@@ -101,26 +101,26 @@ export default function FilterForm({ className = '', customers, apitoken, errors
                 optionsCustomersArr.push(
                     {
                         "value": e.id,
-                        "label": e.customer_user_id
+                        "label": e.customer_user_id + ' ' + e.display_name
                     }
                 );
             });
         }
         setOptionsCustomers(optionsCustomersArr)
 
-        let optionsCustomersNameArr = [];
-        {
-            customers.map((e) => {
-                e.display_name?.length > 0 &&
-                    optionsCustomersNameArr.push(
-                        {
-                            "value": e.id,
-                            "label": e.display_name
-                        }
-                    );
-            });
-        }
-        setOptionsCustomersName(optionsCustomersNameArr)
+        // let optionsCustomersNameArr = [];
+        // {
+        //     customers.map((e) => {
+        //         e.display_name?.length > 0 &&
+        //             optionsCustomersNameArr.push(
+        //                 {
+        //                     "value": e.id,
+        //                     "label": e.display_name
+        //                 }
+        //             );
+        //     });
+        // }
+        // setOptionsCustomersName(optionsCustomersNameArr)
     }
 
     useEffect(() => {
@@ -136,13 +136,13 @@ export default function FilterForm({ className = '', customers, apitoken, errors
         }))
     }
 
-    function customersNameHandleChange(e) {
-        const value = e.value
-        setValues(values => ({
-            ...values,
-            'display_name': value,
-        }))
-    }
+    // function customersNameHandleChange(e) {
+    //     const value = e.value
+    //     setValues(values => ({
+    //         ...values,
+    //         'display_name': value,
+    //     }))
+    // }
     function ticketSourceHandleChange(e) {
         const value = e.target.value
         setValues(values => ({
@@ -210,7 +210,7 @@ export default function FilterForm({ className = '', customers, apitoken, errors
                         />
                     </div>
 
-                    <div>
+                    {/* <div>
                         <InputLabel htmlFor="display_name" value="Users Display Name" />
                         <Select
                             name="display_name"
@@ -221,7 +221,7 @@ export default function FilterForm({ className = '', customers, apitoken, errors
                             onChange={customersNameHandleChange}
                             noOptionsMessage={() => "No Users found..."}
                         />
-                    </div>
+                    </div> */}
 
                     {/* <div>
                         <InputLabel htmlFor="ticket_source" value="Ticket Source" />

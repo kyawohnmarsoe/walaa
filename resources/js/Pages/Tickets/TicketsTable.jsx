@@ -7,9 +7,10 @@ import Modal from "@/Components/DaisyUI/Modal";
 import InputLabel from '@/Components/InputLabel';
 import TextInput from "@/Components/TextInput";
 import Textarea from '@/Components/Textarea';
-import { format } from 'date-fns';
+import Dropdown from '@/Components/Dropdown';
+import { format, formatDistance } from 'date-fns';
 
-export default function TicketTable({ tickets, users, user_groups, remarks }) {
+export default function TicketTable({ tickets, users, user_groups, remarks, issues }) {
     const [loading] = useState(false);
 
     const { topic, level_of_importance } = usePage().props
@@ -25,7 +26,7 @@ export default function TicketTable({ tickets, users, user_groups, remarks }) {
 
     useEffect(() => {
         // console.log(ticketSource);
-        // console.log(ticketSource[0]['ts_3']);     
+        // console.log(ticketSource[0]['ts_3']);    
     }, [])
 
     function splitFile(props, dt) {
@@ -109,7 +110,6 @@ export default function TicketTable({ tickets, users, user_groups, remarks }) {
     }
 
     const onCloseModal = () => {
-
         document.getElementById('ticket_deleteModal').close()
         {
             values.ticket_status == 0
@@ -244,11 +244,16 @@ export default function TicketTable({ tickets, users, user_groups, remarks }) {
                 <thead>
                     <tr className='bg-emerald-300'>
                         <th>Ticket Number</th>
-                        <th>Title</th>
                         <th>User</th>
+                        <th>Title</th>
+                        <th>Last Response</th>
+                        {/* <th>Description</th> */}
                         <th>Topic</th>
-                        <th>Level of Importance</th>
-                        <th>Attached File</th>
+                        <th>Issue Type</th>
+                        {/* <th>Level of Importance</th> */}
+                        {/* <th>Attached File</th> */}
+                        <th>Created Date</th>
+                        <th>Last Updated</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -267,21 +272,44 @@ export default function TicketTable({ tickets, users, user_groups, remarks }) {
                     <tbody>
                         {tickets && tickets.map(dt => (
                             <tr key={dt.id}
-                                className={dt.ticket_status == 0 ? '' : 'bg-teal-100'}
+                                className={dt.ticket_status == 0 ? '' : 'bg-gray-100'}
                                 id={"tr_" + (dt.id)}
                             >
                                 <td>
-                                    <a
-                                        className='inline-flex items-center px-1 pt-1 underline decoration-sky-300 text-sm font-medium text-sky-600 focus:border-sky-700 cursor-pointer'
-                                        onClick={() => callModal(dt, 'ticket_viewModal', '')}
-                                        key={dt.id}
-                                    >
-                                        {dt.ticket_number}
-                                    </a>
-                                    <small key={"status_" + (dt.id)} className={`block mt-2 ${dt.ticket_status == 0 ? '' : 'font-bold text-teal-150'}`}>
+                                    <span>
+                                        <a
+                                            className={`inline-flex items-center px-1 pt-1 underline 
+                                        ${dt.level_of_importance == 'lv_4' ?
+                                                    'decoration-red-300 text-red-600 focus:border-red-700'
+                                                    : dt.level_of_importance == 'lv_3' ?
+                                                        'decoration-orange-300 text-orange-600 focus:border-orange-700'
+                                                        : dt.level_of_importance == 'lv_2' ?
+                                                            'decoration-green-300 text-green-600 focus:border-green-700'
+                                                            : dt.level_of_importance == 'lv_1' ?
+                                                                'decoration-gray-300 text-gray-600 focus:border-gray-700'
+                                                                : 'decoration-sky-300 text-sky-600 focus:border-sky-700'
+                                                }  
+                                        text-sm font-medium  cursor-pointer`}
+                                            onClick={() => callModal(dt, 'ticket_viewModal', '')}
+                                            key={dt.id}
+                                        >
+                                            {dt.ticket_number}
+                                        </a>
+
+                                        {
+                                            remarks && remarks.filter(rm => rm.ticket_id == dt.id).length !== 0 &&
+                                            <span
+                                                className="inline-block whitespace-nowrap rounded-[0.27rem] bg-primary-100 px-[0.65em] pb-[0.25em] pt-[0.35em] text-center align-baseline text-[0.75em] font-bold leading-none text-danger-700"
+                                            >{remarks.filter(rm => rm.ticket_id == dt.id).length}</span>
+                                        }
+                                    </span>
+
+
+                                    {/* <small key={"status_" + (dt.id)} className={`block mt-2 ${dt.ticket_status == 0 ? '' : 'font-bold text-teal-150'}`}>
                                         Status : {dt.ticket_status == 0 ? 'Opened' : 'Closed'}
-                                    </small>
-                                    {
+                                    </small> */}
+
+                                    {/* {
                                         dt.ticket_status == 1 &&
                                         <small key={"updateduser_" + (dt.id)} className="block mt-2">
                                             Updated by : {
@@ -290,9 +318,8 @@ export default function TicketTable({ tickets, users, user_groups, remarks }) {
                                                 ))
                                             }
                                         </small>
-                                    }
+                                    } */}
                                 </td>
-                                <td>{dt.title}</td>
                                 <td>
                                     {dt.customer_user_id}
 
@@ -304,19 +331,47 @@ export default function TicketTable({ tickets, users, user_groups, remarks }) {
                                     }
 
 
-                                    {dt.user_group_id &&
+                                    {/* {dt.user_group_id &&
                                         user_groups.filter(user_gp => user_gp.id == dt.user_group_id)
                                             .map(filteredRes =>
                                                 <small key={"usrgp_" + (dt.id)} className="block mt-2">
                                                     User Group : {filteredRes.group_name}
                                                 </small>
                                             )
+                                    } */}
+                                </td>
+                                <td>
+                                    {dt.title}
+                                </td>
+                                <td>
+                                    {
+                                        remarks &&
+                                        remarks.filter(rm => rm.ticket_id == dt.id).map((filteredRes, index, { length }) => {
+                                            if (length - 1 === index) {
+                                                return <span key={"lastRm_" + (index)} className="block mt-2">
+                                                    {filteredRes.remarks}
+                                                </span>
+                                            } else {
+                                                return <></>
+                                            }
+                                        }
+                                        )
                                     }
                                 </td>
+                                {/* <td>{dt.description}</td> */}
                                 <td>{topicData[0][dt.topic]}</td>
-                                <td>{levelData[0][dt.level_of_importance]}</td>
                                 <td>
-
+                                    {dt.issue_id != 0 &&
+                                        issues.filter(issue => issue.id == dt.issue_id)
+                                            .map(filteredRes =>
+                                                <span key={"issue_" + (dt.id)} className="block mt-2">
+                                                    {filteredRes.issue_type}
+                                                </span>
+                                            )
+                                    }
+                                </td>
+                                {/* <td>{levelData[0][dt.level_of_importance]}</td> */}
+                                {/* <td>
                                     {
                                         dt.attach_file ?
                                             dt.attach_file.includes(',') ?
@@ -334,25 +389,70 @@ export default function TicketTable({ tickets, users, user_groups, remarks }) {
                                                 </a>
                                             : ''
                                     }
-
+                                </td> */}
+                                <td>{formatDistance(new Date(), new Date(dt.created_at), { addSuffix: false })}</td>
+                                <td>
+                                    {format(new Date(dt.updated_at), 'dd-mm-yyyy')}
+                                    {
+                                        <small key={"updateduser_" + (dt.id)} className="block mt-2">
+                                            Updated by : {
+                                                users.filter(user => user.id == dt.updated_by_loggedin_user).map(filteredUser => (
+                                                    filteredUser.name
+                                                ))
+                                            }
+                                        </small>
+                                    }
                                 </td>
                                 <td>
-                                    <button className="btn btn-xs btn-outline btn-block btn-default"
-                                        onClick={() => editData(dt.id)}>
-                                        Edit
-                                    </button>
+                                    <div className="sm:flex sm:items-center">
+                                        <div className="relative">
+                                            <Dropdown >
+                                                <Dropdown.Trigger>
+                                                    <span className="inline-flex rounded-md">
+                                                        <button
+                                                            type="button"
+                                                            className="inline-flex items-center px-3 py-2 border text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                                        >
+                                                            Actions
 
-                                    <button className="btn btn-xs btn-outline btn-block btn-secondary mt-2"
-                                        onClick={() => callModal(dt, 'ticket_deleteModal')}>
-                                        Delete
-                                    </button>
+                                                            <svg
+                                                                className="ml-2 -mr-0.5 h-4 w-4"
+                                                                xmlns="https://www.w3.org/2000/svg"
+                                                                viewBox="0 0 20 20"
+                                                                fill="currentColor"
+                                                            >
+                                                                <path
+                                                                    fillRule="evenodd"
+                                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                                    clipRule="evenodd"
+                                                                />
+                                                            </svg>
+                                                        </button>
+
+                                                    </span>
+                                                </Dropdown.Trigger>
+
+                                                <Dropdown.Content align={'left'} width={'30'}>
+                                                    <button className="px-3 pb-2 cursor-pointer"
+                                                        onClick={() => editData(dt.id)}>
+                                                        Edit
+                                                    </button>
+
+                                                    <button className="px-3 pb-2 cursor-pointer"
+                                                        onClick={() => callModal(dt, 'ticket_deleteModal')}>
+                                                        Delete
+                                                    </button>
+                                                </Dropdown.Content>
+                                            </Dropdown>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 }
 
-            </table>
+            </table >
         </div >
     )
 }

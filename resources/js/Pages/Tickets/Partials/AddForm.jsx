@@ -10,7 +10,7 @@ import SelectOption from '@/Components/SelectOption';
 import InputError from '@/Components/InputError';
 import Select, { components } from "react-select";
 
-export default function AddForm({ className = '', customers, apitoken, errors }) {
+export default function AddForm({ className = '', customers, customer_id, issues, apitoken, errors }) {
 
     const { processing, recentlySuccessful } = useForm();
 
@@ -19,15 +19,20 @@ export default function AddForm({ className = '', customers, apitoken, errors })
         return <components.Input {...props} autoComplete={autoComplete} />;
     };
 
+    const [optionsCustomers, setOptionsCustomers] = useState([])
+    const [selectedOpt, setSelectedOpt] = useState('')
+
+    const [optionsIssues, setOptionsIssues] = useState([])
+
     const [values, setValues] = useState({
-        user_id: '',
+        user_id: customer_id ? customer_id : '',
         title: '',
         topic: '',
         level_of_importance: '',
         attach_file: [],
+        description: '',
+        issue_id: '',
     });
-
-    const [optionsCustomers, setOptionsCustomers] = useState([])
 
     const optionsTopic = [
         {
@@ -85,9 +90,32 @@ export default function AddForm({ className = '', customers, apitoken, errors })
         setOptionsCustomers(optionsCustomersArr)
     }
 
+    const getSelectedCustomer = (customer_id) => {
+        {
+            let selectedRes = customers.filter(cus => customer_id == cus.id)
+            setSelectedOpt(selectedRes[0]['customer_user_id'])
+        }
+    }
+
+    const getIssues = () => {
+        let optionsIssuesArr = [];
+        {
+            issues.map((e) => {
+                optionsIssuesArr.push(
+                    {
+                        "value": e.id,
+                        "label": e.issue_type
+                    }
+                );
+            });
+        }
+        setOptionsIssues(optionsIssuesArr)
+    }
+
     useEffect(() => {
         getCustomers()
-
+        getIssues()
+        customer_id ? getSelectedCustomer(customer_id) : ''
     }, [])
 
     function customersHandleChange(e) {
@@ -96,6 +124,14 @@ export default function AddForm({ className = '', customers, apitoken, errors })
         setValues(values => ({
             ...values,
             'user_id': value,
+        }))
+        getSelectedCustomer(value)
+    }
+    function issuesHandleChange(e) {
+        const value = e.value
+        setValues(values => ({
+            ...values,
+            'issue_id': value,
         }))
     }
     function topicHandleChange(e) {
@@ -174,6 +210,7 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                             className="autoselect border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
                             components={{ Input }}
                             autoComplete="user_id"
+                            value={{ value: values.user_id, label: selectedOpt }}
                             options={optionsCustomers}
                             onChange={customersHandleChange}
                             noOptionsMessage={() => "No Users found..."}
@@ -193,15 +230,29 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                     </div>
 
                     <div>
-                        <InputLabel htmlFor="topic" value="Topic" />
+                        <InputLabel htmlFor="issue_id" value="Issue Type" />
+                        <Select
+                            name="issue_id"
+                            className="autoselect border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
+                            components={{ Input }}
+                            autoComplete="issue_id"
+                            options={optionsIssues}
+                            onChange={issuesHandleChange}
+                            noOptionsMessage={() => "No Data found..."}
+                        />
+                    </div>
+
+                    <div>
+                        <InputLabel htmlFor="topic" value="Topic" className='required' />
                         <SelectOption
                             id="topic"
                             className="mt-1 block w-full"
                             options={optionsTopic}
-                            select_text="Topic"
+                            select_text="topic"
                             name="topic"
                             onChange={topicHandleChange}
                         />
+                        <InputError className="mt-2" message={errors.topic} />
                     </div>
 
                     <div>
@@ -232,6 +283,19 @@ export default function AddForm({ className = '', customers, apitoken, errors })
                             </div>
                         </div>
                         <InputError className="mt-2" message={errors.attach_file} />
+                    </div>
+
+                    <div>
+                        <InputLabel htmlFor="description" value="Description" />
+                        <Textarea
+                            id="description"
+                            name="description"
+                            placeholder="Description..."
+                            value={values.Description}
+                            onChange={handleChange}
+                            className="mt-1 block w-full"
+                            minRows={5}
+                        />
                     </div>
                 </div>
 

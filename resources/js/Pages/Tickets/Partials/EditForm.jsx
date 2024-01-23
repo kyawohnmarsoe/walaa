@@ -12,7 +12,7 @@ import InputError from '@/Components/InputError';
 import { format, formatDistance } from 'date-fns';
 import EditableRemark from './EditableRemark';
 
-export default function EditForm({ className = '', ticket, customers, updated_by_loggedin_user, remarks, users }) {
+export default function EditForm({ className = '', ticket, customers, updated_by_loggedin_user, remarks, users, issues }) {
 
     // console.log(users)
     const { processing, recentlySuccessful } = useForm();
@@ -27,12 +27,17 @@ export default function EditForm({ className = '', ticket, customers, updated_by
         ticket_status: ticket.ticket_status,
         updated_by_loggedin_user: updated_by_loggedin_user,
         attach_file: ticket.attach_file,
+        description: ticket.description ?? '',
+        issue_id: ticket.issue_id
     });
 
     const [urlAttachFile, setUrlAttachFile] = useState('');
 
     const [optionsCustomers, setoptionsCustomers] = useState([])
     const [selectedOpt, setSelectedOpt] = useState('')
+
+    const [optionsIssues, setoptionsIssues] = useState([])
+    const [selectedOptIssue, setSelectedOptIssue] = useState('')
 
     const optionsTopic = [
         {
@@ -113,6 +118,28 @@ export default function EditForm({ className = '', ticket, customers, updated_by
         }
     }
 
+    const getIssues = () => {
+        let optionsIssuesArr = [];
+        {
+            issues.map((e) => {
+                optionsIssuesArr.push(
+                    {
+                        "value": e.id,
+                        "label": e.issue_type
+                    }
+                );
+            });
+        }
+        setoptionsIssues(optionsIssuesArr)
+    }
+
+    const getSelectedIssue = (selected_issueId) => {
+        {
+            let selectedRes = issues.filter(issue => selected_issueId == issue.id)
+            setSelectedOptIssue(selectedRes[0]['issue_type'])
+        }
+    }
+
     function splitFile(props) {
         let files = props.split(",");
         return (
@@ -130,6 +157,9 @@ export default function EditForm({ className = '', ticket, customers, updated_by
 
         getCustomers()
         getSelectedCustomer(ticket.user_id)
+
+        getIssues()
+        ticket.issue_id != 0 ? getSelectedIssue(ticket.issue_id) : ''
         // console.log("old user value ", values.user_id)        
         {
             ticket.attach_file ?
@@ -148,6 +178,15 @@ export default function EditForm({ className = '', ticket, customers, updated_by
         }))
         // console.log('onchange user value ', value)
         getSelectedCustomer(value)
+    }
+
+    function issuesHandleChange(e) {
+        const value = e.value
+        setValues(values => ({
+            ...values,
+            'issue_id': value,
+        }))
+        getSelectedIssue(value)
     }
 
     function topicHandleChange(e) {
@@ -261,12 +300,27 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                     </div>
 
                     <div>
+                        <InputLabel htmlFor="issue_id" value="Issue Type" className='required' />
+                        <Select
+                            name="issue_id"
+                            className="autoselect border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
+                            components={{ Input }}
+                            autoComplete="user_id"
+                            value={{ value: values.issue_id, label: selectedOptIssue }}
+                            options={optionsIssues}
+                            onChange={(e) => issuesHandleChange(e)}
+                            noOptionsMessage={() => "No Data found..."}
+                        />
+                        <InputError className="mt-2" message={errors.issue_id} />
+                    </div>
+
+                    <div>
                         <InputLabel htmlFor="topic" value="Topic" />
                         <SelectOption
                             id="topic"
                             className="mt-1 block w-full"
                             options={optionsTopic}
-                            select_text="Topic"
+                            select_text="topic"
                             name="topic"
                             onChange={topicHandleChange}
                             value={values.topic}
@@ -327,6 +381,19 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                         <InputError className="mt-2" message={errors.attach_file} />
                     </div>
 
+                    <div>
+                        <InputLabel htmlFor="description" value="Description" />
+                        <Textarea
+                            id="description"
+                            name="description"
+                            placeholder="Description..."
+                            value={values.description}
+                            onChange={handleChange}
+                            className="mt-1 block w-full"
+                            minRows={5}
+                        />
+                    </div>
+
                     <TextInput
                         id="updated_by_loggedin_user"
                         name="updated_by_loggedin_user"
@@ -370,6 +437,7 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                                             </p>
                                             <p className="text-xs text-gray-600">
                                                 {format(new Date(rm.created_at), 'MMMM, dd yyyy')}
+                                                {/* {formatDistance(new Date(), new Date(rm.created_at), { addSuffix: true })} */}
                                             </p>
                                         </div>
                                     </div>

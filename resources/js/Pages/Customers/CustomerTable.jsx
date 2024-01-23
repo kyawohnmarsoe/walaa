@@ -26,6 +26,10 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
         router.get(`/customers/${index}`);
     }
 
+    function addTicketClick(cus_id) {
+        router.get(`/tickets/create/${cus_id}`);
+    }
+
     // function notifyCusClick(index) {
     //     router.get(`/customers/notify/${index}`);
     // }
@@ -277,6 +281,10 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                                     <div className="px-3 pb-2 cursor-pointer"
                                                         onClick={() => callModal(cus)}>
                                                         Disable
+                                                    </div>
+                                                    <div className="px-3 pb-2 cursor-pointer"
+                                                        onClick={() => addTicketClick(cus.id)}>
+                                                        Add Ticket
                                                     </div>
 
                                                     {

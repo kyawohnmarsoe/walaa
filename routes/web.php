@@ -22,6 +22,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ApidataController;
+use App\Http\Controllers\TicketIssueController;
 use App\Http\Controllers\WalletController;
 
 Route::get('/test', [DashboardController::class, 'test'])->name('test');
@@ -111,6 +112,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Route::group(['middleware' => ['auth', 'role:admin']], function() {
     Route::get('/tickets', [TicketController::class, 'index'])->name('tickets');
     Route::get('/tickets/create', [TicketController::class, 'create'])->name('tickets.create');
+    Route::get('/tickets/create/{cus_id}', [TicketController::class, 'create_ticket_by_user'])->name('tickets.create.user');
     Route::post('/tickets/store', [TicketController::class, 'store'])->name('tickets.store');
     Route::post('/tickets', [TicketController::class, 'index'])->name('tickets.filter');
     Route::get('/tickets/{id}', [TicketController::class, 'edit'])->name('tickets.edit');
@@ -122,6 +124,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/tickets/image/{id}', [TicketController::class, 'destroy_image'])->name('tickets.destroy.image');
     Route::post('/tickets/attach_file/{id}', [TicketController::class, 'destroy_attachFile'])->name('tickets.destroy.attachfile');
     Route::get('/tickets/user/{user_id}', [TicketController::class, 'tickets_by_user'])->name('tickets.user');
+
+    Route::get('/issues', [TicketIssueController::class, 'index'])->name('ticket.issues');
+    Route::get('/issues/create', [TicketIssueController::class, 'create'])->name('ticket.issues.create');
+    Route::post('/issues/store', [TicketIssueController::class, 'store'])->name('ticket.issues.store');
+    Route::get('/issues/{id}', [TicketIssueController::class, 'edit'])->name('ticket.issues.edit');
+    Route::post('/issues/{id}', [TicketIssueController::class, 'update'])->name('ticket.issues.update');
+    Route::delete('/issues/{id}', [TicketIssueController::class, 'destroy'])->name('ticket.issues.destroy');
     // });
 
     Route::get('/log/error', [LogController::class, 'getErrorLog'])->name('log.error');
@@ -136,7 +145,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/affiliate/stats', [ReportController::class, 'getAffiliateStats'])->name('affiliate.stats');
 
     Route::get('/deposit/transfer', [ReportController::class, 'getBalanceTransfer'])->name('deposit.transfer');
-    //  Route::post('/deposit/store', [ReportController::class, 'storeBalanceTransfer'])->name('deposit.store');
 
     Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices');
     Route::post('/invoices/search', [InvoiceController::class, 'search'])->name('invoices.search');

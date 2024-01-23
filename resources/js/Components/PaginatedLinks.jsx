@@ -14,6 +14,7 @@ import ExpenseTable from '@/Pages/Expenses/ExpenseTable';
 import InvoiceTable from '@/Pages/Invoices/InvoiceTable';
 import WalletTable from '@/Pages/Wallets/WalletTable';
 import BalanceTransferTable from '@/Pages/Reports/Deposit/BalanceTransferTable';
+import TicketissuesTable from '@/Pages/Ticketissues/TicketissuesTable';
 
 export default function PaginatedLinks({
     auth,
@@ -26,6 +27,7 @@ export default function PaginatedLinks({
     remarks,
     user_has_groups,
     user_groups,
+    issues,
     tableName,
     apitoken,
     totalCount,
@@ -95,13 +97,18 @@ export default function PaginatedLinks({
             {
                 tableName == 'ticket' &&
                 <TicketTable tickets={currentItems} users={users} user_groups={user_groups}
-                    remarks={remarks}
+                    remarks={remarks} issues={issues}
                 />
             }
 
             {
                 tableName == 'systemuser' &&
                 <SystemusersTable systemusers={currentItems} user_has_groups={user_has_groups} />
+            }
+
+            {
+                tableName == 'ticketissue' &&
+                <TicketissuesTable issues={currentItems} />
             }
 
             {
@@ -128,7 +135,7 @@ export default function PaginatedLinks({
             }
 
             {
-                tableName == 'balance_transfer' && <BalanceTransferTable items={ currentItems } auth={ auth } users={ users } affiliates={ affiliates } />
+                tableName == 'balance_transfer' && <BalanceTransferTable items={currentItems} auth={auth} users={users} affiliates={affiliates} />
 
             }
 

@@ -16,8 +16,10 @@ export default function Tickets({
     filter_customers,
     users,
     remarks,
+    issues,
     ticket,
     updated_by_loggedin_user,
+    customer_id,
     show_data,
     apitoken,
     errors
@@ -123,6 +125,7 @@ export default function Tickets({
                                             users={users}
                                             user_groups={user_groups}
                                             remarks={remarks}
+                                            issues={issues}
                                             tableName="ticket"
                                             setFilterObj={setFilterObj}
                                             filterObj={filterObj} />
@@ -137,6 +140,8 @@ export default function Tickets({
                                     <AddForm
                                         className="p-4"
                                         customers={customers}
+                                        customer_id={customer_id}
+                                        issues={issues}
                                         apitoken={apitoken}
                                         errors={errors}
                                     />
@@ -153,6 +158,7 @@ export default function Tickets({
                                         updated_by_loggedin_user={updated_by_loggedin_user}
                                         remarks={remarks}
                                         users={users}
+                                        issues={issues}
                                     />
                                 </div>
                             }

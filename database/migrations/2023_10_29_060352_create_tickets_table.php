@@ -16,11 +16,13 @@ return new class extends Migration
             $table->integer('user_id');
             $table->longText('title')->nullable();
             $table->string('topic');
-            $table->string('level_of_importance'); 
+            $table->string('level_of_importance');
             $table->string('ticket_number')->unique();
             $table->integer('ticket_status')->default(0);
             $table->longText('attach_file')->nullable();
-            $table->integer('updated_by_loggedin_user')->default(0); 
+            $table->longText('description')->nullable();
+            $table->integer('issue_id')->default(0);
+            $table->integer('updated_by_loggedin_user')->default(0);
             $table->timestamps();
         });
     }

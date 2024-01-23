@@ -12,6 +12,7 @@ use App\Http\Requests\UpdateTicketRequest;
 use Inertia\Inertia;
 use App\Models\Ticket;
 use App\Models\Customer;
+use App\Models\Ticket_issue;
 use App\Models\User;
 use App\Models\Ticket_remark;
 use App\Models\User_group;
@@ -50,10 +51,12 @@ class TicketController extends Controller
         }
 
         if (count($user_has_groups_idArr) == 0 || $count_user_groups == count($user_has_groups_idArr)) {
-            $tickets = $tickets_query->get(['tickets.*', 'customers.customer_user_id', 'customers.display_name', 'customers.user_group_id']);
+            $tickets = $tickets_query->orderBy('tickets.id', 'DESC')
+                ->get(['tickets.*', 'customers.customer_user_id', 'customers.display_name', 'customers.user_group_id']);
             $filter_customers = Customer::all();
         } else {
             $tickets = $tickets_query->orWhereIn('customers.user_group_id', $user_has_groups_idArr)
+                ->orderBy('tickets.id', 'DESC')
                 ->get(['tickets.*', 'customers.customer_user_id', 'customers.display_name', 'customers.user_group_id']);
             $filter_customers = Customer::whereIn('customers.user_group_id', $user_has_groups_idArr)
                 ->get();
@@ -66,6 +69,7 @@ class TicketController extends Controller
             'filter_customers' => $filter_customers,
             'remarks'   => Ticket_remark::all(),
             'user_groups' => User_group::all(),
+            'issues' => Ticket_issue::all(),
             'show_data' => $show_data
         ])->with([
             'ticket_source'        => config('constants.ticket_source'), //Config::get('constants.ticket_source'),
@@ -100,6 +104,7 @@ class TicketController extends Controller
             'filter_customers' => $filter_customers,
             'remarks'   => Ticket_remark::all(),
             'user_groups' => User_group::all(),
+            'issues' => Ticket_issue::all(),
             'show_data' => $show_data
         ])->with([
             'topic'                => config('constants.topic'),
@@ -123,9 +128,32 @@ class TicketController extends Controller
         return Inertia::render('Tickets/Tickets', [
             'show_data'  => 'add_form',
             'customers' => $customers,
+            'issues' => Ticket_issue::all(),
+            'user_index' => '',
             'apitoken' => $token,
         ]);
     } // create
+
+    public function create_ticket_by_user($cus_id)
+    {
+        $token = $this->getSavedToken();
+        $user_has_groups_idArr = $this->getLoggedInUserGroup();
+        $count_user_groups = User_group::count();
+
+        if (count($user_has_groups_idArr) == 0 || $count_user_groups == count($user_has_groups_idArr)) {
+            $customers = Customer::where('id', $cus_id)->get();
+        } else {
+            $customers = Customer::whereIn('customers.user_group_id', $user_has_groups_idArr)->where('id', $cus_id)->get();
+        }
+
+        return Inertia::render('Tickets/Tickets', [
+            'show_data'  => 'add_form',
+            'customers' => $customers,
+            'issues' => Ticket_issue::all(),
+            'customer_id' => $cus_id,
+            'apitoken' => $token,
+        ]);
+    } // create_ticket_by_user
 
     public function store(StoreTicketRequest $request)
     {
@@ -162,6 +190,8 @@ class TicketController extends Controller
             'level_of_importance' => $request->level_of_importance,
             'ticket_number' => $ticket_number,
             'attach_file' => $fileName,
+            'description' => $request->description,
+            'issue_id' => $request->issue_id,
         ]);
         return redirect()->route('tickets')->with('status', 201);
     } // store
@@ -178,7 +208,8 @@ class TicketController extends Controller
             'customers' => Customer::all(),
             'users' => User::all(),
             'updated_by_loggedin_user' => Auth::id(),
-            'remarks' => Ticket_remark::where('ticket_id', $id)->get()
+            'remarks' => Ticket_remark::where('ticket_id', $id)->get(),
+            'issues' => Ticket_issue::all(),
         ]);
     } // edit
 
@@ -229,6 +260,8 @@ class TicketController extends Controller
             'ticket_status' => $request->ticket_status,
             'updated_by_loggedin_user' => $request->updated_by_loggedin_user,
             'attach_file' => $attach_file_name,
+            'description' => $request->description,
+            'issue_id' => $request->issue_id
         ]);
 
         return redirect()->route('tickets')->with('status', 200);
