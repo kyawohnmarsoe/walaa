@@ -368,4 +368,28 @@ class TicketController extends Controller
         return redirect()->route('tickets')->with('status', 204);
     } // destroy_remark   
 
+    public function open($id)
+    {
+        $ticket = Ticket::findOrFail($id);
+
+        $ticket->update([
+            'ticket_status' => 0, // 0 => open, 1 => close
+            'updated_by_loggedin_user' => Auth::id(),
+        ]);
+
+        return redirect()->back()->with('status', 200);
+    } // open
+
+    public function close($id)
+    {
+        $ticket = Ticket::findOrFail($id);
+
+        $ticket->update([
+            'ticket_status' => 1, // 0 => open, 1 => close
+            'updated_by_loggedin_user' => Auth::id(),
+        ]);
+
+        return redirect()->back()->with('status', 200);
+    } // close
+
 }

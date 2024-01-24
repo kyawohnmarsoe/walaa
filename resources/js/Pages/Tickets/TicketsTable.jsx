@@ -152,6 +152,12 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
     function editData(id) {
         router.get(`/tickets/${id} `);
     }
+    function openData(id) {
+        router.get(`/tickets/open/${id} `);
+    }
+    function closeData(id) {
+        router.get(`/tickets/close/${id} `);
+    }
 
     return (
         <div className="overflow-x-auto mt-3">
@@ -245,11 +251,11 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                     <tr className='bg-emerald-300'>
                         <th>Ticket Number</th>
                         <th>User</th>
+                        <th>Issue Type</th>
                         <th>Title</th>
                         <th>Last Response</th>
                         {/* <th>Description</th> */}
                         <th>Topic</th>
-                        <th>Issue Type</th>
                         {/* <th>Level of Importance</th> */}
                         {/* <th>Attached File</th> */}
                         <th>Created Date</th>
@@ -272,7 +278,7 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                     <tbody>
                         {tickets && tickets.map(dt => (
                             <tr key={dt.id}
-                                className={dt.ticket_status == 0 ? '' : 'bg-gray-100'}
+                                className={dt.ticket_status == 0 ? '' : 'bg-gray-300'}
                                 id={"tr_" + (dt.id)}
                             >
                                 <td>
@@ -341,6 +347,16 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                                     } */}
                                 </td>
                                 <td>
+                                    {dt.issue_id != 0 &&
+                                        issues.filter(issue => issue.id == dt.issue_id)
+                                            .map(filteredRes =>
+                                                <span key={"issue_" + (dt.id)} className="block mt-2">
+                                                    {filteredRes.issue_type}
+                                                </span>
+                                            )
+                                    }
+                                </td>
+                                <td>
                                     {dt.title}
                                 </td>
                                 <td>
@@ -360,16 +376,7 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                                 </td>
                                 {/* <td>{dt.description}</td> */}
                                 <td>{topicData[0][dt.topic]}</td>
-                                <td>
-                                    {dt.issue_id != 0 &&
-                                        issues.filter(issue => issue.id == dt.issue_id)
-                                            .map(filteredRes =>
-                                                <span key={"issue_" + (dt.id)} className="block mt-2">
-                                                    {filteredRes.issue_type}
-                                                </span>
-                                            )
-                                    }
-                                </td>
+
                                 {/* <td>{levelData[0][dt.level_of_importance]}</td> */}
                                 {/* <td>
                                     {
@@ -393,7 +400,9 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                                 <td>{formatDistance(new Date(), new Date(dt.created_at), { addSuffix: false })}</td>
                                 <td>
                                     {format(new Date(dt.updated_at), 'dd-mm-yyyy')}
+
                                     {
+                                        dt.updated_by_loggedin_user != 0 &&
                                         <small key={"updateduser_" + (dt.id)} className="block mt-2">
                                             Updated by : {
                                                 users.filter(user => user.id == dt.updated_by_loggedin_user).map(filteredUser => (
@@ -433,12 +442,21 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                                                 </Dropdown.Trigger>
 
                                                 <Dropdown.Content align={'left'} width={'30'}>
-                                                    <button className="px-3 pb-2 cursor-pointer"
+                                                    <button key={"open_" + (dt.id)} className={`px-3 pb-2 cursor-pointer ${dt.ticket_status == 0 ? 'hidden' : ''}`}
+                                                        onClick={() => openData(dt.id)}>
+                                                        Open
+                                                    </button>
+                                                    <button key={"close_" + (dt.id)} className={`px-3 pb-2 cursor-pointer ${dt.ticket_status == 1 ? 'hidden' : ''}`}
+                                                        onClick={() => closeData(dt.id)}>
+                                                        Close
+                                                    </button>
+
+                                                    <button key={"edit_" + (dt.id)} className="px-3 pb-2 cursor-pointer"
                                                         onClick={() => editData(dt.id)}>
                                                         Edit
                                                     </button>
 
-                                                    <button className="px-3 pb-2 cursor-pointer"
+                                                    <button key={"delete_" + (dt.id)} className="px-3 pb-2 cursor-pointer"
                                                         onClick={() => callModal(dt, 'ticket_deleteModal')}>
                                                         Delete
                                                     </button>

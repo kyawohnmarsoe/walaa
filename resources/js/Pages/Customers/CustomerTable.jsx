@@ -9,6 +9,7 @@ import Dropdown from '@/Components/Dropdown';
 import RefillModal from "./Partials/RefillModal";
 import ChangeModal from "./Partials/ChangeModal";
 import NotifyModal from "./Partials/NotifyModal";
+import WhatsappNotifyModal from "./Partials/WhatsappNotifyModal";
 
 export default function CustomerTable({ customers, accounts, sub_accounts, sys_users, user_groups, apitoken, deposit_password, auth }) {
     const [loading, setLoading] = useState(false);
@@ -18,10 +19,14 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
         change: false,
         extend: false,
         notify: false,
+        whatsappnotify: false,
     })
 
     const [user, setUser] = useState([])
 
+    function locClick(lat, long) {
+        window.open(`https://maps.google.com/?q=${lat},${long}`, '_blank');
+    }
     function editLocalCusClick(index) {
         router.get(`/customers/${index}`);
     }
@@ -30,12 +35,7 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
         router.get(`/tickets/create/${cus_id}`);
     }
 
-    // function notifyCusClick(index) {
-    //     router.get(`/customers/notify/${index}`);
-    // }
-
     function disableCustomer(e) {
-        // document.getElementById('deleteModal').close()
         e.preventDefault()
         let customerUserIndex = document.getElementById('customer_user_index').value
         router.delete(`/customers/${customerUserIndex}`);
@@ -69,6 +69,12 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
         setUser(cus)
     }
 
+    const callWhatsappNotifyModal = (cus) => {
+        setModals({ ...modals, whatsappnotify: true })
+        setUser(cus)
+    }
+
+
     const instance = axios.create({
         baseURL: 'https://rapi.earthlink.iq/api/reseller',
         headers: { 'Authorization': `Bearer ${apitoken}` }
@@ -100,14 +106,8 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
         router.get(`/invoices/user/${customer_user_index} `);
     }
 
-    function clickWhatsapp(cus) {
-        let customer_user_index = cus.customer_user_index
-        // console.log(customer_user_index)
-        router.get(`/send_whatsapp/${customer_user_index}`);
-    }
-
     useEffect(() => {
-        // console.log(sub_accounts); 
+
     }, [])
 
     return (
@@ -130,13 +130,16 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
             </Modal>
 
             <RefillModal modals={modals} setModals={setModals}
-                accountTypes={ accounts } sub_accounts={ sub_accounts } apitoken={apitoken} user={user}
+                accountTypes={accounts} sub_accounts={sub_accounts} apitoken={apitoken} user={user}
                 deposit_password={deposit_password} auth={auth}
             />
             <ChangeModal modals={modals} setModals={setModals}
                 accountTypes={accounts} apitoken={apitoken} user={user}
             />
+
             <NotifyModal modals={modals} setModals={setModals} user={user} />
+
+            <WhatsappNotifyModal modals={modals} setModals={setModals} user={user} />
 
             <table className="table">
                 <thead>
@@ -147,6 +150,7 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                         <th>Affiliate Name</th>
                         <th>Account Info</th>
                         <th>Expiration Date	</th>
+                        <th>Location</th>
                         {/* <th>Active/Disable</th> */}
                         <th>Actions</th>
                     </tr>
@@ -229,10 +233,21 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                 <td>
                                     {cus.manual_expiration_date}
                                 </td>
+                                <td>
+                                    {
+                                        cus.latitude &&
+                                        <div key={"loc_" + (cus.id)} className="text-sky-700">
+                                            <Link className="items-center underline" onClick={() => locClick(cus.latitude, cus.longitude)} >
+                                                View Location
+                                            </Link>
+                                        </div>
+                                    }
+
+                                </td>
                                 {/* <td className={cus.active_status == 1 ? 'text-emerald-500' : 'text-red-500'}>
                                     {cus.active_status == 1 ? 'Active' : 'Disable'}
                                 </td> */}
-                                <td>
+                                < td >
                                     <div className="sm:flex sm:items-center">
                                         <div className="relative">
                                             <Dropdown >
@@ -274,6 +289,7 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                                                 onClick={extendHandler}>Extend</div>
                                                         </>
                                                     }
+
                                                     <div className="px-3 pb-2 cursor-pointer"
                                                         onClick={() => editLocalCusClick(cus.customer_user_index)}>
                                                         Edit
@@ -282,31 +298,34 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                                         onClick={() => callModal(cus)}>
                                                         Disable
                                                     </div>
+
                                                     <div className="px-3 pb-2 cursor-pointer"
                                                         onClick={() => addTicketClick(cus.id)}>
                                                         Add Ticket
                                                     </div>
 
-                                                    {
+                                                    <div className="px-3 pb-2 cursor-pointer"
+                                                        onClick={() => callNotifyModal(cus)}>
+                                                        Notify SMS
+                                                    </div>
+
+                                                    <div className="px-3 pb-2 cursor-pointer"
+                                                        onClick={() => callWhatsappNotifyModal(cus)}>
+                                                        Whatsapp
+                                                    </div>
+
+                                                    {/* {
                                                         cus.account_status == "ExpiringSoon" ?
                                                             cus.sms_status === 0 ?
                                                                 <>
                                                                     <div className="px-3 pb-2 cursor-pointer"
                                                                         onClick={() => callNotifyModal(cus)}>
                                                                         Notify SMS
-                                                                        {/* <span className="relative flex h-3 w-3">
-                                                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                                                                            <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
-                                                                        </span> */}
                                                                     </div>
 
                                                                     <div className="px-3 pb-2 cursor-pointer"
                                                                         onClick={() => clickWhatsapp(cus)}>
                                                                         Whatsapp
-                                                                        {/* <span className="relative flex h-3 w-3">
-                                                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                                                                            <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
-                                                                        </span> */}
                                                                     </div>
                                                                 </>
                                                                 :
@@ -321,7 +340,7 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                                                     }
                                                                 </>
                                                             : ''
-                                                    }
+                                                    } */}
 
                                                 </Dropdown.Content>
                                             </Dropdown>

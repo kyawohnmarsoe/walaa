@@ -31,6 +31,8 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
         state: '',
         customer_user_notes: '',
         user_group_id: '',
+        latitude: '',
+        longitude: '',
     });
 
     const [optionsAffiliates, setOptionsAffiliates] = useState([])
@@ -411,6 +413,33 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
                             autoComplete="off"
                         />
                     </div>
+
+                    <div>
+                        <InputLabel htmlFor="latitude" value="Latitude" />
+                        <TextInput
+                            id="latitude"
+                            name="latitude"
+                            value={values.latitude}
+                            onChange={handleChange}
+                            type="text"
+                            className="mt-1 block w-full"
+                            autoComplete="off"
+                        />
+                    </div>
+
+                    <div>
+                        <InputLabel htmlFor="longitude" value="Longitude" />
+                        <TextInput
+                            id="longitude"
+                            name="longitude"
+                            value={values.longitude}
+                            onChange={handleChange}
+                            type="text"
+                            className="mt-1 block w-full"
+                            autoComplete="off"
+                        />
+                    </div>
+
 
                     <div>
                         <InputLabel htmlFor="city" value="City" />

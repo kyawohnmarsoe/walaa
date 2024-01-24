@@ -22,10 +22,18 @@ export default function AddForm({ className = '', customers, customer_id, issues
     const [optionsCustomers, setOptionsCustomers] = useState([])
     const [selectedOpt, setSelectedOpt] = useState('')
 
+    const [optionsCustomersPhone, setOptionsCustomersPhone] = useState([])
+    const [selectedOptPhone, setSelectedOptPhone] = useState('')
+
+    const [optionsCustomersName, setOptionsCustomersName] = useState([])
+    const [selectedOptName, setSelectedOptName] = useState('')
+
     const [optionsIssues, setOptionsIssues] = useState([])
 
     const [values, setValues] = useState({
         user_id: customer_id ? customer_id : '',
+        mobile_number: '',
+        display_name: '',
         title: '',
         topic: '',
         level_of_importance: '',
@@ -88,12 +96,40 @@ export default function AddForm({ className = '', customers, customer_id, issues
             });
         }
         setOptionsCustomers(optionsCustomersArr)
+
+        let optionsCustomersNameArr = [];
+        {
+            customers.map((e) => {
+                optionsCustomersNameArr.push(
+                    {
+                        "value": e.id,
+                        "label": e.display_name
+                    }
+                );
+            });
+        }
+        setOptionsCustomersName(optionsCustomersNameArr)
+
+        let optionsCustomersPhoneArr = [];
+        {
+            customers.map((e) => {
+                optionsCustomersPhoneArr.push(
+                    {
+                        "value": e.id,
+                        "label": e.mobile_number ?? e.mobile_number2
+                    }
+                );
+            });
+        }
+        setOptionsCustomersPhone(optionsCustomersPhoneArr)
     }
 
     const getSelectedCustomer = (customer_id) => {
         {
             let selectedRes = customers.filter(cus => customer_id == cus.id)
             setSelectedOpt(selectedRes[0]['customer_user_id'])
+            setSelectedOptName(selectedRes[0]['display_name'])
+            setSelectedOptPhone(selectedRes[0]['mobile_number'] + '-' + selectedRes[0]['mobile_number2'])
         }
     }
 
@@ -118,6 +154,28 @@ export default function AddForm({ className = '', customers, customer_id, issues
         customer_id ? getSelectedCustomer(customer_id) : ''
     }, [])
 
+    function customersNameHandleChange(e) {
+        const value = e.value
+        // console.log(value);
+        setValues(values => ({
+            ...values,
+            'display_name': value,
+            'user_id': value,
+        }))
+        getSelectedCustomer(value)
+    }
+
+    function customersPhoneHandleChange(e) {
+        const value = e.value
+        // console.log(value);
+        setValues(values => ({
+            ...values,
+            'mobile_number': value,
+            'user_id': value,
+        }))
+        getSelectedCustomer(value)
+    }
+
     function customersHandleChange(e) {
         const value = e.value
         // console.log(value);
@@ -132,6 +190,11 @@ export default function AddForm({ className = '', customers, customer_id, issues
         setValues(values => ({
             ...values,
             'issue_id': value,
+        }))
+
+        setValues(values => ({
+            ...values,
+            'description': e.label,
         }))
     }
     function topicHandleChange(e) {
@@ -203,6 +266,34 @@ export default function AddForm({ className = '', customers, customer_id, issues
                 <span className='font-bold text-emerald-700' id="deposit_msg"></span>
 
                 <div className='grid grid-cols-3 gap-4'>
+                    <div>
+                        <InputLabel htmlFor="display_name" value="Name " className='required' />
+                        <Select
+                            name="display_name"
+                            className="autoselect border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
+                            components={{ Input }}
+                            autoComplete="user_id"
+                            value={{ value: values.display_name, label: selectedOptName }}
+                            options={optionsCustomersName}
+                            onChange={customersNameHandleChange}
+                            noOptionsMessage={() => "No Data found..."}
+                        />
+                        <InputError className="mt-2" message={errors.display_name} />
+                    </div>
+                    <div>
+                        <InputLabel htmlFor="mobile_number" value="Phone " className='required' />
+                        <Select
+                            name="mobile_number"
+                            className="autoselect border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
+                            components={{ Input }}
+                            autoComplete="mobile_number"
+                            value={{ value: values.mobile_number, label: selectedOptPhone }}
+                            options={optionsCustomersPhone}
+                            onChange={customersPhoneHandleChange}
+                            noOptionsMessage={() => "No Data found..."}
+                        />
+                        <InputError className="mt-2" message={errors.mobile_number} />
+                    </div>
                     <div>
                         <InputLabel htmlFor="user_id" value="Users " className='required' />
                         <Select
@@ -291,7 +382,7 @@ export default function AddForm({ className = '', customers, customer_id, issues
                             id="description"
                             name="description"
                             placeholder="Description..."
-                            value={values.Description}
+                            value={values.description}
                             onChange={handleChange}
                             className="mt-1 block w-full"
                             minRows={5}
