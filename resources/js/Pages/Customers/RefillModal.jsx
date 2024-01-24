@@ -164,7 +164,7 @@ export default function RefillModal({ auth, modals, setModals, user, apitoken, a
                             required
                             onChange={(e) => setData('AccountId', e.target.value)}
                         >
-                            <option value='00'>Select Account Type</option>
+                            <option value='00'>Select Account Type </option>
                             {
                                 accountTypes?.map((a, index) => !!a && <option value={a.account_index} key={index}>
                                     {a.account_name}

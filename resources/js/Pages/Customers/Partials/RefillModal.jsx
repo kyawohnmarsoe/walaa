@@ -7,7 +7,7 @@ import SecondaryButton from '@/Components/SecondaryButton';
 import { Link, useForm, usePage, router } from '@inertiajs/react';
 import InputError from '@/Components/InputError';
 
-export default function RefillModal({ auth, modals, setModals, user, apitoken, accountTypes, deposit_password }) {
+export default function RefillModal ({ auth, modals, setModals, user, apitoken, accountTypes,sub_accounts,deposit_password }) {
     let { flash } = usePage().props
 
     const { data, setData, post, errors } = useForm({
@@ -110,6 +110,7 @@ export default function RefillModal({ auth, modals, setModals, user, apitoken, a
                 </div>
 
                 {
+                    !!+user?.can_change_account &&
                     <div className="mt-6">
                         <InputLabel htmlFor="AccountId" value="Account Type:" />
                         <select
@@ -120,9 +121,9 @@ export default function RefillModal({ auth, modals, setModals, user, apitoken, a
                             required
                             onChange={(e) => setData('AccountId', e.target.value)}
                         >
-                            <option value='00'>Select Account Type</option>
+                            <option value='00'>Select Account Type </option>
                             {
-                                accountTypes?.map((a, index) => !!a && <option value={a.account_index} key={index}>
+                                sub_accounts?.map((a, index) => !!a && <option value={a.account_index} key={index}>
                                     {a.account_name}
                                 </option>)
                             }

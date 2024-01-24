@@ -5,8 +5,9 @@ import Alert from '@/Components/DaisyUI/Alert';
 import ServicePhones from './ServicePhones';
 import React, { useState, useEffect } from 'react';
 import Board from './Board'
+import TicketsList from './TicketsList'
 
-export default function Dashboard({ auth, apitoken,board }) {
+export default function Dashboard ({ auth, apitoken, board, tickets }) {
 
     return (
         <AuthenticatedLayout
@@ -30,7 +31,11 @@ export default function Dashboard({ auth, apitoken,board }) {
                                     : <Alert msg='Session Expired' />
                             }
 
+                           
+                            <TicketsList tickets={ tickets } />
+
                             <Board board={board}/>
+                           
                             
                             {/* <ServicePhones apitoken={apitoken} /> */}
 

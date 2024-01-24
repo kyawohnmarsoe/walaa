@@ -130,7 +130,7 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
             </Modal>
 
             <RefillModal modals={modals} setModals={setModals}
-                accountTypes={accounts} apitoken={apitoken} user={user}
+                accountTypes={ accounts } sub_accounts={ sub_accounts } apitoken={apitoken} user={user}
                 deposit_password={deposit_password} auth={auth}
             />
             <ChangeModal modals={modals} setModals={setModals}

@@ -7,18 +7,21 @@ use Illuminate\Support\Facades\Http;
 use Inertia\Inertia;
 use App\Models\Board;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Ticket;
 
 
 class DashboardController extends Controller
 {
     public function dashboard()
     {
-        $token = $this->getSavedToken();         
+        $token = $this->getSavedToken();  
+        $tickets=Ticket::where('ticket_status','1')->get();
         // dd(Board::all());
         $board=Board::all();
         return Inertia::render('Dashboard', [
             'apitoken' => $token,
-            'board'=>$board
+            'board'=>$board,
+            'tickets'=> $tickets
         ]);
     } // dashboard
 
