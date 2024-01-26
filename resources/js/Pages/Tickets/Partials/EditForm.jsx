@@ -242,6 +242,11 @@ export default function EditForm({ className = '', ticket, customers, updated_by
             'issue_id': value,
         }))
         getSelectedIssue(value)
+
+        setValues(values => ({
+            ...values,
+            'description': e.label,
+        }))
     }
 
     function topicHandleChange(e) {
@@ -370,6 +375,17 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                         <InputError className="mt-2" message={errors.user_id} />
                     </div>
 
+                    <TextInput
+                        id="updated_by_loggedin_user"
+                        name="updated_by_loggedin_user"
+                        value={values.updated_by_loggedin_user}
+                        type="hidden"
+                        className="mt-1 block w-full"
+                        autoComplete="off"
+                    />
+                </div>
+
+                <div className='grid grid-cols-2 gap-6'>
                     <div>
                         <InputLabel htmlFor="title" value="Ticket Title" />
                         <TextInput
@@ -380,7 +396,6 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                             className="mt-1 block w-full"
                         />
                     </div>
-
                     <div>
                         <InputLabel htmlFor="issue_id" value="Issue Type" className='required' />
                         <Select
@@ -395,7 +410,24 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                         />
                         <InputError className="mt-2" message={errors.issue_id} />
                     </div>
+                </div>
 
+                <div className='grid gap-4'>
+                    <div>
+                        <InputLabel htmlFor="description" value="Description" />
+                        <Textarea
+                            id="description"
+                            name="description"
+                            placeholder="Description..."
+                            value={values.description}
+                            onChange={handleChange}
+                            className="mt-1 block w-full"
+                            minRows={5}
+                        />
+                    </div>
+                </div>
+
+                <div className='grid grid-cols-4 gap-4'>
                     <div>
                         <InputLabel htmlFor="topic" value="Topic" />
                         <SelectOption
@@ -408,7 +440,6 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                             value={values.topic}
                         />
                     </div>
-
                     <div>
                         <InputLabel htmlFor="level_of_importance" value="Level Of Importance" className='required' />
                         <SelectOption
@@ -422,7 +453,6 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                         />
                         <InputError className="mt-2" message={errors.level_of_importance} />
                     </div>
-
                     <div>
                         <InputLabel htmlFor="ticket_status" value="Status" />
                         <SelectOption
@@ -435,10 +465,8 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                             value={values.ticket_status}
                         />
                     </div>
-
                     <div>
                         <InputLabel htmlFor="attach_file" value="File Attachment" />
-
                         <div className='flex border-none'>
                             <div>
                                 <TextInput
@@ -459,46 +487,18 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                                     urlAttachFile
                             }
                         </p>
-
                         <InputError className="mt-2" message={errors.attach_file} />
                     </div>
-
-                    <div>
-                        <InputLabel htmlFor="description" value="Description" />
-                        <Textarea
-                            id="description"
-                            name="description"
-                            placeholder="Description..."
-                            value={values.description}
-                            onChange={handleChange}
-                            className="mt-1 block w-full"
-                            minRows={5}
-                        />
-                    </div>
-
-                    <TextInput
-                        id="updated_by_loggedin_user"
-                        name="updated_by_loggedin_user"
-                        value={values.updated_by_loggedin_user}
-                        type="hidden"
-                        className="mt-1 block w-full"
-                        autoComplete="off"
-                    />
                 </div>
 
                 {
-                    remarks != '' && <span className="text-gray-700 mt-2">
-                        Remarks :
-                    </span>
+                    remarks != '' && <h6 className="text-gray-700 mt-2">Remarks : </h6>
                 }
 
                 {
                     remarks && remarks.map(rm => (
                         <>
                             <div key={"rmdiv_" + (rm.id)}>
-                                {/* <span className="text-gray-700">
-                                    Remarks :
-                                </span> */}
                                 <div className="max-w-xl rounded overflow-hidden shadow-lg px-3 pt-4 mb-4">
                                     <div className="grid grid-cols-3 gap-4">
                                         <div className="col-span-2">

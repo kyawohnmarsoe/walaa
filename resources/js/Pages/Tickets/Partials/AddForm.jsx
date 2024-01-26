@@ -309,6 +309,9 @@ export default function AddForm({ className = '', customers, customer_id, issues
                         <InputError className="mt-2" message={errors.user_id} />
                     </div>
 
+                </div>
+
+                <div className='grid grid-cols-2 gap-4'>
                     <div>
                         <InputLabel htmlFor="title" value="Ticket Title" />
                         <TextInput
@@ -319,7 +322,6 @@ export default function AddForm({ className = '', customers, customer_id, issues
                             className="mt-1 block w-full"
                         />
                     </div>
-
                     <div>
                         <InputLabel htmlFor="issue_id" value="Issue Type" />
                         <Select
@@ -332,7 +334,24 @@ export default function AddForm({ className = '', customers, customer_id, issues
                             noOptionsMessage={() => "No Data found..."}
                         />
                     </div>
+                </div>
 
+                <div className='grid gap-4'>
+                    <div>
+                        <InputLabel htmlFor="description" value="Description" />
+                        <Textarea
+                            id="description"
+                            name="description"
+                            placeholder="Description..."
+                            value={values.description}
+                            onChange={handleChange}
+                            className="mt-1 block w-full"
+                            minRows={5}
+                        />
+                    </div>
+                </div>
+
+                <div className='grid grid-cols-3 gap-4'>
                     <div>
                         <InputLabel htmlFor="topic" value="Topic" className='required' />
                         <SelectOption
@@ -375,20 +394,8 @@ export default function AddForm({ className = '', customers, customer_id, issues
                         </div>
                         <InputError className="mt-2" message={errors.attach_file} />
                     </div>
-
-                    <div>
-                        <InputLabel htmlFor="description" value="Description" />
-                        <Textarea
-                            id="description"
-                            name="description"
-                            placeholder="Description..."
-                            value={values.description}
-                            onChange={handleChange}
-                            className="mt-1 block w-full"
-                            minRows={5}
-                        />
-                    </div>
                 </div>
+
 
                 <div className="flex items-center gap-4">
                     <PrimaryButton disabled={processing} type="submit">Add</PrimaryButton>

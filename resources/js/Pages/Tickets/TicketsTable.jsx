@@ -8,6 +8,7 @@ import InputLabel from '@/Components/InputLabel';
 import TextInput from "@/Components/TextInput";
 import Textarea from '@/Components/Textarea';
 import Dropdown from '@/Components/Dropdown';
+import Checkbox from '@/Components/Checkbox';
 import { format, formatDistance } from 'date-fns';
 
 export default function TicketTable({ tickets, users, user_groups, remarks, issues }) {
@@ -23,6 +24,9 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
         ticket_status: '',
         attachfile_name: '',
     });
+
+    const [title, setTitle] = useState('View Detail')
+    const [checked, setChecked] = useState(false);
 
     useEffect(() => {
         // console.log(ticketSource);
@@ -53,6 +57,18 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
         }))
     }
 
+    function handleClick(e) {
+        setChecked(!checked);
+        // const checked = e.target.checked;
+        const value = e.target.value;
+        setValues(values => ({
+            ...values,
+            ticket_status: e.target.checked,
+        }))
+        console.log(e.target.checked)
+
+    };
+
     const callModal = (ticket, modal_id, attachfile_name) => {
         setValues(values => ({
             ...values,
@@ -80,8 +96,25 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
 
         if (modal_id == 'ticket_viewModal') {
             // console.log('Call Modal - ', ticket.id);
+            setTitle(ticket.ticket_number)
+
+            { ticket.ticket_status == 1 ? setChecked(true) : setChecked(false) }
+
             document.getElementsByClassName('ticket_status')[0].innerHTML = ` ${ticket.ticket_status == 0 ? 'Opened' : '<span class="text-bold text-green-500">Closed</span>'}`
-            document.getElementsByClassName('user_id')[0].innerHTML = ` ${ticket.customer_user_id}`
+            // document.getElementsByClassName('user_id')[0].innerHTML = ` ${ticket.customer_user_id}`
+
+            document.getElementsByClassName('topic')[0].innerHTML = ` ${topicData[0][ticket.topic]}`
+            document.getElementsByClassName('level_of_important')[0].innerHTML = ` ${levelData[0][ticket.level_of_importance]}`
+            document.getElementsByClassName('description')[0].innerHTML = `${ticket.description != null ? ticket.description : ' - '}`
+            document.getElementsByClassName('title')[0].innerHTML = ` ${ticket.title != null ? ticket.title : ' - '}`
+            {
+                ticket.updated_by_loggedin_user != 0 &&
+                    users.filter(user => user.id == ticket.updated_by_loggedin_user).map(filteredUser => (
+                        document.getElementsByClassName('updated_by')[0].innerHTML = filteredUser.name
+                    ))
+            }
+            document.getElementsByClassName('updated_at')[0].innerHTML = `at  ${format(new Date(ticket.updated_at), 'MMMM, dd yyyy, h:mm:ss a')}`
+            document.getElementById('ticket_status').value = ticket_status
 
             {
                 remarks.filter(rm => rm.ticket_id == ticket.id).map(filteredRM => (
@@ -179,26 +212,66 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                 </form>
             </Modal>
 
-            <Modal id="ticket_viewModal" title="View Detail" closeModal={onCloseModal} className=" w-full max-w-2xl max-h-full">
-                <form onSubmit={addRemark} className="space-y-2.5 ">
-                    <div className="pt-4">
-                        <span className="font-bold text-gray-700">
-                            Ticket Number :
-                        </span>
-                        <span className="text-gray-700 ticket_number"></span>
+            <Modal id="ticket_viewModal" title={title} closeModal={onCloseModal} className=" w-full max-w-2xl max-h-full">
+                <form onSubmit={addRemark} className="space-y-5 ">
+                    <div className='grid grid-cols-3 gap-4 mt-2'>
+                        <div>
+                            <span className="font-bold text-gray-700">
+                                Topic :
+                            </span>
+                            <span className="text-gray-700 topic"></span>
+                        </div>
+                        <div>
+                            <span className="font-bold text-gray-700">
+                                Level of important :
+                            </span>
+                            <span className="text-gray-700 level_of_important"></span>
+                        </div>
+                        <div>
+                            <span className="font-bold text-gray-700">
+                                Status :
+                            </span>
+                            <span className="text-gray-700 ticket_status"></span>
+                        </div>
+
+                        {/* <div>
+                            <span className="font-bold text-gray-700">
+                                Ticket Number :
+                            </span>
+                            <span className="text-gray-700 ticket_number"></span>
+                        </div>
+                        <div>
+                            <span className="font-bold text-gray-700">
+                                User ID :
+                            </span>
+                            <span className="text-gray-700 user_id"></span>
+                        </div>
+                        <div>
+                            <span className="font-bold text-gray-700">
+                                Status :
+                            </span>
+                            <span className="text-gray-700 ticket_status"></span>
+                        </div> */}
                     </div>
+
+                    <div className='mt-2'>
+                        <span className="font-bold text-gray-700 mt-2">
+                            Title :
+                        </span>
+                        <span className="title"></span>
+                    </div>
+
                     <div>
-                        <span className="font-bold text-gray-700">
-                            Status :
+                        <span className="font-bold text-gray-700 mt-2">
+                            Description :
                         </span>
-                        <span className="text-gray-700 ticket_status"></span>
+                        <span className="description"></span>
                     </div>
-                    <div>
-                        <span className="font-bold text-gray-700">
-                            User ID :
-                        </span>
-                        <span className="text-gray-700 user_id"></span>
+                    <div className="mt-2">
+                        By: <small className="updated_by"></small>
+                        <small className="updated_at ml-2"></small>
                     </div>
+
                     <div>
                         <span className="font-bold text-gray-700">
                             Remarks :
@@ -225,6 +298,23 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                         type="hidden"
                         value={values.ticket_id}
                     />
+                    <div className="mt-6 flex justify-start">
+                        <div className='grid grid-cols-3 gap-4'>
+                            <label className="flex items-center mt-1" key="chk1">
+                                <Checkbox
+                                    name="ticket_status"
+                                    id="ticket_status"
+                                    value={values.ticket_status}
+                                    onChange={handleClick}
+                                    checked={checked}
+                                />
+                                {/* <input type="checkbox" id="ticket_status" name="ticket_status" checked={checked} onChange={handleClick} /> */}
+                                <span className="ml-2 text-sm text-gray-600">
+                                    Close the ticket
+                                </span>
+                            </label>
+                        </div>
+                    </div>
                     <div className="mt-6 flex justify-end">
                         <PrimaryButton disabled="" type="submit" >Add Remark</PrimaryButton>
                     </div>
@@ -399,7 +489,7 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                                 </td> */}
                                 <td>{formatDistance(new Date(), new Date(dt.created_at), { addSuffix: false })}</td>
                                 <td>
-                                    {format(new Date(dt.updated_at), 'dd-mm-yyyy')}
+                                    {format(new Date(dt.updated_at), 'd-M-yyyy')}
 
                                     {
                                         dt.updated_by_loggedin_user != 0 &&

@@ -338,13 +338,23 @@ class TicketController extends Controller
     public function store_remark(Request $request)
     {
         $input = $request->all();
-        // return response(compact('input')); 
+        // return response(compact('input'));
         // $ticket = Ticket_remark::create($data);
-        Ticket_remark::insert([
-            'ticket_id' => $request->ticket_id,
-            'remarks'   => $request->remarks,
-            'remark_by' =>  Auth::id()
-        ]);
+        if ($request->ticket_status) {
+            $ticket = Ticket::findOrFail($request->ticket_id);
+            $ticket->update([
+                'ticket_status' => $request->ticket_status,
+            ]);
+        }
+
+        if ($request->remarks) {
+            Ticket_remark::insert([
+                'ticket_id' => $request->ticket_id,
+                'remarks'   => $request->remarks,
+                'remark_by' =>  Auth::id()
+            ]);
+        }
+
         return redirect()->route('tickets')->with('status', 201);
     } // store_remark
 
