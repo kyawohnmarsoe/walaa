@@ -23,6 +23,7 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
         remarks: '',
         ticket_status: '',
         attachfile_name: '',
+        rm_attach_file: null
     });
 
     const [title, setTitle] = useState('View Detail')
@@ -54,6 +55,13 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
         setValues(values => ({
             ...values,
             [key]: value,
+        }))
+    }
+
+    function attachFileHandleChange(e) {
+        setValues(values => ({
+            ...values,
+            'rm_attach_file': e.target.files[0],
         }))
     }
 
@@ -132,7 +140,9 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                     ))}
                         </p><p class="text-xs text-gray-600">
                         ${format(new Date(filteredRM.created_at), 'MMMM, dd yyyy')}                            
-                        </p></div></div></div>`
+                        </p></div></div><div class="text-right mb-4">
+                        ${filteredRM.rm_attach_file ? `<a href='/uploads/others/${filteredRM.rm_attach_file}' key='file_${filteredRM.id}' target="_blank" class="text-sm text-blue-500 underline">${filteredRM.rm_attach_file}</a>` : ''}                           
+                    </div></div>`
                 ))
             }
         } else if (modal_id == 'ticket_fileModal') {
@@ -290,6 +300,20 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                             className="mt-1 block w-full"
                             minRows={5}
                         />
+                    </div>
+                    <div className="pt-2">
+                        <InputLabel htmlFor="rm_attach_file" value="File Attachment" />
+                        <div className='flex border-none'>
+                            <div>
+                                <TextInput
+                                    id="rm_attach_file"
+                                    name="rm_attach_file"
+                                    onChange={attachFileHandleChange}
+                                    type="file"
+                                    className="mt-1 block w-full border-none rounded-none"
+                                />
+                            </div>
+                        </div>
                     </div>
                     <TextInput
                         className="ticket_id"

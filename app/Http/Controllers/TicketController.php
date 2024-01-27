@@ -347,10 +347,17 @@ class TicketController extends Controller
             ]);
         }
 
-        if ($request->remarks) {
+        $fileName = '';
+        if ($request->hasFile('rm_attach_file')) {
+            $fileName = time() . '_' . $request->rm_attach_file->getClientOriginalName();
+            $request->rm_attach_file->move(public_path('uploads/others'), $fileName);
+        }
+
+        if ($request->remarks || $request->rm_attach_file) {
             Ticket_remark::insert([
                 'ticket_id' => $request->ticket_id,
                 'remarks'   => $request->remarks,
+                'rm_attach_file' => $fileName,
                 'remark_by' =>  Auth::id()
             ]);
         }
