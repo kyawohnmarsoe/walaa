@@ -88,6 +88,7 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
 
         document.getElementById('show_remarks').innerHTML = ''
         document.getElementById('file_link').innerHTML = ''
+        document.getElementsByClassName('attach_file')[0].innerHTML = ''
 
         var ticket_number = document.getElementsByClassName('ticket_number')
         for (var i = 0; i < ticket_number.length; i++) {
@@ -114,14 +115,28 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
             document.getElementsByClassName('topic')[0].innerHTML = ` ${topicData[0][ticket.topic]}`
             document.getElementsByClassName('level_of_important')[0].innerHTML = ` ${levelData[0][ticket.level_of_importance]}`
             document.getElementsByClassName('description')[0].innerHTML = `${ticket.description != null ? ticket.description : ' - '}`
-            document.getElementsByClassName('title')[0].innerHTML = ` ${ticket.title != null ? ticket.title : ' - '}`
+
+            {
+                ticket.attach_file ?
+                    ticket.attach_file.includes(',') ?
+                        ticket.attach_file.split(",").map((file, index) => {
+                            document.getElementsByClassName('attach_file')[0].innerHTML += `<span class="mt-2"><a href='/uploads/others/${file}' key='file_${ticket.id}${index}' target="_blank" class="text-sm text-blue-500 underline">${file}</a></span><br>`
+                        })
+                        :
+                        document.getElementsByClassName('attach_file')[0].innerHTML = `<span><a href='/uploads/others/${ticket.attach_file}' key='file_${ticket.id}' target="_blank" class="text-sm text-blue-500 underline">${ticket.attach_file}</a></span>`
+                    : ''
+            }
+
+
+            document.getElementsByClassName('title')[0].innerHTML = ` ${ticket.title != null ? ticket.title : ' - '} `
+
             {
                 ticket.updated_by_loggedin_user != 0 &&
                     users.filter(user => user.id == ticket.updated_by_loggedin_user).map(filteredUser => (
                         document.getElementsByClassName('updated_by')[0].innerHTML = filteredUser.name
                     ))
             }
-            document.getElementsByClassName('updated_at')[0].innerHTML = `at  ${format(new Date(ticket.updated_at), 'MMMM, dd yyyy, h:mm:ss a')}`
+            document.getElementsByClassName('updated_at')[0].innerHTML = `at  ${format(new Date(ticket.updated_at), 'MMMM, dd yyyy, h:mm:ss a')} `
             document.getElementById('ticket_status').value = ticket_status
 
             {
@@ -140,14 +155,14 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                     ))}
                         </p><p class="text-xs text-gray-600">
                         ${format(new Date(filteredRM.created_at), 'MMMM, dd yyyy')}                            
-                        </p></div></div><div class="text-right mb-4">
-                        ${filteredRM.rm_attach_file ? `<a href='/uploads/others/${filteredRM.rm_attach_file}' key='file_${filteredRM.id}' target="_blank" class="text-sm text-blue-500 underline">${filteredRM.rm_attach_file}</a>` : ''}                           
-                    </div></div>`
+                        </p></div></div > <div class="text-right mb-4">
+                    ${filteredRM.rm_attach_file ? `<a href='/uploads/others/${filteredRM.rm_attach_file}' key='file_${filteredRM.id}' target="_blank" class="text-sm text-blue-500 underline">${filteredRM.rm_attach_file}</a>` : ''}
+                </div></div > `
                 ))
             }
         } else if (modal_id == 'ticket_fileModal') {
-            document.getElementById('file_link').innerHTML += ` ${attachfile_name}`
-            document.getElementById('file_link').href = `/uploads/others/${attachfile_name}`
+            document.getElementById('file_link').innerHTML += ` ${attachfile_name} `
+            document.getElementById('file_link').href = `/ uploads / others / ${attachfile_name} `
         }
 
     }
@@ -157,9 +172,9 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
         {
             values.ticket_status == 0
                 ? ''
-                : document.getElementById(`tr_${values.ticket_id}`).classList.add('bg-teal-100')
+                : document.getElementById(`tr_${values.ticket_id} `).classList.add('bg-teal-100')
         }
-        document.getElementById(`tr_${values.ticket_id}`).classList.remove('bg-gray-300');
+        document.getElementById(`tr_${values.ticket_id} `).classList.remove('bg-gray-300');
     };
 
     function deleteData(e) {
@@ -167,7 +182,7 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
         e.preventDefault()
         let ticketId = document.getElementById('ticket_id').value
         // console.log(ticketId)
-        router.delete(`/tickets/${ticketId} `);
+        router.delete(`/ tickets / ${ticketId} `);
         onCloseModal();
     }
 
@@ -176,7 +191,7 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
         e.preventDefault()
         let ticketId = document.getElementById('ticket_id').value;
         console.log(ticketId)
-        router.post(`/tickets/attach_file/${ticketId}`, values);
+        router.post(`/ tickets / attach_file / ${ticketId} `, values);
     }
 
     function clickFileLink(e) {
@@ -189,17 +204,17 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
         document.getElementById('ticket_viewModal').close()
         onCloseModal()
         e.preventDefault()
-        router.post(`/tickets/store/remark`, values);
+        router.post(`/ tickets / store / remark`, values);
     }
 
     function editData(id) {
-        router.get(`/tickets/${id} `);
+        router.get(`/ tickets / ${id} `);
     }
     function openData(id) {
-        router.get(`/tickets/open/${id} `);
+        router.get(`/ tickets / open / ${id} `);
     }
     function closeData(id) {
-        router.get(`/tickets/close/${id} `);
+        router.get(`/ tickets / close / ${id} `);
     }
 
     return (
@@ -276,11 +291,15 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                             Description :
                         </span>
                         <span className="description"></span>
+                        <div className="attach_file text-right"></div>
+
+                        <div className="mt-2">
+                            By: <small className="updated_by"></small>
+                            <small className="updated_at ml-2"></small>
+                        </div>
+                        <hr className="mt-2"></hr>
                     </div>
-                    <div className="mt-2">
-                        By: <small className="updated_by"></small>
-                        <small className="updated_at ml-2"></small>
-                    </div>
+
 
                     <div>
                         <span className="font-bold text-gray-700">
@@ -408,8 +427,8 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                                                             : dt.level_of_importance == 'lv_1' ?
                                                                 'decoration-gray-300 text-gray-600 focus:border-gray-700'
                                                                 : 'decoration-sky-300 text-sky-600 focus:border-sky-700'
-                                                }  
-                                        text-sm font-medium  cursor-pointer`}
+                                                }
+                                                text-sm font-medium  cursor-pointer`}
                                             onClick={() => callModal(dt, 'ticket_viewModal', '')}
                                             key={dt.id}
                                         >
@@ -425,7 +444,7 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                                     </span>
 
 
-                                    {/* <small key={"status_" + (dt.id)} className={`block mt-2 ${dt.ticket_status == 0 ? '' : 'font-bold text-teal-150'}`}>
+                                    {/* <small key={"status_" + (dt.id)} className={`block mt - 2 ${ dt.ticket_status == 0 ? '' : 'font-bold text-teal-150' } `}>
                                         Status : {dt.ticket_status == 0 ? 'Opened' : 'Closed'}
                                     </small> */}
 
@@ -449,7 +468,6 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                                             Name : {dt.display_name}
                                         </small>
                                     }
-
 
                                     {/* {dt.user_group_id &&
                                         user_groups.filter(user_gp => user_gp.id == dt.user_group_id)
@@ -505,7 +523,7 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                                                 >
                                                     {
                                                         dt.attach_file.length > 10 ?
-                                                            `${dt.attach_file.substring(0, 10)}...` : dt.attach_file
+                                                            `${ dt.attach_file.substring(0, 10) }...` : dt.attach_file
                                                     }
                                                 </a>
                                             : ''
@@ -556,11 +574,11 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                                                 </Dropdown.Trigger>
 
                                                 <Dropdown.Content align={'left'} width={'30'}>
-                                                    <button key={"open_" + (dt.id)} className={`px-3 pb-2 cursor-pointer ${dt.ticket_status == 0 ? 'hidden' : ''}`}
+                                                    <button key={"open_" + (dt.id)} className={`px-3 pb-2 cursor-pointer ${dt.ticket_status == 0 ? 'hidden' : ''} `}
                                                         onClick={() => openData(dt.id)}>
                                                         Open
                                                     </button>
-                                                    <button key={"close_" + (dt.id)} className={`px-3 pb-2 cursor-pointer ${dt.ticket_status == 1 ? 'hidden' : ''}`}
+                                                    <button key={"close_" + (dt.id)} className={`px-3 pb-2 cursor-pointer ${dt.ticket_status == 1 ? 'hidden' : ''} `}
                                                         onClick={() => closeData(dt.id)}>
                                                         Close
                                                     </button>

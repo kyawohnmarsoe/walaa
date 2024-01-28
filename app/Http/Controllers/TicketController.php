@@ -25,9 +25,10 @@ class TicketController extends Controller
         $user_has_groups_idArr = $this->getLoggedInUserGroup();
         $count_user_groups = User_group::count();
 
-        if ($request->hasAny(['user_id', 'display_name', 'topic', 'ticket_status', 'level_of_importance', 'ticket_number'])) {
+        if ($request->hasAny(['user_id', 'display_name', 'topic', 'ticket_status', 'level_of_importance', 'ticket_number', 'search_value'])) {
             $data = $request->all();
             $tickets_query = Ticket::join('customers', 'customers.id', '=', 'tickets.user_id')
+                ->leftjoin('ticket_remarks', 'ticket_remarks.ticket_id', '=', 'tickets.id')
                 ->when(request('user_id') != '', function ($q) {
                     return $q->where('tickets.user_id', request('user_id'));
                 })->when(request('display_name') != '', function ($q) {
@@ -40,6 +41,10 @@ class TicketController extends Controller
                     return $q->where('tickets.level_of_importance', request('level_of_importance'));
                 })->when(request('ticket_number') != '', function ($q) {
                     return $q->where('tickets.ticket_number', request('ticket_number'));
+                })->when(request('search_value') != '', function ($q) {
+                    return $q->where('tickets.ticket_number', 'LIKE', request('search_value') . '%')
+                        ->orWhere('tickets.title', 'LIKE', request('search_value') . '%')
+                        ->orWhere('ticket_remarks.remarks', 'LIKE', request('search_value') . '%');
                 });
             // ->whereNull('customers.user_group_id')
 
@@ -51,12 +56,12 @@ class TicketController extends Controller
         }
 
         if (count($user_has_groups_idArr) == 0 || $count_user_groups == count($user_has_groups_idArr)) {
-            $tickets = $tickets_query->orderBy('tickets.id', 'DESC')
+            $tickets = $tickets_query->orderBy('tickets.id', 'DESC')->groupBy('tickets.id')
                 ->get(['tickets.*', 'customers.customer_user_id', 'customers.display_name', 'customers.user_group_id']);
             $filter_customers = Customer::all();
         } else {
             $tickets = $tickets_query->orWhereIn('customers.user_group_id', $user_has_groups_idArr)
-                ->orderBy('tickets.id', 'DESC')
+                ->orderBy('tickets.id', 'DESC')->groupBy('tickets.id')
                 ->get(['tickets.*', 'customers.customer_user_id', 'customers.display_name', 'customers.user_group_id']);
             $filter_customers = Customer::whereIn('customers.user_group_id', $user_has_groups_idArr)
                 ->get();

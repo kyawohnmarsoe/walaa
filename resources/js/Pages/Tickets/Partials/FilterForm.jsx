@@ -23,7 +23,8 @@ export default function FilterForm({ className = '', customers, apitoken, errors
         topic: '',
         level_of_importance: '',
         ticket_number: '',
-        ticket_status: ''
+        ticket_status: '',
+        search_value: ''
     });
 
     const [optionsCustomers, setOptionsCustomers] = useState([])
@@ -165,7 +166,7 @@ export default function FilterForm({ className = '', customers, apitoken, errors
         }))
     }
     function statusHandleChange(e) {
-        const value = e.target.value
+        const value = parseInt(e.target.value)
         setValues(values => ({
             ...values,
             'ticket_status': value,
@@ -197,7 +198,7 @@ export default function FilterForm({ className = '', customers, apitoken, errors
                 <span className='font-bold text-emerald-700' id="deposit_msg"></span>
 
                 <div className='grid grid-cols-3 gap-4'>
-                    <div>
+                    {/* <div>
                         <InputLabel htmlFor="user_id" value="Users" />
                         <Select
                             name="user_id"
@@ -208,7 +209,7 @@ export default function FilterForm({ className = '', customers, apitoken, errors
                             onChange={customersHandleChange}
                             noOptionsMessage={() => "No Users found..."}
                         />
-                    </div>
+                    </div> */}
 
                     {/* <div>
                         <InputLabel htmlFor="display_name" value="Users Display Name" />
@@ -237,6 +238,20 @@ export default function FilterForm({ className = '', customers, apitoken, errors
                     </div> */}
 
                     <div>
+                        <InputLabel htmlFor="search_value" value="Search" />
+                        <TextInput
+                            id="search_value"
+                            name="search_value"
+                            value={values.search_value}
+                            onChange={handleChange}
+                            type="text"
+                            className="mt-1 block w-full"
+                            placeholder="By Ticket Number / Title / Remarks "
+                            autoComplete="off"
+                        />
+                    </div>
+
+                    <div>
                         <InputLabel htmlFor="topic" value="Topic" />
                         <SelectOption
                             id="topic"
@@ -260,7 +275,7 @@ export default function FilterForm({ className = '', customers, apitoken, errors
                         />
                     </div>
 
-                    <div>
+                    {/* <div>
                         <InputLabel htmlFor="level_of_importance" value="Level Of Importance" />
                         <SelectOption
                             id="level_of_importance"
@@ -270,9 +285,9 @@ export default function FilterForm({ className = '', customers, apitoken, errors
                             name="level_of_importance"
                             onChange={levelImpHandleChange}
                         />
-                    </div>
+                    </div> */}
 
-                    <div>
+                    {/* <div>
                         <InputLabel htmlFor="ticket_number" value="Ticket Number" />
                         <TextInput
                             id="ticket_number"
@@ -283,7 +298,7 @@ export default function FilterForm({ className = '', customers, apitoken, errors
                             className="mt-1 block w-full"
                             autoComplete="off"
                         />
-                    </div>
+                    </div> */}
                 </div>
 
                 <div className="flex items-center gap-4">
