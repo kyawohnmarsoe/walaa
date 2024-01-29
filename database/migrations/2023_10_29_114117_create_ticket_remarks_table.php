@@ -12,9 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('ticket_remarks', function (Blueprint $table) {
-            $table->id();            
+            $table->id();
             $table->integer('ticket_id');
             $table->string('remarks')->nullable();
+            $table->string('rm_attach_file')->nullable();
             $table->integer('remark_by');
             $table->timestamps();
         });

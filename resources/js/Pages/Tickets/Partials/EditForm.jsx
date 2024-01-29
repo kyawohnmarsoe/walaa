@@ -21,6 +21,8 @@ export default function EditForm({ className = '', ticket, customers, updated_by
 
     const [values, setValues] = useState({
         user_id: ticket.user_id,
+        mobile_number: '',
+        display_name: '',
         title: ticket.title,
         topic: ticket.topic,
         level_of_importance: ticket.level_of_importance,
@@ -35,6 +37,12 @@ export default function EditForm({ className = '', ticket, customers, updated_by
 
     const [optionsCustomers, setoptionsCustomers] = useState([])
     const [selectedOpt, setSelectedOpt] = useState('')
+
+    const [optionsCustomersPhone, setOptionsCustomersPhone] = useState([])
+    const [selectedOptPhone, setSelectedOptPhone] = useState('')
+
+    const [optionsCustomersName, setOptionsCustomersName] = useState([])
+    const [selectedOptName, setSelectedOptName] = useState('')
 
     const [optionsIssues, setoptionsIssues] = useState([])
     const [selectedOptIssue, setSelectedOptIssue] = useState('')
@@ -108,6 +116,32 @@ export default function EditForm({ className = '', ticket, customers, updated_by
             });
         }
         setoptionsCustomers(optionsCustomersArr)
+
+        let optionsCustomersNameArr = [];
+        {
+            customers.map((e) => {
+                optionsCustomersNameArr.push(
+                    {
+                        "value": e.id,
+                        "label": e.display_name
+                    }
+                );
+            });
+        }
+        setOptionsCustomersName(optionsCustomersNameArr)
+
+        let optionsCustomersPhoneArr = [];
+        {
+            customers.map((e) => {
+                optionsCustomersPhoneArr.push(
+                    {
+                        "value": e.id,
+                        "label": e.mobile_number ?? e.mobile_number2
+                    }
+                );
+            });
+        }
+        setOptionsCustomersPhone(optionsCustomersPhoneArr)
     }
 
     const getSelectedCustomer = (selected_id) => {
@@ -115,6 +149,8 @@ export default function EditForm({ className = '', ticket, customers, updated_by
             let selectedRes = customers.filter(cus => selected_id == cus.id)
             // console.log("selected user ", selectedRes[0]['customer_user_id'])
             setSelectedOpt(selectedRes[0]['customer_user_id'])
+            setSelectedOptName(selectedRes[0]['display_name'])
+            setSelectedOptPhone(selectedRes[0]['mobile_number'] + '-' + selectedRes[0]['mobile_number2'])
         }
     }
 
@@ -170,13 +206,32 @@ export default function EditForm({ className = '', ticket, customers, updated_by
 
     }, [])
 
+    function customersNameHandleChange(e) {
+        const value = e.value
+        setValues(values => ({
+            ...values,
+            'display_name': value,
+            'user_id': value,
+        }))
+        getSelectedCustomer(value)
+    }
+
+    function customersPhoneHandleChange(e) {
+        const value = e.value
+        setValues(values => ({
+            ...values,
+            'mobile_number': value,
+            'user_id': value,
+        }))
+        getSelectedCustomer(value)
+    }
+
     function customersHandleChange(e) {
         const value = e.value
         setValues(values => ({
             ...values,
             'user_id': value,
         }))
-        // console.log('onchange user value ', value)
         getSelectedCustomer(value)
     }
 
@@ -187,6 +242,11 @@ export default function EditForm({ className = '', ticket, customers, updated_by
             'issue_id': value,
         }))
         getSelectedIssue(value)
+
+        setValues(values => ({
+            ...values,
+            'description': e.label,
+        }))
     }
 
     function topicHandleChange(e) {
@@ -272,7 +332,34 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                 <span className='font-bold text-emerald-700' id="deposit_msg"></span>
 
                 <div className='grid grid-cols-3 gap-4'>
-
+                    <div>
+                        <InputLabel htmlFor="display_name" value="Name " className='required' />
+                        <Select
+                            name="display_name"
+                            className="autoselect border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
+                            components={{ Input }}
+                            autoComplete="user_id"
+                            value={{ value: values.display_name, label: selectedOptName }}
+                            options={optionsCustomersName}
+                            onChange={(e) => customersNameHandleChange(e)}
+                            noOptionsMessage={() => "No Data found..."}
+                        />
+                        <InputError className="mt-2" message={errors.display_name} />
+                    </div>
+                    <div>
+                        <InputLabel htmlFor="mobile_number" value="Phone " className='required' />
+                        <Select
+                            name="mobile_number"
+                            className="autoselect border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
+                            components={{ Input }}
+                            autoComplete="mobile_number"
+                            value={{ value: values.mobile_number, label: selectedOptPhone }}
+                            options={optionsCustomersPhone}
+                            onChange={(e) => customersPhoneHandleChange(e)}
+                            noOptionsMessage={() => "No Data found..."}
+                        />
+                        <InputError className="mt-2" message={errors.mobile_number} />
+                    </div>
                     <div>
                         <InputLabel htmlFor="user_id" value="Users" className='required' />
                         <Select
@@ -288,6 +375,17 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                         <InputError className="mt-2" message={errors.user_id} />
                     </div>
 
+                    <TextInput
+                        id="updated_by_loggedin_user"
+                        name="updated_by_loggedin_user"
+                        value={values.updated_by_loggedin_user}
+                        type="hidden"
+                        className="mt-1 block w-full"
+                        autoComplete="off"
+                    />
+                </div>
+
+                <div className='grid grid-cols-2 gap-6'>
                     <div>
                         <InputLabel htmlFor="title" value="Ticket Title" />
                         <TextInput
@@ -298,7 +396,6 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                             className="mt-1 block w-full"
                         />
                     </div>
-
                     <div>
                         <InputLabel htmlFor="issue_id" value="Issue Type" className='required' />
                         <Select
@@ -313,7 +410,24 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                         />
                         <InputError className="mt-2" message={errors.issue_id} />
                     </div>
+                </div>
 
+                <div className='grid gap-4'>
+                    <div>
+                        <InputLabel htmlFor="description" value="Description" />
+                        <Textarea
+                            id="description"
+                            name="description"
+                            placeholder="Description..."
+                            value={values.description}
+                            onChange={handleChange}
+                            className="mt-1 block w-full"
+                            minRows={5}
+                        />
+                    </div>
+                </div>
+
+                <div className='grid grid-cols-4 gap-4'>
                     <div>
                         <InputLabel htmlFor="topic" value="Topic" />
                         <SelectOption
@@ -326,7 +440,6 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                             value={values.topic}
                         />
                     </div>
-
                     <div>
                         <InputLabel htmlFor="level_of_importance" value="Level Of Importance" className='required' />
                         <SelectOption
@@ -340,7 +453,6 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                         />
                         <InputError className="mt-2" message={errors.level_of_importance} />
                     </div>
-
                     <div>
                         <InputLabel htmlFor="ticket_status" value="Status" />
                         <SelectOption
@@ -353,10 +465,8 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                             value={values.ticket_status}
                         />
                     </div>
-
                     <div>
                         <InputLabel htmlFor="attach_file" value="File Attachment" />
-
                         <div className='flex border-none'>
                             <div>
                                 <TextInput
@@ -377,46 +487,18 @@ export default function EditForm({ className = '', ticket, customers, updated_by
                                     urlAttachFile
                             }
                         </p>
-
                         <InputError className="mt-2" message={errors.attach_file} />
                     </div>
-
-                    <div>
-                        <InputLabel htmlFor="description" value="Description" />
-                        <Textarea
-                            id="description"
-                            name="description"
-                            placeholder="Description..."
-                            value={values.description}
-                            onChange={handleChange}
-                            className="mt-1 block w-full"
-                            minRows={5}
-                        />
-                    </div>
-
-                    <TextInput
-                        id="updated_by_loggedin_user"
-                        name="updated_by_loggedin_user"
-                        value={values.updated_by_loggedin_user}
-                        type="hidden"
-                        className="mt-1 block w-full"
-                        autoComplete="off"
-                    />
                 </div>
 
                 {
-                    remarks != '' && <span className="text-gray-700 mt-2">
-                        Remarks :
-                    </span>
+                    remarks != '' && <h6 className="text-gray-700 mt-2">Remarks : </h6>
                 }
 
                 {
                     remarks && remarks.map(rm => (
                         <>
                             <div key={"rmdiv_" + (rm.id)}>
-                                {/* <span className="text-gray-700">
-                                    Remarks :
-                                </span> */}
                                 <div className="max-w-xl rounded overflow-hidden shadow-lg px-3 pt-4 mb-4">
                                     <div className="grid grid-cols-3 gap-4">
                                         <div className="col-span-2">

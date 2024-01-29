@@ -25,9 +25,10 @@ class TicketController extends Controller
         $user_has_groups_idArr = $this->getLoggedInUserGroup();
         $count_user_groups = User_group::count();
 
-        if ($request->hasAny(['user_id', 'display_name', 'topic', 'ticket_status', 'level_of_importance', 'ticket_number'])) {
+        if ($request->hasAny(['user_id', 'display_name', 'topic', 'ticket_status', 'level_of_importance', 'ticket_number', 'search_value'])) {
             $data = $request->all();
             $tickets_query = Ticket::join('customers', 'customers.id', '=', 'tickets.user_id')
+                ->leftjoin('ticket_remarks', 'ticket_remarks.ticket_id', '=', 'tickets.id')
                 ->when(request('user_id') != '', function ($q) {
                     return $q->where('tickets.user_id', request('user_id'));
                 })->when(request('display_name') != '', function ($q) {
@@ -40,6 +41,10 @@ class TicketController extends Controller
                     return $q->where('tickets.level_of_importance', request('level_of_importance'));
                 })->when(request('ticket_number') != '', function ($q) {
                     return $q->where('tickets.ticket_number', request('ticket_number'));
+                })->when(request('search_value') != '', function ($q) {
+                    return $q->where('tickets.ticket_number', 'LIKE', request('search_value') . '%')
+                        ->orWhere('tickets.title', 'LIKE', request('search_value') . '%')
+                        ->orWhere('ticket_remarks.remarks', 'LIKE', request('search_value') . '%');
                 });
             // ->whereNull('customers.user_group_id')
 
@@ -51,12 +56,12 @@ class TicketController extends Controller
         }
 
         if (count($user_has_groups_idArr) == 0 || $count_user_groups == count($user_has_groups_idArr)) {
-            $tickets = $tickets_query->orderBy('tickets.id', 'DESC')
+            $tickets = $tickets_query->orderBy('tickets.id', 'DESC')->groupBy('tickets.id')
                 ->get(['tickets.*', 'customers.customer_user_id', 'customers.display_name', 'customers.user_group_id']);
             $filter_customers = Customer::all();
         } else {
             $tickets = $tickets_query->orWhereIn('customers.user_group_id', $user_has_groups_idArr)
-                ->orderBy('tickets.id', 'DESC')
+                ->orderBy('tickets.id', 'DESC')->groupBy('tickets.id')
                 ->get(['tickets.*', 'customers.customer_user_id', 'customers.display_name', 'customers.user_group_id']);
             $filter_customers = Customer::whereIn('customers.user_group_id', $user_has_groups_idArr)
                 ->get();
@@ -338,13 +343,30 @@ class TicketController extends Controller
     public function store_remark(Request $request)
     {
         $input = $request->all();
-        // return response(compact('input')); 
+        // return response(compact('input'));
         // $ticket = Ticket_remark::create($data);
-        Ticket_remark::insert([
-            'ticket_id' => $request->ticket_id,
-            'remarks'   => $request->remarks,
-            'remark_by' =>  Auth::id()
-        ]);
+        if ($request->ticket_status) {
+            $ticket = Ticket::findOrFail($request->ticket_id);
+            $ticket->update([
+                'ticket_status' => $request->ticket_status,
+            ]);
+        }
+
+        $fileName = '';
+        if ($request->hasFile('rm_attach_file')) {
+            $fileName = time() . '_' . $request->rm_attach_file->getClientOriginalName();
+            $request->rm_attach_file->move(public_path('uploads/others'), $fileName);
+        }
+
+        if ($request->remarks || $request->rm_attach_file) {
+            Ticket_remark::insert([
+                'ticket_id' => $request->ticket_id,
+                'remarks'   => $request->remarks,
+                'rm_attach_file' => $fileName,
+                'remark_by' =>  Auth::id()
+            ]);
+        }
+
         return redirect()->route('tickets')->with('status', 201);
     } // store_remark
 
@@ -367,5 +389,29 @@ class TicketController extends Controller
         Ticket_remark::findOrFail($id)->delete();
         return redirect()->route('tickets')->with('status', 204);
     } // destroy_remark   
+
+    public function open($id)
+    {
+        $ticket = Ticket::findOrFail($id);
+
+        $ticket->update([
+            'ticket_status' => 0, // 0 => open, 1 => close
+            'updated_by_loggedin_user' => Auth::id(),
+        ]);
+
+        return redirect()->back()->with('status', 200);
+    } // open
+
+    public function close($id)
+    {
+        $ticket = Ticket::findOrFail($id);
+
+        $ticket->update([
+            'ticket_status' => 1, // 0 => open, 1 => close
+            'updated_by_loggedin_user' => Auth::id(),
+        ]);
+
+        return redirect()->back()->with('status', 200);
+    } // close
 
 }

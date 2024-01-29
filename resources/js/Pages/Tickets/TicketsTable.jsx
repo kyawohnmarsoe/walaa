@@ -8,6 +8,7 @@ import InputLabel from '@/Components/InputLabel';
 import TextInput from "@/Components/TextInput";
 import Textarea from '@/Components/Textarea';
 import Dropdown from '@/Components/Dropdown';
+import Checkbox from '@/Components/Checkbox';
 import { format, formatDistance } from 'date-fns';
 
 export default function TicketTable({ tickets, users, user_groups, remarks, issues }) {
@@ -22,7 +23,11 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
         remarks: '',
         ticket_status: '',
         attachfile_name: '',
+        rm_attach_file: null
     });
+
+    const [title, setTitle] = useState('View Detail')
+    const [checked, setChecked] = useState(false);
 
     useEffect(() => {
         // console.log(ticketSource);
@@ -53,6 +58,25 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
         }))
     }
 
+    function attachFileHandleChange(e) {
+        setValues(values => ({
+            ...values,
+            'rm_attach_file': e.target.files[0],
+        }))
+    }
+
+    function handleClick(e) {
+        setChecked(!checked);
+        // const checked = e.target.checked;
+        const value = e.target.value;
+        setValues(values => ({
+            ...values,
+            ticket_status: e.target.checked,
+        }))
+        console.log(e.target.checked)
+
+    };
+
     const callModal = (ticket, modal_id, attachfile_name) => {
         setValues(values => ({
             ...values,
@@ -64,6 +88,7 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
 
         document.getElementById('show_remarks').innerHTML = ''
         document.getElementById('file_link').innerHTML = ''
+        document.getElementsByClassName('attach_file')[0].innerHTML = ''
 
         var ticket_number = document.getElementsByClassName('ticket_number')
         for (var i = 0; i < ticket_number.length; i++) {
@@ -80,8 +105,39 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
 
         if (modal_id == 'ticket_viewModal') {
             // console.log('Call Modal - ', ticket.id);
+            setTitle(ticket.ticket_number)
+
+            { ticket.ticket_status == 1 ? setChecked(true) : setChecked(false) }
+
             document.getElementsByClassName('ticket_status')[0].innerHTML = ` ${ticket.ticket_status == 0 ? 'Opened' : '<span class="text-bold text-green-500">Closed</span>'}`
-            document.getElementsByClassName('user_id')[0].innerHTML = ` ${ticket.customer_user_id}`
+            // document.getElementsByClassName('user_id')[0].innerHTML = ` ${ticket.customer_user_id}`
+
+            document.getElementsByClassName('topic')[0].innerHTML = ` ${topicData[0][ticket.topic]}`
+            document.getElementsByClassName('level_of_important')[0].innerHTML = ` ${levelData[0][ticket.level_of_importance]}`
+            document.getElementsByClassName('description')[0].innerHTML = `${ticket.description != null ? ticket.description : ' - '}`
+
+            {
+                ticket.attach_file ?
+                    ticket.attach_file.includes(',') ?
+                        ticket.attach_file.split(",").map((file, index) => {
+                            document.getElementsByClassName('attach_file')[0].innerHTML += `<span class="mt-2"><a href='/uploads/others/${file}' key='file_${ticket.id}${index}' target="_blank" class="text-sm text-blue-500 underline">${file}</a></span><br>`
+                        })
+                        :
+                        document.getElementsByClassName('attach_file')[0].innerHTML = `<span><a href='/uploads/others/${ticket.attach_file}' key='file_${ticket.id}' target="_blank" class="text-sm text-blue-500 underline">${ticket.attach_file}</a></span>`
+                    : ''
+            }
+
+
+            document.getElementsByClassName('title')[0].innerHTML = ` ${ticket.title != null ? ticket.title : ' - '} `
+
+            {
+                ticket.updated_by_loggedin_user != 0 &&
+                    users.filter(user => user.id == ticket.updated_by_loggedin_user).map(filteredUser => (
+                        document.getElementsByClassName('updated_by')[0].innerHTML = filteredUser.name
+                    ))
+            }
+            document.getElementsByClassName('updated_at')[0].innerHTML = `at  ${format(new Date(ticket.updated_at), 'MMMM, dd yyyy, h:mm:ss a')} `
+            document.getElementById('ticket_status').value = ticket_status
 
             {
                 remarks.filter(rm => rm.ticket_id == ticket.id).map(filteredRM => (
@@ -99,12 +155,14 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                     ))}
                         </p><p class="text-xs text-gray-600">
                         ${format(new Date(filteredRM.created_at), 'MMMM, dd yyyy')}                            
-                        </p></div></div></div>`
+                        </p></div></div > <div class="text-right mb-4">
+                    ${filteredRM.rm_attach_file ? `<a href='/uploads/others/${filteredRM.rm_attach_file}' key='file_${filteredRM.id}' target="_blank" class="text-sm text-blue-500 underline">${filteredRM.rm_attach_file}</a>` : ''}
+                </div></div > `
                 ))
             }
         } else if (modal_id == 'ticket_fileModal') {
-            document.getElementById('file_link').innerHTML += ` ${attachfile_name}`
-            document.getElementById('file_link').href = `/uploads/others/${attachfile_name}`
+            document.getElementById('file_link').innerHTML += ` ${attachfile_name} `
+            document.getElementById('file_link').href = `/ uploads / others / ${attachfile_name} `
         }
 
     }
@@ -114,9 +172,9 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
         {
             values.ticket_status == 0
                 ? ''
-                : document.getElementById(`tr_${values.ticket_id}`).classList.add('bg-teal-100')
+                : document.getElementById(`tr_${values.ticket_id} `).classList.add('bg-teal-100')
         }
-        document.getElementById(`tr_${values.ticket_id}`).classList.remove('bg-gray-300');
+        document.getElementById(`tr_${values.ticket_id} `).classList.remove('bg-gray-300');
     };
 
     function deleteData(e) {
@@ -124,7 +182,7 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
         e.preventDefault()
         let ticketId = document.getElementById('ticket_id').value
         // console.log(ticketId)
-        router.delete(`/tickets/${ticketId} `);
+        router.delete(`/ tickets / ${ticketId} `);
         onCloseModal();
     }
 
@@ -133,7 +191,7 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
         e.preventDefault()
         let ticketId = document.getElementById('ticket_id').value;
         console.log(ticketId)
-        router.post(`/tickets/attach_file/${ticketId}`, values);
+        router.post(`/ tickets / attach_file / ${ticketId} `, values);
     }
 
     function clickFileLink(e) {
@@ -146,11 +204,17 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
         document.getElementById('ticket_viewModal').close()
         onCloseModal()
         e.preventDefault()
-        router.post(`/tickets/store/remark`, values);
+        router.post(`/ tickets / store / remark`, values);
     }
 
     function editData(id) {
-        router.get(`/tickets/${id} `);
+        router.get(`/ tickets / ${id} `);
+    }
+    function openData(id) {
+        router.get(`/ tickets / open / ${id} `);
+    }
+    function closeData(id) {
+        router.get(`/ tickets / close / ${id} `);
     }
 
     return (
@@ -173,26 +237,70 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                 </form>
             </Modal>
 
-            <Modal id="ticket_viewModal" title="View Detail" closeModal={onCloseModal} className=" w-full max-w-2xl max-h-full">
-                <form onSubmit={addRemark} className="space-y-2.5 ">
-                    <div className="pt-4">
-                        <span className="font-bold text-gray-700">
-                            Ticket Number :
-                        </span>
-                        <span className="text-gray-700 ticket_number"></span>
+            <Modal id="ticket_viewModal" title={title} closeModal={onCloseModal} className=" w-full max-w-2xl max-h-full">
+                <form onSubmit={addRemark} className="space-y-5 ">
+                    <div className='grid grid-cols-3 gap-4 mt-2'>
+                        <div>
+                            <span className="font-bold text-gray-700">
+                                Topic :
+                            </span>
+                            <span className="text-gray-700 topic"></span>
+                        </div>
+                        <div>
+                            <span className="font-bold text-gray-700">
+                                Level of important :
+                            </span>
+                            <span className="text-gray-700 level_of_important"></span>
+                        </div>
+                        <div>
+                            <span className="font-bold text-gray-700">
+                                Status :
+                            </span>
+                            <span className="text-gray-700 ticket_status"></span>
+                        </div>
+
+                        {/* <div>
+                            <span className="font-bold text-gray-700">
+                                Ticket Number :
+                            </span>
+                            <span className="text-gray-700 ticket_number"></span>
+                        </div>
+                        <div>
+                            <span className="font-bold text-gray-700">
+                                User ID :
+                            </span>
+                            <span className="text-gray-700 user_id"></span>
+                        </div>
+                        <div>
+                            <span className="font-bold text-gray-700">
+                                Status :
+                            </span>
+                            <span className="text-gray-700 ticket_status"></span>
+                        </div> */}
                     </div>
+
+                    <div className='mt-2'>
+                        <span className="font-bold text-gray-700 mt-2">
+                            Title :
+                        </span>
+                        <span className="title"></span>
+                    </div>
+
                     <div>
-                        <span className="font-bold text-gray-700">
-                            Status :
+                        <span className="font-bold text-gray-700 mt-2">
+                            Description :
                         </span>
-                        <span className="text-gray-700 ticket_status"></span>
+                        <span className="description"></span>
+                        <div className="attach_file text-right"></div>
+
+                        <div className="mt-2">
+                            By: <small className="updated_by"></small>
+                            <small className="updated_at ml-2"></small>
+                        </div>
+                        <hr className="mt-2"></hr>
                     </div>
-                    <div>
-                        <span className="font-bold text-gray-700">
-                            User ID :
-                        </span>
-                        <span className="text-gray-700 user_id"></span>
-                    </div>
+
+
                     <div>
                         <span className="font-bold text-gray-700">
                             Remarks :
@@ -212,6 +320,20 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                             minRows={5}
                         />
                     </div>
+                    <div className="pt-2">
+                        <InputLabel htmlFor="rm_attach_file" value="File Attachment" />
+                        <div className='flex border-none'>
+                            <div>
+                                <TextInput
+                                    id="rm_attach_file"
+                                    name="rm_attach_file"
+                                    onChange={attachFileHandleChange}
+                                    type="file"
+                                    className="mt-1 block w-full border-none rounded-none"
+                                />
+                            </div>
+                        </div>
+                    </div>
                     <TextInput
                         className="ticket_id"
                         id="ticket_id"
@@ -219,6 +341,23 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                         type="hidden"
                         value={values.ticket_id}
                     />
+                    <div className="mt-6 flex justify-start">
+                        <div className='grid grid-cols-3 gap-4'>
+                            <label className="flex items-center mt-1" key="chk1">
+                                <Checkbox
+                                    name="ticket_status"
+                                    id="ticket_status"
+                                    value={values.ticket_status}
+                                    onChange={handleClick}
+                                    checked={checked}
+                                />
+                                {/* <input type="checkbox" id="ticket_status" name="ticket_status" checked={checked} onChange={handleClick} /> */}
+                                <span className="ml-2 text-sm text-gray-600">
+                                    Close the ticket
+                                </span>
+                            </label>
+                        </div>
+                    </div>
                     <div className="mt-6 flex justify-end">
                         <PrimaryButton disabled="" type="submit" >Add Remark</PrimaryButton>
                     </div>
@@ -245,11 +384,11 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                     <tr className='bg-emerald-300'>
                         <th>Ticket Number</th>
                         <th>User</th>
+                        <th>Issue Type</th>
                         <th>Title</th>
                         <th>Last Response</th>
                         {/* <th>Description</th> */}
                         <th>Topic</th>
-                        <th>Issue Type</th>
                         {/* <th>Level of Importance</th> */}
                         {/* <th>Attached File</th> */}
                         <th>Created Date</th>
@@ -272,7 +411,7 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                     <tbody>
                         {tickets && tickets.map(dt => (
                             <tr key={dt.id}
-                                className={dt.ticket_status == 0 ? '' : 'bg-gray-100'}
+                                className={dt.ticket_status == 0 ? '' : 'bg-gray-300'}
                                 id={"tr_" + (dt.id)}
                             >
                                 <td>
@@ -288,8 +427,8 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                                                             : dt.level_of_importance == 'lv_1' ?
                                                                 'decoration-gray-300 text-gray-600 focus:border-gray-700'
                                                                 : 'decoration-sky-300 text-sky-600 focus:border-sky-700'
-                                                }  
-                                        text-sm font-medium  cursor-pointer`}
+                                                }
+                                                text-sm font-medium  cursor-pointer`}
                                             onClick={() => callModal(dt, 'ticket_viewModal', '')}
                                             key={dt.id}
                                         >
@@ -305,7 +444,7 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                                     </span>
 
 
-                                    {/* <small key={"status_" + (dt.id)} className={`block mt-2 ${dt.ticket_status == 0 ? '' : 'font-bold text-teal-150'}`}>
+                                    {/* <small key={"status_" + (dt.id)} className={`block mt - 2 ${ dt.ticket_status == 0 ? '' : 'font-bold text-teal-150' } `}>
                                         Status : {dt.ticket_status == 0 ? 'Opened' : 'Closed'}
                                     </small> */}
 
@@ -330,7 +469,6 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                                         </small>
                                     }
 
-
                                     {/* {dt.user_group_id &&
                                         user_groups.filter(user_gp => user_gp.id == dt.user_group_id)
                                             .map(filteredRes =>
@@ -339,6 +477,16 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                                                 </small>
                                             )
                                     } */}
+                                </td>
+                                <td>
+                                    {dt.issue_id != 0 &&
+                                        issues.filter(issue => issue.id == dt.issue_id)
+                                            .map(filteredRes =>
+                                                <span key={"issue_" + (dt.id)} className="block mt-2">
+                                                    {filteredRes.issue_type}
+                                                </span>
+                                            )
+                                    }
                                 </td>
                                 <td>
                                     {dt.title}
@@ -360,16 +508,7 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                                 </td>
                                 {/* <td>{dt.description}</td> */}
                                 <td>{topicData[0][dt.topic]}</td>
-                                <td>
-                                    {dt.issue_id != 0 &&
-                                        issues.filter(issue => issue.id == dt.issue_id)
-                                            .map(filteredRes =>
-                                                <span key={"issue_" + (dt.id)} className="block mt-2">
-                                                    {filteredRes.issue_type}
-                                                </span>
-                                            )
-                                    }
-                                </td>
+
                                 {/* <td>{levelData[0][dt.level_of_importance]}</td> */}
                                 {/* <td>
                                     {
@@ -384,7 +523,7 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                                                 >
                                                     {
                                                         dt.attach_file.length > 10 ?
-                                                            `${dt.attach_file.substring(0, 10)}...` : dt.attach_file
+                                                            `${ dt.attach_file.substring(0, 10) }...` : dt.attach_file
                                                     }
                                                 </a>
                                             : ''
@@ -392,8 +531,10 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                                 </td> */}
                                 <td>{formatDistance(new Date(), new Date(dt.created_at), { addSuffix: false })}</td>
                                 <td>
-                                    {format(new Date(dt.updated_at), 'dd-mm-yyyy')}
+                                    {format(new Date(dt.updated_at), 'd-M-yyyy')}
+
                                     {
+                                        dt.updated_by_loggedin_user != 0 &&
                                         <small key={"updateduser_" + (dt.id)} className="block mt-2">
                                             Updated by : {
                                                 users.filter(user => user.id == dt.updated_by_loggedin_user).map(filteredUser => (
@@ -433,12 +574,21 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
                                                 </Dropdown.Trigger>
 
                                                 <Dropdown.Content align={'left'} width={'30'}>
-                                                    <button className="px-3 pb-2 cursor-pointer"
+                                                    <button key={"open_" + (dt.id)} className={`px-3 pb-2 cursor-pointer ${dt.ticket_status == 0 ? 'hidden' : ''} `}
+                                                        onClick={() => openData(dt.id)}>
+                                                        Open
+                                                    </button>
+                                                    <button key={"close_" + (dt.id)} className={`px-3 pb-2 cursor-pointer ${dt.ticket_status == 1 ? 'hidden' : ''} `}
+                                                        onClick={() => closeData(dt.id)}>
+                                                        Close
+                                                    </button>
+
+                                                    <button key={"edit_" + (dt.id)} className="px-3 pb-2 cursor-pointer"
                                                         onClick={() => editData(dt.id)}>
                                                         Edit
                                                     </button>
 
-                                                    <button className="px-3 pb-2 cursor-pointer"
+                                                    <button key={"delete_" + (dt.id)} className="px-3 pb-2 cursor-pointer"
                                                         onClick={() => callModal(dt, 'ticket_deleteModal')}>
                                                         Delete
                                                     </button>

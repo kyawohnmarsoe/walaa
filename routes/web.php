@@ -97,7 +97,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/customers/{index}', [CustomerController::class, 'destroy'])->name('customers.destroy');
     Route::post('/customers/change/account/{index}', [CustomerController::class, 'change_account'])->name('customers.change.account');
     Route::get('/customers/details/{index}', [CustomerController::class, 'details'])->name('customers.details');
-    Route::get('/customers/notify/{index}', [CustomerController::class, 'notify'])->name('customers.notify');
+    Route::post('/customers/notify/{index}', [CustomerController::class, 'notify'])->name('customers.notify');
     // Route::get('/customers/change_deposit_pass', [CustomerController::class, 'change_deposit_password'])->name('customers.change_deposit_pass');
     // Route::post('/customers/change_deposit_pass/{id}', [CustomerController::class, 'update_deposit_password'])->name('customers.update_deposit_pass');  
     Route::get('/users/management', [UserController::class, 'showAllUsers'])->name('users.management');
@@ -108,7 +108,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/apiuser', [ApiUserController::class, 'change_api_user'])->name('apiuser');
     Route::post('/apiuser/{id}', [ApiUserController::class, 'update_api_user'])->name('apiuser.update_api_user');
 
-    Route::get('/send_whatsapp/{index}', [WhatsAppController::class, 'send_whatsapp'])->name('send_whatsapp');
+    Route::post('/send_whatsapp/{index}', [WhatsAppController::class, 'send_whatsapp'])->name('send_whatsapp');
 
     // Route::group(['middleware' => ['auth', 'role:admin']], function() {
     Route::get('/tickets', [TicketController::class, 'index'])->name('tickets');
@@ -125,6 +125,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/tickets/image/{id}', [TicketController::class, 'destroy_image'])->name('tickets.destroy.image');
     Route::post('/tickets/attach_file/{id}', [TicketController::class, 'destroy_attachFile'])->name('tickets.destroy.attachfile');
     Route::get('/tickets/user/{user_id}', [TicketController::class, 'tickets_by_user'])->name('tickets.user');
+    Route::get('/tickets/open/{id}', [TicketController::class, 'open'])->name('tickets.open');
+    Route::get('/tickets/close/{id}', [TicketController::class, 'close'])->name('tickets.close');
 
     Route::get('/issues', [TicketIssueController::class, 'index'])->name('ticket.issues');
     Route::get('/issues/create', [TicketIssueController::class, 'create'])->name('ticket.issues.create');

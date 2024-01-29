@@ -4,10 +4,10 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import SecondaryButton from '@/Components/SecondaryButton';
 import TextInput from '@/Components/TextInput';
 import InputLabel from '@/Components/InputLabel';
-import { useForm, router } from '@inertiajs/react';
+import { useForm } from '@inertiajs/react';
 
 
-export default function NotifyModal({ modals, setModals, user }) {
+export default function WhatsappNotifyModal({ modals, setModals, user }) {
     const { data, setData, post } = useForm({
         email: user.customer_user_id,
         customer_user_index: user.customer_user_index,
@@ -18,23 +18,22 @@ export default function NotifyModal({ modals, setModals, user }) {
         e.preventDefault();
 
         let customer_user_index = user.customer_user_index
-        // router.post(`/customers/notify/${customer_user_index}`);
-        post(route('customers.notify', customer_user_index));
+        post(route('send_whatsapp', customer_user_index));
         closeModal()
     }
 
     const closeModal = () => {
         setModals({
             ...modals,
-            notify: false
+            whatsappnotify: false
         });
     };
 
     return (
-        <Modal show={modals.notify} onClose={closeModal} maxWidth={'xl'}>
+        <Modal show={modals.whatsappnotify} onClose={closeModal} maxWidth={'xl'}>
             <form onSubmit={submit} className="p-6 scroll-form" autoComplete="off">
                 <h2 className="text-lg font-medium text-gray-900">
-                    Notify via SMS
+                    Notify via Whatsapp
                 </h2>
 
                 <p className="mt-1 text-sm ">

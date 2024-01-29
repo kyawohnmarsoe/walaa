@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
-use Spatie\Permission\Models\Role;
+// use Spatie\Permission\Models\Role;
 use Inertia\Inertia;
 use App\Models\Customer;
 use App\Models\Affiliate;
@@ -17,8 +17,8 @@ use App\Models\User_group;
 use App\Models\Invoice;
 use App\Models\Ticket;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Carbon;
+// use Illuminate\Support\Facades\DB;
+// use Illuminate\Support\Carbon;
 
 class CustomerController extends Controller
 {
@@ -226,6 +226,8 @@ class CustomerController extends Controller
                         'mobile_number' => $request->mobile_number,
                         'mobile_number2' => $request->mobile_number2,
                         'address' => $request->address,
+                        'latitude' => $request->latitude,
+                        'longitude' => $request->longitude,
                         'email' => $request->email,
                         'user_password' => $request->user_password,
                         'city' => $request->city,
@@ -480,13 +482,16 @@ class CustomerController extends Controller
         ]);
     } // details
 
-    public function notify($index)
+    public function notify(Request $request, $index)
     {
+        // $input = $request->all();
+        // return response(compact(['input', 'index']));
+
         $data = Customer::where('customer_user_index', $index)->get();
         $send_mobile = '';
         if (count($data) > 0) {
             $send_mobile = $data[0]['mobile_number'] ? $data[0]['mobile_number'] : $data[0]['mobile_number2'];
-            // $send_mobile = '66952806757';           
+            // $send_mobile = '66952806757';
         }
 
         $token = 'd2FsYS1saW5rOldsQDFlZjZeYXpY';
@@ -503,7 +508,7 @@ class CustomerController extends Controller
                     "to" => $send_mobile // 41793026727
                 ],
                 "from" => "InfoSMS-Walaa",
-                "text" => "Your account is going to expiring soon!"
+                "text" => $request->message,
             ]
         ];
 

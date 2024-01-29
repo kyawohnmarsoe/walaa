@@ -31,6 +31,8 @@ export default function AddForm({ className = '', customer, accounts, sub_accoun
         display_name: customer.display_name ?? '',
         customer_user_notes: customer.customer_user_notes ?? '',
         user_group_id: customer.user_group_id,
+        latitude: customer.latitude ?? '',
+        longitude: customer.longitude ?? '',
     });
 
     const [optionsAffiliates, setOptionsAffiliates] = useState([])
@@ -401,6 +403,31 @@ export default function AddForm({ className = '', customer, accounts, sub_accoun
                             id="address"
                             name="address"
                             value={values.address}
+                            onChange={handleChange}
+                            type="text"
+                            className="mt-1 block w-full"
+                            autoComplete="off"
+                        />
+                    </div>
+
+                    <div>
+                        <InputLabel htmlFor="latitude" value="Latitude" />
+                        <TextInput
+                            id="latitude"
+                            name="latitude"
+                            value={values.latitude}
+                            onChange={handleChange}
+                            type="text"
+                            className="mt-1 block w-full"
+                            autoComplete="off"
+                        />
+                    </div>
+                    <div>
+                        <InputLabel htmlFor="longitude" value="Longitude" />
+                        <TextInput
+                            id="longitude"
+                            name="longitude"
+                            value={values.longitude}
                             onChange={handleChange}
                             type="text"
                             className="mt-1 block w-full"

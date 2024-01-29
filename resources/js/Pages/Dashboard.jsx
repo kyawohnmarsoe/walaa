@@ -7,7 +7,7 @@ import React, { useState, useEffect } from 'react';
 import Board from './Board'
 import TicketsList from './TicketsList'
 
-export default function Dashboard ({ auth, apitoken, board, tickets }) {
+export default function Dashboard({ auth, apitoken, board, tickets }) {
 
     return (
         <AuthenticatedLayout
@@ -31,17 +31,17 @@ export default function Dashboard ({ auth, apitoken, board, tickets }) {
                                     : <Alert msg='Session Expired' />
                             }
 
-                           
-                            <TicketsList tickets={ tickets } />
 
-                            <Board board={board}/>
-                           
-                            
+                            <TicketsList tickets={tickets} />
+
+                            <Board board={board} />
+
+
                             {/* <ServicePhones apitoken={apitoken} /> */}
 
                             <div className="pt-12 px-3 ">
                                 <h2 className="text-lg font-medium text-gray-800 pb-4">Service phones:</h2>
-                                <tbody className="text-sm"><tr><td>Zain </td><td> : 6116</td></tr><tr><td>Asia </td><td> : 6116</td></tr><tr><td>Zain </td><td> : 07835410888</td></tr><tr><td>Asia </td><td> : 07718299888</td></tr><tr><td>Omnea </td><td> : 07600025500</td></tr></tbody>
+                                <table><tbody className="text-sm"><tr><td>Zain </td><td> : 6116</td></tr><tr><td>Asia </td><td> : 6116</td></tr><tr><td>Zain </td><td> : 07835410888</td></tr><tr><td>Asia </td><td> : 07718299888</td></tr><tr><td>Omnea </td><td> : 07600025500</td></tr></tbody></table>
                             </div>
 
                         </div>

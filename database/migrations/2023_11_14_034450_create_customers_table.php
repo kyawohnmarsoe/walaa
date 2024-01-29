@@ -32,19 +32,22 @@ return new class extends Migration
             $table->string('caller_id')->nullable();
             $table->text('customer_user_notes')->nullable();
             $table->string('status')->nullable();
-            $table->integer('active_status')->default(1); 
+            $table->integer('active_status')->default(1);
             $table->string('account_status')->nullable();
             $table->string('account_package_type')->nullable();
-            $table->integer('user_group_id')->nullable(); 
-            
-            $table->string('manual_expiration_date')->nullable();              
-            $table->string('can_refill')->nullable();              
-            $table->string('can_change_account')->nullable();              
-            $table->string('can_extend_user')->nullable();  
-            
+            $table->integer('user_group_id')->nullable();
+
+            $table->string('manual_expiration_date')->nullable();
+            $table->string('can_refill')->nullable();
+            $table->string('can_change_account')->nullable();
+            $table->string('can_extend_user')->nullable();
+
             $table->integer('sms_status')->default(0);
-            $table->integer('sms_sent_by')->default(0);            
-                
+            $table->integer('sms_sent_by')->default(0);
+
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
+
             $table->timestamps();
         });
     }

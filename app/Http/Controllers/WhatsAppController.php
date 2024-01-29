@@ -10,15 +10,17 @@ use Twilio\Rest\Client;
 
 class WhatsAppController extends Controller
 {
-    public function send_whatsapp($index)
+    public function send_whatsapp(Request $request, $index)
     {
+        // $input = $request->all();
+        // return response(compact(['input', 'index']));
         // Testing with last API
         $data = Customer::where('customer_user_index', $index)->get();
         $send_mobile = '';
         if (count($data) > 0) {
-            // $send_mobile = $data[0]['mobile_number'] ? $data[0]['mobile_number'] : $data[0]['mobile_number2'];
+            $send_mobile = $data[0]['mobile_number'] ? $data[0]['mobile_number'] : $data[0]['mobile_number2'];
             $email = $data[0]['customer_user_id'];
-            $send_mobile = '66952806757'; //  959425324224
+            // $send_mobile = '66952806757'; //  959425324224
         }
 
         $auth = 'o8r28s0001qm0crilgie8f9dkv8djs8ors';
@@ -27,7 +29,7 @@ class WhatsAppController extends Controller
         $post_data = [
             "auth" => $auth,
             "phone" => $send_mobile,
-            "msg" => $email . ', your account will be expired soon!'
+            "msg" => $request->message,
         ];
 
         if ($send_mobile != '') {
