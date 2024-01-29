@@ -24,6 +24,7 @@ use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ApidataController;
 use App\Http\Controllers\TicketIssueController;
 use App\Http\Controllers\WalletController;
+use App\Http\Controllers\PaymentController;
 
 Route::get('/test', [DashboardController::class, 'test'])->name('test');
 Route::get('/test2', [DashboardController::class, 'test2'])->name('test2');
@@ -146,12 +147,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/deposit/transfer', [ReportController::class, 'getBalanceTransfer'])->name('deposit.transfer');
 
+    Route::get('/payments', [PaymentController::class, 'index'])->name('payments');
+
+
+
     Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices');
     Route::post('/invoices/search', [InvoiceController::class, 'search'])->name('invoices.search');
     Route::get('/invoices/create', [InvoiceController::class, 'create'])->name('invoices.create');
     Route::post('/invoices/store', [InvoiceController::class, 'store'])->name('invoices.store');
     Route::post('/invoices/storedata', [InvoiceController::class, 'storeData'])->name('invoices.storedata');
     Route::get('/invoices/{id}', [InvoiceController::class, 'show'])->name('invoices.show');
+    Route::get('/invoices/user/{id}', [InvoiceController::class, 'eachUser'])->name('invoices.eachUser');
     Route::get('/invoices/edit/{id}', [InvoiceController::class, 'edit'])->name('invoices.edit');
     Route::post('/invoices/update/{id}', [InvoiceController::class, 'update'])->name('invoices.update');
     Route::get('/invoices/user/{user_index}', [InvoiceController::class, 'invoices_by_user'])->name('invoices.user');

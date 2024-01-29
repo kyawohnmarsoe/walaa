@@ -18,9 +18,9 @@ export default function InvoiceTable ({ items, apitoken, auth })
                         {/* <th>Invoice Type</th> */}
                         <th>Description</th>
                         <th>Price</th>
-                        <th>Paid Amount</th>
-                        <th>Balance</th> 
-                        <th>Status</th>
+                        {/* <th>Paid Amount</th> */}
+                        {/* <th>Balance</th>  */}
+                        {/* <th>Status</th> */}
                          <th>Notes</th>
                         {/* <th>Due Date</th> */}
                         <th>Record Date</th>

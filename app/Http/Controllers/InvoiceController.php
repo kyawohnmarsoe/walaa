@@ -63,6 +63,30 @@ class InvoiceController extends Controller
     ]);
   }
 
+   public function eachUser($userId)
+   {
+   $token = $this->getSavedToken();
+
+   $cusDataByLoginUserGroupId = $this->getUserIndexReqData_byLoggedInGroupSysUserId();
+   // $customers = response(compact('cusDataByLoginUserGroupId'));
+   $accounts = Account::join('sub_accounts', 'sub_accounts.account_index', '=', 'accounts.account_index')
+   ->get(['accounts.account_price', 'sub_accounts.*']);
+
+   $invoices = Invoice::where('userID',$userId)->orderBy('id', 'desc')->get()->all();
+
+   return Inertia::render('Invoices/Invoices', [
+   'apitoken' => $token,
+   'affiliates' => Affiliate::orderBy('affiliate_name', 'asc')->get(),
+   'invoices' => $invoices,
+   'userIndexByGroup' => $cusDataByLoginUserGroupId,
+   'customers' => Customer::orderBy('customer_user_id', 'asc')->get(),
+   'accounts' => $accounts
+
+   ]);
+   }
+
+  
+
   public function invoices_by_user($user_index)
   {
     $token = $this->getSavedToken();

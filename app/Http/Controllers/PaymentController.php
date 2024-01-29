@@ -10,17 +10,26 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
+use App\Models\Customer;
+use App\Models\Invoice;
 
 class PaymentController extends Controller
 {
       public function index(){
         $token = $this->getSavedToken();  
         return Inertia::render('Payments/Payments',[
-            'apitoken' => $token,
-            'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get(),
-            'payments' => Payment::orderBy('id','desc')->get(),
+            'customers' => Customer::orderBy('id','desc')->get(),
     ]);
     }
+
+          // public function search($userId){
+         
+          // return Inertia::render('Payments/Payments',[
+          // 'payments' => Payment::orderBy('id','desc')->get(),
+          // 'customers' => Customer::orderBy('id','desc')->get(),
+          // 'invoices' => Invoice::orderBy('id','desc')->get()
+          // ]);
+          // }
 
          public function create() 
      {   $token = $this->getSavedToken();  
