@@ -5,13 +5,16 @@ use Inertia\Inertia;
 use App\Models\Affiliate;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePaymentRequest;
-use App\Models\Payment;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
 use App\Models\Customer;
 use App\Models\Invoice;
+use App\Models\Payment;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 
 class PaymentController extends Controller
 {
@@ -19,6 +22,8 @@ class PaymentController extends Controller
         $token = $this->getSavedToken();  
         return Inertia::render('Payments/Payments',[
             'customers' => Customer::orderBy('id','desc')->get(),
+           
+            'payments' => Payment::orderBy('id','desc')->get(),
     ]);
     }
 
@@ -56,37 +61,35 @@ class PaymentController extends Controller
     
     public function store(Request $request)
     {
-      //  dd($request);
-      $balance=$request->payment['salePrice'];
+     
+      
       $data = [
-        'invoinceID' => $request->payment['invoinceID'],
-        'userIndex' => $request->payment['userIndex'],
-        'displayName' => $request->payment['displayName'],
-        'affiliateName' => $request->payment['affiliateName'],
-        'invoiceType' => $request->payment['invoiceType'],
-        'invoiceDescription' => $request->payment['invoiceDescription'],
-        'invoiceDuration' => $request->payment['invoiceDuration'],
-        'salePrice' => $request->payment['salePrice'],
-        'retailPriceCurrency' => $request->payment['retailPriceCurrency'],
-        'retailPrice' => $request->payment['retailPrice'],
-        'referenceRecord' => $request->payment['referenceRecord'],
-        'recordDate' => $request->payment['recordDate'],
-        'lastStatusChanged' => $request->payment['lastStatusChanged'],
-        'accountName' => $request->payment['accountName'],
+        'display_name' => $request->payment['display_name'],
+        'mobile_number' => $request->payment['mobile_number'],
+        'customer_user_index' => $request->payment['customer_user_index'],
+        'prev_balance' => $request->payment['prev_balance'],
+        'paid_amount' => $request->payment['paid_amount'],
+        'current_balance' => $request->payment['current_balance'],
         'notes' => $request->payment['notes'],
-        'userID' => $request->payment['userID'],
-        'discountedPrice' => $request->payment['discountedPrice'],
-        'paymentDueDate' => $request->payment['paymentDueDate'],
-        'paymentDueDateTime' => $request->payment['paymentDueDateTime'],
-         'paidPrice' => $request->payment['paidPrice'],
-         'balance' => $balance,
-         'invoiceStatus' => $request->payment['invoiceStatus'],
-         'notes' => $request->payment['notes'],
-         'modifyUser' => $request->payment['modifyUser'],
+        'modify_user' => Auth::user()->name,
       ];
 
      
       Payment::create($data);
+
+      // $customer = Customer::where('customer_user_index', $request->payment['customer_user_index'])->firstOrFail();
+      
+      DB::table('customers')
+      ->where('customer_user_index', $request->payment['customer_user_index'])
+      ->update(['balance' => $request->payment['current_balance']]);
+
+      $user = User::findOrFail(Auth::user()->id);
+
+      DB::table('users')
+      ->where('id', Auth::user()->id)
+      ->update(['balance' => $user->balance + $request->payment['paid_amount'] ]);
+
+     
       // return  redirect()->route('users.management')->with('status', 201);  
       return  redirect()->route('payments')->with('status', 201);  
        

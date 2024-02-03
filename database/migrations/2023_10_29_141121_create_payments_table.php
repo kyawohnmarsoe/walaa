@@ -15,29 +15,14 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->string('invoinceID');
-            $table->string('userIndex');
-            $table->string('displayName');
-            $table->string('affiliateName');
-            $table->string('invoiceType');
-            $table->string('invoiceDescription');
-            $table->string('invoiceDuration');
-            $table->string('salePrice');
-            $table->string('retailPriceCurrency');
-            $table->string('retailPrice')->nullable();
-            $table->string('referenceRecord')->nullable();
-            $table->string('recordDate')->nullable();
-            $table->string('invoiceStatus')->nullable();
-            $table->string('lastStatusChanged')->nullable();
-            $table->string('accountName')->nullable();
+            $table->string('display_name')->nullable();
+            $table->string('mobile_number')->nullable();
+            $table->string('customer_user_index');
+            $table->string('prev_balance')->nullable();
+            $table->string('paid_amount')->nullable();
+            $table->string('current_balance')->nullable();
             $table->string('notes')->nullable();
-            $table->string('userID')->nullable();
-            $table->string('paidPrice')->nullable();
-            $table->string('discountedPrice')->nullable();
-            $table->string('balance')->nullable();
-            $table->string('modifyUser')->nullable();
-            $table->string('paymentDueDate')->nullable();
-            $table->string('paymentDueDateTime')->nullable();
+            $table->string('modify_user')->nullable();
             $table->timestamps();
         });
     }

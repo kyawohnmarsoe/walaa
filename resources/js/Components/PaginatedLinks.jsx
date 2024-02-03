@@ -15,6 +15,7 @@ import InvoiceTable from '@/Pages/Invoices/InvoiceTable';
 import WalletTable from '@/Pages/Wallets/WalletTable';
 import BalanceTransferTable from '@/Pages/Reports/Deposit/BalanceTransferTable';
 import TicketissuesTable from '@/Pages/Ticketissues/TicketissuesTable';
+import PaymentTable from '@/Pages/Payments/PaymentTable';
 
 export default function PaginatedLinks({
     auth,
@@ -34,7 +35,8 @@ export default function PaginatedLinks({
     listname,
     filterObj,
     setFilterObj,
-    deposit_password }) {
+    deposit_password,
+ }) {
     const [itemOffset, setItemOffset] = useState(0);
 
     // console.log(items)
@@ -136,6 +138,12 @@ export default function PaginatedLinks({
 
             {
                 tableName == 'balance_transfer' && <BalanceTransferTable items={currentItems} auth={auth} users={users} affiliates={affiliates} />
+
+            }
+
+            {
+                tableName == 'payments' && <PaymentTable items={ currentItems } />
+              
 
             }
 

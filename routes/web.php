@@ -150,6 +150,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/deposit/transfer', [ReportController::class, 'getBalanceTransfer'])->name('deposit.transfer');
 
     Route::get('/payments', [PaymentController::class, 'index'])->name('payments');
+    Route::post('/payments/store', [PaymentController::class, 'store'])->name('payments.store');
 
 
 
