@@ -162,7 +162,7 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
             }
         } else if (modal_id == 'ticket_fileModal') {
             document.getElementById('file_link').innerHTML += ` ${attachfile_name} `
-            document.getElementById('file_link').href = `/ uploads / others / ${attachfile_name} `
+            document.getElementById('file_link').href = `/uploads/others/${attachfile_name} `
         }
 
     }
@@ -182,7 +182,7 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
         e.preventDefault()
         let ticketId = document.getElementById('ticket_id').value
         // console.log(ticketId)
-        router.delete(`/ tickets / ${ticketId} `);
+        router.delete(`/tickets/${ticketId} `);
         onCloseModal();
     }
 
@@ -191,7 +191,7 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
         e.preventDefault()
         let ticketId = document.getElementById('ticket_id').value;
         console.log(ticketId)
-        router.post(`/ tickets / attach_file / ${ticketId} `, values);
+        router.post(`/tickets/attach_file/${ticketId} `, values);
     }
 
     function clickFileLink(e) {
@@ -204,17 +204,17 @@ export default function TicketTable({ tickets, users, user_groups, remarks, issu
         document.getElementById('ticket_viewModal').close()
         onCloseModal()
         e.preventDefault()
-        router.post(`/ tickets / store / remark`, values);
+        router.post(`/tickets/store/remark`, values);
     }
 
     function editData(id) {
-        router.get(`/ tickets / ${id} `);
+        router.get(`/tickets/${id} `);
     }
     function openData(id) {
-        router.get(`/ tickets / open / ${id} `);
+        router.get(`/tickets/open/${id} `);
     }
     function closeData(id) {
-        router.get(`/ tickets / close / ${id} `);
+        router.get(`/tickets/close/${id} `);
     }
 
     return (
