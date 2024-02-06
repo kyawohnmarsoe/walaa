@@ -164,13 +164,49 @@ export default function Authenticated({ user, header, children }) {
                                     </div>
                                 </div>
 
+                                <div className="sm:flex sm:items-center">
+                                    <div className="relative">
+                                        <Dropdown>
+                                            <Dropdown.Trigger>
+                                                <span className="inline-flex rounded-md">
+                                                    <button
+                                                        type="button"
+                                                        className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                                    >
+                                                        Affiliates
+
+                                                        <svg
+                                                            className="ml-2 -mr-0.5 h-4 w-4"
+                                                            xmlns="https://www.w3.org/2000/svg"
+                                                            viewBox="0 0 20 20"
+                                                            fill="currentColor"
+                                                        >
+                                                            <path
+                                                                fillRule="evenodd"
+                                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                                clipRule="evenodd"
+                                                            />
+                                                        </svg>
+                                                    </button>
+
+                                                </span>
+                                            </Dropdown.Trigger>
+
+                                            <Dropdown.Content align={ 'left' }>
+                                                <Dropdown.Link href={ route('affiliates') }>All Affiliates</Dropdown.Link>
+                                                <Dropdown.Link href={ route('deposit.transfer') }>Balance Transfer</Dropdown.Link>
+                                                <Dropdown.Link href={ route('affiliates.payments') }>Affiliate Payments</Dropdown.Link>
+                                                
+                                            </Dropdown.Content>
+                                        </Dropdown>
+                                    </div>
+                                </div>
+
 
                                 <NavLink href={route('accounts')} active={url.startsWith('/accounts')}>
                                     Accounts
                                 </NavLink>
-                                <NavLink href={route('affiliates')} active={url.startsWith('/affiliates')}>
-                                    Affiliates
-                                </NavLink>
+                              
                                 {/* <NavLink href={route('customers')} active={url.startsWith('/customers')}>
                                     Users
                                 </NavLink> */}
@@ -223,7 +259,7 @@ export default function Authenticated({ user, header, children }) {
                                                 <Dropdown.Link href={route('usergroup')} active={url.startsWith('/usergroup')}> Users Group Manage</Dropdown.Link>
                                                 <Dropdown.Link href={route('systemuser')} active={url.startsWith('/systemuser')}> Staffs Manage</Dropdown.Link>
                                                 {/* <Dropdown.Link href={ route('apidata') } active={ url.startsWith('/apidata') }> API Data Manage</Dropdown.Link> */}
-                                                <Dropdown.Link href={route('deposit.transfer')}>Balance Transfer</Dropdown.Link >
+                                                {/* <Dropdown.Link href={route('deposit.transfer')}>Balance Transfer</Dropdown.Link > */}
                                                 <Dropdown.Link href={route('ticket.issues')} active={url.startsWith('/issues')}> Ticket Issues</Dropdown.Link>
                                             </>
                                         }

@@ -16,6 +16,7 @@ import WalletTable from '@/Pages/Wallets/WalletTable';
 import BalanceTransferTable from '@/Pages/Reports/Deposit/BalanceTransferTable';
 import TicketissuesTable from '@/Pages/Ticketissues/TicketissuesTable';
 import PaymentTable from '@/Pages/Payments/PaymentTable';
+import AffiliatesPaymentsTable from '@/Pages/Affiliates/AffiliatesPaymentsTable';
 
 export default function PaginatedLinks({
     auth,
@@ -145,6 +146,10 @@ export default function PaginatedLinks({
                 tableName == 'payments' && <PaymentTable items={ currentItems } />
               
 
+            }
+
+            {
+                tableName == 'affiliates_payments' && <AffiliatesPaymentsTable items={ currentItems } />
             }
 
         </>

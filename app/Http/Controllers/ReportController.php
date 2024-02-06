@@ -47,8 +47,9 @@ class ReportController extends Controller
          $deposit_data = $this->get_deposit_password();
 
          $transactions = DB::table('balance_transfers')
-                        ->leftJoin('affiliates', 'affiliate', '=', 'affiliate_index')
-                        ->select('balance_transfers.*', 'affiliate_index', 'affiliate_name')
+                        ->leftJoin('affiliates', 'affiliates.affiliate_index', '=', 'balance_transfers.affiliate_index')
+                        ->select('balance_transfers.*','affiliates.balance')
+                        ->orderBy('id','desc')
                         ->get();
                        
                         // dd($transactions);
@@ -64,11 +65,23 @@ class ReportController extends Controller
 
      public function storeBalanceTransfer(Request $request){
         // dd($request->TargetAffiliateIndex);
+        $affiliate = Affiliate::where('affiliate_index',$request->TargetAffiliateIndex)
+                                    ->get();
+        $update_balance = $affiliate[0]->balance - $request->Amount;
+                                    // dd($affiliate[0]->affiliate_name);
        
         BalanceTransfer::create([
-            'affiliate' => $request->TargetAffiliateIndex,
+            'affiliate_index' => $request->TargetAffiliateIndex,
+            'affiliate_name' => $affiliate[0]->affiliate_name,
             'amount' => $request->Amount,
+            'notes' => $request->notes,
+            'balance' => $request->balance,
+
         ]);
+
+        DB::table('affiliates')
+        ->where('affiliate_index', $request->TargetAffiliateIndex)
+        ->update(['balance' => $update_balance]);
 
         return redirect()->route('deposit.transfer')->with('status', 201);
 

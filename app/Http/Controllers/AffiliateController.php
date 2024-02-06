@@ -6,6 +6,14 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Affiliate;
 use Illuminate\Support\Facades\Http;
+use App\Models\Customer;
+use App\Models\Invoice;
+use App\Models\AffiliatesPayment;
+use App\Models\Payment;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 
 class AffiliateController extends Controller
 {
@@ -14,9 +22,66 @@ class AffiliateController extends Controller
         $token = $this->getSavedToken();
         return Inertia::render('Affiliates/Affiliates', [
             'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get(),
-            'apitoken' => $token
+            'apitoken' => $token,
+            
         ]);
     } // index    
+
+     public function payments()
+     {
+       
+        // $token = $this->getSavedToken();
+        return Inertia::render('Affiliates/Payments', [
+        'affiliates' => Affiliate::orderBy('affiliate_name','asc')->get(),
+        
+        'customers' => Customer::orderBy('id','desc')->get(),
+
+        'affiliates_payments' => AffiliatesPayment::orderBy('id','desc')->get(),
+        ]);
+
+         dd('ok');
+
+        
+
+     } // index
+
+     
+          public function paymentsStore(Request $request)
+          {
+
+          $data = [
+          'affiliate_name' => $request->payment['affiliate_name'],
+          'affiliate_index' => $request->payment['affiliate_index'],
+          'prev_balance' => $request->payment['prev_balance'],
+          'paid_amount' => $request->payment['paid_amount'],
+          'current_balance' => $request->payment['current_balance'],
+          'notes' => $request->payment['notes'],
+          'modify_user' => Auth::user()->name,
+          ];
+
+         
+          AffiliatesPayment::create($data);
+
+        //    $affiliate = Affiliate::where('affiliate_index',$request->payment['affiliate_index'])
+        //    ->get();
+        //    $update_balance = $affiliate[0]->balance - $request->Amount;
+
+             DB::table('affiliates')
+             ->where('affiliate_index', $request->payment['affiliate_index'])
+             ->update(['balance' => $request->payment['current_balance']]);
+
+          $user = User::findOrFail(Auth::user()->id);
+
+          DB::table('users')
+          ->where('id', Auth::user()->id)
+          ->update(['balance' => $user->balance + $request->payment['paid_amount'] ]);
+
+
+          // return redirect()->route('users.management')->with('status', 201);
+          return redirect()->route('affiliates.payments')->with('status', 201);
+
+          }
+
 
     public function store() { // insert API data to db
         $token = $this->getSavedToken();

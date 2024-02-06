@@ -13,8 +13,11 @@ return new class extends Migration
     {
         Schema::create('balance_transfers', function (Blueprint $table) {
             $table->id();
-              $table->string('affiliate');
+              $table->string('affiliate_name')->nullable();
+              $table->string('affiliate_index');
               $table->bigInteger('amount');
+              $table->string('notes')->nullable();
+               $table->bigInteger('balance')->default(0);
             $table->timestamps();
         });
     }
