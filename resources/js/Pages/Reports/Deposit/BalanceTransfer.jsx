@@ -88,9 +88,7 @@ export default function BalanceTransfer ({ className = '', affiliates, apitoken,
 
         console.log('submit')
 
-        router.post(`/deposit/store/`, data) 
-        
-        return 
+        // return router.post(`/deposit/store/`, data) 
 
         instance.post('/affiliate/deposit/transferBalance1', data)
             .then(res =>
