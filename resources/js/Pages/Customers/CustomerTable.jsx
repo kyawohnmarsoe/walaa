@@ -12,6 +12,7 @@ import NotifyModal from "./Partials/NotifyModal";
 import WhatsappNotifyModal from "./Partials/WhatsappNotifyModal";
 
 export default function CustomerTable({ customers, accounts, sub_accounts, sys_users, user_groups, apitoken, deposit_password, auth }) {
+
     const [loading, setLoading] = useState(false);
     const { url } = usePage()
     const [modals, setModals] = useState({
@@ -110,6 +111,7 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
 
     }, [])
 
+
     return (
         <div className="overflow-x-auto mt-3">
 
@@ -146,6 +148,7 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                     <tr className='bg-emerald-300'>
                         <th>User Email</th>
                         <th>Display Name</th>
+
                         <th>Mobile Number</th>
                         <th>Affiliate Name</th>
                         <th>Account Info</th>

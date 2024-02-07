@@ -84,6 +84,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/affiliates', [AffiliateController::class, 'index'])->name('affiliates');
     Route::get('/affiliates/store', [AffiliateController::class, 'store'])->name('affiliates.store');
+    Route::get('/affiliates/payments', [AffiliateController::class, 'payments'])->name('affiliates.payments');
+    Route::post('/affiliates/payments', [
+        AffiliateController::class,
+        'paymentsStore'
+    ])->name('affiliates.paymentsStore');
 
     Route::get('/deposit/password', [CustomerController::class, 'deposit'])->name('deposit.password');
 

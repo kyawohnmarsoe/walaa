@@ -37,7 +37,6 @@ export default function Customers({
         router.get('/customers/store/api/' + totalCount)
     }
 
-
     return (
         <AuthenticatedLayout
             user={auth.user}
