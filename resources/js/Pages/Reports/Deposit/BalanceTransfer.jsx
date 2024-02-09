@@ -22,7 +22,10 @@ export default function BalanceTransfer ({ className = '', affiliates, apitoken,
     const { data, setData, post, processing, errors, reset } = useForm({
         TargetAffiliateIndex: '',
         Amount: '',
-        DepositPassword: deposit_password
+        DepositPassword: deposit_password,
+        affiliate_name: '',
+        notes: '',
+        balance:0
     });
 
 
@@ -44,6 +47,12 @@ export default function BalanceTransfer ({ className = '', affiliates, apitoken,
 
     useEffect(() =>
     {
+        flash.status == 201 && location.reload()
+    }, [flash.status])
+
+    useEffect(() =>
+    {
+      
         instance.get('/affiliate')
             .then(res =>
             {
@@ -79,9 +88,9 @@ export default function BalanceTransfer ({ className = '', affiliates, apitoken,
 
         console.log('submit')
 
-        // router.post(`/deposit/store/`, data) 
+        // return router.post(`/deposit/store/`, data) 
 
-        instance.post('/affiliate/deposit/transferBalance', data)
+        instance.post('/affiliate/deposit/transferBalance1', data)
             .then(res =>
             {
                 console.log(res.data)
@@ -251,6 +260,25 @@ export default function BalanceTransfer ({ className = '', affiliates, apitoken,
 
                                 </div>
 
+                               
+
+                                <div className='grid md:grid-cols-3 gap-4'>
+                                    <div></div>
+                                    <div>
+                                        <InputLabel htmlFor="notes" value="Notes" />
+
+                                        <TextInput
+                                            id="notes"
+                                            className="mt-1 block w-full disabled "
+                                            value={ main.notes }
+                                            onChange={ (e) => setData('notes', e.target.value) }
+
+                                        />
+
+                                        {/* <InputError className="mt-2" message={errors.name} /> */ }
+                                    </div>
+
+                                </div>
 
                                 <div className='grid md:grid-cols-3 gap-4'>
                                     <div></div>

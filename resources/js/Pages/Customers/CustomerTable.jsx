@@ -100,17 +100,16 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
     }
 
     function handleTicketSubmit(user_id) {
-        router.get(`/tickets/user/${user_id} `);
+        router.get(`/tickets/user/${user_id}`);
     }
 
     function handleInvoiceSubmit(customer_user_index) {
-        router.get(`/invoices/user/${customer_user_index} `);
+        router.get(`/invoices/user/${customer_user_index}`);
     }
 
     useEffect(() => {
 
     }, [])
-
 
     return (
         <div className="overflow-x-auto mt-3">
@@ -148,7 +147,6 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                     <tr className='bg-emerald-300'>
                         <th>User Email</th>
                         <th>Display Name</th>
-
                         <th>Mobile Number</th>
                         <th>Affiliate Name</th>
                         <th>Account Info</th>
@@ -241,7 +239,10 @@ export default function CustomerTable({ customers, accounts, sub_accounts, sys_u
                                         cus.latitude &&
                                         <div key={"loc_" + (cus.id)} className="text-sky-700">
                                             <Link className="items-center underline" onClick={() => locClick(cus.latitude, cus.longitude)} >
-                                                View Location
+                                                <svg className="h-4 w-4 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                </svg>
                                             </Link>
                                         </div>
                                     }

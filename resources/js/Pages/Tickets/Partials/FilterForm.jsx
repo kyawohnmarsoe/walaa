@@ -23,7 +23,7 @@ export default function FilterForm({ className = '', customers, apitoken, errors
         topic: '',
         level_of_importance: '',
         ticket_number: '',
-        ticket_status: '',
+        filter_ticket_status: '',
         search_value: ''
     });
 
@@ -169,7 +169,7 @@ export default function FilterForm({ className = '', customers, apitoken, errors
         const value = parseInt(e.target.value)
         setValues(values => ({
             ...values,
-            'ticket_status': value,
+            'filter_ticket_status': value,
         }))
     }
 
@@ -264,13 +264,13 @@ export default function FilterForm({ className = '', customers, apitoken, errors
                     </div>
 
                     <div>
-                        <InputLabel htmlFor="ticket_status" value="Status" />
+                        <InputLabel htmlFor="filter_ticket_status" value="Status" />
                         <SelectOption
-                            id="ticket_status"
+                            id="filter_ticket_status"
                             className="mt-1 block w-full"
                             options={optionsStatus}
                             select_text="Status"
-                            name="ticket_status"
+                            name="filter_ticket_status"
                             onChange={statusHandleChange}
                         />
                     </div>

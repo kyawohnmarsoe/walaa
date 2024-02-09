@@ -22,9 +22,11 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ApidataController;
+use App\Http\Controllers\DeviceTicketController;
 use App\Http\Controllers\TicketIssueController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\PaymentController;
+use Illuminate\Support\Facades\Artisan;
 
 Route::get('/test', [DashboardController::class, 'test'])->name('test');
 Route::get('/test2', [DashboardController::class, 'test2'])->name('test2');
@@ -139,6 +141,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/issues/{id}', [TicketIssueController::class, 'edit'])->name('ticket.issues.edit');
     Route::post('/issues/{id}', [TicketIssueController::class, 'update'])->name('ticket.issues.update');
     Route::delete('/issues/{id}', [TicketIssueController::class, 'destroy'])->name('ticket.issues.destroy');
+
+    Route::get('/device/tickets', [DeviceTicketController::class, 'index'])->name('device.tickets');
+    Route::get('/device/tickets/create', [DeviceTicketController::class, 'create'])->name('device.tickets.create');
+    Route::get('/device/tickets/{id}', [DeviceTicketController::class, 'edit'])->name('device.tickets.edit');
+    Route::post('/device/tickets/{id}', [DeviceTicketController::class, 'update'])->name('device.tickets.update');
+    Route::post('/device/tickets', [DeviceTicketController::class, 'index'])->name('device.tickets.filter');
+    Route::post('/device/tickets/store', [DeviceTicketController::class, 'store'])->name('device.tickets.store');
+    Route::post('/device/tickets/store/remark', [DeviceTicketController::class, 'store_remark'])->name('device.tickets.store.remark');
+    Route::get('/device/tickets/delete_remark/{id}', [DeviceTicketController::class, 'destroy_remark'])->name('device.tickets.destroy.remark');
+    Route::post('/device/tickets/update/remark/{rmId}', [DeviceTicketController::class, 'update_remark'])->name('device.tickets.update.remark');
+    Route::get('/device/tickets/open/{id}', [DeviceTicketController::class, 'open'])->name('device.tickets.open');
+    Route::get('/device/tickets/close/{id}', [DeviceTicketController::class, 'close'])->name('device.tickets.close');
+    Route::delete('/device/tickets/{id}', [DeviceTicketController::class, 'destroy'])->name('device.tickets.destroy');
+
     // });
 
     Route::get('/log/error', [LogController::class, 'getErrorLog'])->name('log.error');
@@ -156,8 +172,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/payments', [PaymentController::class, 'index'])->name('payments');
     Route::post('/payments/store', [PaymentController::class, 'store'])->name('payments.store');
-
-
 
     Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices');
     Route::post('/invoices/search', [InvoiceController::class, 'search'])->name('invoices.search');
@@ -194,12 +208,30 @@ Route::middleware('auth')->group(function () {
 //     Route::delete('/earthlink/profile', [EarthlinkProfileController::class, 'destroy'])->name('earthlink.destroy');
 // });
 
-// Route::get('/clear-cache-all', function() {    
-//     Artisan::call('route:cache');
-//     Artisan::call('config:cache');
-//     Artisan::call('cache:clear');
-//     Artisan::call('view:clear');
-//     dd("Cache Clear All");
-// });
+//Clear route cache
+Route::get('/route-cache', function () {
+    Artisan::call('route:cache');
+    return 'Routes cache cleared';
+});
+//Clear config cache
+Route::get('/config-cache', function () {
+    Artisan::call('config:cache');
+    return 'Config cache cleared';
+});
+// Clear application cache
+Route::get('/clear-cache', function () {
+    Artisan::call('cache:clear');
+    return 'Application cache cleared';
+});
+// Clear view cache
+Route::get('/view-clear', function () {
+    Artisan::call('view:clear');
+    return 'View cache cleared';
+});
+// Clear cache using reoptimized class
+Route::get('/optimize-clear', function () {
+    Artisan::call('optimize:clear');
+    return 'View cache cleared';
+});
 
 require __DIR__ . '/auth.php';

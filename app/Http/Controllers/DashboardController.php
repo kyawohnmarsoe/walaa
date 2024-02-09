@@ -14,75 +14,77 @@ class DashboardController extends Controller
 {
     public function dashboard()
     {
-        $token = $this->getSavedToken();  
-        $tickets=Ticket::where('ticket_status','1')->get();
+        $token = $this->getSavedToken();
+        $tickets = Ticket::where('ticket_status', '1')->get();
         // dd(Board::all());
-        $board=Board::all();
+        $board = Board::all();
         return Inertia::render('Dashboard', [
             'apitoken' => $token,
-            'board'=>$board,
-            'tickets'=> $tickets
+            'board' => $board,
+            'tickets' => $tickets
         ]);
     } // dashboard
 
-     public function writing(Request $request)
-     {
+    public function writing(Request $request)
+    {
         //  dd($request );
         //  return $request->id;
         $id = $request->id;
-       
+
         $board = Board::findorfail($id);
-        $data=[
-             "writing" => $request->board,
-             'modifyUser'=> Auth::user()->name,
+        $data = [
+            "writing" => $request->board,
+            'modifyUser' => Auth::user()->name,
         ];
         $board->update($data);
         return redirect()->route('dashboard')->with('status', 201);
-     }
-    
+    }
+
     //========= Start Get Data From API =========//
-    public function get_statsList() {
+    public function get_statsList()
+    {
         $token   = $this->getSavedToken();
-        $apiURL  = 'https://rapi.earthlink.iq/api/reseller/home/Dashboard' ;  
+        $apiURL  = 'https://rapi.earthlink.iq/api/reseller/home/Dashboard';
         $headers = [
-            'Authorization'=>'Bearer '.$token, 
+            'Authorization' => 'Bearer ' . $token,
             'Accept' => 'application/json'
         ];
-        
+
         $all_data_api = Http::withHeaders($headers)->get($apiURL);
-        $all_data_response  = json_decode($all_data_api->getBody(), true);        
-        
-        return $all_data_response;     
+        $all_data_response  = json_decode($all_data_api->getBody(), true);
+
+        return $all_data_response;
     } // get_statsList
 
-    public function get_servicePhones() {
+    public function get_servicePhones()
+    {
         $token   = $this->getSavedToken();
-        $apiURL  = 'https://rapi.earthlink.iq/api/reseller/support/phones' ;  
+        $apiURL  = 'https://rapi.earthlink.iq/api/reseller/support/phones';
         $headers = [
-            'Authorization'=>'Bearer '.$token, 
+            'Authorization' => 'Bearer ' . $token,
             'Accept' => 'application/json'
         ];
-        
+
         $all_data_api = Http::withHeaders($headers)->get($apiURL);
-        $all_data_response  = json_decode($all_data_api->getBody(), true);        
-        
-        return $all_data_response;    
+        $all_data_response  = json_decode($all_data_api->getBody(), true);
+
+        return $all_data_response;
     } // get_servicePhones
 
     //========= End Get Data From API =========//
-    
-     public function test()
+
+    public function test()
     {
         // $token = $this->getSavedToken();
-       
+
         return Inertia::render('Test', [
             // 'apitoken' => $token
         ]);
     } // dashboard
     public function test2()
     {
-        $headers=['Content-Type'=> 'application/json',];
-        $apiURL = 'https://rapi.earthlink.iq/api/reseller/Token' ;
+        $headers = ['Content-Type' => 'application/json',];
+        $apiURL = 'https://rapi.earthlink.iq/api/reseller/Token';
         $data = [
             "username" => "walaaim",
             "password" => "@walaalink@",
@@ -95,8 +97,7 @@ class DashboardController extends Controller
         dd($api_response->object());
 
         return view('test', [
-        //'apitoken' => $token
+            //'apitoken' => $token
         ]);
-    } 
-
+    }
 }

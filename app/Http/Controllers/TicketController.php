@@ -25,7 +25,7 @@ class TicketController extends Controller
         $user_has_groups_idArr = $this->getLoggedInUserGroup();
         $count_user_groups = User_group::count();
 
-        if ($request->hasAny(['user_id', 'display_name', 'topic', 'ticket_status', 'level_of_importance', 'ticket_number', 'search_value'])) {
+        if ($request->hasAny(['user_id', 'display_name', 'topic', 'filter_ticket_status', 'level_of_importance', 'ticket_number', 'search_value'])) {
             $data = $request->all();
             $tickets_query = Ticket::join('customers', 'customers.id', '=', 'tickets.user_id')
                 ->leftjoin('ticket_remarks', 'ticket_remarks.ticket_id', '=', 'tickets.id')
@@ -35,8 +35,8 @@ class TicketController extends Controller
                     return $q->orWhere('tickets.user_id', request('display_name'));
                 })->when(request('topic') != '', function ($q) {
                     return $q->where('tickets.topic', request('topic'));
-                })->when(request('ticket_status') != '', function ($q) {
-                    return $q->where('tickets.ticket_status', request('ticket_status'));
+                })->when(request('filter_ticket_status') != '', function ($q) {
+                    return $q->where('tickets.ticket_status', request('filter_ticket_status'));
                 })->when(request('level_of_importance') != '', function ($q) {
                     return $q->where('tickets.level_of_importance', request('level_of_importance'));
                 })->when(request('ticket_number') != '', function ($q) {
@@ -343,14 +343,14 @@ class TicketController extends Controller
     public function store_remark(Request $request)
     {
         $input = $request->all();
-        // return response(compact('input'));
+        //return response(compact('input'));
         // $ticket = Ticket_remark::create($data);
-        if ($request->ticket_status) {
-            $ticket = Ticket::findOrFail($request->ticket_id);
-            $ticket->update([
-                'ticket_status' => $request->ticket_status,
-            ]);
-        }
+        //if ($request->ticket_status) {
+        $ticket = Ticket::findOrFail($request->ticket_id);
+        $ticket->update([
+            'ticket_status' => $request->ticket_status,
+        ]);
+        //}
 
         $fileName = '';
         if ($request->hasFile('rm_attach_file')) {

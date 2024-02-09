@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('affiliate_index')->unique();
             $table->string('affiliate_name');
+            $table->bigInteger('balance')->default(0);
             $table->timestamps();
         });
     }

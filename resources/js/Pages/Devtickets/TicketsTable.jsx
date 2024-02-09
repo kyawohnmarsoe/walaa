@@ -67,14 +67,13 @@ export default function TicketsTable({ tickets, users, user_groups, remarks, iss
 
     function handleClick(e) {
         setChecked(!checked);
-        // const checked = e.target.checked;
-        const value = e.target.value;
+        const target_checked = e.target.checked;
+        const value = parseInt(e.target.value);
         setValues(values => ({
             ...values,
-            ticket_status: e.target.checked,
+            ticket_status: target_checked,
         }))
-        console.log(e.target.checked)
-
+        console.log(ticket_status)
     };
 
     const callModal = (ticket, modal_id, attachfile_name) => {
@@ -140,12 +139,12 @@ export default function TicketsTable({ tickets, users, user_groups, remarks, iss
             document.getElementById('ticket_status').value = ticket_status
 
             {
-                remarks.filter(rm => rm.ticket_id == ticket.id).map(filteredRM => (
+                remarks.filter(rm => rm.devticket_id == ticket.id).map(filteredRM => (
                     document.getElementById('show_remarks').innerHTML += `<div class="max-w-2xl rounded overflow-hidden shadow-lg px-3 pt-4 mb-4">
                     <div class="grid grid-cols-3 gap-4"><div class="col-span-2">
                     ${filteredRM.remarks}  <br>                 
                     </div><div class="text-right">
-                        <a href='/tickets/delete_remark/${filteredRM.id}' key=${filteredRM.id} class="text-sm text-red-500 underline remove_rm">Remove</a>
+                        <a href='/device/tickets/delete_remark/${filteredRM.id}' key=${filteredRM.id} class="text-sm text-red-500 underline remove_rm">Remove</a>
                     </div></div>
                     <div class="flex items-center pb-3">
                         <div class="mt-4 mb-2"">
@@ -182,7 +181,7 @@ export default function TicketsTable({ tickets, users, user_groups, remarks, iss
         e.preventDefault()
         let ticketId = document.getElementById('ticket_id').value
         // console.log(ticketId)
-        router.delete(`/tickets/${ticketId}`);
+        router.delete(`/device/tickets/${ticketId}`);
         onCloseModal();
     }
 
@@ -204,18 +203,18 @@ export default function TicketsTable({ tickets, users, user_groups, remarks, iss
         document.getElementById('ticket_viewModal').close()
         onCloseModal()
         e.preventDefault()
-        // console.log(values.ticket_status);
-        router.post(`/tickets/store/remark`, values);
+        console.log(values.ticket_status);
+        router.post(`/device/tickets/store/remark`, values);
     }
 
     function editData(id) {
-        router.get(`/tickets/${id}`);
+        router.get(`/device/tickets/${id}`);
     }
     function openData(id) {
-        router.get(`/tickets/open/${id}`);
+        router.get(`/device/tickets/open/${id}`);
     }
     function closeData(id) {
-        router.get(`/tickets/close/${id}`);
+        router.get(`/device/tickets/close/${id}`);
     }
 
     return (
@@ -259,25 +258,6 @@ export default function TicketsTable({ tickets, users, user_groups, remarks, iss
                             </span>
                             <span className="text-gray-700 ticket_status"></span>
                         </div>
-
-                        {/* <div>
-                            <span className="font-bold text-gray-700">
-                                Ticket Number :
-                            </span>
-                            <span className="text-gray-700 ticket_number"></span>
-                        </div>
-                        <div>
-                            <span className="font-bold text-gray-700">
-                                User ID :
-                            </span>
-                            <span className="text-gray-700 user_id"></span>
-                        </div>
-                        <div>
-                            <span className="font-bold text-gray-700">
-                                Status :
-                            </span>
-                            <span className="text-gray-700 ticket_status"></span>
-                        </div> */}
                     </div>
 
                     <div className='mt-2'>
@@ -301,7 +281,6 @@ export default function TicketsTable({ tickets, users, user_groups, remarks, iss
                         <hr className="mt-2"></hr>
                     </div>
 
-
                     <div>
                         <span className="font-bold text-gray-700">
                             Remarks :
@@ -310,7 +289,7 @@ export default function TicketsTable({ tickets, users, user_groups, remarks, iss
                     </div>
 
                     <div className="pt-2">
-                        <InputLabel htmlFor="ticket_number" value="Remark" />
+                        <InputLabel htmlFor="remarks" value="Remark" />
                         <Textarea
                             id="remarks"
                             name="remarks"
@@ -344,15 +323,24 @@ export default function TicketsTable({ tickets, users, user_groups, remarks, iss
                     />
                     <div className="mt-6 flex justify-start">
                         <div className='grid grid-cols-3 gap-4'>
-                            <label className="flex items-center mt-1" key={"chkStatus_" + (values.ticket_id)}>
-                                <Checkbox
+                            <label className="flex items-center mt-1" htmlFor="ticket_status" key={`chkStatus_${values.ticket_id}`}>
+                                {/* <Checkbox
                                     name="ticket_status"
                                     id="ticket_status"
                                     value={values.ticket_status}
                                     onChange={handleClick}
                                     checked={checked}
-                                />
-                                {/* <input type="checkbox" id="ticket_status" name="ticket_status" checked={checked} onChange={handleClick} /> */}
+                                /> */}
+                                {/* <TextInput
+                                    className="ticket_status"
+                                    id="ticket_status"
+                                    name="ticket_status"
+                                    type="checkbox"
+                                    value={values.ticket_status}
+                                    onChange={handleClick}
+                                    checked={checked}
+                                /> */}
+                                <input type="checkbox" id="ticket_status" value={values.ticket_status} name="ticket_status" checked={checked} onChange={handleClick} />
                                 <span className="ml-2 text-sm text-gray-600">
                                     Close the ticket
                                 </span>
@@ -368,7 +356,7 @@ export default function TicketsTable({ tickets, users, user_groups, remarks, iss
             <Modal id="ticket_fileModal" title="View File" closeModal={onCloseModal}>
                 <div className='grid grid-cols-1 gap-4'>
                     <div className="pt-4">
-                        <a onClick={clickFileLink} id="file_link" className="font-medium text-sky-600 focus:border-sky-700 cursor-pointer underline decoration-sky-300" target="_blank"></a>
+                        <a key={"fileLink_" + (values.ticket_id)} onClick={clickFileLink} id="file_link" className="font-medium text-sky-600 focus:border-sky-700 cursor-pointer underline decoration-sky-300" target="_blank"></a>
                     </div>
                 </div>
                 <form onSubmit={deleteFileData} className="space-y-6 ">
@@ -444,21 +432,6 @@ export default function TicketsTable({ tickets, users, user_groups, remarks, iss
                                         }
                                     </span>
 
-
-                                    {/* <small key={"status_" + (dt.id)} className={`block mt - 2 ${ dt.ticket_status == 0 ? '' : 'font-bold text-teal-150' } `}>
-                                        Status : {dt.ticket_status == 0 ? 'Opened' : 'Closed'}
-                                    </small> */}
-
-                                    {/* {
-                                        dt.ticket_status == 1 &&
-                                        <small key={"updateduser_" + (dt.id)} className="block mt-2">
-                                            Updated by : {
-                                                users.filter(user => user.id == dt.updated_by_loggedin_user).map(filteredUser => (
-                                                    filteredUser.name
-                                                ))
-                                            }
-                                        </small>
-                                    } */}
                                 </td>
                                 <td>
                                     {dt.customer_user_id}
@@ -470,14 +443,7 @@ export default function TicketsTable({ tickets, users, user_groups, remarks, iss
                                         </small>
                                     }
 
-                                    {/* {dt.user_group_id &&
-                                        user_groups.filter(user_gp => user_gp.id == dt.user_group_id)
-                                            .map(filteredRes =>
-                                                <small key={"usrgp_" + (dt.id)} className="block mt-2">
-                                                    User Group : {filteredRes.group_name}
-                                                </small>
-                                            )
-                                    } */}
+
                                 </td>
                                 <td>
                                     {dt.issue_id != 0 &&
@@ -507,29 +473,9 @@ export default function TicketsTable({ tickets, users, user_groups, remarks, iss
                                         )
                                     }
                                 </td>
-                                {/* <td>{dt.description}</td> */}
+
                                 <td>{topicData[0][dt.topic]}</td>
 
-                                {/* <td>{levelData[0][dt.level_of_importance]}</td> */}
-                                {/* <td>
-                                    {
-                                        dt.attach_file ?
-                                            dt.attach_file.includes(',') ?
-                                                splitFile(dt.attach_file, dt)
-                                                :
-                                                <a
-                                                    className='inline-flex items-center px-1 pt-1 underline decoration-sky-300 text-sm font-medium text-sky-600 focus:border-sky-700 cursor-pointer'
-                                                    onClick={() => callModal(dt, 'ticket_fileModal', dt.attach_file)}
-                                                    key={dt.id}
-                                                >
-                                                    {
-                                                        dt.attach_file.length > 10 ?
-                                                            `${ dt.attach_file.substring(0, 10) }...` : dt.attach_file
-                                                    }
-                                                </a>
-                                            : ''
-                                    }
-                                </td> */}
                                 <td>{formatDistance(new Date(), new Date(dt.created_at), { addSuffix: false })}</td>
                                 <td>
                                     {format(new Date(dt.updated_at), 'd-M-yyyy')}

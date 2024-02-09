@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('balance_transfers', function (Blueprint $table) {
+        Schema::create('devticket_remarks', function (Blueprint $table) {
             $table->id();
-              $table->string('affiliate_name')->nullable();
-              $table->string('affiliate_index');
-              $table->bigInteger('amount');
-              $table->string('notes')->nullable();
-               $table->bigInteger('balance')->default(0);
+            $table->integer('devticket_id');
+            $table->string('remarks')->nullable();
+            $table->string('rm_attach_file')->nullable();
+            $table->integer('remark_by');
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('balance_transfers');
+        Schema::dropIfExists('devticket_remarks');
     }
 };

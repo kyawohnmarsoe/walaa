@@ -53,6 +53,7 @@ class CustomerController extends Controller
 
     public function index(Request $request)
     {
+
         $user_has_groups_idArr = $this->getLoggedInUserGroup();
         $count_user_groups = User_group::count();
 
@@ -114,8 +115,10 @@ class CustomerController extends Controller
 
         if (count($user_has_groups_idArr) == 0 || $count_user_groups == count($user_has_groups_idArr)) {
             $customers = $customers_query->get(['customers.*', 'affiliates.affiliate_name', 'accounts.account_name', 'tickets.id As ticket_id', 'invoices.id As invoice_id']);
+
             $filter_user_groups = User_group::all();
         } else {
+
             $customers = $customers_query->whereIn('customers.user_group_id', $user_has_groups_idArr)
                 ->get(['customers.*', 'affiliates.affiliate_name', 'accounts.account_name', 'tickets.id As ticket_id', 'invoices.id As invoice_id']);
             $filter_user_groups = User_group::whereIn('user_groups.id', $user_has_groups_idArr)

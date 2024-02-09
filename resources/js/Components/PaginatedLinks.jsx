@@ -5,6 +5,7 @@ import AccountsTable from '@/Pages/Accounts/AccountsTable';
 import CustomerTable from '@/Pages/Customers/CustomerTable';
 import AffiliatesTable from '@/Pages/Affiliates/AffiliatesTable';
 import TicketTable from '@/Pages/Tickets/TicketsTable';
+import DevTicketTable from '@/Pages/Devtickets/TicketsTable';
 import SystemusersTable from '@/Pages/Systemusers/SystemusersTable';
 import UsergroupTable from '@/Pages/Usergroup/UsergroupTable';
 import TestUsageTable from '@/Pages/Reports/Stats/TestUsage/TestUsageTable';
@@ -105,6 +106,13 @@ export default function PaginatedLinks({
             }
 
             {
+                tableName == 'devticket' &&
+                <DevTicketTable tickets={currentItems} users={users} user_groups={user_groups}
+                    remarks={remarks} issues={issues}
+                />
+            }
+
+            {
                 tableName == 'systemuser' &&
                 <SystemusersTable systemusers={currentItems} user_has_groups={user_has_groups} />
             }
@@ -146,6 +154,10 @@ export default function PaginatedLinks({
                 tableName == 'payments' && <PaymentTable items={currentItems} />
 
 
+            }
+
+            {
+                tableName == 'affiliates_payments' && <AffiliatesPaymentsTable items={currentItems} />
             }
 
             {
