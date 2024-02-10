@@ -172,7 +172,7 @@ export default function TicketsTable({ tickets, users, user_groups, remarks, iss
         {
             values.ticket_status == 0
                 ? ''
-                : document.getElementById(`tr_${values.ticket_id} `).classList.add('bg-teal-100')
+                : document.getElementById(`tr_${values.ticket_id}`).classList.add('bg-teal-100')
         }
         document.getElementById(`tr_${values.ticket_id}`).classList.remove('bg-gray-300');
     };

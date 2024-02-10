@@ -140,6 +140,8 @@ class DeviceTicketController extends Controller
     {
         $input = $request->all();
 
+        // return response(compact('input'));
+
         // if ($request->ticket_status) {
         $ticket = Device_ticket::findOrFail($request->ticket_id);
         $ticket->update([

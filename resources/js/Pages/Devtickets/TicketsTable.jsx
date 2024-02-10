@@ -67,13 +67,13 @@ export default function TicketsTable({ tickets, users, user_groups, remarks, iss
 
     function handleClick(e) {
         setChecked(!checked);
-        const target_checked = e.target.checked;
+
         const value = parseInt(e.target.value);
+        const changeVal = value == 1 ? 0 : 1
         setValues(values => ({
             ...values,
-            ticket_status: target_checked,
+            ticket_status: changeVal,
         }))
-        console.log(ticket_status)
     };
 
     const callModal = (ticket, modal_id, attachfile_name) => {
@@ -171,7 +171,7 @@ export default function TicketsTable({ tickets, users, user_groups, remarks, iss
         {
             values.ticket_status == 0
                 ? ''
-                : document.getElementById(`tr_${values.ticket_id} `).classList.add('bg-teal-100')
+                : document.getElementById(`tr_${values.ticket_id}`).classList.add('bg-teal-100')
         }
         document.getElementById(`tr_${values.ticket_id}`).classList.remove('bg-gray-300');
     };
@@ -324,23 +324,15 @@ export default function TicketsTable({ tickets, users, user_groups, remarks, iss
                     <div className="mt-6 flex justify-start">
                         <div className='grid grid-cols-3 gap-4'>
                             <label className="flex items-center mt-1" htmlFor="ticket_status" key={`chkStatus_${values.ticket_id}`}>
-                                {/* <Checkbox
+                                <Checkbox
                                     name="ticket_status"
                                     id="ticket_status"
                                     value={values.ticket_status}
                                     onChange={handleClick}
-                                    checked={checked}
-                                /> */}
-                                {/* <TextInput
-                                    className="ticket_status"
-                                    id="ticket_status"
-                                    name="ticket_status"
-                                    type="checkbox"
-                                    value={values.ticket_status}
-                                    onChange={handleClick}
-                                    checked={checked}
-                                /> */}
-                                <input type="checkbox" id="ticket_status" value={values.ticket_status} name="ticket_status" checked={checked} onChange={handleClick} />
+                                    // checked={checked}
+                                    defaultChecked={values.ticket_status == 1 ? 'checked' : ''}
+                                />
+
                                 <span className="ml-2 text-sm text-gray-600">
                                     Close the ticket
                                 </span>
