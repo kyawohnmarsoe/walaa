@@ -18,7 +18,9 @@ export default function Customers({
     sub_accounts,
     sys_users,
     user_groups,
-    tickets,
+    towers,
+    devices,
+    ports,
     apitoken,
     totalCount,
     deposit_password,
@@ -132,6 +134,7 @@ export default function Customers({
                                             accounts={accounts}
                                             users={sys_users}
                                             user_groups={user_groups}
+                                            towers={towers}
                                             setFilterObj={setFilterObj}
                                             filterObj={filterObj}
                                             apitoken={apitoken}
@@ -152,6 +155,7 @@ export default function Customers({
                                         sub_accounts={sub_accounts}
                                         affiliates={affiliates}
                                         user_groups={user_groups}
+                                        towers={towers}
                                         apitoken={apitoken}
                                     />
                                 </div>
@@ -180,6 +184,9 @@ export default function Customers({
                                         sub_accounts={sub_accounts}
                                         affiliates={affiliates}
                                         user_groups={user_groups}
+                                        towers={towers}
+                                        devices={devices}
+                                        ports={ports}
                                         apitoken={apitoken}
                                     />
                                 </div>

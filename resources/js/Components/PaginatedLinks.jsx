@@ -18,6 +18,9 @@ import BalanceTransferTable from '@/Pages/Reports/Deposit/BalanceTransferTable';
 import TicketissuesTable from '@/Pages/Ticketissues/TicketissuesTable';
 import PaymentTable from '@/Pages/Payments/PaymentTable';
 import AffiliatesPaymentsTable from '@/Pages/Affiliates/AffiliatesPaymentsTable';
+import TowersTable from '@/Pages/Towers/TowersTable';
+import DevicesTable from '@/Pages/Devices/DevicesTable';
+import PortsTable from '@/Pages/Ports/PortsTable';
 
 export default function PaginatedLinks({
     auth,
@@ -30,6 +33,7 @@ export default function PaginatedLinks({
     remarks,
     user_has_groups,
     user_groups,
+    towers,
     issues,
     tableName,
     apitoken,
@@ -88,7 +92,7 @@ export default function PaginatedLinks({
             {
                 tableName == 'customer' &&
                 <CustomerTable customers={currentItems} accounts={accounts} sub_accounts={sub_accounts}
-                    sys_users={users} user_groups={user_groups} apitoken={apitoken}
+                    sys_users={users} user_groups={user_groups} towers={towers} apitoken={apitoken}
                     totalCount={totalCount} deposit_password={deposit_password} auth={auth}
                 />
             }
@@ -120,6 +124,19 @@ export default function PaginatedLinks({
             {
                 tableName == 'ticketissue' &&
                 <TicketissuesTable issues={currentItems} />
+            }
+
+            {
+                tableName == 'tower' &&
+                <TowersTable towers={currentItems} />
+            }
+            {
+                tableName == 'device' &&
+                <DevicesTable devices={currentItems} />
+            }
+            {
+                tableName == 'port' &&
+                <PortsTable ports={currentItems} />
             }
 
             {

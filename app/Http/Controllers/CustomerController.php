@@ -13,9 +13,12 @@ use App\Models\Account;
 use App\Models\Sub_account;
 use App\Models\Deposit_pass;
 use App\Http\Requests\StoreCustomerRequest;
+use App\Models\Device;
 use App\Models\User_group;
 use App\Models\Invoice;
+use App\Models\Port;
 use App\Models\Ticket;
+use App\Models\Tower;
 use App\Models\User;
 // use Illuminate\Support\Facades\DB;
 // use Illuminate\Support\Carbon;
@@ -67,7 +70,7 @@ class CustomerController extends Controller
 
         if ($request->hasAny(['account_index', 'sub_account_id', 'affiliate_index', 'customer_user_id', 'display_name', 'mobile_number', 'status', 'user_group_id'])) {
 
-            $customers_query = Customer::leftJoin('affiliates', 'affiliates.affiliate_index', '=', 'customers.affiliate_index')
+            $customers_query = Customer::with(['tower', 'device', 'port'])->leftJoin('affiliates', 'affiliates.affiliate_index', '=', 'customers.affiliate_index')
                 ->leftJoin('accounts', 'accounts.account_index', '=', 'customers.account_index')
                 ->leftJoin('tickets', 'tickets.user_id', '=', 'customers.id')
                 ->leftJoin('invoices', 'invoices.userIndex', '=', 'customers.customer_user_index')
@@ -100,7 +103,7 @@ class CustomerController extends Controller
             // left join tickets t on t.user_id=cus.id GROUP BY cus.id
             // where cus.user_group_id in('1') OR cus.user_group_id IS NULL;
 
-            $customers_query = Customer::leftJoin('affiliates', 'affiliates.affiliate_index', '=', 'customers.affiliate_index')
+            $customers_query = Customer::with(['tower', 'device', 'port'])->leftJoin('affiliates', 'affiliates.affiliate_index', '=', 'customers.affiliate_index')
                 ->leftJoin('accounts', 'accounts.account_index', '=', 'customers.account_index')
                 ->leftJoin('tickets', 'tickets.user_id', '=', 'customers.id')
                 ->leftJoin('invoices', 'invoices.userIndex', '=', 'customers.customer_user_index')
@@ -134,6 +137,7 @@ class CustomerController extends Controller
             'affiliates' => Affiliate::all(),
             'sys_users' => User::all(),
             'user_groups' => $filter_user_groups,
+            'towers' => Tower::all(),
             'show_data' => $show_data,
             'apitoken' => $token,
             'totalCount' => $totalCount,
@@ -150,6 +154,7 @@ class CustomerController extends Controller
             'sub_accounts' => Sub_account::all(),
             'affiliates' => Affiliate::all(),
             'user_groups' => User_group::all(),
+            'towers' => Tower::all(),
             'apitoken' => $token,
         ]);
     } // create   
@@ -242,7 +247,9 @@ class CustomerController extends Controller
                         'user_group_id' => $request->user_group_id,
                         'status' => 'Offline',
                         'account_status' => 'Active',
-                        'account_package_type' => 'MonthlyPrepaid'
+                        'account_package_type' => 'MonthlyPrepaid',
+                        // 'connection_type' => $request->connection_type,
+                        // 'tower_id' => $request->tower_id,
                     ]);
 
                     $this->getUserInfo($request->email);
@@ -419,6 +426,9 @@ class CustomerController extends Controller
             'sub_accounts' => Sub_account::all(),
             'affiliates' => Affiliate::all(),
             'user_groups' => User_group::all(),
+            'towers' => Tower::all(),
+            'devices' => Device::all(),
+            'ports' => Port::all(),
             'apitoken' => $token,
         ]);
     } // edit

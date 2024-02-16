@@ -6,23 +6,24 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Customer extends Model
+class Device extends Model
 {
     use HasFactory;
-    protected $guarded = [];
 
+    protected $guarded = [];
 
     public function tower(): BelongsTo
     {
         return $this->belongsTo(Tower::class);
     }
-    public function device(): BelongsTo
+
+    public function ports()
     {
-        return $this->belongsTo(Device::class, 'device_id');
+        return $this->hasMany(Port::class, 'device_id', 'id');
     }
 
-    public function port(): BelongsTo
+    public function customers()
     {
-        return $this->belongsTo(Port::class, 'port_id');
+        return $this->hasMany(Customer::class, 'device_id', 'id');
     }
 }

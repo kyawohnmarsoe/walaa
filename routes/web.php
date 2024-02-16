@@ -22,10 +22,13 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ApidataController;
+use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\DeviceTicketController;
 use App\Http\Controllers\TicketIssueController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PortController;
+use App\Http\Controllers\TowerController;
 use Illuminate\Support\Facades\Artisan;
 
 Route::get('/test', [DashboardController::class, 'test'])->name('test');
@@ -154,6 +157,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/device/tickets/open/{id}', [DeviceTicketController::class, 'open'])->name('device.tickets.open');
     Route::get('/device/tickets/close/{id}', [DeviceTicketController::class, 'close'])->name('device.tickets.close');
     Route::delete('/device/tickets/{id}', [DeviceTicketController::class, 'destroy'])->name('device.tickets.destroy');
+
+    Route::get('/towers', [TowerController::class, 'index'])->name('towers');
+    Route::get('/towers/create', [TowerController::class, 'create'])->name('towers.create');
+    Route::post('/towers/store', [TowerController::class, 'store'])->name('towers.store');
+    Route::get('/towers/{id}', [TowerController::class, 'edit'])->name('towers.edit');
+    Route::post('/towers/{id}', [TowerController::class, 'update'])->name('towers.update');
+    Route::delete('/towers/{id}', [TowerController::class, 'destroy'])->name('towers.destroy');
+
+    Route::get('/devices', [DeviceController::class, 'index'])->name('devices');
+    Route::get('/devices/create', [DeviceController::class, 'create'])->name('devices.create');
+    Route::post('/devices/store', [DeviceController::class, 'store'])->name('devices.store');
+    Route::get('/devices/{id}', [DeviceController::class, 'edit'])->name('devices.edit');
+    Route::post('/devices/{id}', [DeviceController::class, 'update'])->name('devices.update');
+
+    Route::get('/ports', [PortController::class, 'index'])->name('ports');
+    Route::get('/ports/create', [PortController::class, 'create'])->name('ports.create');
+    Route::post('/ports/store', [PortController::class, 'store'])->name('ports.store');
+    Route::get('/ports/{id}', [PortController::class, 'edit'])->name('ports.edit');
+    Route::post('/ports/{id}', [PortController::class, 'update'])->name('ports.update');
 
     // });
 

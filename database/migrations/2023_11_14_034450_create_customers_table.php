@@ -49,6 +49,13 @@ return new class extends Migration
             $table->string('longitude')->nullable();
             $table->string('balance')->default(0);
 
+            $table->string('connection_type')->nullable();
+            $table->integer('tower_id')->default(0);
+            $table->integer('device_id')->default(0);
+            $table->integer('port_id')->default(0);
+            $table->integer('complete_status')->default(0);
+            $table->integer('recommend_point')->default(0);
+
             $table->timestamps();
         });
     }

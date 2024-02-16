@@ -8,7 +8,7 @@ import TextInput from '@/Components/TextInput';
 import Textarea from '@/Components/Textarea';
 import SelectOption from '@/Components/SelectOption';
 
-export default function AddForm({ className = '', accounts, sub_accounts, affiliates, user_groups, apitoken }) {
+export default function AddForm({ className = '', accounts, sub_accounts, affiliates, user_groups, towers, apitoken }) {
 
     const { processing } = useForm();
 
@@ -33,12 +33,15 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
         user_group_id: '',
         latitude: '',
         longitude: '',
+        // connection_type: '',
+        // tower_id: '',
     });
 
     const [optionsAffiliates, setOptionsAffiliates] = useState([])
     const [optionsAccounts, setOptionsAccounts] = useState([])
     const [optionsSubAccounts, setOptionsSubAccounts] = useState([])
     const [optionsUserGroups, setOptionsUserGroups] = useState([])
+    const [optionsTowers, setOptionsTowers] = useState([])
 
     const [showAffiliateValue, setShowAffiliateValue] = useState(false)
     const [showAccountValue, setShowAccountValue] = useState(false)
@@ -47,6 +50,17 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
     const [filteredAccount, setFilteredAccount] = useState([])
 
     let span = document.getElementById("deposit_msg");
+
+    const optionsConnectType = [
+        {
+            "index": "FTTH",
+            "name": "FTTH"
+        },
+        {
+            "index": "WiFi",
+            "name": "WiFi"
+        }
+    ];
 
     const getAffiliates = () => {
         let optionsAffiliatesArr = [];
@@ -93,10 +107,26 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
         setOptionsUserGroups(optionsUserGroupsArr)
     }
 
+    // const getTowers = () => {
+    //     let optionsTowersArr = [];
+    //     {
+    //         towers.map((e) => {
+    //             optionsTowersArr.push(
+    //                 {
+    //                     "index": e.id,
+    //                     "name": e.tower_name
+    //                 }
+    //             );
+    //         });
+    //     }
+    //     setOptionsTowers(optionsTowersArr)
+    // }
+
     useEffect(() => {
         getAffiliates()
         getAccounts()
         getUserGroups()
+        // getTowers()
     }, [])
 
     function affiliatesHandleChange(e) {
@@ -191,6 +221,23 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
             'user_group_id': value,
         }))
     }
+
+    // function connTypeHandleChange(e) {
+    //     const value = e.target.value
+    //     setValues(values => ({
+    //         ...values,
+    //         'connection_type': value,
+    //     }))
+    // }
+
+    // function towerHandleChange(e) {
+    //     const value = e.target.value
+    //     // console.log(value);
+    //     setValues(values => ({
+    //         ...values,
+    //         'tower_id': value,
+    //     }))
+    // }
 
     function handleChange(e) {
         const key = e.target.id;
@@ -466,6 +513,32 @@ export default function AddForm({ className = '', accounts, sub_accounts, affili
                             autoComplete="off"
                         />
                     </div>
+
+                    {/* <div>
+                        <InputLabel htmlFor="connection_type" value="Connection Type" />
+                        <SelectOption
+                            id="connection_type"
+                            className="mt-1 block w-full"
+                            options={optionsConnectType}
+                            select_text="Connection Type"
+                            name="connection_type"
+                            onChange={connTypeHandleChange}
+                            value={values.connection_type}
+                        />
+                    </div>
+
+                    <div>
+                        <InputLabel htmlFor="tower_id" value="Towers" />
+                        <SelectOption
+                            id="tower_id"
+                            className="mt-1 block w-full"
+                            options={optionsTowers}
+                            select_text="Towers"
+                            name="tower_id"
+                            value={values.tower_id}
+                            onChange={towerHandleChange}
+                        />
+                    </div> */}
 
                     <div>
                         <InputLabel htmlFor="user_group_id" value="User Groups" />

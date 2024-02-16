@@ -292,6 +292,9 @@ export default function Authenticated({ user, header, children }) {
                                                 {/* <Dropdown.Link href={ route('apidata') } active={ url.startsWith('/apidata') }> API Data Manage</Dropdown.Link> */}
                                                 {/* <Dropdown.Link href={route('deposit.transfer')}>Balance Transfer</Dropdown.Link > */}
                                                 <Dropdown.Link href={route('ticket.issues')} active={url.startsWith('/issues')}> Ticket Issues</Dropdown.Link>
+                                                <Dropdown.Link href={route('towers')} active={url.startsWith('/towers')}> Towers</Dropdown.Link>
+                                                <Dropdown.Link href={route('devices')} active={url.startsWith('/devices')}> Devices</Dropdown.Link>
+                                                <Dropdown.Link href={route('ports')} active={url.startsWith('/ports')}> Ports</Dropdown.Link>
                                             </>
                                         }
                                         <Dropdown.Link href={route('logout')} method="post" as="button">
