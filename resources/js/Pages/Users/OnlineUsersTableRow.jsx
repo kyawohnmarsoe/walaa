@@ -60,14 +60,14 @@ export default function OnlineUsersTableRow({ user, index, apitoken }) {
         <span className="text-emerald-500">{user?.onlineStatus}</span>
       </td>
 
-      <td>{ user?.onlineTime }</td>
-      <td>{ user?.onlineSince }</td>
-      <td>{ user?.callerMAC }</td>
-      <td>{ user?.expirationDate }</td>
-      <td><a href={ `https://${ user?.userIP }` } className="text-sky-700" target="_blank">{ user?.userIP }</a></td>
-      <td>{ user?.loginFrom }</td>
-      <td>{ user?.affiliateName }</td>
-       {/* <td> <button className="btn btn-xs btn-outline btn-block btn-info mb-1" onClick={ disconnectHandler } >Disconnect</button><br /></td> */}
+      <td>{user?.onlineTime}</td>
+      <td>{user?.onlineSince}</td>
+      <td>{user?.callerMAC}</td>
+      <td>{user?.expirationDate}</td>
+      <td><a href={`https://${user?.userIP}`} className="text-sky-700" target="_blank">{user?.userIP}</a></td>
+      <td>{user?.loginFrom}</td>
+      <td>{user?.affiliateName}</td>
+      {/* <td> <button className="btn btn-xs btn-outline btn-block btn-info mb-1" onClick={ disconnectHandler } >Disconnect</button><br /></td> */}
 
     </tr >
   )

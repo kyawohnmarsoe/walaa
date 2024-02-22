@@ -17,6 +17,7 @@ export default function Dashboard({ auth, apitoken, board, tickets }) {
                     Dashboard
                 </h2>
             }
+
         >
             <Head title="Dashboard" />
 

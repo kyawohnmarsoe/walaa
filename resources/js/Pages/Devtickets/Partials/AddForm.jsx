@@ -258,7 +258,7 @@ export default function AddForm({ className = '', customers, customer_id, issues
                 </a>
             </div>
             <header>
-                <h2 className="text-lg font-medium text-sky-600">Add Ticket</h2>
+                <h2 className="text-lg font-medium text-sky-600">Add Device Ticket</h2>
             </header>
 
             <form onSubmit={handleSubmit} className="mt-6 space-y-6 ">

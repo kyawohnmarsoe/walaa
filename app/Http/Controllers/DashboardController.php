@@ -18,10 +18,13 @@ class DashboardController extends Controller
         $tickets = Ticket::where('ticket_status', '1')->get();
         // dd(Board::all());
         $board = Board::all();
+
+        $api_user_data = $this->get_api_user();
+
         return Inertia::render('Dashboard', [
             'apitoken' => $token,
             'board' => $board,
-            'tickets' => $tickets
+            'tickets' => $tickets,
         ]);
     } // dashboard
 
@@ -70,6 +73,24 @@ class DashboardController extends Controller
 
         return $all_data_response;
     } // get_servicePhones
+
+    public function get_onlineUsers(Request $request)
+    {
+        $token   = $this->getSavedToken();
+        $apiURL  = 'https://rapi.earthlink.iq/api/reseller/activesessions';
+        $headers = [
+            'Authorization' => 'Bearer ' . $token,
+            'Accept' => 'application/json'
+        ];
+
+        $post_data = $request->all();
+
+        $all_data_api = Http::withHeaders($headers)->post($apiURL, $post_data);
+        $all_data_response  = json_decode($all_data_api->getBody(), true);
+
+        return $all_data_response;
+    } // get_onlineUsers
+
 
     //========= End Get Data From API =========//
 

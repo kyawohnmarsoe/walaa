@@ -13,40 +13,48 @@ export default function OnlineUsers({ auth, apitoken, affiliates, userIndexByGro
   const { users, total, errMessage, loading } = onlineUsersData
   const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10, Orderby: 'userId' })
 
- 
+  // const instance = axios.create({
+  //   baseURL: 'https://rapi.earthlink.iq/api/reseller',
+  //   headers: { 'Authorization': `Bearer ${apitoken}` }
+  // });
 
-  const instance = axios.create({
-    baseURL: 'https://rapi.earthlink.iq/api/reseller',
-    headers: { 'Authorization': `Bearer ${apitoken}` }
-  });
-
-  const filterUsersByGroup = (resUsers) =>
-  {
+  const filterUsersByGroup = (resUsers) => {
     const results = resUsers.filter(r => userIndexByGroup.find(u => u.customer_user_index == r.userIndex))
     return results;
   }
 
- 
   useEffect(() => {
-    instance.post('/activesessions', filterObj)
+
+    // instance.post('/activesessions', filterObj)
+    //   .then(res => {
+    //     if (res?.data?.value?.itemsList?.length > 0 && userIndexByGroup !== 'all') {
+    //       const results = filterUsersByGroup(res?.data?.value?.itemsList)
+    //       // console.log(results)
+    //       // setOnlineUsersData({ users: results, total: results.length, errMessage: '', loading: false })
+    //       setOnlineUsersData({ users: res?.data?.value?.itemsList, total: res?.data?.value?.totalCount, errMessage: '', loading: false })
+    //     } else {
+    //       setOnlineUsersData({ users: res?.data?.value?.itemsList, total: res?.data?.value?.totalCount, errMessage: '', loading: false })
+    //     }
+    //   })
+    //   .catch(err => {
+    //     setOnlineUsersData({ users: [], total: 0, errMessage: err?.message, loading: false })
+    //     // console.log(err)
+    //   })
+
+    axios.post('/users/online', filterObj)
       .then(res => {
-
-        if (res?.data?.value?.itemsList?.length > 0 && userIndexByGroup !== 'all'){
+        // console.log(res)
+        if (res?.data?.value?.itemsList?.length > 0 && userIndexByGroup !== 'all') {
           const results = filterUsersByGroup(res?.data?.value?.itemsList)
-          // console.log(results)
-          // setOnlineUsersData({ users: results, total: results.length, errMessage: '', loading: false })
           setOnlineUsersData({ users: res?.data?.value?.itemsList, total: res?.data?.value?.totalCount, errMessage: '', loading: false })
-
-        }else{
+        } else {
           setOnlineUsersData({ users: res?.data?.value?.itemsList, total: res?.data?.value?.totalCount, errMessage: '', loading: false })
-
         }
-       
       })
       .catch(err => {
         setOnlineUsersData({ users: [], total: 0, errMessage: err?.message, loading: false })
-        // console.log(err)
       })
+
 
   }, [filterObj])
 

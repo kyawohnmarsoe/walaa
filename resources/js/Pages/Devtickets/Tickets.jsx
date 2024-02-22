@@ -37,10 +37,10 @@ export default function Tickets({
         <AuthenticatedLayout
             user={auth.user}
             header={
-                <h2 className="font-semibold text-xl text-gray-800 leading-tight">Tickets</h2>
+                <h2 className="font-semibold text-xl text-gray-800 leading-tight">Device Tickets</h2>
             }
         >
-            <Head title="Tickets" />
+            <Head title="Device Tickets" />
 
             <div className="py-12 ">
                 <div className="max-w-8xl mx-auto sm:px-6 lg:px-4">
@@ -97,7 +97,7 @@ export default function Tickets({
 
                                     <div className='flex items-center justify-end gap-4 p-2 mb-2'>
                                         <PrimaryButton disabled='' onClick={ev => addTicketClick()}>
-                                            Add Ticket
+                                            Add Device Ticket
                                         </PrimaryButton>
                                     </div>
 

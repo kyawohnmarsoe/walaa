@@ -13,7 +13,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import { DownloadTableExcel } from 'react-export-table-to-excel';
 import { Link, useForm, usePage, router } from '@inertiajs/react';
 
-export default function Management ({ auth, apitoken, affiliates, accountTypes, deposit_password, userIndexByGroup, customers, invoices }) {
+export default function Management({ auth, apitoken, affiliates, accountTypes, deposit_password, userIndexByGroup, customers, invoices }) {
   // const { flash } = usePage().props
   const tableRef = useRef(null);
   const [onlineUsersData, setOnlineUsersData] = useState({ users: [], total: 0, errMessage: '', loading: true })
@@ -25,32 +25,29 @@ export default function Management ({ auth, apitoken, affiliates, accountTypes, 
     headers: { 'Authorization': `Bearer ${apitoken}` }
   });
 
-  const filterUsersByGroup = (resUsers) =>
-  {
-    
+  const filterUsersByGroup = (resUsers) => {
+
     const results = resUsers.filter(r => userIndexByGroup.find(u => u.customer_user_index == r.customer_user_index))
     return results;
     console.log(results)
   }
-  
+
   useEffect(() => {
-    
+
     instance.post('/user/all', filterObj)
       .then(res => {
-        if (res?.data?.value?.itemsList?.length > 0 && userIndexByGroup !== 'all')
-        {
+        if (res?.data?.value?.itemsList?.length > 0 && userIndexByGroup !== 'all') {
           // const results = filterUsersByGroup(res?.data?.value?.itemsList)
           const results = filterUsersByGroup(customers)
-         
+
           // setOnlineUsersData({ users: results, total: results.length, errMessage: '', loading: false })
           setOnlineUsersData({ users: res?.data?.value?.itemsList, total: res?.data?.value?.totalCount, errMessage: '', loading: false })
 
 
-        } else
-        {
-        
+        } else {
+
           setOnlineUsersData({ users: res?.data?.value?.itemsList, total: res?.data?.value?.totalCount, errMessage: '', loading: false })
-         
+
         }
       })
       .catch(err => {

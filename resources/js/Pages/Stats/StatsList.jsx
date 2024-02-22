@@ -36,6 +36,8 @@ export default function StatsList({ apitoken }) {
 
   // console.log(apitoken)
   useEffect(() => {
+
+    console.log(apitoken);
     // instance.get('/home/Dashboard')
     //   .then(res => {
     //     // setStatsData({ stats: res.data.value, errMessage: '', loading: false })
