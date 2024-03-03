@@ -58,7 +58,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard/statslist', [DashboardController::class, 'get_statsList'])->name('dashboard.statslist');
     Route::get('/dashboard/servicePhones', [DashboardController::class, 'get_servicePhones'])->name('dashboard.servicePhones');
     Route::post('/users/online', [DashboardController::class, 'get_onlineUsers'])->name('apiusers.online');
-
+    Route::post('/users/management', [DashboardController::class, 'get_usersManagement'])->name('apiusers.management');
 
     Route::get('/users/online', [UserController::class, 'showOnlineUsers'])->name('users.online');
     Route::get('/user/{id}', [UserController::class, 'getUserDetails'])->name('user.details');

@@ -20,10 +20,10 @@ export default function Management({ auth, apitoken, affiliates, accountTypes, d
   const { users, total, errMessage, loading } = onlineUsersData
   const [filterObj, setFilterObj] = useState({ StartIndex: 0, RowCount: 10, Orderby: 'UserId' })
 
-  const instance = axios.create({
-    baseURL: 'https://rapi.earthlink.iq/api/reseller',
-    headers: { 'Authorization': `Bearer ${apitoken}` }
-  });
+  // const instance = axios.create({
+  //   baseURL: 'https://rapi.earthlink.iq/api/reseller',
+  //   headers: { 'Authorization': `Bearer ${apitoken}` }
+  // });
 
   const filterUsersByGroup = (resUsers) => {
 
@@ -34,26 +34,36 @@ export default function Management({ auth, apitoken, affiliates, accountTypes, d
 
   useEffect(() => {
 
-    instance.post('/user/all', filterObj)
+    // instance.post('/user/all', filterObj)
+    //   .then(res => {
+    //     if (res?.data?.value?.itemsList?.length > 0 && userIndexByGroup !== 'all') {
+    //       // const results = filterUsersByGroup(res?.data?.value?.itemsList)
+    //       const results = filterUsersByGroup(customers)
+    //       // setOnlineUsersData({ users: results, total: results.length, errMessage: '', loading: false })
+    //       setOnlineUsersData({ users: res?.data?.value?.itemsList, total: res?.data?.value?.totalCount, errMessage: '', loading: false })
+    //     } else {
+    //       setOnlineUsersData({ users: res?.data?.value?.itemsList, total: res?.data?.value?.totalCount, errMessage: '', loading: false })
+    //     }
+    //   })
+    //   .catch(err => {
+    //     setOnlineUsersData({ users: [], total: 0, errMessage: err.message, loading: false })
+    //     console.log(err)
+    //   })
+
+
+    axios.post('/users/management', filterObj)
       .then(res => {
         if (res?.data?.value?.itemsList?.length > 0 && userIndexByGroup !== 'all') {
-          // const results = filterUsersByGroup(res?.data?.value?.itemsList)
           const results = filterUsersByGroup(customers)
-
-          // setOnlineUsersData({ users: results, total: results.length, errMessage: '', loading: false })
           setOnlineUsersData({ users: res?.data?.value?.itemsList, total: res?.data?.value?.totalCount, errMessage: '', loading: false })
-
-
         } else {
-
           setOnlineUsersData({ users: res?.data?.value?.itemsList, total: res?.data?.value?.totalCount, errMessage: '', loading: false })
-
         }
       })
       .catch(err => {
         setOnlineUsersData({ users: [], total: 0, errMessage: err.message, loading: false })
-        console.log(err)
       })
+
   }, [filterObj])
 
 

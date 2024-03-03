@@ -92,6 +92,23 @@ class DashboardController extends Controller
     } // get_onlineUsers
 
 
+    public function get_usersManagement(Request $request)
+    {
+        $token   = $this->getSavedToken();
+        $apiURL  = 'https://rapi.earthlink.iq/api/reseller/user/all';
+        $headers = [
+            'Authorization' => 'Bearer ' . $token,
+            'Accept' => 'application/json'
+        ];
+
+        $post_data = $request->all();
+
+        $all_data_api = Http::withHeaders($headers)->post($apiURL, $post_data);
+        $all_data_response  = json_decode($all_data_api->getBody(), true);
+
+        return $all_data_response;
+    } // get_usersManagement
+
     //========= End Get Data From API =========//
 
     public function test()
