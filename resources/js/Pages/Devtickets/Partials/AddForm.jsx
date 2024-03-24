@@ -242,7 +242,7 @@ export default function AddForm({ className = '', customers, customer_id, issues
 
     function handleSubmit(e) {
         e.preventDefault()
-        router.post('/device/tickets/store', values)
+        router.post(`/device/tickets/store`, values)
     }
 
     return (

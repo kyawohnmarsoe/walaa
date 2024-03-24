@@ -149,10 +149,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/device/tickets', [DeviceTicketController::class, 'index'])->name('device.tickets');
     Route::get('/device/tickets/create', [DeviceTicketController::class, 'create'])->name('device.tickets.create');
+    Route::post('/device/tickets/store', [DeviceTicketController::class, 'store'])->name('device.tickets.store');
     Route::get('/device/tickets/{id}', [DeviceTicketController::class, 'edit'])->name('device.tickets.edit');
     Route::post('/device/tickets/{id}', [DeviceTicketController::class, 'update'])->name('device.tickets.update');
     Route::post('/device/tickets', [DeviceTicketController::class, 'index'])->name('device.tickets.filter');
-    Route::post('/device/tickets/store', [DeviceTicketController::class, 'store'])->name('device.tickets.store');
+
     Route::post('/device/tickets/store/remark', [DeviceTicketController::class, 'store_remark'])->name('device.tickets.store.remark');
     Route::get('/device/tickets/delete_remark/{id}', [DeviceTicketController::class, 'destroy_remark'])->name('device.tickets.destroy.remark');
     Route::post('/device/tickets/update/remark/{rmId}', [DeviceTicketController::class, 'update_remark'])->name('device.tickets.update.remark');

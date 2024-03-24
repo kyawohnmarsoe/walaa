@@ -52,9 +52,15 @@ export default function Affiliates({ auth, mustVerifyEmail, affiliates, apitoken
                         </div>
                     }
 
+                    {flash.status == 200 &&
+                        <div className="alert alert-success">
+                            Affiliate data updated successfully.
+                        </div>
+                    }
+
                     {flash.status == 201 &&
                         <div className="alert alert-success">
-                            Data created successfully.
+                            Affiliate data created successfully.
                         </div>
                     }
 
