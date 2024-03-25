@@ -39,11 +39,23 @@ export default function BalanceTransfer ({ className = '', affiliates, apitoken,
 
     useEffect(() =>
     {
+        // instance.get('/affiliate/deposit/balance')
+        //     .then(res =>
+        //     { setDeposit({ ...deposit, current: res.data.value }) })
+        //     .catch(err => { console.log(err.message) })
+        getBalance();
+    }, [value])
+
+    const getBalance = () =>{
+        console.log('getBalnce Run...')
         instance.get('/affiliate/deposit/balance')
             .then(res =>
-            { setDeposit({ ...deposit, current: res.data.value }) })
+            { setDeposit({ ...deposit, current: res.data.value }) 
+                console.log(res.data.value)
+            })
             .catch(err => { console.log(err.message) })
-    }, [value])
+        
+    }
 
     useEffect(() =>
     {
@@ -90,13 +102,14 @@ export default function BalanceTransfer ({ className = '', affiliates, apitoken,
 
         // return router.post(`/deposit/store/`, data) 
 
-        instance.post('/affiliate/deposit/transferBalance1', data)
+        instance.post('/affiliate/deposit/transferBalance', data)
             .then(res =>
             {
                 console.log(res.data)
                 res.data.value ? ( setMain({ ...main, failMessage: '', value: res.data.value }), 
                     router.post(`/deposit/store/`, data) ):
-                    setMain({ ...main, failMessage: res.data.error.message, value: '' })
+                    setMain({ ...main, failMessage: res.data.error.message, value: '' });
+                    getBalance();
 
             })
             .catch(err =>
