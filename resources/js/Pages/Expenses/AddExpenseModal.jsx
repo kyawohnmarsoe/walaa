@@ -12,7 +12,7 @@ export default function AddExpenseModal ({ modals, setModals, auth, users })
 {
     let { flash } = usePage().props
     const { data, setData, post, processing, errors, reset } = useForm({
-        walletUserId: '',
+        walletUserId: users[0].id,
         type: '',
         description: '',
         amount: '',
@@ -39,7 +39,7 @@ export default function AddExpenseModal ({ modals, setModals, auth, users })
       
 
         setData({
-            walletUserId: '',
+            walletUserId: users[0].id,
             type: '',
             description: '',
             amount: '',
@@ -72,6 +72,7 @@ export default function AddExpenseModal ({ modals, setModals, auth, users })
                         value={ data?.walletUserId }
                         required
                         onChange={ (e) => setData('walletUserId', e.target.value) }
+                        // onChange={ (e) => console.log(e.target.value) }
                     >
                        
                        {
@@ -142,7 +143,7 @@ export default function AddExpenseModal ({ modals, setModals, auth, users })
                         className="mt-1 block w-full  "
                         value={ data?.submittedBy }
                         onChange={ (e) => setData('submittedBy', e.target.value) }
-                        
+                        required
                     />
 
                 </div>

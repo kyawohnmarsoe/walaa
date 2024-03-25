@@ -127,7 +127,7 @@ export default function EditExpenseModal ({ modals, setModals, auth, users, user
                         className="mt-1 block w-full  "
                         value={ data?.submittedBy }
                         onChange={ (e) => setData('submittedBy', e.target.value) }
-
+                        required
                     />
 
                 </div>
