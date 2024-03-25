@@ -6,6 +6,9 @@ import { usePage, router } from '@inertiajs/react';
 
 
 export default function Board({ board }) {
+
+    console.log(board);
+    
     let { flash } = usePage().props
     const [writing, setWriting] = !!board.length ? useState(board[0]['writing']) : useState('')
 

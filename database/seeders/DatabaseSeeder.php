@@ -9,6 +9,8 @@ use Illuminate\Support\Str;
 
 use Database\Seeders\UserSeeder;
 use Database\Seeders\RolesSeeder;
+use Database\Seeders\BoardSeeder;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -35,6 +37,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolesSeeder::class,
             UserSeeder::class,
+            BoardSeeder::class,
         ]);
     }
 }

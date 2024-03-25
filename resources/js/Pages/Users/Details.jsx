@@ -21,9 +21,11 @@ export default function Details ({ auth, apitoken, id, accountTypes })
 
     useEffect(() =>
     {
-        instance.get(`/user/${ id }`)
+        // instance.get(`/user/${ id }`)
+        instance.post(`/user/all`, { UserId: 'a1@walaa'})
             .then(res =>
             {
+                console.log('test kyaw')
                 setUserData({ user: res.data.value, errMessage: '', loading: false })
 
                 // console.log('response' + res.data.value)

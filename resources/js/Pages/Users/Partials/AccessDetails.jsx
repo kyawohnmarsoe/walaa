@@ -34,6 +34,7 @@ export default function AccessDetails ({ apitoken, user, className = '' })
         instance.post(`/user/${ user.userIndex }`, { ...data })
             .then(res =>
             {
+                console.log('test test')
                 res.data.value ? setUserData({ errMessage: '', loading: false, value: res.data.value }) :
                     setUserData({ errMessage: res.data.error.detailMessage, loading: false, value: '' })
 
