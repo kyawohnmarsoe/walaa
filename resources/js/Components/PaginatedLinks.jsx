@@ -177,9 +177,7 @@ export default function PaginatedLinks({
                 tableName == 'affiliates_payments' && <AffiliatesPaymentsTable items={currentItems} />
             }
 
-            {
-                tableName == 'affiliates_payments' && <AffiliatesPaymentsTable items={currentItems} />
-            }
+           
 
         </>
     );
